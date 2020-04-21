@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+plot\PYG{p}{(}formula \PYG{o}{=} Sales \PYG{o}{\PYGZti{}} TV\PYG{p}{,} data \PYG{o}{=} adv\PYG{p}{,} xlim \PYG{o}{=} pdom\PYG{p}{,}
+     main \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Sales Given TV Advertising\PYGZdq{}}\PYG{p}{)}
+
+abline\PYG{p}{(}lmMod\PYG{p}{)}
+\end{Verbatim}

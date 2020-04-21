@@ -1,0 +1,115 @@
+#+TITLE: Data Science Scripts / Notes
+
+:Preamble:
+#+DESCRIPTION:
+#+KEYWORDS:
+#+STARTUP:  content
+#+TODO: TODO IN-PROGRESS WAITING DONE
+# #+STARTUP: latexpreview
+#+INFOJS_OPT: view:info toc:4
+#+PLOT: title:"Citas" ind:1 deps:(3) type:2d with:histograms set:"yrange [0:]"
+#+OPTIONS: tex:t
+# #+LATEX_HEADER: \usepackage{/home/ryan/Templates/LaTeX/ScreenStyle}
+#+LATEX_HEADER: \usepackage{/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle}
+# [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle.sty][Style Link]]
+#    [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle.sty][LaTeX Sty File]]
+#+CSL_STYLE: /home/ryan/.emacs.d/Nature.csl
+#+PROPERTY: header-args:R :results output  :session *R* :dir ./
+:END:
+
+
+- [[wiki:index][PrivateIndex]]
+
+- Related:  [[wiki:02_Practical_org][Intro Data Science]]  [[wiki:TSANotes][Time Series Analysis]] 
+
+# How to use
+if you've stumbled upon this you've found a bunch of my /**R**/ Scripts that
+I use as snippets, they're all a bit of a mess, generally the idea is:
+
+1. Clone the repo
+2. Set up Vim:
+  + [[https://github.com/vim-scripts/utl.vim][Universal Text Handler]]
+  + [[https://github.com/jceb/vim-orgmode][Vim Org Mode]]
+3. Use this index to jump to the /**R**/ Script / /**R**/ Markdown /
+=org-babel=, You'll want these:
+  + [[https://github.com/jalvesaq/Nvim-R]][Nvim-R]]
+  + [[https://github.com/ncm2/ncm2][NCM2]]
+  + [[https://github.com/SirVer/ultisnips][UltiSnips]]
+    + [[https://github.com/gillescastel/latex-snippets][Snippets]]
+4. use =SPC k r= or =SPC k s= to knit or spin the HTML
+  + I haven't been good with roxygen comments
+4. This is incomplete, if you need to fix links use =C-x C-j= and =Spc f f=
+as theyre implemented in the
+[[https://github.com/RyanGreenup/DotFiles][DotFiles]] in order to fix it them
+  
+
+:TEMPLATE:
+
+#* Template
+#** Inline Code
+
+#+BEGIN_SRC R :exports both :results output graphics file :file Intro02AdvPlotLinMod.png
+   adv$MeanAdvertising <- rowMeans(adv[,c(!(names(adv) == "Sales"))])
+
+   AdvTVPlot <- ggplot(data = adv, aes(x = TV, y = Sales, col = MeanAdvertising)) +
+     geom_point() +
+     theme_bw() +
+     stat_smooth(method = 'lm', formula = y ~ poly(x, 2, raw = TRUE), se = FALSE) +
+    ##stat_smooth(method = 'lm', formula = y ~ log(x), se = FALSE) +
+     labs(col = "Mean Advertising", x= "TV Advertising")
+  print(AdvTVPlot)
+
+    if(knitr::is_html_output()){
+      ggplotly(knitr::is_latex_output())
+    } else {
+      AdvTVPlot
+    }
+ #+END_SRC
+
+ #+RESULTS:
+ [[file:Intro02AdvPlotLinMod.png]]
+
+:END:
+
+ 
+* TODO Create Links to Files and Scripts
+** Environmental Informatics (Time Series Analysis)
+** Predictive Modelling
+
+** IntroDataSci
+
+
+These Files include: 
+
+ + [[IntroDataSci/00_Merge.Rmd][/todo,merge these]]
+ + [[IntroDataSci/01_Practical_SummarisingData.Rmd][Summarising Data]]
+ + [[IntroDataSci/02_Practical_LinearRegression.Rmd][LinearRegression]]
+ + [[IntroDataSci/03_Practical_Multiple_Linear_Regression.Rmd][Multiple Linear Regression]]
+ + [[IntroDataSci/04_Practical_Logistic.Rmd][Logistic Regression]]
+ + [[IntroDataSci/05_Practical_CrossValidation.Rmd][Cross Validation and BootStrapping]]
+ + [[IntroDataSci/06_Practical_Trees.Rmd][Tree Based Methods]]
+ + [[IntroDataSci/08_Practical_SupportVectorMachines.Rmd][Support Vector Machines]]
+ + [[IntroDataSci/10_Practical_PrincipalComponentAnalysis.Rmd][Principal Component Analysis]]
+ + [[IntroDataSci/11_Practical_Clustering-Iris.Rmd][Clustering]]
+ + [[IntroDataSci/99_Poly.R][Polynomial Snippet]]
+ + [[IntroDataSci/CreateChunks.R][Rmd Chunks Snippet]]
+
+
+
+I did do this as an org file to, I like it but I think =nvim-r= is just easier
+to use, albeit a little janky, I include this below merely as an example, refer
+to the actual file in the Notes Repo.
+
+[[./IntroDataSci/Org-Babel/IntroDataSci.org][Intro Data Sci in Org-Mode]]
+* References
+
+# Comment out the next two for LaTeX to work
+
+<<bibliography link>>
+bibliography:/home/ryan/Dropbox/Studies/Papers/references.bib
+
+<<bibliographystyle link>>
+bibliographystyle:unsrt
+
+
+\printbibliography

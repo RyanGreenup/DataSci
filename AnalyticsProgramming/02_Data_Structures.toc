@@ -1,0 +1,35 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Practical 02}{1}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{Preamble}{1}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{(1) Create Gaussian Values}{2}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{(2) Manipulate the Values}{2}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Print the number of Positive Values}{2}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Make all Values Positive}{2}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{(3) Create Bins}{3}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Equal Size Histogram bins}{3}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Plot the Binned Values}{3}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Random Sample}{5}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{(4) Create a matrix of Values}{6}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{(5) Linear Regression}{7}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Base Packages}{7}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{GGPlot2}{9}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Build the Model}{9}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Plot the Data Type}{10}{Doc-Start}
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{Refine the Model}{11}{Doc-Start}

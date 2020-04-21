@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+int\PYGZus{}mod\PYGZus{}adv \PYG{o}{\PYGZlt{}\PYGZhy{}} lm\PYG{p}{(}formula \PYG{o}{=} Sales \PYG{o}{\PYGZti{}} TV \PYG{o}{*} Radio \PYG{o}{+} TV \PYG{o}{+} Radio\PYG{p}{,} data \PYG{o}{=} adv\PYG{p}{)}
+int\PYGZus{}mod\PYGZus{}adv
+\end{Verbatim}

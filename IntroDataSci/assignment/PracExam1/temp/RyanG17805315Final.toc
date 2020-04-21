@@ -1,0 +1,20 @@
+\contentsline {section}{Wipe all the damn variables to prevent mistakes}{1}{Doc-Start}% 
+\contentsline {subsubsection}{Fit}{2}{lstnumber.-1.37}% 
+\contentsline {subsubsection}{Plot the Model}{2}{lstnumber.-2.5}% 
+\contentsline {paragraph}{Base}{3}{lstnumber.-2.5}% 
+\contentsline {paragraph}{Use \texttt {rpart}}{3}{lstnumber.-3.6}% 
+\contentsline {subsubsection}{Evaluate the tree by using a validation Split}{4}{lstnumber.-4.5}% 
+\contentsline {subsubsection}{Tree Pruning}{5}{lstnumber.-5.27}% 
+\contentsline {paragraph}{Using the the \texttt {cv.tree()} package}{5}{lstnumber.-5.27}% 
+\contentsline {paragraph}{Plot the Testing Error}{6}{lstnumber.-6.7}% 
+\contentsline {paragraph}{Prune the Tree}{6}{lstnumber.-7.13}% 
+\contentsline {paragraph}{Asess the pruned model against the test data}{7}{lstnumber.-8.3}% 
+\contentsline {subsection}{Regression Trees}{7}{lstnumber.-9.5}% 
+\contentsline {subsubsection}{Seperate training Data}{7}{lstnumber.-10.8}% 
+\contentsline {subsubsection}{Fit a Regression Tree to the Training Data}{8}{lstnumber.-11.3}% 
+\contentsline {paragraph}{Evalueate the Performance}{8}{lstnumber.-12.5}% 
+\contentsline {subsubsection}{Prune the tree with CV}{8}{lstnumber.-13.5}% 
+\contentsline {paragraph}{Perform Cross Validation}{8}{lstnumber.-13.5}% 
+\contentsline {paragraph}{Visualise the validaiton Error}{9}{lstnumber.-14.11}% 
+\contentsline {paragraph}{Prune the Tree}{9}{lstnumber.-15.6}% 
+\contentsline {subsubsection}{Using rpart}{9}{lstnumber.-16.3}% 

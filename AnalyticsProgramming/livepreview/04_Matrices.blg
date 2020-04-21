@@ -1,0 +1,9 @@
+[0] Config.pm:304> INFO - This is Biber 2.14 (beta)
+[0] Config.pm:307> INFO - Logfile is 'livepreview/04_Matrices.blg'
+[121] biber:322> INFO - === Tue Mar 17, 2020, 20:53:10
+[149] Biber.pm:415> INFO - Reading 'livepreview/04_Matrices.bcf'
+[246] Biber.pm:943> INFO - Found 0 citekeys in bib section 0
+[256] Utils.pm:293> WARN - The file 'livepreview/04_Matrices.bcf' does not contain any citations!
+[268] bbl.pm:652> INFO - Writing 'livepreview/04_Matrices.bbl' with encoding 'UTF-8'
+[269] bbl.pm:755> INFO - Output to livepreview/04_Matrices.bbl
+[269] Biber.pm:128> INFO - WARNINGS: 1

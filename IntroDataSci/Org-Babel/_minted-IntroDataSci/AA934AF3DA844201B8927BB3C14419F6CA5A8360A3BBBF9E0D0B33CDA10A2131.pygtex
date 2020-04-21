@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+input \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{seq}\PYG{p}{(}from \PYG{o}{=} \PYG{l+m}{100}\PYG{p}{,} to \PYG{o}{=} \PYG{l+m}{900}\PYG{p}{,} by \PYG{o}{=} \PYG{l+m}{100}\PYG{p}{)}
+output \PYG{o}{\PYGZlt{}\PYGZhy{}} predict\PYG{p}{(}object \PYG{o}{=} lmMod\PYG{p}{,} newdata \PYG{o}{=} \PYG{k+kt}{data.frame}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}TV\PYGZdq{}} \PYG{o}{=} input\PYG{p}{))}
+
+predDF \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{data.frame}\PYG{p}{(}input\PYG{p}{,} output\PYG{p}{)}
+\PYG{k+kp}{names}\PYG{p}{(}predDF\PYG{p}{)} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{names}\PYG{p}{(}adv\PYG{p}{[}\PYG{k+kt}{c}\PYG{p}{(}\PYG{l+m}{1}\PYG{p}{,}\PYG{l+m}{4}\PYG{p}{)])}
+predDF
+\end{Verbatim}

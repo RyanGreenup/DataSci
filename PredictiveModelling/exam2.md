@@ -1,0 +1,708 @@
+---
+title: "Final Exam - Question 2"
+tags: [Notebooks/Predictive Modelling]
+date: 2018-June-4
+author: "Ryan Greenup (1780 5315)"
+# output:
+#   rmarkdown::html_document:
+#     theme: lumen
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+    #Possible themes are cayman, tactile, architect, leonids, hpstr
+---
+
+
+
+#Preamble
+##Clear Latent Variables
+First clear latent variables that could be leftover from past work
+
+```r
+rm(list = ls())
+```
+##Load Packages
+Now load all the necessary packages:
+
+```r
+if(require('pacman')){
+    library('pacman')
+  }else{
+    install.packages('pacman')
+    library('pacman')
+  }
+  
+  pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer, colorspace, prettydoc, glmnet)
+```
+
+##Set Working Directory
+It is not necessary to set the working directory because this is a markdown file, the working directory is automatically set to the location of file
+
+##Load the data
+the data can be loaded using a relative file path, because the working directory is automatically set to
+the file location
+
+```r
+train.df <- read.csv(file = "newforest1.csv", header = TRUE, sep = ",")
+```
+
+```
+## Warning in file(file, "rt"): cannot open file 'newforest1.csv': No such
+## file or directory
+```
+
+```
+## Error in file(file, "rt"): cannot open the connection
+```
+
+```r
+test.df <- read.csv(file = "newforest2.csv", header = TRUE, sep = ",")
+```
+
+```
+## Warning in file(file, "rt"): cannot open file 'newforest2.csv': No such
+## file or directory
+```
+
+```
+## Error in file(file, "rt"): cannot open the connection
+```
+
+
+# (a) Train a Ridge Regression Model Using Cross Validation
+
+##Make the output variable binomial
+The current output variable has 4 levels, only 2 are required, forest/not forest
+hence an `ifelse` test can be used to replace them
+
+
+```r
+train.df$class <- ifelse(train.df$class %in% c("d", "h", "s"), yes = 0, no = 1)
+```
+
+```
+## Error in train.df$class %in% c("d", "h", "s"): object 'train.df' not found
+```
+
+Binomial Models can perform better when the predictor is a factor rather than a
+numeric value, but numeric output values are required for `cv.glmnet` to run
+so ensure that the class variable is numeric:
+
+
+```r
+train.df$class <- as.numeric(train.df$class)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'train.df' not found
+```
+
+   
+##Create the feature and output Matrix
+
+It is necessary to use matrices with the `glmnet` package
+so first create a feature and output matrix
+
+```r
+x <- as.matrix(train.df[,!(names(train.df) %in% c("class"))])
+```
+
+```
+## Error in as.matrix(train.df[, !(names(train.df) %in% c("class"))]): object 'train.df' not found
+```
+
+```r
+y <- as.matrix(train.df[,(names(train.df) %in% c("class"))]) 
+```
+
+```
+## Error in as.matrix(train.df[, (names(train.df) %in% c("class"))]): object 'train.df' not found
+```
+
+
+##Use Cross Validation to create a model
+now the `glmnet` can be used to create a ridge regression model
+and automatically use cross validation to choose the best 
+value for lambda.
+
+I'm going to create a lassoo and ridge model just in case
+it's required later in the exam.
+
+
+```r
+  ridge.mod <- cv.glmnet(x, y, family = "gaussian", alpha = 0)
+```
+
+```
+## Error in nrow(x): object 'x' not found
+```
+
+```r
+  lasso.mod <- cv.glmnet(x, y, family = "gaussian", alpha = 1)
+```
+
+```
+## Error in nrow(x): object 'x' not found
+```
+
+
+##Access the best lambda value and store it
+The value of lambda that returns the best performing model as 
+measured with cross validation can be found and stored:
+
+
+```r
+  lambda.min.ridge <- ridge.mod$lambda.min
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'ridge.mod' not found
+```
+
+```r
+  lambda.min.lasso <- lasso.mod$lambda.min
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'lasso.mod' not found
+```
+  
+#(b) Predict the Probabilities for forest land, using the best lambda
+
+
+```r
+  prob.ridgeSTD <- predict(ridge.mod, newx = x, s = lambda.min.ridge)
+```
+
+```
+## Error in predict(ridge.mod, newx = x, s = lambda.min.ridge): object 'ridge.mod' not found
+```
+
+```r
+  prob.lassoSTD <- predict(lasso.mod, newx = x, s = lambda.min.lasso)
+```
+
+```
+## Error in predict(lasso.mod, newx = x, s = lambda.min.lasso): object 'lasso.mod' not found
+```
+  
+  ##Make the probabilities into predictions
+  If we assume that a probability less than 50\% is indicative of forest land,
+  predictions can be made from the probability.
+    (Note that this may not be the appropriate probability threshold, a 
+    ROC curve used on the training data would help show which probability threshold
+    perfors best on the data.)
+    
+
+```r
+  pred.ridge.other <- ifelse(test = prob.ridgeSTD > 0.5, yes = 1, no = 0)
+```
+
+```
+## Error in ifelse(test = prob.ridgeSTD > 0.5, yes = 1, no = 0): object 'prob.ridgeSTD' not found
+```
+
+```r
+accuracy <- mean(train.df$class==pred.ridge.other)
+```
+
+```
+## Error in mean(train.df$class == pred.ridge.other): object 'train.df' not found
+```
+
+```r
+paste("Thus the the model predicts correctly for the absence of forest land at a rate of", 
+      round(accuracy, 2)*100, "%", "on the training data") %>% print()
+```
+
+```
+## Error in paste("Thus the the model predicts correctly for the absence of forest land at a rate of", : object 'accuracy' not found
+```
+    
+    
+
+    
+
+#(C) Perform One-Vs-All Classification
+
+##Create a model for Sugi Forest Prediction
+Following the same procedure as before a model for Sugi forest prediction
+can be constructed
+
+
+```r
+train.df <- read.csv(file = "newforest1.csv", header = TRUE, sep = ",")
+```
+
+```
+## Warning in file(file, "rt"): cannot open file 'newforest1.csv': No such
+## file or directory
+```
+
+```
+## Error in file(file, "rt"): cannot open the connection
+```
+
+```r
+#Classify the the forest type
+train.df$class <- ifelse(train.df$class %in% c("d", "h", "0"), yes = 0, no = 1)
+```
+
+```
+## Error in train.df$class %in% c("d", "h", "0"): object 'train.df' not found
+```
+
+```r
+#Create Matrices to Feed into glmnet
+x <- as.matrix(train.df[,!(names(train.df) %in% c("class"))])
+```
+
+```
+## Error in as.matrix(train.df[, !(names(train.df) %in% c("class"))]): object 'train.df' not found
+```
+
+```r
+y <- as.matrix(train.df[,(names(train.df) %in% c("class"))]) 
+```
+
+```
+## Error in as.matrix(train.df[, (names(train.df) %in% c("class"))]): object 'train.df' not found
+```
+
+```r
+#Create the Model
+ridge.mod.s <- cv.glmnet(x, y, family = "gaussian", alpha = 0)
+```
+
+```
+## Error in nrow(x): object 'x' not found
+```
+
+```r
+#Store the Lambda Value
+lambda.min.ridge.s <- ridge.mod.s$lambda.min
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'ridge.mod.s' not found
+```
+
+```r
+#Find the modelled probabilities
+prob.ridgeSTD <- predict(ridge.mod.s, newx = x, s = lambda.min.ridge)
+```
+
+```
+## Error in predict(ridge.mod.s, newx = x, s = lambda.min.ridge): object 'ridge.mod.s' not found
+```
+
+```r
+#Create Predictions from the Probabilities
+
+pred.ridge.s <- ifelse(test = prob.ridgeSTD > 0.5, yes = 1, no = 0)
+```
+
+```
+## Error in ifelse(test = prob.ridgeSTD > 0.5, yes = 1, no = 0): object 'prob.ridgeSTD' not found
+```
+
+```r
+accuracy <- mean(train.df$class==pred.ridge.s)
+```
+
+```
+## Error in mean(train.df$class == pred.ridge.s): object 'train.df' not found
+```
+
+```r
+paste("Thus the the model predicts correctly for the presence of 'sugi' forest land at a rate of", 
+      round(accuracy, 2)*100, "%", "on the training data") %>% print()
+```
+
+```
+## Error in paste("Thus the the model predicts correctly for the presence of 'sugi' forest land at a rate of", : object 'accuracy' not found
+```
+
+##Create Model for Hinoki Forests
+Like wise models for Hinoki forests can be created (maybe I should make this
+into a function but oh well...)
+
+
+```r
+train.df <- read.csv(file = "newforest1.csv", header = TRUE, sep = ",")
+```
+
+```
+## Warning in file(file, "rt"): cannot open file 'newforest1.csv': No such
+## file or directory
+```
+
+```
+## Error in file(file, "rt"): cannot open the connection
+```
+
+```r
+#Classify the the forest type
+train.df$class <- ifelse(train.df$class %in% c("d", "s", "0"), yes = 0, no = 1)
+```
+
+```
+## Error in train.df$class %in% c("d", "s", "0"): object 'train.df' not found
+```
+
+```r
+#Create Matrices to Feed into glmnet
+x <- as.matrix(train.df[,!(names(train.df) %in% c("class"))])
+```
+
+```
+## Error in as.matrix(train.df[, !(names(train.df) %in% c("class"))]): object 'train.df' not found
+```
+
+```r
+y <- as.matrix(train.df[,(names(train.df) %in% c("class"))]) 
+```
+
+```
+## Error in as.matrix(train.df[, (names(train.df) %in% c("class"))]): object 'train.df' not found
+```
+
+```r
+#Create the Model
+ridge.mod.h <- cv.glmnet(x, y, family = "gaussian", alpha = 0)
+```
+
+```
+## Error in nrow(x): object 'x' not found
+```
+
+```r
+#Store the Lambda Value
+lambda.min.ridge.h <- ridge.mod.h$lambda.min
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'ridge.mod.h' not found
+```
+
+```r
+#Find the modelled probabilities
+prob.ridgeSTD <- predict(ridge.mod.h, newx = x, s = lambda.min.ridge)
+```
+
+```
+## Error in predict(ridge.mod.h, newx = x, s = lambda.min.ridge): object 'ridge.mod.h' not found
+```
+
+```r
+#Create Predictions from the Probabilities
+
+pred.ridge.h <- ifelse(test = prob.ridgeSTD > 0.5, yes = 1, no = 0)
+```
+
+```
+## Error in ifelse(test = prob.ridgeSTD > 0.5, yes = 1, no = 0): object 'prob.ridgeSTD' not found
+```
+
+```r
+accuracy <- mean(train.df$class==pred.ridge.h)
+```
+
+```
+## Error in mean(train.df$class == pred.ridge.h): object 'train.df' not found
+```
+
+```r
+paste("Thus the the model predicts correctly for the presence of 'hinoki' forest land at a rate of", 
+      round(accuracy, 2)*100, "%", "on the training data") %>% print()
+```
+
+```
+## Error in paste("Thus the the model predicts correctly for the presence of 'hinoki' forest land at a rate of", : object 'accuracy' not found
+```
+
+##Create Model for mixed deciduous Forests
+
+Like wise models for Hinoki forests can be created (maybe I should make this
+into a function but oh well...)
+
+
+```r
+train.df <- read.csv(file = "newforest1.csv", header = TRUE, sep = ",")
+```
+
+```
+## Warning in file(file, "rt"): cannot open file 'newforest1.csv': No such
+## file or directory
+```
+
+```
+## Error in file(file, "rt"): cannot open the connection
+```
+
+```r
+#Classify the the forest type
+train.df$class <- ifelse(train.df$class %in% c("h", "s", "0"), yes = 0, no = 1)
+```
+
+```
+## Error in train.df$class %in% c("h", "s", "0"): object 'train.df' not found
+```
+
+```r
+#Create Matrices to Feed into glmnet
+x <- as.matrix(train.df[,!(names(train.df) %in% c("class"))])
+```
+
+```
+## Error in as.matrix(train.df[, !(names(train.df) %in% c("class"))]): object 'train.df' not found
+```
+
+```r
+y <- as.matrix(train.df[,(names(train.df) %in% c("class"))]) 
+```
+
+```
+## Error in as.matrix(train.df[, (names(train.df) %in% c("class"))]): object 'train.df' not found
+```
+
+```r
+#Create the Model
+ridge.mod.d <- cv.glmnet(x, y, family = "gaussian", alpha = 0)
+```
+
+```
+## Error in nrow(x): object 'x' not found
+```
+
+```r
+#Store the Lambda Value
+lambda.min.ridge.d <- ridge.mod.d$lambda.min
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'ridge.mod.d' not found
+```
+
+```r
+#Find the modelled probabilities
+prob.ridgeSTD <- predict(ridge.mod.d, newx = x, s = lambda.min.ridge)
+```
+
+```
+## Error in predict(ridge.mod.d, newx = x, s = lambda.min.ridge): object 'ridge.mod.d' not found
+```
+
+```r
+#Create Predictions from the Probabilities
+
+pred.ridge.d <- ifelse(test = prob.ridgeSTD > 0.5, yes = 1, no = 0)
+```
+
+```
+## Error in ifelse(test = prob.ridgeSTD > 0.5, yes = 1, no = 0): object 'prob.ridgeSTD' not found
+```
+
+```r
+accuracy <- mean(train.df$class==pred.ridge.d)
+```
+
+```
+## Error in mean(train.df$class == pred.ridge.d): object 'train.df' not found
+```
+
+```r
+paste("Thus the the model predicts correctly for the presence of mixed deciduous forest land at a rate of", 
+      round(accuracy, 2)*100, "%", "on the training data") %>% print()
+```
+
+```
+## Error in paste("Thus the the model predicts correctly for the presence of mixed deciduous forest land at a rate of", : object 'accuracy' not found
+```
+
+#(d) predict probabilities for each type of forest on the test set
+
+Probabilites for the type of forest existing given the predictor values can
+be calculated and hence used to measure the accuracy of the model on
+the testing data thustly:
+
+
+```r
+#Create Matrices to Feed into glmnet
+x.test <- as.matrix(test.df[,!(names(train.df) %in% c("class"))])
+```
+
+```
+## Error in as.matrix(test.df[, !(names(train.df) %in% c("class"))]): object 'test.df' not found
+```
+
+```r
+#Get the Probabilities
+  #Other
+  prob.test.o <- predict(ridge.mod, newx = x.test, s = lambda.min.ridge)
+```
+
+```
+## Error in predict(ridge.mod, newx = x.test, s = lambda.min.ridge): object 'ridge.mod' not found
+```
+
+```r
+  #Sugi
+  prob.test.s <- predict(ridge.mod.s, newx = x.test, s = lambda.min.ridge.s)
+```
+
+```
+## Error in predict(ridge.mod.s, newx = x.test, s = lambda.min.ridge.s): object 'ridge.mod.s' not found
+```
+
+```r
+  #Hanoki
+  prob.test.h <- predict(ridge.mod.h, newx = x.test, s = lambda.min.ridge.h)
+```
+
+```
+## Error in predict(ridge.mod.h, newx = x.test, s = lambda.min.ridge.h): object 'ridge.mod.h' not found
+```
+
+```r
+  #Disidual
+  prob.test.d <- predict(ridge.mod.d, newx = x.test, s = lambda.min.ridge.d)
+```
+
+```
+## Error in predict(ridge.mod.d, newx = x.test, s = lambda.min.ridge.d): object 'ridge.mod.d' not found
+```
+
+```r
+#Make predictions from the probabilities
+  pred.test.o <- ifelse(test = prob.test.o> 0.5, yes = 1, no = 0)
+```
+
+```
+## Error in ifelse(test = prob.test.o > 0.5, yes = 1, no = 0): object 'prob.test.o' not found
+```
+
+```r
+  pred.test.s <- ifelse(test = prob.test.s> 0.5, yes = 1, no = 0)
+```
+
+```
+## Error in ifelse(test = prob.test.s > 0.5, yes = 1, no = 0): object 'prob.test.s' not found
+```
+
+```r
+  pred.test.h <- ifelse(test = prob.test.h> 0.5, yes = 1, no = 0)
+```
+
+```
+## Error in ifelse(test = prob.test.h > 0.5, yes = 1, no = 0): object 'prob.test.h' not found
+```
+
+```r
+  pred.test.d <- ifelse(test = prob.test.d> 0.5, yes = 1, no = 0)
+```
+
+```
+## Error in ifelse(test = prob.test.d > 0.5, yes = 1, no = 0): object 'prob.test.d' not found
+```
+
+```r
+#Determine the Accuracy
+  #Other
+  test.df <- read.csv(file = "newforest2.csv", header = TRUE, sep = ",")
+```
+
+```
+## Warning in file(file, "rt"): cannot open file 'newforest2.csv': No such
+## file or directory
+```
+
+```
+## Error in file(file, "rt"): cannot open the connection
+```
+
+```r
+  #Classify the the forest type
+  obs.o <- ifelse(test.df$class %in% c("h", "s", "d"), yes = 0, no = 1)
+```
+
+```
+## Error in test.df$class %in% c("h", "s", "d"): object 'test.df' not found
+```
+
+```r
+  obs.s <- ifelse(test.df$class %in% c("h", "o", "d"), yes = 0, no = 1)
+```
+
+```
+## Error in test.df$class %in% c("h", "o", "d"): object 'test.df' not found
+```
+
+```r
+  obs.h <- ifelse(test.df$class %in% c("o", "s", "d"), yes = 0, no = 1)
+```
+
+```
+## Error in test.df$class %in% c("o", "s", "d"): object 'test.df' not found
+```
+
+```r
+  obs.d <- ifelse(test.df$class %in% c("h", "s", "o"), yes = 0, no = 1)
+```
+
+```
+## Error in test.df$class %in% c("h", "s", "o"): object 'test.df' not found
+```
+
+```r
+  #Calculate the Accuracy of the Model on the Test Date  
+  accuracy.o <- mean(obs.o==pred.test.o)
+```
+
+```
+## Error in mean(obs.o == pred.test.o): object 'obs.o' not found
+```
+
+```r
+  accuracy.s <- mean(obs.s==pred.test.s)
+```
+
+```
+## Error in mean(obs.s == pred.test.s): object 'obs.s' not found
+```
+
+```r
+  accuracy.h <- mean(obs.h==pred.test.h)
+```
+
+```
+## Error in mean(obs.h == pred.test.h): object 'obs.h' not found
+```
+
+```r
+  accuracy.d <- mean(obs.d==pred.test.d)
+```
+
+```
+## Error in mean(obs.d == pred.test.d): object 'obs.d' not found
+```
+
+```r
+  #Throw it in a dataframe
+  data.frame("Model" = c("Other", "Sugi", "Hanoki", "Disidual"),
+             "Accuracy" = c(accuracy.o, accuracy.s, accuracy.h, accuracy.d)) %>%
+    print()
+```
+
+```
+## Error in data.frame(Model = c("Other", "Sugi", "Hanoki", "Disidual"), : object 'accuracy.o' not found
+```
+
+#(e) ROC Curve
+
+A ROC Curve would allow an assessment of which probability threshold
+would perform best for our model.
+
+A ROC curve could be used here but has not been implemented, this 
+is a potential improvement that could be made to the model.

@@ -1,0 +1,645 @@
+---
+title: "2_Practical; Linear Regression"
+author: "Ryan Greenup 17805315"
+date: "12 March 2019"
+output:
+  html_document:
+    code_folding: hide
+    keep_md: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+  pdf_document: 
+    keep_tex: yes
+    toc: yes
+always_allow_html: yes
+  ##Shiny can be good but {.tabset} will be more compatible with PDF
+    ##but you can submit HTML in turnitin so it doesn't really matter.
+    
+    ##If a floating toc is used in the document only use {.tabset} on more or less copy/pasted k
+        #sections with different datasets
+---
+
+
+```{r setup, include=FALSE}
+load.pac <- function() {
+  
+  if(require('pacman')){
+    library('pacman')
+  }else{
+    install.packages('pacman')
+    library('pacman')
+  }
+  
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, webshot, scales)
+  
+}
+
+if (!exists("execFlag")) {
+ load.pac()
+  execFlag <- FALSE
+}
+  
+
+```
+
+# Simple Linear Regression
+Material of Tue 12 2019, week 2 
+
+## Question 1
+
+### (a) Import the Data
+
+```{r}
+adv <- read.csv(file = "Datasets/Advertising.csv", header = TRUE, sep = ",")
+```
+
+
+#### Inspect the structure of the Data Set
+
+```{r}
+head(adv)
+str(adv)
+summary(adv)
+```
+
+
+### (b) Construct Scatter Plots {.tabset}
+
+So I'd like to do a shiny ggplot here, however it's probably just as easy to use tabset by appending `{.tabset}` to the heading
+
+
+```{r}
+# par(mfrow=c(2,2))
+# plot(lm(y~x))
+```
+
+
+Multiple Plots may be fitted into one output using either the `par()` package or the `layout()` package, I personally prefer the `layout()` package, I think because in the past I had a bad experience with `par()`:
+
+* **In order to use `par`**:
+  - `par( mfcol = c(ROW, COLS))`
+  - `par (mfcol = c(ROW, COLS))`
+    - That's not a typo, `mfrow` and `mfcol` are identical in this case
+* **In order to use `layout`**:
+  - `layout(MATRIX)`
+    - The matrix should be a grid, the plots will be fed to that grid in numerical order so for example:
+      - `layout(matrix(1:3, nrow = 1))` will fit the plots to the following matrix in the order specified:
+      
+      $$
+      \begin{bmatrix}
+      1 & 2 & 3
+      \end{bmatrix}
+      $$
+* **In order to use `grid.layout():
+  - grid.arrange(plot1, plot2, ncol = 2))
+    - This is the only one that will work with ggplot2
+
+#### Multi Fit Base Plots {.tabset}
+
+
+```{r}
+# Set the layout:
+  # Using `layout()` command:
+
+    layout(matrix(1:3, nrow =1))
+
+  # using `par()` command:
+
+    #par(mfrow=c(1,3)) # Specify the
+
+# Set the plot Domain
+pdom <- c(0, 300) #Plot Domain
+
+#Generate the plots
+plot(formula = Sales ~ TV, data = adv, xlim = pdom,
+     main = "Sales Given TV Advertising")
+plot(formula = Sales ~ Newspaper, data = adv, xlim = pdom,
+     main = "Sales Given Newspaper Advertising")
+plot(formula = Sales ~ Radio, data = adv, xlim = pdom,
+     main = "Sales Given Radio Advertising")
+
+```
+
+
+
+#### GGPlot {.tabset}
+
+##### Television Advertising
+
+```{r}
+adv$MeanAdvertising <- rowMeans(adv[,c(!(names(adv) == "Sales"))])
+
+AdvTVPlot <- ggplot(data = adv, aes(x = TV, y = Sales, col = MeanAdvertising)) +
+  geom_point() + 
+  theme_bw() +
+  stat_smooth(method = 'lm', formula = y ~ poly(x, 2, raw = TRUE), se = FALSE) +
+ ##stat_smooth(method = 'lm', formula = y ~ log(x), se = FALSE) +
+  labs(col = "Mean Advertising", x= "TV Advertising") 
+
+if(knitr::is_latex_output()){
+ AdvTVPlot 
+} else {
+  AdvTVPlot%>% ggplotly()
+}
+
+
+
+
+```
+
+##### Radio Advertising
+
+```{r}
+
+ AdvRadPlot <- ggplot(data = adv, aes(x = Radio, y = Sales, col = MeanAdvertising)) +
+   geom_point() + 
+   theme_bw() +
+   labs(col = "Mean Advertising", x= "Radio Advertising") + 
+   geom_smooth(method = 'lm')
+
+
+# padv %>% ggplotly() plotly doesn't work with knitr/LaTeX so test the output and choose accordingly:
+#Thise could be combined into an interactive graph by wrapping in ggplotly(padv)
+
+if(knitr::is_latex_output()){
+  AdvRadPlot 
+} else {
+ AdvRadPlot %>% ggplotly()
+}
+
+
+```
+
+
+##### Newspaper Advertising
+
+```{r}
+
+AdvNewsPlot <- ggplot(data = adv, aes(x = Newspaper, y = Sales, col = MeanAdvertising)) +
+  geom_point() + 
+  theme_bw() +
+  labs(col = "Mean Advertising", x= "Newspaper Advertising")
+
+# padv %>% ggplotly() plotly doesn't work with knitr/LaTeX so test the output and choose accordingly:
+#Thise could be combined into an interactive graph by wrapping in ggplotly(padv)
+
+if(knitr::is_latex_output()){
+  AdvNewsPlot
+} else {
+AdvNewsPlot %>% ggplotly()
+}
+```
+
+
+
+#### Base Plot
+
+
+```{r}
+pdom <- c(0, 300) #Plot Domain
+plot(formula = Sales ~ TV, data = adv, xlim = pdom,
+     main = "Sales Given TV Advertising")
+plot(formula = Sales ~ Newspaper, data = adv, xlim = pdom,
+     main = "Sales Given Newspaper Advertising")
+plot(formula = Sales ~ Radio, data = adv, xlim = pdom,
+     main = "Sales Given Radio Advertising")
+```
+
+## (c) Find the Correlation Coefficient
+The corellation coefficient can be found by using the `cor` function, it is a measurement of the strength of a linear relationship ranging from -1, to 1, wherein a value of 0 would represent no relationship.
+
+The Pearson Correlation Coeffient tends to be used over other models and it's value is determined by:
+$$
+r_{xy} = \frac{\sum^{n}_{i= 1}   \left[ x_i - \overline{x} \right] \times \left( y_i - \overline{y} \right)}{\sqrt{\sum^{n}_{i= 1}   \left[\left(  x_i - \overline{x} \right)^2 \right]} \sqrt{\sum^{n}_{i= 1}   \left[ \left( y_i- \overline{y} \right)^2 \right]}}
+$$
+Some of the assumptions underlying the Correlation Coefficient are: [^corref] 
+
+* Independent Observations
+* Normally distributed observations (i.e. follows a bell curve)
+* hmoscedasticity [^pennstate]
+  - This means equal variance of observations
+    - i.e. all there is no pattern between the variables and the plot, the points should make a rectangle, not a triangle
+* Normally distributed points
+* the points must make a straight line not a curve 
+
+
+[^corref]: [Corellation Coefficient](spss-tutorials.com/pearson-correlation-coefficient/)
+[^pennstate]: [PennState University](newonlinecourses.science.psu.edu/stat501)
+
+the correlation coefficient in this case can be found by using `cor(x = adv$TV, y = adv$Sales)` and provides that $r \approx$ `r 
+cor(x = adv$TV, y = adv$Sales) %>% signif(2)
+`
+ This might not be a meaningufl value however because the variance of the sales appears to increase as advertising increases, if that is overlooked however the pearson correlation coefficient provides that the model is a reasonably strong positive linear model.
+
+## (d) Assess the accuracy of the parameter estimates
+
+The parameter estimates may be returned by summarising the model with `summary(lm)`
+```{r}
+lmMod <- lm(formula = Sales ~ TV, data = adv)
+lmSum <- summary(lmMod)
+lmSum
+lmSum$coefficients
+
+lmMod2 <- lm(formula = Sales ~ TV, data = adv)
+
+```
+
+In this case we have:
+
+*  a slope of $\beta_1 \approx$ `r lmSum$coefficients[2,1] %>% signif(2)` $\pm$ `r lmSum$coefficients[2,2] %>% signif(2)`
+*  an Intercept of  $\beta_0 \approx$ `r lmSum$coefficients[1,1] %>% signif(2)` $\pm$ `r lmSum$coefficients[1,2] %>% signif(2)`
+
+
+The standard deviation of a statistic used as an estimator of a population parameter is often referred to as the **standard error of the estimator (S.E.)**; it is the $\pm$ values specified above:
+
+* Standard Error of Slope Coefficient $\sigma_{\beta_1} = s\sqrt{\frac{1}{n}+ \frac{\overline{x}^2}{SS_x}} = 0.00027$
+* Standard Errof of Intercept Coefficint $\sigma_{\beta_0} = \frac{s}{\sqrt{SS_x}} = 0.46$
+
+Where:
+
+* $s$ is the sample standard deviation (OF WHAT?)
+* $SS_x = \sum^{n}_{i= 1}   \left[ x^2_i \right] - n\cdot  \left( \overline{x} \right)^2$
+* s is the sample standard deviation of $x$
+ - because the sample standard deiation of $x$ predicts the deviation of $y$ anyway
+
+
+You may also have the standard deviation of the residuals (the distance along the y-axis of a point from the regression line), this is known as the **Residual Standard Error** and is calculated via the *Ordinary Least Squares Method* [^olsmet], it is is given by:
+
+
+\begin{align}
+ \sigma_{\varepsilon} = S.E. & = \sqrt{\frac{\textbf{RSS}}{N}}\\
+ \ \\
+ &= \sqrt{\frac{\sum^{n}_{i= 1}   \left[ \left( y_i - \hat{y}_i \right)^2 \right]}{N}}
+\end{align}
+
+Which you'll notice is identical to the ***RMSE***.
+
+[^olsmet]: i.e. chosing $\beta_0$ and $\beta_1$ to minimise $\left(\textbf{RSS} =  \sum^{n}_{i= 1}   \left[ \left( y_i - \hat{y_i} \right)^2 \right] \right)$
+
+
+
+
+
+so by the emperical method $2\times \text{S.E.}$ would represent a 95% confidence interval (rather than prediction interval) of the expected $y$-values. Drawing such a confidence interval:
+
+```{r}
+paramint <- confint(object = lm(adv$Sales ~ adv$TV), level = 0.95) %>% signif(2)
+paramint
+```
+
+So drawing from this we could expect, with only a 5% probability of incorrectly rejecting the null hypothesis that there is no relationship, that in the absence of advertising, the TV sales to fall between `r paramint[1,1]` and `r paramint[1,2]`.
+
+With the same degree and type of certainty it could also be oncluded that for every $1000 increase in advertising, the tv sales will increase by between `r paramint[2,1]*1000` and `r paramint[2,2]*1000`.
+
+
+### (f) Test the significance of the slope of the linear model
+If it is appropriate to fit a linear model to data, then we can test for correlation between the data points by considering whether or not the slope value is non-zero $\beta_1 \neq 0$, this is because a zero coefficient would be such that the model would predict $Y = C + \varepsilon$, this means that $X$ is not a feature/predictor of $Y$, however $Y$ may still be a function of (or rather response variable of) other values other factors that are 'behind the scenes'.[^67]
+
+[^67]: Refer to page 67 of the text book, section [3.1.2]
+
+So our hypotheses would be:
+
+\begin{align}
+H_0 : \enspace \beta_1 &= 0 \qquad ( \small {\text{ The null hypothesis is that nothings related}})\\
+H_1 : \enspace \beta_1 &= 1
+\end{align}
+
+So our interest is to determine how far from 0 our expected $\beta_1$ value needs to be from 0 for us to conclude
+
+> <font size="3"> The expected value of $\beta_1$ is so far from zero we can conclude that it it's not zero at some significance level $^{\dagger}$" </font size>
+
+> > *$\dagger$ <font size="2"> at some low probability of incorrectly rejecting the null hypothesis</font>* 
+
+The problem is defining how far from zero is far enough, for this we use the expected distance from the regression line, the standard error from above, a value observed observed too many standard deviations to the right of the mean are not very likely too occur.
+
+
+#### Choosing a Parametric method
+
+A statistical method that relies on an underlying assumption of the statistical distribution of the data is known as a a parametric method, in this case, it is a fundamental assumption of **Ordinary Least Squares** Linear regression that the data is normally distributed.[^BiomTB]
+
+This is a situation where we use the *Student's t-test* because this is a sample, and the population standard deviation $\left( \sigma \right)$ is not known and hence the confidence interval for the mean must be made broader in order to account for the fact that the sample standard deviation $s$ is being used to estimate $\sigma$
+
+because the sampled population is normally distributed, the sampling distribution of $\bar{x}$ will be normally distributed [^CLT] (regardless of sample size) and centred  about $\mu$  with a a standard deviation of $\frac{\sigma}{\sqrt{n}}$. If the population was non-normal the sampling distribution will be approximately normal for $n\geq 30$.
+
+Because $\frac{\sigma}{n}$ is the standard deviation of the the sample mean $\bar{x}$ it is reffered to as the **Standard Error of the mean** [^BiomTB], so we could calculate the critical value along the standard normal distribution corresponding to the the sampling distribution in order to determine probabilities, however, $\sigma$ is unknown and using $s$ instead will not create a normal distribution, the distriution it creates is Gosset's **Student's t-distribution** [^366biom]:
+
+\begin{align}
+  t = \frac{\overline{x}- \mu}{\frac{s}{\sqrt{n}}}
+\end{align}
+
+
+[^366biom]: Mendenhall, *Introduction to Probability & Statistics* p. 254 [7.4]
+
+So in this case our test statistic will be:
+
+\begin{align}
+t = \frac{\hat{\beta}_1- 0}{\text{SE}\left( \hat{\beta}_1 \right)}
+\end{align}
+
+In order to perform this test in R we can use `qnorm` and `qt` to return critical values, `t.test` will perform a hypothesis test directly from input data but that's not suitable here.
+
+```{r}
+tcritval <- qt(p = 0.05,df =nrow(adv)-2 )
+tcritval %>% signif(2)
+
+```
+
+So the critical t-value is `r tcritval %>% signif(2)` and from the summary call from before we have that the t-statistic is 17, which far exceeds this, as a matter of fact further over to the right the p-value is reported at $\alpha = 10^{-16}$.
+
+In practice you'd just read off the *p*-values and pick the ones with `*` to the right of them, the more `*` the more significance.
+
+Hence we reject the hypothesis that no relationship exists at an extremely low probability of incorrectly doing so (i.e. low probability of commiting type 1 error).
+
+
+
+[^CLT]: By the Central Limit Theorem
+[^BiomTB]: Mendenhall, *Introduction to Probability & Statistics* p. 254 [7.4]
+
+
+
+
+
+### (g) Plot the straight line within the scatter plot and comment {.tabset}
+
+#### Base Plot
+In order to plot this inside base packages, feed the model object, i.e. `lm(Y~X)` inside a call to `abline()` in order to plot the model over the top of the base plot, so all together it might look like: [^naomit]
+
+```
+Form <- Sales ~ TV
+Lmodel <- lm(formula = Form, data = adv, na.action = na.exclude)
+plot(Form, data = adv)
+abline(Lmodel)
+```
+Or you could do it like this even, but I think the way above is better syntax because it will behave better with 'predict' function and follows `tidyverse` syntax
+
+```
+Lmodel <- lm(adv$Sales ~ adv$TV)
+plot(x = adv$TV, y = adv$Sales)
+abline(a = Lmodel$coefficients[1], b = Lmodel$coefficients[2])
+```
+
+
+[^naomit]: [`na.exclude` will pad values extracted so lengths are the same, `na.omit` will not](https://stats.stackexchange.com/a/11028)
+
+```{r}
+plot(formula = Sales ~ TV, data = adv, xlim = pdom,
+     main = "Sales Given TV Advertising")
+
+abline(lmMod)
+```
+
+#### GGplot
+
+
+```{r}
+AdvTVPlot <- ggplot(data = adv, aes(x = TV, y = Sales, col = MeanAdvertising)) +
+  geom_point() + 
+  theme_bw() +
+  stat_smooth(method = 'lm', formula = y ~ x, se = FALSE) 
+
+AdvTVPlot
+```
+
+If we needed to feed ggplot a specific model we could do that like this, but it's a whole thing to do and you'd probably rather not do it this way, but if you really really need to 
+
+[^ggstack]: [External Model for ggplot](https://stackoverflow.com/a/49848195)
+
+```{r}
+AdvTVPlot <- ggplot(data = adv, aes(x = TV, y = Sales, col = MeanAdvertising)) +
+  geom_point() + 
+  theme_bw() +
+  stat_smooth(
+      method = "lm",
+      mapping = aes( y = predict(lmMod)
+                     )
+      )
+
+AdvTVPlot
+```
+
+
+
+### (h) Assess the overall accuracy of the model
+The model can be assed by considering the:
+
+* Coefficient of determination $R^2$ which is the proportion of variance in the data that is explained by the model
+ - Only in the case of simple linear regression is $R^2 = (r)^2$
+* The Residual Standard Error is the standard deviation of the residuals, i.e. it is the expected distance between each point to the regression line, taken along the $y$-axis.
+
+#### Terminology
+
+The texbook makes, in my opinion, a mistake in that it refers to the the *Root Mean Square Error* (***RMSE***) as the *Residual Standard Error* (***RSE***) [^69], this is true, the standard error of the residuals ($\varepsilon$) would be the RMSE, so we would have ***RMSE*** $= \sigma_{\varepsilon}$, that's fine.
+
+[^69]: Refer to Page 69 of the TB for RMSE definition, the TB divides by DF which is probably more correct that dividing by sample size.
+
+The issue is there is another common term used called the *Relative Squared Error* (***RSE***) is often used [^saedsayad] and so this is hence ambiguous, hence forth I will:
+
+* Refer to the Standard Error of the residuals ($\sigma_{varepsilon}$) as ***RMSE***:
+  - $\text{RMSE} = \sqrt{\frac{\sum{\varepsilon ^2}}{n}}$
+* Refer to the Relative Standard Error as ***RSE***
+  - $\text{RSE} = \frac{\sigma_{\varepsilon} ^2}{\sigma_y ^2} = \frac{\sum{\left( y-\hat{y} \right)^2  }}{ \sum{  \left(  y-\bar{y}  \right)^2 }  }$
+    - The advantage to the RSE is that it can be compared between models with different units, whereas the RMSE cannot, just another tool in the belt I suppose.
+
+
+[^saedsayad]: [An Introduction to Data Science : Model Evaluation - Regression](https://www.saedsayad.com/model_evaluation_r.htm)
+
+#### Root Mean Square Error
+Recall that the model was of the form $Y = \beta_1 X + \beta_0 + \varepsilon$, the ***RMSE*** (*Root Mean Square Error*) is the standard deviation of $\varepsilon$ as measured along the $Y$-axis:
+
+\begin{align}
+ \sigma_{\varepsilon} =  \sqrt{\frac{\sum^{n}_{i= 1}   \left[ \left( y_i - \hat{y}_i \right)^2 \right]}{N}}
+\end{align}
+
+
+This value can be returned from R by investigating the anova table:
+
+```{r}
+anova(lmMod)
+```
+
+From the *ANOVA* table it can be seen that the average squared residual is 10.6
+
+\begin{align}
+\text{mean}\left( \varepsilon^2\right) &= 10.6\\
+\implies \frac{1}{n} \cdot \sum^{n}_{i=1} \left[ \varepsilon_i \right] & =10.6\\
+\implies \frac{1}{n} \cdot \sum^{n}_{i=1} \left[ \left( \hat{y}_i - y_i \right)^2 \right] & =10.6\\
+\implies \sqrt{\frac{1}{n} \cdot \sum^{n}_{i=1} \left[ \left( \hat{y}_i - y_i \right)^2 \right] } & = 3.2\\
+\ \\
+\implies \sigma_{\varepsilon} &= 3.2
+\end{align}
+
+Thus we may conclude that we expect the model to predict the sales within $\pm$ 3.2 units, which is quite predictive and hence useful.
+
+#### Coefficient of Determination
+The coefficient of determination is the proportion of variation within the model that is explained by the model:
+
+\begin{align}
+R^2 &= \frac{TSS-RSS}{TSS}\\
+&= \frac{3315}{3315+2103}\\
+\ \\
+&= 0.612
+\end{align}
+
+In practice we would simply extract the coefficient of determination ($R^2$) from the model-summary:
+
+```{r}
+lmSum$r.squared %>% round(3) %>% percent()
+```
+
+This value suggests that a reasonable amount of the variation is explained by the model, but perhaps a non-linear model could explain more of the variance. (be careful a significant coefficient of determination doesn't necessarily mean that the slope is significantly different from 0)
+
+#### Residual Analysis
+
+```{r}
+layout(matrix(1:4, nrow = 2))
+plot(lmMod)
+```
+
+* The residual plot does not appear to normally distributed, there is a slight logarithmic trend, this violates assumptions of the linear model undermining the predictive capacity of the model in this case.
+- The variance is also non-constant, for a linear model to be used in must be homoscedastic (i.e. constant variance), this is not the case implying that the assumptions of the linear model have been violated and hence this model may not be appropriate [^96]
+* the standardised residuals should be normally distriuted with a mean of 0 and standard deviation of 1, whilst the standard deviation appears acceptable, the standardised residuals are centred around $\approx 3/4$ with a positive upward slope violating the assumption of normality.
+* The normal Q-Q plot is a straight line so actually the data is probably normally distributed, the only issue is the heteroscedasticity of the data.
+* The Cook's Distance plot suggests that there are some points with a high amount of leverage, so perhaps there are some outliers or perhaps the increasing variance is undermining the appropriateness of the model.
+
+
+
+### (i) Use the model to make predictions
+
+
+[^96]: refer to page 96 of the TB, log or exp transforming may be appropriate here, the data is not homosdcedastic and is hence said to be heteroscedastic.
+#### How to use predict
+
+When making predictions is important to ensure that the names of a data frame are `syntactically correct`, otherwise you will have a bad day trying to get predict to work and ggplot2 to work because specifying the data frame names in a formula will be difficult, make sure that names are always syntactically valid.
+
+what is important is you create your model with the correct syntax, if you create your model like this:
+
+```
+mymodelWRONG <- lm(adv$Sales ~ adv$TV)
+```
+you won't be able to predict data like this:
+
+```
+predict(object = lmMod, newdata = data.frame("TV" = 300))
+```
+
+you'll just get an error that says `'newdata' had 1 row but variables found have 200 rows`, you have to give the variables corresponding names so that the model object can save them for later and make the connection, for instance, if inspect the terms from above you will get:
+
+```
+mymodelWRONG[["terms"]]
+```
+
+which outputs, at the tail end:
+
+```
+adv$Sales    adv$TV 
+"numeric" "numeric" 
+```
+
+where as if you create the model like this:
+
+
+```
+lmModCORRECT <- lm(formula = Sales ~ TV, data = adv)
+predict(object = lmModCORRECT, newdata = data.frame("TV" = 300))
+
+```
+
+and inspect the terms with:
+
+```
+lmModCORRECT[["terms"]]
+```
+
+you will get this as output
+```
+  Sales        TV 
+"numeric" "numeric" 
+```
+
+where `Sales` and `TV` are the outputs of `names(adv)` and so I can use that when I use predict. You should not use `attach` it will cause problems later, <font size="1"> however, it can be nice to use attach just before a predict call to get auto completed names and then remove attach and re-execute the script </font size>.
+
+So always use the `lm(formula = Y~X, data = myDF)` because it works the best; you have to use the same syntax/format when using predict or ggplot anyway so there's no reason not to use the same syntax throughout anyway.
+
+Also the lecturer said to use lists, I reckon use data frames because that way your `newdata` matches the input data one-to-one, moreover:
+
+* It makes it far simpler to assign names, because again, the input/ouptu data will all be the same format
+* when creating *Lasso* Regression Models you have to use matrices as input data and it's easier to set your workflow up to go from dataframe to matrix (You have to do this in predictive modelling)
+
+#### Predict the Data
+
+##### One Point
+```{r}
+input = 3
+output <- predict(object = lmMod, newdata = data.frame("TV" = 3))
+predDatasingle <- data.frame(input, output)
+names(predDatasingle) <- names(adv[c(1,4)])
+
+print(predDatasingle)
+
+```
+
+
+##### Multiple points
+```{r}
+input <- seq(from = 100, to = 900, by = 100)
+output <- predict(object = lmMod, newdata = data.frame("TV" = input))
+
+predDF <- data.frame(input, output)
+names(predDF) <- names(adv[c(1,4)])
+predDF
+
+```
+
+
+
+## Question 02
+### (a) Upload the Auto Dataset and explore it.
+### (b) Construct scatter plots to visualize the relationship between mpg and displacement, weight and accellertion:
+### Repeat the analysis in Q1 (c) to (i) using mpg and weight.
+
+
+[^rmsevrss]: In the case of linear regression minimizing the rss is equivalent to minimising the RMSE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

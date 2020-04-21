@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+AdvNewsPlot \PYG{o}{\PYGZlt{}\PYGZhy{}} ggplot\PYG{p}{(}data \PYG{o}{=} adv\PYG{p}{,} aes\PYG{p}{(}x \PYG{o}{=} Newspaper\PYG{p}{,} y \PYG{o}{=} Sales\PYG{p}{,} col \PYG{o}{=} MeanAdvertising\PYG{p}{))} \PYG{o}{+}
+  geom\PYGZus{}point\PYG{p}{()} \PYG{o}{+}
+  theme\PYGZus{}bw\PYG{p}{()} \PYG{o}{+}
+  labs\PYG{p}{(}col \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Mean Advertising\PYGZdq{}}\PYG{p}{,} x\PYG{o}{=} \PYG{l+s}{\PYGZdq{}Newspaper Advertising\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} padv \PYGZpc{}\PYGZgt{}\PYGZpc{} ggplotly() plotly doesn\PYGZsq{}t work with knitr/LaTeX so test the output and choose accordingly:}
+\PYG{c+c1}{\PYGZsh{}Thise could be combined into an interactive graph by wrapping in ggplotly(padv)}
+
+ \PYG{k+kr}{if}\PYG{p}{(}knitr\PYG{o}{::}is\PYGZus{}html\PYGZus{}output\PYG{p}{())\PYGZob{}}
+AdvNewsPlot \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} ggplotly\PYG{p}{()}
+\PYG{p}{\PYGZcb{}} \PYG{k+kr}{else} \PYG{p}{\PYGZob{}}
+AdvNewsPlot
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

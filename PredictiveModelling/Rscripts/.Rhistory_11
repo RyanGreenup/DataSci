@@ -1,0 +1,56 @@
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer, colorspace,
+prettydoc, glmnet)
+rm(list = ls())
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer, colorspace,
+prettydoc, glmnet)
+all.df <- read.csv(file = "deathrate.csv", header = TRUE, sep = ",")
+all.df.feat <- all.df[,-1]
+MeanCol.vec <- sapply(all.df.feat, mean)
+SDCol.vec <- sapply(all.df.feat, sd)
+#Create data frames for the standard feature data
+allSTD.df.feat  <- all.df.feat
+for (i in 1:ncol(allSTD.df.feat)){
+x   <- all.df.feat[,i]
+mu  <- MeanCol.vec[i]
+sig <- SDCol.vec[i]
+allSTD.df.feat[,i] <- (x-mu)/sig
+}
+#Combine to create Std DataFrames
+allSTD.df <- cbind(I = all.df$I, allSTD.df.feat)
+allSTD.df <- arrange(.data = allSTD.df, by.group = I)
+##Write The Standardised data to a CSV
+write.csv(x = allSTD.df, file = "deathrateSTD.csv", row.names = FALSE)
+x <- as.matrix(allSTD.df[,!(names(all.df) %in% c("I", "B"))])
+y <- as.matrix(allSTD.df[,(names(all.df) %in% c("B"))])
+ridge.mod <- cv.glmnet(x, y, family = "gaussian", alpha = 0)
+lasso.mod <- cv.glmnet(x, y, family = "gaussian", alpha = 1)
+lambda.min.ridge <- ridge.mod$lambda.min
+lambda.min.lasso <- lasso.mod$lambda.min
+pred.ridgeSTD <- predict(ridge.mod, newx = x, s = lambda.min.ridge)
+pred.lassoSTD <- predict(lasso.mod, newx = x, s = lambda.min.lasso)
+pred.ridge <-  pred.ridgeSTD*SDCol.vec["B"] + MeanCol.vec["B"]
+pred.lasso<-  pred.lassoSTD*SDCol.vec["B"] + MeanCol.vec["B"]
+#Base Plot
+plot(x = all.df$I, y = all.df$B, lty = 1, type = "b",
+ylab = "Predicted Death Rate",
+xlab = "Observation Number",
+main = "Observed and Predicted Death Rate")
+lines(x = all.df$I, y = pred.lasso, col = "red")
+lasso.mod.coef <- coefficients(lasso.mod)
+lasso.mod.coef
+LassoPredictors <- lasso.mod.coef[lasso.mod.coef[,1] > 0,]
+LassoPredictors <- sort(LassoPredictors)
+paste("The Predictors for the Best Lasso Model, in order of significance, are:",
+paste("",names(LassoPredictors[-1]),sep="", collapse=", "))

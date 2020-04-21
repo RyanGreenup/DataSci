@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+quadmod \PYG{o}{\PYGZlt{}\PYGZhy{}} lm\PYG{p}{(}formula \PYG{o}{=} Sales \PYG{o}{\PYGZti{}} \PYG{k+kp}{I}\PYG{p}{(}TV\PYG{o}{*}TV\PYG{p}{)} \PYG{o}{+} TV\PYG{p}{,} data \PYG{o}{=} adv\PYG{p}{)}
+\PYG{k+kp}{summary}\PYG{p}{(}quadmod\PYG{p}{)}
+\end{Verbatim}

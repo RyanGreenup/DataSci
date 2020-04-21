@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+newdata \PYG{o}{=}  \PYG{k+kt}{data.frame}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}TV\PYGZdq{}} \PYG{o}{=} \PYG{k+kt}{c}\PYG{p}{(}\PYG{l+m}{3}\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{,} \PYG{l+m}{2}\PYG{p}{),} \PYG{l+s}{\PYGZdq{}Radio\PYGZdq{}} \PYG{o}{=} \PYG{k+kt}{c}\PYG{p}{(}\PYG{l+m}{4}\PYG{p}{,} \PYG{l+m}{5}\PYG{p}{,} \PYG{l+m}{6}\PYG{p}{))}
+Mod\PYGZus{}Adv\PYGZus{}Mult\PYGZus{}b1 \PYG{o}{\PYGZlt{}\PYGZhy{}} predict\PYG{p}{(}object \PYG{o}{=} advModMultb1\PYG{p}{,} newdata\PYG{p}{)}
+
+mypreds \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{data.frame}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Input\PYGZdq{}} \PYG{o}{=} newdata\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Output\PYGZdq{}} \PYG{o}{=}  Mod\PYGZus{}Adv\PYGZus{}Mult\PYGZus{}b1\PYG{p}{)}
+mypreds \PYG{c+c1}{\PYGZsh{} Careful with the names, they workout as Input.name in this case.}
+\end{Verbatim}

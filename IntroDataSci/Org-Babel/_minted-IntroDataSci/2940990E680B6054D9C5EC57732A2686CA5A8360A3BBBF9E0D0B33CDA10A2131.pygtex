@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+lmMod2 \PYG{o}{\PYGZlt{}\PYGZhy{}} lm\PYG{p}{(}formula \PYG{o}{=} Sales \PYG{o}{\PYGZti{}} TV\PYG{p}{,} data \PYG{o}{=} adv\PYG{p}{)}
+\end{Verbatim}

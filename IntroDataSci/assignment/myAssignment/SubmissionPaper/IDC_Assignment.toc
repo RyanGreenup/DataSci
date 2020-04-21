@@ -1,0 +1,41 @@
+\contentsline {section}{Question 1}{2}{Doc-Start}
+\contentsline {subsection}{(1) Explore the Data Set}{2}{Doc-Start}
+\contentsline {subsubsection}{Identify any Linear Relations}{3}{lstnumber.-5.2}
+\contentsline {subsection}{(2) Select the most Suitable Attribute to use for Simple Linear Regression}{5}{figure.2}
+\contentsline {subsubsection}{Create the Model}{7}{equation.0.1}
+\contentsline {subsection}{(3) Model the Performance using Multiple Linear Regression}{9}{equation.0.2}
+\contentsline {subsubsection}{Collinearity}{9}{equation.0.2}
+\contentsline {subsubsection}{Linearity}{9}{equation.0.2}
+\contentsline {subsubsection}{Feature Interaction}{9}{equation.0.2}
+\contentsline {subsubsection}{Fit the Model}{10}{equation.0.2}
+\contentsline {subsubsection}{Find the Best Model}{15}{lstnumber.-27.45}
+\contentsline {paragraph}{Use the best subset selection}{15}{lstnumber.-27.45}
+\contentsline {subsubsection}{Consider Interaction Terms}{17}{equation.0.3}
+\contentsline {subsection}{(4) Model Diagnostics}{18}{lstnumber.-36.5}
+\contentsline {subsubsection}{ggplot2}{18}{figure.6}
+\contentsline {subsection}{(5) Transform the Data to Overcome Diagnostic issues.}{20}{figure.7}
+\contentsline {section}{Question 2}{22}{equation.0.4}
+\contentsline {subsection}{(1) Choose an appropriate polynomial attribute}{22}{equation.0.4}
+\contentsline {subsubsection}{Consider Cycle Time}{22}{equation.0.4}
+\contentsline {subsubsection}{Choose the Best Performing variable}{24}{equation.0.5}
+\contentsline {paragraph}{Implement the Algorithm}{24}{Item.2}
+\contentsline {subsection}{(2) Use 10-fold CV to Select the Optimal Model}{26}{lstnumber.-49.11}
+\contentsline {subsection}{(3) Comment on the Accuracy of the Model}{28}{equation.0.6}
+\contentsline {subsection}{(4) Model Diagnostics}{28}{equation.0.6}
+\contentsline {section}{Question 3}{30}{figure.12}
+\contentsline {subsection}{(1) Create a Test and Training set}{30}{figure.12}
+\contentsline {subsection}{(2) Build a Decision Tree}{30}{lstnumber.-58.4}
+\contentsline {subsubsection}{Superior Plot}{31}{figure.14}
+\contentsline {subsubsection}{Significant Attributes}{33}{figure.15}
+\contentsline {subsection}{(3) Model Performance}{34}{figure.15}
+\contentsline {paragraph}{Comparison to testing data}{34}{figure.15}
+\contentsline {subsubsection}{Comment on the Error}{34}{lstnumber.-64.11}
+\contentsline {subsection}{(4) Build a Categorical Decision tree}{34}{lstnumber.-64.11}
+\contentsline {subparagraph}{(5) Comment on the performance of the model}{37}{figure.17}
+\contentsline {section}{Question 4}{39}{lstnumber.-76.1}
+\contentsline {subsection}{(1) Design a Support Vector Machine}{39}{lstnumber.-76.1}
+\contentsline {subsubsection}{Create a categorical Variable}{39}{lstnumber.-76.1}
+\contentsline {paragraph}{Create the SVM}{39}{lstnumber.-77.3}
+\contentsline {subsubsection}{Compare Different Types of Kernels}{41}{figure.18}
+\contentsline {paragraph}{The Optimal SVM}{42}{lstnumber.-82.21}
+\contentsline {subsection}{(2) What is the Performance?}{42}{lstnumber.-82.21}

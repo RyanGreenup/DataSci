@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+                            \PYG{c+c1}{\PYGZsh{} Instead of representing interaction it represents TV\PYGZca{}3}
+
+polymodel\PYGZus{}Raw\PYG{o}{\PYGZlt{}\PYGZhy{}} lm\PYG{p}{(}Sales \PYG{o}{\PYGZti{}} poly\PYG{p}{(}x \PYG{o}{=} TV\PYG{p}{,} degree \PYG{o}{=} \PYG{l+m}{3}\PYG{p}{,} raw \PYG{o}{=} \PYG{k+kc}{TRUE}\PYG{p}{),} data \PYG{o}{=} adv\PYG{p}{)}
+\PYG{k+kp}{summary}\PYG{p}{(}polymodel\PYGZus{}Raw\PYG{p}{)}
+\end{Verbatim}

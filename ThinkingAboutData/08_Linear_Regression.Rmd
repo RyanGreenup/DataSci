@@ -1,0 +1,244 @@
+---
+title: "08 Linear Regression"
+fig_caption: yes
+output:
+  html_document: 
+    keep_md: yes
+    toc: yes
+  html_notebook:
+    toc: yes
+  pdf_document:
+    toc: yes
+tags: Notebooks/Thinking About Data
+editor_options:
+  chunk_output_type: inline
+---
+
+# (08) Linear Regression
+## Preamble
+
+```{r}
+# Preamble
+
+## Install Pacman
+load.pac <- function() {
+  
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+    pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice,
+                 coin, primes, epitools, maps, clipr, ggmap, RColorBrewer)
+  
+  
+   mise()
+   select <- dplyr::select
+}
+
+load.pac()
+setwd(dir = "/home/ryan/Notes/DataSci/ThinkingAboutData/")
+load(file = "~/Notes/DataSci/ThinkingAboutData/TAD.rdata")
+load(file = "./TAD.rdata")
+print("Success")
+```
+
+
+```{r}
+knitr::opts_chunk$set(fig.path = "./figure/")
+
+```
+
+## Scatter Plot
+A scatter plot can be created using the `plot` and `abline()` functions:
+
+```{r, warning = FALSE}
+head(crabsmolt)
+plot(postsz ~ presz, data = crabsmolt)
+abline(a = 0, b = 1)
+abline(a = 18,  b = 1)
+```
+
+This could also be constructed with ggplot2:
+
+```{r, warning = FALSE}
+ggplot(crabsmolt, aes(x = presz, y = postsz)) +
+    geom_point() +
+    geom_smooth(method = lm, se = FALSE, col="blue") +
+    geom_abline(slope = 1, intercept = 18, col = "red") +
+    theme_bw()
+```
+
+
+## Linear Regression
+### Crabs
+```{r, warning = FALSE}
+(fit = lm(postsz ~ presz, data = crabsmolt))formula
+
+plot(postsz ~ presz, data = crabsmolt)
+abline(fit)
+```
+### Pulse
+
+```{r, warning = FALSE}
+head(PulseBA)
+formula <- "After ~ Before"
+(pl.lm <- lm(formula, data = PulseBA))
+
+plot(After ~ Before, data = PulseBA)
+abline(pl.lm)
+```
+
+### Heights
+
+```{r, warning = FALSE}
+head(heights)
+h.lm <- lm(earn ~ height, data = heights)
+
+plot(y = heights$earn, x = heights$height)
+abline(h.lm)
+```
+
+### Helmets
+
+```{r, warning = FALSE}
+head(nzhelmet)
+nz.lm <- lm(Metal ~ Cardboard, data = nzhelmet)
+
+plot(Metal ~ Cardboard, data = nzhelmet)
+abline(nz.lm)
+```
+
+
+## Hypothesis Test (for no slope)
+Given the hypothesis:
+
++ $H_0: \quad$ The slope has a value of 0
++ $H_a: \quad$ The slope has a non-zero value
+
+In order to evaluate the probability of rejecting the null hypothesis when it is
+true:
+
+1. Simulate a sample corresponding to this population that has no relationship
+  + This can be done by permuting the observations
+2. Measure the number of times a slope value more extreme than observation is
+recorded.
+  + this represents the probability of a rejection corresponding to this sample
+  being a /False Positive/.
+
+```{r, warning = FALSE}
+## Calculate the current slope
+slope <- lm(postsz ~ presz, data = crabsmolt)[[1]][2]
+
+## Simulate null hypothesis
+
+sim <- replicate(10^3, {
+    ## Shuffle the data
+    postsz_perm <- sample(crabsmolt$postsz)
+    ## Recalculate the slope
+    slope_sim <- lm(postsz_perm ~ crabsmolt$presz, data = crabsmolt)[[1]][2]
+    ## Is the slope more extreme
+    abs(slope_sim) > abs(slope)
+})
+
+(pval <- mean(sim))
+```
+
+This simulation returns an expected p-value is 0 and hence the probability of rejecting
+the null hypothesis when it is true, (i.e. the probability of rejecting the
+hypothesis of no relationship when there actually is no relationship) is very
+small and hence is rejected.
+
+It is conceded that there is a relationship between the two variables at a very
+high significance level.
+
+### Pulse Data
+
+The Hypothesis for the pulse data is:
+
++ $H_0: \quad$ There is no relationship between pulse rates before or after exercise
++ $H_a: \quad$ There is a non-zero rate of change for a model predicting
+  Post-Exercise Pulse from Pre-Exercise.
+  
+The probability of rejecting the null hypothesis when it is correct can be
+measured by simulating the frequency at which the null hypothesis would be
+rejected if there was no relationship between the data in this sample given the
+measured slope value.
+
+```{r, warning = FALSE}
+names(PulseBA)
+## Calculate the Slope
+slope <- lm(After ~ Before, data = PulseBA)[[1]][2]
+
+## Simulate no Relationship
+sim <- replicate(10^4, {
+    ## Permutate the data so there is no relationship
+    After_p <- sample(PulseBA$After)
+    ## Measure the slope of a Linear Regression
+    slope_sim <- coef(lm(After ~ Before, data = PulseBA))[2]
+    ## Is this simulated value more extreme?
+    abs(slope_sim) > abs(slope)
+})
+
+(pval <- mean(sim))
+
+```
+
+The expected p-value is returned as zero and so the probability of rejecting the
+null hypothesis when it is true is very small, and hence the null hypothesis is
+rejected.
+
+It is conceded at a very high significance level that there is a non-zero rate
+of change between the Post/Pre Pulse Rates in the population given this sample.
+
+This doesn't provide that there is necessarily a high probability of correctly
+rejecting the null hypothesis when it is false, this is measured by the power
+$1 - \beta \approx \1-\textsf{FNR}$
+
+
+
+
+### Exemplar Crabs
+To test the hypothesis that the slope has some value
+
+$$\begin{aligned}
+y&= mx + c \\
+y-mx& = c \\
+y-mx& =  0\cdot m_2  + c \\
+\end{aligned}$$
+
+Now it is merely necessary to perform a hypothesis test for a zero slope for 
+$y - mx \sim c$:
+
+```{r, warning = FALSE}
+## What is the observed slope
+slope <- lm(postsz ~ presz, data = crabsmolt)[[1]][2]
+
+## Simulate the observed slope when there is no relationship
+sim <- replicate(10^4, {
+    ## Permutate the Observations to remove a relationship
+    presz_perm <- sample(crabsmolt$presz)
+    ## Measure the slope
+    slope_sim <- lm(postsz ~ presz_perm, data = crabsmolt)
+    ## Is this slope more extreme?
+    abs(slope_sim) > abs(slope)
+})
+
+## What is the frequency at which the null hypothesis would be rejected
+    ## (erroneously if the observation was the cut off point)
+(pval <- mean(sim))
+```
+
+The probability
+
+
+
+
+
+## Confidence Interval (for slope)
+## Residuals
+## Summary Information

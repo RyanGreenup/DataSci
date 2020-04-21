@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+ggplot\PYG{p}{(}data \PYG{o}{=} ResDF\PYG{p}{,} aes\PYG{p}{(}x \PYG{o}{=} Output\PYG{p}{,} y \PYG{o}{=} Error\PYG{p}{,} col \PYG{o}{=} Error \PYG{p}{))} \PYG{o}{+}
+  geom\PYGZus{}point\PYG{p}{()} \PYG{o}{+}
+  theme\PYGZus{}bw\PYG{p}{()} \PYG{o}{+}
+  stat\PYGZus{}smooth\PYG{p}{(}col \PYG{o}{=} \PYG{l+s}{\PYGZdq{}grey\PYGZdq{}}\PYG{p}{)}\PYG{o}{+}
+  stat\PYGZus{}smooth\PYG{p}{(}method \PYG{o}{=} \PYG{l+s}{\PYGZdq{}lm\PYGZdq{}}\PYG{p}{,} se \PYG{o}{=} \PYG{l+m}{0}\PYG{p}{,} \PYG{p}{)} \PYG{o}{+}
+scale\PYGZus{}color\PYGZus{}gradient\PYG{p}{(}low \PYG{o}{=} \PYG{l+s}{\PYGZdq{}indianred\PYGZdq{}}\PYG{p}{,} high \PYG{o}{=} \PYG{l+s}{\PYGZdq{}royalblue\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+  labs\PYG{p}{(}y \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Residuals\PYGZdq{}}\PYG{p}{,} x \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Predicted Value\PYGZdq{}}\PYG{p}{,} title \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Residuals Plotted against Output\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

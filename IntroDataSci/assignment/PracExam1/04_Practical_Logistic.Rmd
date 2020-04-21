@@ -1,0 +1,635 @@
+---
+title: "04_Practical; Logistic Regression"
+author: "Ryan Greenup 17805315"
+date: "12 March 2019"
+output:
+  html_document:
+    code_folding: hide
+    keep_md: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: no
+  pdf_document: 
+    toc: yes
+always_allow_html: yes
+bibliography: ref.bib
+
+  ##Shiny can be good but {.tabset} will be more compatible with PDF
+    ##but you can submit HTML in turnitin so it doesn't really matter.
+    
+ ##It is rare that you will want to use a floating toc with {.tabset}
+    ##If a floating toc is used in the document only use {.tabset} on more or less copy/pasted 
+        #sections with different datasets
+    ##Otherwise use {.tabsets} instead of TOC or TOC instead of {.tabsets}, one or the other though.
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(caret, e1071, scales, ggplot2, rmarkdown, shiny, ISLR, class, BiocManager, corrplot, plotly, tidyverse, latex2exp, stringr, reshape2, cowplot, ggpubr, rstudioapi, wesanderson, RColorBrewer, colorspace, gridExtra, grid)
+  #Mass isn't available for R 3.5...
+```
+
+# Logistic Regression
+Material of Tue 26 2019, week 4 
+
+It's worth bearing in mind that Logistic regression is basically the same as linear regression for an output value that is categorical, i.e. if linear assumptions hold and $Y \in \mathbb{Z} \wedge Y = f(X) + \varepsilon \implies f = \sum^n_{i=1} \left[a_i \cdot  \frac{e^{\alpha + \beta x_i}}{1+e^{\alpha + \beta x_i}} \right]$.
+
+This is a parametric method because all we need to do now is solve parameter coefficients.
+This is supervised learning because there are output values.
+
+## Question 01: Logistic Regression: Use “Default” data sets
+
+### 1. Start R studio. Upload “Default” data set built in R and View the data sets using the Console.
+
+```{r}
+def <- read.csv(file = "Datasets/Default.csv")
+
+head(def)
+    # writeLines("\n")
+    # print("***Dimensions***")
+    writeLines("\n")
+dim(def)
+    # writeLines("\n")
+    # print("***Summary***")
+    # writeLines("\n")
+summary(def)
+    # writeLines("\n")
+    # print("***Structure***")
+    # writeLines("\n")
+str(def)
+    # writeLines("\n")
+    
+```
+
+#### Dummy Variables
+when `glm` is used on a categorical variable that is stored as the `factor` class in ***R*** the categorical variables will be encoded as dummy variables (i.e. they will become numbers that are stored as `factors` ), I thought it might be better to do this yourself because otherwise you have to figure out which dummy variable corresponds to what, however at p. 157 of the textook a different approach is taken; `glm` was used and then `contrasts(def$student)` was used to work out which was what, that's probably the better way to do it.
+
+You shouldn't work with dummy variables at all, that's what contrasts are for, work with contrasts [^contrastR] instead [^datacamp] of doing it all by hand, it will prevent you from making a mistake.
+
+
+[^datacamp]: [Data Camp: Logistic Regression Tutorial](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/contrasts)
+[^contrastR]: [R Documentation on Contrasts](https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/contrasts)
+
+
+If values are already numeric but represent categorical variables, it is necessary to ensure that they are of the `factor` class not `numeric`/`integer`/`double` etc. because otherwise the model will perform sub-optimally. This can be tested by using `class()`.[^class]
+
+[^class]: [DataMentor](https://www.datamentor.io/r-programming/factor/) and [StackOverflow](https://stackoverflow.com/questions/35445112/what-is-the-difference-between-mode-and-class-in-r) and [StackExchange](https://stats.stackexchange.com/questions/3212/mode-class-and-type-of-r-objects)
+
+If values are integers but need to be considered as discrete values, it is usually better to convert them into `factors` as well, otherwise models will simply assume they are continuous variables and perform suboptimally (it may be worth preserving two colums in a data frame for the factorised and original data, ocassionally plots will complain about discrete data data and it will be easier to feed them the numeric data).
+
+first convert the data from factors to something else just so we can see how to do that, the easiest in this case is a `character` (be mindful in ***R*** there is no `string` class, instead there is only the `character` class, this is distinct from *C*-like languages such as java), again this can be tested by using `class()`.
+
+There is also `typeof()` which returns the type of the object from the perspective of ***R***, `class()` refers to the perspective of an Object-Orientated programming language.
+
+```{r}
+def$default <- as.factor(def$default)
+def$student <- as.factor(def$student)
+glm(formula = default ~ balance, data = def, family = "binomial")
+```
+
+```{r}
+contrasts(def$default)
+contrasts(def$student)
+```
+
+
+### 2. Plot Income verses Balance (i.e. Plot the Predictors against Each other) {.tabset}
+
+Generally it would be more appropriate to map the output variable to the colour, because colour is easier to see than shape and it is the output variable we are most concerned with.
+
+#### GGplot
+
+By using the structure from above we can decide to map shape and colour to the default and student variables respectively.
+
+Ge
+
+```{r}
+predplot <- ggplot(data = def, aes(y = balance, x = income, col = default, shape = student)) +
+  geom_point(size = 2, alpha = 0.7) +
+  labs(y = TeX("Account Balance $(X_2)$"), x = TeX("Income ($X_3$)"), shape = TeX("Student ( X_1 )"), col = "Default (Y)",
+       title = "Account Balace against Income and Defaut") +
+  theme_classic()
+
+predplot
+
+#ggplotly(predplot) # This does not support latex!
+```
+
+It's hard to see whether or not there are any defaults in the centre of the plot, hence map the alpha-level to the default and let's invert this plot so that the split occurs along left/right, that way it will resemble our box plots (this is done simply for want of being able to visualise the data, both the axis are predivitive features so it doesn't matter):
+
+```{r}
+ggplot(data = def, aes(x = balance, y = income, col = default, shape = student)) +
+  geom_point(size = 5, aes(alpha = default)) +
+  labs(x = TeX("Account Balance $(X_2)$"), y = TeX("Income ($X_3$)"), shape = TeX("Student ( X_1 )"), col = "Default (Y)",
+       title = "Account Balace against Income and Defaut") +
+  theme_classic()
+```
+
+Now it can be clearly seen that defaults occur at a higher frequency when there is a higher account balance, and maybe slightly higher for students than non-students (there;s mayve very slightly less triangles on the right side than left.)
+
+It seems to be totally independent of income.
+
+
+##### BoxPlot
+It is necessary to observe the behaviour of the output variable in response to all the predictors, however it is innapropriate to use a scatterplot because it comes out almost useless:
+
+A boxplot is the correct way to do this [^129], using the output along the $x$-axis and the predictor along the $y$ axis, we can create two sets of this in ggplot by mapping the `x=student` and `fill  = default`.
+
+[^129]: Refer to page 129 of ISL [@ISL]
+
+
+```{r}
+ggplot(data = def, aes(x = student, y = balance, fill = default)) + #The predict
+  geom_boxplot() +
+  theme_classic() +
+  labs(y = TeX("Balance ($X_2$)"), x = TeX("Student ($X_1$)") , fill = TeX("Default ($Y$)"),
+       title = TeX("Default given Status as student and Balance")) +
+  scale_fill_brewer(palette = "Pastel1")
+```
+
+From here it can clearly be seen that there are some outliers for balance but it is a significant predictorv of defaulting, it can also be seen that generally students are more likely to default but this is a non-significant observation.
+
+In my opinion the appropriate 
+
+The textbook chose to visualise the boxplots as below, I think this is undesirable because the interaction of income is already clear from the preceeding plot and because student has a more significant impact than income that should be considered.
+
+```{r}
+balplot <- ggplot(data = def, aes(x = default, y = balance, fill = default)) +
+  geom_boxplot() + 
+  labs(x = TeX("Default $(Y)$"), y = TeX("Balance $(X_2)$"), title = "Default given Account Balance") +
+  theme_classic2() + 
+  guides(fill = FALSE) +
+  scale_fill_brewer(palette = "Pastel1")
+
+
+incplot <- ggplot(data = def, aes(x = default, y = income, fill = default)) +
+  geom_boxplot() + 
+  labs(x = TeX("Default $(Y)$"), y = TeX("Balance $(X_33$"), title = "Default given Account Balance") +
+  theme_classic2() +
+  guides(fill = FALSE) +
+  #scale_fill_discrete(direction = 1, h.start = 99, )
+  scale_fill_brewer(palette = "Pastel1")
+
+grid.arrange(balplot, incplot, nrow = 1)
+```
+
+#### Base Plot
+
+```{r}
+plot(income ~ balance, data = def,
+    main = "Credit Defaults",
+     xlab = "Income",
+     ylab ="Balance",
+     pch = c(1, 2)[as.numeric(student)],
+     col = c("IndianRed", "Royalblue")[as.numeric(default)], 
+    cex = 0.7)
+```
+
+
+
+
+
+### 3. Construct the Multiple Linear Logistic Model for default in terms of the Predictors balance, student and income.
+In order to create a logistic model use the `glm` function which is a *generalised linear model* function, because this is just an exponentiated linear function.
+
+* Choose `family = binomial`
+  - categorical variables are not normally distributed because they are not continuous, a binomial distribution is the corresponding distribution for discrete data
+* Choose `link = logit`
+  - Use `probit` for when the seperation of data is distinct, it performs slightly better.
+  - the term *logit* is another word for *log odds*:
+      - $\log{\left(\frac{\text{P}\left(X\right)}{1 - \text{P}\left(X\right)}\right)}$
+
+
+
+
+
+```{r}
+ModDef <- glm(formula = default ~ student + balance + income, family = binomial(link = "logit"), data = def)
+contrasts(def$default)
+```
+
+
+### 4. Show how you would calculate the probability (the default = “yes”) for a given set of X (predictor) values.
+In order to find the probability just use the predict command:
+
+
+#### Create the data frame of new data
+Use a data frame rather than a list, that way the format of your input, output and predicted data is all equivalent.
+
+```{r}
+newdata <- data.frame(
+#   "student" = as.factor(c("Yes", "Yes", "No", "Yes")), # Normal
+      #If I wanted to create random points.
+    "student" = ifelse(sample(c(0, 1), size = 4, replace = TRUE)==0, "No", "Yes"), 
+   "balance" = rnorm(n = 4, 1500, sd = 500),
+   "income" = rnorm(n = 4, mean = 50000, sd = 15000)
+   )
+
+```
+
+Now call the `predict` command and use `cbind` to combine the `newdata` with the predicted data.
+
+By default the predict command will output the value of the *logit* or the *log-odds*:[^133]
+
+[^133]: Refer to page 133 Equation 4.4 of ISL
+
+$$
+\verb|output| = \log\left(   \frac{ \text{Pr}\left(X\right)  }{1 - \text{Pr}\left(X\right) }   \right)
+$$
+Clearly the raw probability would be considerably more useful to us, hence specify the parameter `type="Response"`:
+
+
+
+
+```{r}
+predVals <- predict(object = ModDef, newdata, type = "response") 
+cbind("default_prob" = predVals, newdata)
+```
+
+all the corresponding values can be returned by not specifying the `newdata` parameter in the predict command, it would also be possible to return the `fitted.values` from the model object, the fitted values will represent the probability because it is the natural position along the $y$-axis, it is the fitted value
+
+```{r}
+ModelPreds <- cbind(def, "Probability" = ModDef$fitted.values)
+
+#ModelPreds <- cbind(def, "Probability" = predict(ModDef, type = 'response'))   #This would do the same thing
+```
+
+In order to move from the probability to the decision the threshold would have to be specified:
+
+```{r}
+threshold <- 0.5
+ModelPreds$prediction <- rep_len(x ="No", length.out = nrow(ModelPreds))
+ModelPreds$prediction[ModelPreds$Probability > threshold] <- "Yes"
+ModelPreds$prediction <- as.factor(ModelPreds$prediction)
+ModelPreds <- ModelPreds[,c(2,6,7,3,4,5)]
+head(ModelPreds)
+
+
+#Alternative approach
+#threshold <- 0.5
+#Predictions <- ifelse(ModelPreds$Probability < threshold, 0, 1)
+#ModelPreds <- cbind(ModelPreds, "Prediction" = Predictions)
+```
+
+### 5. Construct the Misclassification Martrix
+
+
+The misclassification matrix (or confusion matrix) is a matrix for the False and True Positives, it can be a good idea to wrap this in a function because later on it may be necessary to use a loop to return a ROC curve.
+
+#### Construct functions to Compute FPR and TPR {.tabset}
+
+##### base
+
+This is the method that oliver taught us
+
+ ```
+This is the harder way to do it, this is what Oliver taught us
+ trupos <- ifelse(ModelPreds$default == ModelPreds$Prediction, 1, 0 )             #fpr
+ trupos <- sum(trupos)
+ trupos
+ 
+ FalsePos <- nrow(ModelPreds) - trupos
+ 
+ FalseNeg <- ifelse(ModelPreds$)
+ ```
+ 
+ This is a more elegent strategy using `table(predictions, observations)`, the order should be specified as such by convention I have seen in the TB and [online](https://www.datacamp.com/community/tutorials/confusion-matrix-calculation-r), this way also matches the `confusionMatrix()` functoin inside the `caret` package
+ 
+ By convention the rows will represent the predicted values and the columns will represent the observed values. \footnote{Atleast that's what I'm lead to believe by this [DataCamp Tutorial](https://www.datacamp.com/community/tutorials/confusion-matrix-calculation-r) and this [DataSchool Tutorial](https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/)}. however one page of the textbook shows it in print the otherway but generates in code this way so that's a little confusing.
+ 
+ 
+ 
+
+```{r}
+conf.mat <- table(ModelPreds$prediction, ModelPreds$default, dnn = c("Predicted", "Observed"))
+print(conf.mat)
+
+# It can be a little difficult to determine which one is the prediction using table
+  #if you don't get the order of prediction then observation right, so
+    # you can also use `confusionMatrix` from the `caret` package to triple check.
+
+
+conf.mat2 <- confusionMatrix(ModelPreds$prediction, ModelPreds$default)
+print(conf.mat2)
+
+```
+
+
+### 6. Calculate the Prob (Misclassification) or Misclassification Rate
+
+
+In order to determine the missclassification rate we would, in this case the diagonals are the correct predictions and the off-diagonals are misclassifications \footnote{refer to page 158 of the TB}
+
+```{r}
+misclass <- (40+228)/(9627+228+40+105)
+
+print(paste("The misclassification rate is: ", percent(misclass)))
+```
+
+in practice we would just take the mean value of the missclassifications, because under the hood true and false correspond to 1/0 in R.
+
+```{r}
+misclass <- mean(ModelPreds$default != ModelPreds$prediction) 
+print(paste("The misclassification rate is: ", percent(misclass)))
+```
+
+
+
+### 7. Calculate the FPR and FNR
+Incorrect will be off-diagonals.
+
+The False positive rate will be the number of times that the prediction is positive but the observation is negative, so the second row, first column of the confusion matrix.
+
+The False Negative rate will be the number of times that the prediction is negative but the observation is positive, so first row second column:
+
+```{r}
+conf.mat
+FPR <- conf.mat[2,1] / nrow(ModelPreds)
+FNR <- conf.mat[1,2] / nrow(ModelPreds)
+```
+
+The false positive rate is `r FPR` and the False Negative rate is `r FNR`
+
+#### Choose the ideal threshold based on the ROC curve
+##### Terminology
+
+The true positive rate is the number of positives that are true divided by the number of positives observed
+$$
+\textbf{TruePosRate} \text{ is } \textit{Sensitivity} = \frac{\textsf{# of True Positives}}{\textsf{# of True Positives + # of False Negatives}} \\
+\ \\
+\textbf{FalsePosRate} \text{ is } \left( 1-\textit{Sensitivity} \right) = \frac{\textsf{# of False Positives}}{\textsf{# of False Positive + # of True True Negative}}
+
+$$
+
+$$
+\textit{Sensitivity} \text{ is } \textbf{TruePosRate}\\
+\textit{Specificity} \text{ is } \textbf{TrueNegRate}
+$$
+
+A ROC Curve is the TruePosRate (i.e. the Sensitivity) on the $y$-axis against the FalsePosRate (i.e. 1-Sensitivity) on the x-axis:
+
+First Create a tpr function:
+
+```{r}
+tpr <- function(model, observation, threshold, silent){
+   probability <- model$fitted.values
+  
+  prediction <- rep_len(x ="No", length.out = length(observation))
+  prediction[probability > threshold] <- "Yes"
+  prediction <- as.factor(prediction)
+  
+   conf.mat <- table(prediction, observation, dnn = c("Predicted", "Observed"))
+    conf.mat2 <- confusionMatrix(prediction, observation)
+    if (!silent) {
+    print(conf.mat2)
+    }
+    
+     tpr <- conf.mat2[["byClass"]][["Sensitivity"]] 
+#   tpr <- 1- conf.mat[2,2]/(conf.mat[2,2] + conf.mat[1,1])
+    fnr <- 1-conf.mat2[["byClass"]][["Specificity"]] 
+
+    return(c(tpr, fnr))
+    
+}
+
+tpr(ModDef, def$default, threshold = 0.5, silent = FALSE)
+
+```
+
+Now run a loop to try every threshold
+
+```{r, include=FALSE}
+#  di <- 0.01
+#tprvec <- rep(x = c(FALSE, FALSE), length.out = 1/di) # This would need to be a data frame
+#  for (i in seq(from = 0.01, to = 0.985-di, by = di)) {
+  
+# tprvec[i/di] <- tpr(ModDef, def$default, threshold = i , silent = TRUE)
+# 
+# }
+# 
+# rocdata <- data.frame(Sensitivity = tprvec, FPR = 
+```
+
+
+
+## Question 02: Logistic Regression: Use “Smarket” data set.
+
+### 1. Start R studio. Upload “Smarket” data set built in R and View the data sets using the Console.
+
+```{r}
+head(Smarket)
+```
+
+
+### 2. Construct the Multiple Linear Logistic Model for Direction in terms of the Predictors Lag1, Lag2, Lag3, Lag4, Lag5 and Volume.
+
+```{r}
+#Check that it's a factor
+class(Smarket$Direction)
+
+#Make it a factor
+Smarket$Direction <- as.factor(Smarket$Direction)
+
+LogModSmarket <- glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data = Smarket, family = binomial(link = "logit"))
+```
+
+
+### 3. Show how you would calculate the probability (the Direction = “up”) for a given set of X (predictor) values.
+
+Generate some newdata
+```{r}
+n <- 4
+maxval <- max(Smarket$Today)
+minval <- min(Smarket$Today)
+
+newdata <- data.frame(
+                      Lag1 = sample(seq(from = minval, to = maxval, length.out = 1000), size = n),
+                      Lag2 = sample(seq(from = minval, to = maxval, length.out = 1000), size = n),
+                      Lag3 = sample(seq(from = minval, to = maxval, length.out = 1000), size = n),
+                      Lag4 = sample(seq(from = minval, to = maxval, length.out = 1000), size = n),
+                      Lag5 = sample(seq(from = minval, to = maxval, length.out = 1000), size = n),
+                      Volume = sample(seq(
+                        from = min(Smarket$Volume), to = max(Smarket$Volume), length.out = 1000)
+                        , size = n)
+                      )
+```
+Now feed this data into the model:
+
+```{r}
+predicteddata <- predict(object = LogModSmarket, newdata, type = "response")
+predicteddata <- data.frame(Probability = predicteddata, newdata )
+```
+
+In order to create the predictions use `contrasts` to check how the dummy variables have been assigned.
+
+```{r}
+contrasts(Smarket$Direction)
+```
+
+Hence Up is 1 so in order to create the prediction from the probability (assuming an 0.5 threshold):
+
+```{r}
+
+predicteddata$Predictions <- "Down"
+predicteddata$Predictions[predicteddata$Probability > 0.5] <- "Up"
+
+# Don't forget that it needs to be a factor,
+  # Because of some really strange behaviour in R this MUST be done last
+predicteddata$Predictions <- as.factor( predicteddata$Predictions)
+predicteddata <- predicteddata[,c(8, 1:7)]
+
+# If Else could also have been used like this
+    #This is neat because it's using if/else across data without a loop
+      #Just rember that this returs values, it won't assign them inside like a
+      #loop otherwise would
+
+predicteddata$Predictions <- ifelse(predicteddata$Probability > 0.5, "Up", "Down")
+
+predicteddata
+```
+
+
+### 4. Construct the Misclassification Martrix
+
+First call upon the model (or predict) to get the modelled values of the data:
+
+* Calling from the model with `glm(Y~X)$fitted.values` will always return the probabilities, The fitted values are the y-values, naturally the prob.
+* If you want to youse predict, don't specify new data and it will by default return the training data, however the values will be the log-odd values, make sure to specify `type=response`
+
+```{r}
+# Calling from the model will always return the probabilities, 
+# The fitted values are the y-values, naturally the prob.
+
+preds <- LogModSmarket$fitted.values
+
+# If you want to youse predict, don't specify new data and it
+#will by default return the training data, however the values 
+# will be the log-odd values, make sure to specify
+#type=response
+
+probs <- predict(LogModSmarket, type = 'response')
+
+preds <- ifelse(probs > 0.5, "Up", "Down")
+preds <- as.factor(preds)
+
+```
+
+The misclassification matrix may be made with:
+
+* The built in `table` command
+  - When using this you have to remember to do it in the order `prediction, observation`
+* the `confusionmatrix()` command from the `caret` package
+  - the advantage to this is that it will automatically label things and return the tpr
+  
+  
+```{r}
+conf.mat <- table(preds, Smarket$Direction, dnn = c("Predictions", "Observations"))
+conf.mat
+
+# Using confusionMatrix (recall that the `contrasts` told us up was one,
+  # hence that is specified as positive)
+conf.obj <- confusionMatrix(data = preds, reference = Smarket$Direction )
+conf.obj
+```
+  
+### 5. Calculate the Prob (Misclassification) or Misclassification Rate
+
+The diagonals of the matrix represent the correct classifications and the off-diagonals represent the misclassifications, so the misclassification rate is:
+
+```{r}
+(conf.mat[1,2] + conf.mat[2,1])/sum(conf.mat)
+
+# This may also have been returned from 
+1-conf.obj$overall["Accuracy"]
+```
+
+
+### 6. Calculate the False Positive rate
+
+The false positive rate is:
+
+\begin{align}
+\textsf{FPR}&= \frac{FP}{Neg}\\
+&= \frac{FP}{FP + TN}\\
+&= 1 - TNR
+\end{align}
+
+If/when you forget that during the exam remember you can just use `confusionMatrix()` command inside the `caret` package.
+
+```{r}
+
+#I've made a mistake here, down is positive when I would have rathered it the other wya and is too late in the evening to fix that,
+# It makes it a mess but whatever.
+
+# From the confusion Matrix
+conf.mat
+FPR <- (conf.mat[1,2])/(sum(conf.mat[,2]))
+
+# Using `caret::confusionMatrix()`
+# Specificity is the TNR
+  #FPR is 1-TNR so use
+FPR
+1-conf.obj$byClass["Specificity"][1]
+                        
+```
+
+
+### 7. Calculate the False Negative Rate
+
+The False Negative rate may be determined by swapping every
+occurence of positive with negative and vice versa, hence;
+
+The False Negative Rate is given by:
+
+
+\begin{align}
+\textsf{FNR}&= \frac{FN}{Pos}\\
+&= \frac{FN}{FN + TP}\\
+&= 1 - TPR
+\end{align}
+
+```{r}
+
+#I've fucked up here, dowsn is positive and is too late in the evening to fix that,
+# It makes it a mess but whatever.
+
+# From the confusion Matrix
+  # It's false so we are concerned with the offset
+    # Just choose the other offset and the other column
+FNR <- (conf.mat[2,1])/(sum(conf.mat[,1])) 
+
+# Using `caret::confusionMatrix()`
+# Specificity is the TNR
+  #FNR is 1-TPR so use Sensitivity instead
+FNR
+1-conf.obj$byClass["Sensitivity"][1]
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

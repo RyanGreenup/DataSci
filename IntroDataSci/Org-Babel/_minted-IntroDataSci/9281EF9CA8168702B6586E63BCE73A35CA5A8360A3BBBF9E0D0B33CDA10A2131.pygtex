@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+paramint \PYG{o}{\PYGZlt{}\PYGZhy{}} confint\PYG{p}{(}object \PYG{o}{=} lm\PYG{p}{(}adv\PYG{o}{\PYGZdl{}}Sales \PYG{o}{\PYGZti{}} adv\PYG{o}{\PYGZdl{}}TV\PYG{p}{),} level \PYG{o}{=} \PYG{l+m}{0.95}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} \PYG{k+kp}{signif}\PYG{p}{(}\PYG{l+m}{2}\PYG{p}{)}
+paramint
+\end{Verbatim}

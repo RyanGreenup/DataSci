@@ -1,0 +1,17 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+ adv\PYG{o}{\PYGZdl{}}MeanAdvertising \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{rowMeans}\PYG{p}{(}adv\PYG{p}{[,}\PYG{k+kt}{c}\PYG{p}{(}\PYG{o}{!}\PYG{p}{(}\PYG{k+kp}{names}\PYG{p}{(}adv\PYG{p}{)} \PYG{o}{==} \PYG{l+s}{\PYGZdq{}Sales\PYGZdq{}}\PYG{p}{))])}
+
+ AdvTVPlot \PYG{o}{\PYGZlt{}\PYGZhy{}} ggplot\PYG{p}{(}data \PYG{o}{=} adv\PYG{p}{,} aes\PYG{p}{(}x \PYG{o}{=} TV\PYG{p}{,} y \PYG{o}{=} Sales\PYG{p}{,} col \PYG{o}{=} MeanAdvertising\PYG{p}{))} \PYG{o}{+}
+   geom\PYGZus{}point\PYG{p}{()} \PYG{o}{+}
+   theme\PYGZus{}bw\PYG{p}{()} \PYG{o}{+}
+   stat\PYGZus{}smooth\PYG{p}{(}method \PYG{o}{=} \PYG{l+s}{\PYGZsq{}lm\PYGZsq{}}\PYG{p}{,} formula \PYG{o}{=} y \PYG{o}{\PYGZti{}} poly\PYG{p}{(}x\PYG{p}{,} \PYG{l+m}{2}\PYG{p}{,} raw \PYG{o}{=} \PYG{k+kc}{TRUE}\PYG{p}{),} se \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{)} \PYG{o}{+}
+  \PYG{c+c1}{\PYGZsh{}\PYGZsh{}stat\PYGZus{}smooth(method = \PYGZsq{}lm\PYGZsq{}, formula = y \PYGZti{} log(x), se = FALSE) +}
+   labs\PYG{p}{(}col \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Mean Advertising\PYGZdq{}}\PYG{p}{,} x\PYG{o}{=} \PYG{l+s}{\PYGZdq{}TV Advertising\PYGZdq{}}\PYG{p}{)}
+\PYG{k+kp}{print}\PYG{p}{(}AdvTVPlot\PYG{p}{)}
+
+  \PYG{k+kr}{if}\PYG{p}{(}knitr\PYG{o}{::}is\PYGZus{}html\PYGZus{}output\PYG{p}{())\PYGZob{}}
+    ggplotly\PYG{p}{(}knitr\PYG{o}{::}is\PYGZus{}latex\PYGZus{}output\PYG{p}{())}
+  \PYG{p}{\PYGZcb{}} \PYG{k+kr}{else} \PYG{p}{\PYGZob{}}
+    AdvTVPlot
+  \PYG{p}{\PYGZcb{}}
+\end{Verbatim}

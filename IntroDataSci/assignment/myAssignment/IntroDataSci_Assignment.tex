@@ -1,0 +1,2324 @@
+\documentclass[12pt]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={SecAssignment},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{SecAssignment}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+
+
+
+
+%\documentclass[12pt]{article}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%Preamble%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Packages ------------------------------------
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[utf8]{inputenc}
+%\usepackage[framemethod=tikz]{mdframed}
+\usepackage{graphicx}
+%\usetikzlibrary{calc}
+%\usepackage{chngcntr}
+\usepackage[T1]{fontenc}
+\usepackage{extsizes} % More Font Sizes
+\usepackage[utf8]{inputenc}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+\usepackage{sectsty} %Need it for underlining Sections
+\usepackage{listings}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{enumitem}
+\usepackage{ifxetex,ifluatex}
+\usepackage{lipsum}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+
+\addtolength{\skip\footins}{2pc plus 5pt} %Add whitespace before footnotes`
+%\usepackage[svgnames, x11names, dvipsnames]{xcolor} %This is included with mdframed
+%\usepackage{tgadventor}
+%\usepackage{titlesec} % Section Colours
+
+
+
+
+%Hyperlinks-----------------------------------
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black,
+	colorlinks=true, %set true if you want colored links
+	linktoc=all     %set to all if you want both sections and subsections linked
+}
+
+%Remove Section Numbers----------------
+\makeatletter
+\renewcommand{\@seccntformat}[1]{}
+\makeatother
+
+%Change the Font------------------------------
+%\usepackage{PoiretOne}
+\renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif
+
+% Add rule after sections ------------------------------
+\usepackage{titlesec}
+
+
+
+
+
+
+%Listings----------------------------------------
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{
+	%  frame=tb,
+	frame=leftline,
+	framesep=15pt,
+	language=Java,
+	aboveskip=15pt,
+	belowskip=20pt,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	%  backgroundcolor=\color{Snow2},
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3,
+	xleftmargin=1in,
+}
+
+% Formatting----------------------------------------
+\widowpenalty=1000
+\clubpenalty=1000
+
+% Problem boxes --------------------------------------
+
+%\newtheorem*{prob}{Problem}
+%\theoremstyle{working}{\cmss}
+%\newtheorem*{working}{Worked Solution}
+%\renewcommand{\qedsymbol}{$\blacksquare$}
+
+
+\newenvironment{prob}[1][Problem]{%
+	\sffamily \itshape   %
+}{\endproof} %\itshape for italics
+
+\newenvironment{sol}[1][Problem]{%
+	\proof[\nopunct]  %
+}{\endproof}
+
+%%%% Define Heading colours
+\definecolor{colsse}{RGB}{136, 73, 143}
+\definecolor{colsss}{RGB}{156, 118, 160}
+\definecolor{colspg}{RGB}{218, 168, 224}
+\definecolor{coltit}{RGB}{84, 65, 86}
+\definecolor{colname}{RGB}{236, 66 ,255}
+% Font
+
+% Numbering
+
+
+
+\renewcommand{\thesection}{}
+\renewcommand{\thesubsection}{}
+
+
+
+
+
+
+
+
+%\renewenvironment{proof}{{\bfseries \fontfamily{ccr} \selectfont Proof}}{*something*}
+
+
+
+\title{\color{coltit} \Huge Computer Algebra [Ch. 17.2(3)]}
+\author{Ryan Greenup ; 1780-5315}
+
+
+
+
+
+
+\begin{document}
+	\maketitle
+	
+	{
+		\setcounter{tocdepth}{2}
+		\tableofcontents
+	}
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\hypertarget{question-1}{%
+\section{Question 1}\label{question-1}}
+
+\hypertarget{explore-the-data-set}{%
+\subsection{(1) Explore the Data Set}\label{explore-the-data-set}}
+
+Explore the given dataset and identify the attributes of CPU that have
+linear association with CPU performance.
+
+Load and inspect the dataset in R:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\DataTypeTok{file =} \StringTok{"./Code/Datasets/CPU.csv"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{sep =} \StringTok{","}\NormalTok{)}
+\KeywordTok{head}\NormalTok{(cpu)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   CycleTime MinimumMainMemory MaximumMainMemory CacheSize
+## 1       125               256              6000       256
+## 2        29              8000             32000        32
+## 3        29              8000             32000        32
+## 4        29              8000             32000        32
+## 5        29              8000             16000        32
+## 6        26              8000             32000        64
+##   MinimumNumberOfChannels MaximumNumberOfChannels Performance
+## 1                      16                     128         198
+## 2                       8                      32         269
+## 3                       8                      32         220
+## 4                       8                      32         172
+## 5                       8                      16         132
+## 6                       8                      32         318
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(cpu)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    209 obs. of  7 variables:
+##  $ CycleTime              : int  125 29 29 29 29 26 23 23 23 23 ...
+##  $ MinimumMainMemory      : int  256 8000 8000 8000 8000 8000 16000 16000 16000 32000 ...
+##  $ MaximumMainMemory      : int  6000 32000 32000 32000 16000 32000 32000 32000 64000 64000 ...
+##  $ CacheSize              : int  256 32 32 32 32 64 64 64 64 128 ...
+##  $ MinimumNumberOfChannels: int  16 8 8 8 8 8 16 16 16 32 ...
+##  $ MaximumNumberOfChannels: int  128 32 32 32 16 32 32 32 32 64 ...
+##  $ Performance            : int  198 269 220 172 132 318 367 489 636 1144 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#dim(cpu)}
+\CommentTok{#summary(cpu)}
+\end{Highlighting}
+\end{Shaded}
+
+From the output it can be seen that this is a data set containing 6
+predictive features corresponding to 1 ouput variable with 209
+observations.
+
+\hypertarget{identify-any-linear-relations}{%
+\subsubsection{Identify any Linear
+Relations}\label{identify-any-linear-relations}}
+
+In order to identify any linear relations \texttt{corrplot()} may be
+used to consider the strength and direction of any linear correlation
+between variables:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu_pretty <-}\StringTok{ }\NormalTok{cpu}
+\KeywordTok{names}\NormalTok{(cpu_pretty) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Cycle}\CharTok{\textbackslash{}n}\StringTok{Period"}\NormalTok{, }\StringTok{"Min}\CharTok{\textbackslash{}n}\StringTok{Memory"}\NormalTok{, }\StringTok{"Max}\CharTok{\textbackslash{}n}\StringTok{Memory"}\NormalTok{, }\StringTok{"Cache"}\NormalTok{, }\StringTok{"Min}\CharTok{\textbackslash{}n}\StringTok{Channels"}\NormalTok{, }\StringTok{"Max}\CharTok{\textbackslash{}n}\StringTok{Channels"}\NormalTok{, }\StringTok{"Performance"}\NormalTok{)}
+
+\KeywordTok{corrplot}\NormalTok{(}\KeywordTok{cor}\NormalTok{(cpu_pretty),}\DataTypeTok{method =} \StringTok{'ellipse'}\NormalTok{, }\DataTypeTok{type =} \StringTok{'upper'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{SecAssignment_files/figure-latex/corrplot-1.pdf}
+\caption{Correlation Vatrix for CPU Characteristics}
+\end{figure}
+
+This suggests that the Maximum Main memory has a strong positive
+correlation with performance. In order to further assess the
+relationship between performance and maximum main memory a scatter plot
+will be drawn in order to investigate the relationships, the
+\texttt{pairs()} function is not ideal here because we only need to
+consider \emph{Performance} as a response.
+
+It would be possible to call a loop over various plots using the base
+packages but it would be more appropriate to create a \emph{tidy} data
+frame and plot multiple facets using \texttt{ggplot2()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# layout(matrix(1:6, nrow = 2))}
+\CommentTok{# for (i in 1:6) \{}
+\CommentTok{# plot(y=cpu$Performance, x = cpu[,i], xlab = names(cpu)[i], ylab = "Performance")}
+\CommentTok{# \}}
+
+
+  \CommentTok{# New facet label names for supp variable}
+\NormalTok{pred.labs <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Max}\CharTok{\textbackslash{}n}\StringTok{Memory"}\NormalTok{, }\StringTok{"Min}\CharTok{\textbackslash{}n}\StringTok{Memory"}\NormalTok{)}
+\KeywordTok{names}\NormalTok{(pred.labs) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"MaximumMainMemory"}\NormalTok{, }\StringTok{"MinimumMainMemory"}\NormalTok{)}
+
+
+\CommentTok{# Create the plot}
+\CommentTok{# p + facet_grid(}
+\CommentTok{#   dose ~ supp, }
+\CommentTok{#   labeller = labeller(dose = dose.labs, supp = supp.labs)}
+\CommentTok{#   )}
+
+\NormalTok{subset <-}\StringTok{ }\KeywordTok{names}\NormalTok{(cpu_pretty)[}\DecValTok{2}\OperatorTok{:}\DecValTok{3}\NormalTok{]}
+\NormalTok{cpu.tidymem <-}\StringTok{ }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpu_pretty[,}\KeywordTok{c}\NormalTok{(}\StringTok{"Performance"}\NormalTok{,subset)], }\DataTypeTok{cols =}\NormalTok{ subset )}
+\NormalTok{pmem <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(cpu.tidymem, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ value, }\DataTypeTok{y =}\NormalTok{ Performance, }\DataTypeTok{col =}\NormalTok{ name)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{'lm'}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(. }\OperatorTok{~}\StringTok{ }\NormalTok{name ) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{col =} \StringTok{"CPU }\CharTok{\textbackslash{}n}\StringTok{ Characteristic"}\NormalTok{, }\DataTypeTok{x =} \OtherTok{NULL}\NormalTok{)}
+
+
+\NormalTok{cpu.else <-}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(cpu_pretty, }\OperatorTok{-}\NormalTok{subset)}
+\NormalTok{cpu.tidyelse <-}\StringTok{ }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpu.else, }\DataTypeTok{cols =} \DecValTok{1}\OperatorTok{:}\NormalTok{(}\OperatorTok{-}\DecValTok{1}\OperatorTok{+}\KeywordTok{length}\NormalTok{(cpu.else)))}
+\NormalTok{pelse <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(cpu.tidyelse, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ value, }\DataTypeTok{y =}\NormalTok{ Performance, }\DataTypeTok{col =}\NormalTok{ name)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{'lm'}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(. }\OperatorTok{~}\StringTok{ }\NormalTok{name, }\DataTypeTok{scales =} \StringTok{"free_x"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{col =} \StringTok{"CPU }\CharTok{\textbackslash{}n}\StringTok{ Characteristic"}\NormalTok{, }\DataTypeTok{x =} \OtherTok{NULL}\NormalTok{)}
+
+\KeywordTok{grid.arrange}\NormalTok{(pmem, pelse, }\DataTypeTok{nrow =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{SecAssignment_files/figure-latex/sp-1.pdf}
+\caption{Scatter Plots of Perfomance given CPU Characteristics}
+\end{figure}
+
+All of the variables, with the exception of \texttt{CycleTime}, are
+linearly correlated with performance, however the plots demonstrate a
+violation with the assumption of homoskedasticity.
+
+\hypertarget{select-the-most-suitable-attribute-to-use-for-simple-linear-regression}{%
+\subsection{(2) Select the most Suitable Attribute to use for Simple
+Linear
+Regression}\label{select-the-most-suitable-attribute-to-use-for-simple-linear-regression}}
+
+Many of the variables are linearly correlated with performance, however,
+as mentioned, the plots violate the assumption of homoskedasticity, for
+this reason a \(\log\) transform is used.
+
+The Cycle period appears to be inversely proportional to performance, it
+seems reasonable that cycle frequency will be proportional to
+performance and for this reason here a a linear model of cycle frequency
+(an inverse transform), will be considered as a potential attribute for
+Simple Linear Regression.
+
+\texttt{MaximumMainMemory} and \texttt{MinimimMainMemory} are strongly
+correlated predictors and so only one of the two should be considered as
+a predictive feature. It can be seen from the correlation matrix that
+\texttt{MaximumMainMemory} is more strongly correlated with performance
+and so it is chosen as the potential predictive feature.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# layout(matrix(1:6, nrow = 2))}
+\CommentTok{# for (i in 1:6) \{}
+\CommentTok{# plot(y=cpu$Performance, x = cpu[,i], xlab = names(cpu)[i], ylab = "Performance")}
+\CommentTok{# \}}
+
+\NormalTok{cpu_pretty}\OperatorTok{$}\StringTok{"ln(Performance)"}\NormalTok{ <-}\StringTok{ }\KeywordTok{log}\NormalTok{(cpu_pretty}\OperatorTok{$}\NormalTok{Performance)}
+\CommentTok{# names(cpu_pretty)[7] <- "ln(Performance)"}
+
+
+
+\NormalTok{subset <-}\StringTok{ }\KeywordTok{names}\NormalTok{(cpu_pretty)[}\DecValTok{2}\NormalTok{]}
+\NormalTok{cpu.tidymem <-}\StringTok{ }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpu_pretty[,}\KeywordTok{c}\NormalTok{(}\StringTok{"ln(Performance)"}\NormalTok{,subset)], }\DataTypeTok{cols =}\NormalTok{ subset )}
+\NormalTok{pmem <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(cpu.tidymem, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ value, }\DataTypeTok{y =} \StringTok{`}\DataTypeTok{ln(Performance)}\StringTok{`}\NormalTok{, }\DataTypeTok{col =}\NormalTok{ name)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{'lm'}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(. }\OperatorTok{~}\StringTok{ }\NormalTok{name ) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{col =} \StringTok{"CPU }\CharTok{\textbackslash{}n}\StringTok{ Characteristic"}\NormalTok{, }\DataTypeTok{x =} \OtherTok{NULL}\NormalTok{)}
+
+
+\NormalTok{cpu.else <-}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(cpu_pretty, }\OperatorTok{-}\NormalTok{subset)}
+\NormalTok{cpu.tidyelse <-}\StringTok{ }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpu.else, }\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{))}
+\NormalTok{pelse <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(cpu.tidyelse, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ value, }\DataTypeTok{y =} \StringTok{`}\DataTypeTok{ln(Performance)}\StringTok{`}\NormalTok{, }\DataTypeTok{col =}\NormalTok{ name)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{'lm'}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(. }\OperatorTok{~}\StringTok{ }\NormalTok{name, }\DataTypeTok{scales =} \StringTok{"free_x"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{col =} \StringTok{"CPU }\CharTok{\textbackslash{}n}\StringTok{ Characteristic"}\NormalTok{, }\DataTypeTok{x =} \OtherTok{NULL}\NormalTok{)}
+
+\KeywordTok{grid.arrange}\NormalTok{(pmem, pelse, }\DataTypeTok{nrow =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{SecAssignment_files/figure-latex/splog-1.pdf}
+\caption{Scatter Plot of Log-Scaled Perfomance over CPU Characteristics}
+\end{figure}
+
+None of these plots are linear despite the transform, it would be
+inappropriate to fit a linear model to data that violates the underlying
+assumptions of linear regression, instead, consider the cpu frequency:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu_pretty}\OperatorTok{$}\StringTok{"Root Performance"}\NormalTok{ <-}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(cpu_pretty}\OperatorTok{$}\NormalTok{Performance)}
+\NormalTok{cpu_pretty}\OperatorTok{$}\NormalTok{Frequency <-}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{cpu_pretty}\OperatorTok{$}\StringTok{"Cycle}\CharTok{\textbackslash{}n}\StringTok{Period"}\NormalTok{)}
+
+\NormalTok{cpufreq <-}\StringTok{ }\NormalTok{dplyr}\OperatorTok{::}\KeywordTok{select}\NormalTok{(cpu_pretty, }\KeywordTok{c}\NormalTok{(}\StringTok{"Performance"}\NormalTok{, }\StringTok{"ln(Performance)"}\NormalTok{, }\StringTok{"Frequency"}\NormalTok{))}
+\NormalTok{cpuTidyfreq <-}\StringTok{ }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpufreq, }\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(}\StringTok{"Performance"}\NormalTok{, }\StringTok{"ln(Performance)"}\NormalTok{), }\DataTypeTok{names_to =} \StringTok{"Performance}\CharTok{\textbackslash{}n}\StringTok{Measure"}\NormalTok{)}
+
+
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpuTidyfreq, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Frequency, }\DataTypeTok{y =}\NormalTok{ value, }\DataTypeTok{col =} \StringTok{`}\DataTypeTok{Performance}\CharTok{\textbackslash{}n}\DataTypeTok{Measure}\StringTok{`}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =} \StringTok{'lm'}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(}\StringTok{`}\DataTypeTok{Performance}\CharTok{\textbackslash{}n}\DataTypeTok{Measure}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{scales =} \StringTok{"free_y"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+From this it can be seen that the frequency is far more linear than
+other variables after a log transform, for this reason frequency is
+chosen as the most suitable attribute from which to predict CPU
+performance with simple linear regression.
+
+Before the log transform it is too heteroskedastic and vialotaes the
+assumption of normal residuals, the log transform appears to have
+constant variance and appears to be reasonably linear, wheareas other
+attributes appear to follow a concave-down and non-linear trend
+following the transform.
+
+The linear model chosen is of the form:
+
+\[
+\log{\left( Y_{Perf}\right)} = \beta_0 + \beta_1 \times X_{Freq}
+\]
+
+this attribute is chosen because it is the only attribute that has a
+linear relationship (albeit after a log transform) and the only
+attribute that has constant variance from the model.
+
+\hypertarget{create-the-model}{%
+\subsubsection{Create the Model}\label{create-the-model}}
+
+The model can be created using the \texttt{lm} function, it is important
+to not use \texttt{I(log(Y))} in the model call, otherwise residual
+plots may not be generated.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Training Split}
+\NormalTok{train <-}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(cpu) }\OperatorTok{*}\StringTok{ }\FloatTok{0.45}\NormalTok{)}
+\NormalTok{cpu_mod.slm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\DataTypeTok{formula =} \StringTok{`}\DataTypeTok{ln(Performance)}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{Frequency, }\DataTypeTok{data =}\NormalTok{ cpu_pretty, }\DataTypeTok{subset =}\NormalTok{ train)}
+\NormalTok{val.Error <-}\StringTok{ }\NormalTok{(cpu_pretty}\OperatorTok{$}\StringTok{`}\DataTypeTok{ln(Performance)}\StringTok{`}\NormalTok{[}\OperatorTok{-}\NormalTok{train] }\OperatorTok{-}\StringTok{ }\KeywordTok{predict}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ cpu_mod.slm, }\DataTypeTok{newdata =}\NormalTok{ cpu_pretty[}\OperatorTok{-}\NormalTok{train,]))}\OperatorTok{^}\DecValTok{2} \OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mean}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{sqrt}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{exp}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{paste}\NormalTok{(}\StringTok{"is the validation RMSE (expected distance from model"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{print}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "2.249 is the validation RMSE (expected distance from model"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Return Model}
+\NormalTok{cpu_mod.slm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\StringTok{`}\DataTypeTok{ln(Performance)}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{Frequency, }\DataTypeTok{data =}\NormalTok{ cpu_pretty, }\DataTypeTok{subset =} \OtherTok{NULL}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(cpu_mod.slm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = `ln(Performance)` ~ Frequency, data = cpu_pretty, 
+##     subset = NULL)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.20171 -0.43299  0.04276  0.48407  1.80214 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   3.2034     0.0769   41.66   <2e-16 ***
+## Frequency    61.2591     4.2183   14.52   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.7396 on 207 degrees of freedom
+## Multiple R-squared:  0.5047, Adjusted R-squared:  0.5023 
+## F-statistic: 210.9 on 1 and 207 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Which provides that the specific model, in this case, is:
+
+\[
+\log_e\left( Y_{Perf}   \right) = 3.2034 + 61.26 \times X_{Freq}
+\]
+
+The intercept and slope are both highly significant p-values, indicating
+that the probability of incorrectly rejecting the null hypothesis, that
+there is no linear relationship between frequency and performance
+(presuming that the linear assumptions are valid, which they appear to
+be), given that the other predictive features are constant, is very low.
+
+This model is accpeted because all the coefficients are significant, and
+the expected validation error is only 0.8, where as the standard
+deviation of the performance variable is 160. The \(R\)-squared value is
+quite poor (a measurement of the proportion of variance explained by the
+model), which indicates that there is potentially a better model for the
+data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sd}\NormalTok{(cpu}\OperatorTok{$}\NormalTok{Performance)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 160.8306
+\end{verbatim}
+
+\hypertarget{model-the-performance-using-multiple-linear-regression}{%
+\subsection{(3) Model the Performance using Multiple Linear
+Regression}\label{model-the-performance-using-multiple-linear-regression}}
+
+From the correlation plot @ref(fig:corrplot) it can be seen that the
+following are strongly postively correlated with CPU performance:
+
+\begin{itemize}
+\tightlist
+\item
+  Minimum Main Memory
+\item
+  Maximum Main Memory
+\end{itemize}
+
+While the following are weakly correlated with CPU performance.
+
+\begin{itemize}
+\tightlist
+\item
+  Cache Size
+\item
+  Minimum Channels
+\item
+  Maximum Channels
+\end{itemize}
+
+Are weakly correlated with CPU performance.
+
+\texttt{Cycletime} is very weakly negatively correlated with performance
+and may not be useful predictor of performance, however from before it
+is clear that frequency is indeed a strongly correlated predictor of
+performance and will hence be included in any predictive model.
+
+\hypertarget{collinearity}{%
+\subsubsection{Collinearity}\label{collinearity}}
+
+The minimum and maximum amount of memory appear to be strongly
+positively correlated, indicating that it may be appropriate to consider
+only one of those two variables in a model, similar mutlicolinearity is
+observed between maximum and minimum channels.
+
+In order to assess multi-collinearity the \emph{variance inflation
+factors} (\emph{VIF}) \footnote{Refer to p.~101 of TB} will be
+calculated for every term of a linear model, a VIF value that exceeds 5
+indicates a problematic amount of collinearity.
+
+\hypertarget{linearity}{%
+\subsubsection{Linearity}\label{linearity}}
+
+Although the \emph{Pearson Correlation Coefficient} measures the
+strength of the linear relationship between variables, the data may have
+a non-linear tendency that may compromise the model's capacity to
+forecast, this can be seen from the scatter plots at @ref(sp:corrplot),
+this could potentially be overcome with a concave transform, such as a
+log-transform, this will be considered after fitting the model by
+analysing the residuals.
+
+\hypertarget{feature-interaction}{%
+\subsubsection{Feature Interaction}\label{feature-interaction}}
+
+A cpu with a higher frequency (i.e.~a lower value for
+\texttt{CycleTime}) may benefit more significantly from more memory and
+more channels, hence we will consider the following interaction terms in
+a mulitple linear regression:
+
+\begin{itemize}
+\tightlist
+\item
+  Max Memory and Frequency
+\item
+  Max Channels and Frequency
+\item
+  Max Channels, Max Memory and Frequency.
+\end{itemize}
+
+\hypertarget{fit-the-model}{%
+\subsubsection{Fit the Model}\label{fit-the-model}}
+
+Backward elimination will be implemented in order to choose the model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu}\OperatorTok{$}\NormalTok{Frequency <-}\StringTok{ }\NormalTok{cpu}\OperatorTok{$}\NormalTok{CycleTime}\OperatorTok{^-}\DecValTok{1}
+\NormalTok{cpu_mod.mlm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{-}\NormalTok{CycleTime }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{(MaximumNumberOfChannels }\OperatorTok{*}\StringTok{ }\NormalTok{MaximumMainMemory }\OperatorTok{*}\StringTok{ }\NormalTok{Frequency)  }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{(MaximumNumberOfChannels }\OperatorTok{*}\StringTok{ }\NormalTok{Frequency) }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{( MaximumMainMemory }\OperatorTok{*}\StringTok{ }\NormalTok{Frequency)   , }\DataTypeTok{data =}\NormalTok{ cpu)}
+\KeywordTok{summary}\NormalTok{(cpu_mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Performance ~ . - CycleTime + I(MaximumNumberOfChannels * 
+##     MaximumMainMemory * Frequency) + I(MaximumNumberOfChannels * 
+##     Frequency) + I(MaximumMainMemory * Frequency), data = cpu)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -148.536  -12.912   -0.918   12.896  213.929 
+## 
+## Coefficients:
+##                                                              Estimate
+## (Intercept)                                                 1.194e+01
+## MinimumMainMemory                                           1.327e-02
+## MaximumMainMemory                                           1.602e-03
+## CacheSize                                                   7.876e-01
+## MinimumNumberOfChannels                                     4.696e-01
+## MaximumNumberOfChannels                                    -5.654e-01
+## Frequency                                                  -1.373e+03
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  9.272e-04
+## I(MaximumNumberOfChannels * Frequency)                      7.703e+01
+## I(MaximumMainMemory * Frequency)                            3.776e-02
+##                                                            Std. Error
+## (Intercept)                                                 6.686e+00
+## MinimumMainMemory                                           1.521e-03
+## MaximumMainMemory                                           6.262e-04
+## CacheSize                                                   9.486e-02
+## MinimumNumberOfChannels                                     6.948e-01
+## MaximumNumberOfChannels                                     2.601e-01
+## Frequency                                                   5.747e+02
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  4.511e-04
+## I(MaximumNumberOfChannels * Frequency)                      3.428e+01
+## I(MaximumMainMemory * Frequency)                            2.657e-02
+##                                                            t value
+## (Intercept)                                                  1.785
+## MinimumMainMemory                                            8.722
+## MaximumMainMemory                                            2.559
+## CacheSize                                                    8.303
+## MinimumNumberOfChannels                                      0.676
+## MaximumNumberOfChannels                                     -2.174
+## Frequency                                                   -2.389
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)   2.056
+## I(MaximumNumberOfChannels * Frequency)                       2.247
+## I(MaximumMainMemory * Frequency)                             1.421
+##                                                            Pr(>|t|)    
+## (Intercept)                                                  0.0757 .  
+## MinimumMainMemory                                          1.09e-15 ***
+## MaximumMainMemory                                            0.0113 *  
+## CacheSize                                                  1.54e-14 ***
+## MinimumNumberOfChannels                                      0.5000    
+## MaximumNumberOfChannels                                      0.0309 *  
+## Frequency                                                    0.0178 *  
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)   0.0411 *  
+## I(MaximumNumberOfChannels * Frequency)                       0.0257 *  
+## I(MaximumMainMemory * Frequency)                             0.1568    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 38.7 on 199 degrees of freedom
+## Multiple R-squared:  0.9446, Adjusted R-squared:  0.9421 
+## F-statistic:   377 on 9 and 199 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+The least significant predictor is the variable
+\texttt{MinimimMainMemory}, this could be explained by intercorrelation
+between terms. Before proceeding the \emph{variable inflation factor}
+will be considered, this can be acheived by using the
+\texttt{car::vif()} function on a model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(car)}
+\KeywordTok{vif}\NormalTok{(cpu_mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                          MinimumMainMemory 
+##                                                   4.836088 
+##                                          MaximumMainMemory 
+##                                                   7.488001 
+##                                                  CacheSize 
+##                                                   2.062585 
+##                                    MinimumNumberOfChannels 
+##                                                   3.115217 
+##                                    MaximumNumberOfChannels 
+##                                                   6.350779 
+##                                                  Frequency 
+##                                                   6.779859 
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency) 
+##                                                  44.904601 
+##                     I(MaximumNumberOfChannels * Frequency) 
+##                                                  75.619039 
+##                           I(MaximumMainMemory * Frequency) 
+##                                                  19.576037
+\end{verbatim}
+
+Typically a VIF above 10 indicates a problematic amount of colinearity,
+before we may commence with backwards elimination it will be necessary
+to remove colinear interaction factors and then consider combining
+remaining colinear factors into combined predictor.
+
+The Interaction term of channels and frequency has the highest VIF so it
+will be removed first:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu_mod.mlm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{-}\NormalTok{CycleTime }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{(MaximumNumberOfChannels }\OperatorTok{*}\StringTok{ }\NormalTok{MaximumMainMemory }\OperatorTok{*}\StringTok{ }\NormalTok{Frequency) }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{( MaximumMainMemory }\OperatorTok{*}\StringTok{ }\NormalTok{Frequency)   , }\DataTypeTok{data =}\NormalTok{ cpu) }
+\KeywordTok{vif}\NormalTok{(cpu_mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                          MinimumMainMemory 
+##                                                   4.834693 
+##                                          MaximumMainMemory 
+##                                                   7.295421 
+##                                                  CacheSize 
+##                                                   1.996105 
+##                                    MinimumNumberOfChannels 
+##                                                   2.092357 
+##                                    MaximumNumberOfChannels 
+##                                                   2.865647 
+##                                                  Frequency 
+##                                                   3.498502 
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency) 
+##                                                   4.333099 
+##                           I(MaximumMainMemory * Frequency) 
+##                                                  19.421320
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# summary(cpu_mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+The interaction term of \texttt{MaximumMainMemory} and
+\texttt{Frequency} has too high a \texttt{VIF()} factor, so that will be
+removed:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu_mod.mlm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{-}\NormalTok{CycleTime }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{(MaximumNumberOfChannels }\OperatorTok{*}\StringTok{ }\NormalTok{MaximumMainMemory }\OperatorTok{*}\StringTok{ }\NormalTok{Frequency)  , }\DataTypeTok{data =}\NormalTok{ cpu) }
+\KeywordTok{vif}\NormalTok{(cpu_mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                          MinimumMainMemory 
+##                                                   3.169999 
+##                                          MaximumMainMemory 
+##                                                   4.302255 
+##                                                  CacheSize 
+##                                                   1.897146 
+##                                    MinimumNumberOfChannels 
+##                                                   2.074288 
+##                                    MaximumNumberOfChannels 
+##                                                   2.773799 
+##                                                  Frequency 
+##                                                   2.226321 
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency) 
+##                                                   2.931035
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# summary(cpu_mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+The VIF factors are sufficiently low, despite the correlation between
+maximum and minimum memory, the sufficiently low VIF values indicate
+that there is iinsufficient evidence to remove minimum memory on the
+grounds of colinearity and the term will not be removed.
+
+A VIF factor of 4 is still somewhat high, however it would be
+inappropriate to exclude either variable because having a low minimum
+memory is qualitatively different from having a low maximum memory, a
+poor configuration of CPU is indicative poor performance and hence the
+variables should remain unaltered.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu_mod.mlm }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Performance ~ . - CycleTime + I(MaximumNumberOfChannels * 
+##     MaximumMainMemory * Frequency), data = cpu)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -158.832  -11.365   -1.345   13.350  226.565 
+## 
+## Coefficients:
+##                                                              Estimate
+## (Intercept)                                                 1.689e+00
+## MinimumMainMemory                                           1.431e-02
+## MaximumMainMemory                                           1.862e-03
+## CacheSize                                                   8.004e-01
+## MinimumNumberOfChannels                                     1.429e+00
+## MaximumNumberOfChannels                                    -1.708e-01
+## Frequency                                                  -1.693e+02
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  1.988e-03
+##                                                            Std. Error
+## (Intercept)                                                 4.944e+00
+## MinimumMainMemory                                           1.246e-03
+## MaximumMainMemory                                           4.800e-04
+## CacheSize                                                   9.200e-02
+## MinimumNumberOfChannels                                     5.734e-01
+## MaximumNumberOfChannels                                     1.738e-01
+## Frequency                                                   3.331e+02
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  1.165e-04
+##                                                            t value
+## (Intercept)                                                  0.342
+## MinimumMainMemory                                           11.485
+## MaximumMainMemory                                            3.879
+## CacheSize                                                    8.700
+## MinimumNumberOfChannels                                      2.492
+## MaximumNumberOfChannels                                     -0.983
+## Frequency                                                   -0.508
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  17.062
+##                                                            Pr(>|t|)    
+## (Intercept)                                                0.733031    
+## MinimumMainMemory                                           < 2e-16 ***
+## MaximumMainMemory                                          0.000142 ***
+## CacheSize                                                  1.19e-15 ***
+## MinimumNumberOfChannels                                    0.013498 *  
+## MaximumNumberOfChannels                                    0.326994    
+## Frequency                                                  0.611711    
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 39.14 on 201 degrees of freedom
+## Multiple R-squared:  0.9428, Adjusted R-squared:  0.9408 
+## F-statistic: 473.1 on 7 and 201 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+The term \texttt{Frequency} is not significant and so it will be removed
+from the model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu_mod.mlm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{-}\NormalTok{Frequency }\OperatorTok{-}\NormalTok{CycleTime }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{(MaximumNumberOfChannels }\OperatorTok{*}\StringTok{ }\NormalTok{MaximumMainMemory }\OperatorTok{*}\StringTok{ }\NormalTok{Frequency)  , }\DataTypeTok{data =}\NormalTok{ cpu) }
+\CommentTok{#vif(cpu_mod.mlm)}
+ \KeywordTok{summary}\NormalTok{(cpu_mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Performance ~ . - Frequency - CycleTime + I(MaximumNumberOfChannels * 
+##     MaximumMainMemory * Frequency), data = cpu)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -158.42  -11.51   -1.13   14.02  222.10 
+## 
+## Coefficients:
+##                                                              Estimate
+## (Intercept)                                                 0.7551310
+## MinimumMainMemory                                           0.0141224
+## MaximumMainMemory                                           0.0018003
+## CacheSize                                                   0.7946907
+## MinimumNumberOfChannels                                     1.3862559
+## MaximumNumberOfChannels                                    -0.1589160
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  0.0019897
+##                                                            Std. Error
+## (Intercept)                                                 4.5817350
+## MinimumMainMemory                                           0.0011895
+## MaximumMainMemory                                           0.0004635
+## CacheSize                                                   0.0911478
+## MinimumNumberOfChannels                                     0.5661210
+## MaximumNumberOfChannels                                     0.1719460
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  0.0001163
+##                                                            t value
+## (Intercept)                                                  0.165
+## MinimumMainMemory                                           11.873
+## MaximumMainMemory                                            3.884
+## CacheSize                                                    8.719
+## MinimumNumberOfChannels                                      2.449
+## MaximumNumberOfChannels                                     -0.924
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  17.109
+##                                                            Pr(>|t|)    
+## (Intercept)                                                0.869256    
+## MinimumMainMemory                                           < 2e-16 ***
+## MaximumMainMemory                                          0.000139 ***
+## CacheSize                                                  1.03e-15 ***
+## MinimumNumberOfChannels                                    0.015190 *  
+## MaximumNumberOfChannels                                    0.356474    
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 39.07 on 202 degrees of freedom
+## Multiple R-squared:  0.9427, Adjusted R-squared:  0.941 
+## F-statistic: 553.9 on 6 and 202 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+The term \texttt{MaximumNumberOfChannels} is not significant and so it
+will be removed from the model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu_mod.mlm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{-}\NormalTok{MaximumNumberOfChannels }\OperatorTok{-}\NormalTok{Frequency }\OperatorTok{-}\NormalTok{CycleTime }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{(MaximumNumberOfChannels }\OperatorTok{*}\StringTok{ }\NormalTok{MaximumMainMemory }\OperatorTok{*}\StringTok{ }\NormalTok{Frequency)  , }\DataTypeTok{data =}\NormalTok{ cpu) }
+\CommentTok{#vif(cpu_mod.mlm)}
+ \KeywordTok{summary}\NormalTok{(cpu_mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Performance ~ . - MaximumNumberOfChannels - Frequency - 
+##     CycleTime + I(MaximumNumberOfChannels * MaximumMainMemory * 
+##     Frequency), data = cpu)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -155.673  -11.509   -0.239   13.303  224.823 
+## 
+## Coefficients:
+##                                                              Estimate
+## (Intercept)                                                -7.778e-01
+## MinimumMainMemory                                           1.449e-02
+## MaximumMainMemory                                           1.770e-03
+## CacheSize                                                   7.722e-01
+## MinimumNumberOfChannels                                     1.193e+00
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  1.930e-03
+##                                                            Std. Error
+## (Intercept)                                                 4.269e+00
+## MinimumMainMemory                                           1.122e-03
+## MaximumMainMemory                                           4.621e-04
+## CacheSize                                                   8.782e-02
+## MinimumNumberOfChannels                                     5.261e-01
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  9.685e-05
+##                                                            t value
+## (Intercept)                                                 -0.182
+## MinimumMainMemory                                           12.913
+## MaximumMainMemory                                            3.829
+## CacheSize                                                    8.793
+## MinimumNumberOfChannels                                      2.269
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  19.930
+##                                                            Pr(>|t|)    
+## (Intercept)                                                0.855630    
+## MinimumMainMemory                                           < 2e-16 ***
+## MaximumMainMemory                                          0.000171 ***
+## CacheSize                                                  6.24e-16 ***
+## MinimumNumberOfChannels                                    0.024350 *  
+## I(MaximumNumberOfChannels * MaximumMainMemory * Frequency)  < 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 39.05 on 203 degrees of freedom
+## Multiple R-squared:  0.9425, Adjusted R-squared:  0.941 
+## F-statistic:   665 on 5 and 203 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+All Model terms are now significant so the model is accepted as a
+potential model.
+
+\hypertarget{find-the-best-model}{%
+\subsubsection{Find the Best Model}\label{find-the-best-model}}
+
+Backward elimination will not necessarily return the optimal model,
+instead the method of \emph{best subset selection} should be used, which
+involves choosing the best variables corresponding to a given model size
+by way of the training error and then determining the best model size
+using an adjusted-measurement of training error, 10-fold
+cross-validation could also be used, however there exists the
+possibility that no single model performs significantly better and it
+would be more appropriate to instead consider using lasso regression,
+this is outside the scope of this work and so instead the simplest model
+that performs the best with respect to adjusted training error
+measurements will be accepted.
+
+\hypertarget{use-the-best-subset-selection}{%
+\paragraph{Use the best subset
+selection}\label{use-the-best-subset-selection}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{allMLM <-}\StringTok{ }\KeywordTok{regsubsets}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{-}\NormalTok{CycleTime, cpu)}
+\NormalTok{allMLMSum <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(allMLM)}
+\end{Highlighting}
+\end{Shaded}
+
+Now take the the AIC, BIC and adjusted R-squared values as an estimate
+of the model error
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ErrorCrit <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\StringTok{"preds"}\NormalTok{ =}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{(}\KeywordTok{ncol}\NormalTok{(cpu)}\OperatorTok{-}\DecValTok{2}\NormalTok{)), }\StringTok{"adjrsq"}\NormalTok{ =}\StringTok{ }\NormalTok{allMLMSum}\OperatorTok{$}\NormalTok{adjr2, }\StringTok{"bic"}\NormalTok{ =}\StringTok{ }\NormalTok{allMLMSum}\OperatorTok{$}\NormalTok{bic, }\StringTok{"cp"}\NormalTok{=}\StringTok{ }\NormalTok{allMLMSum}\OperatorTok{$}\NormalTok{cp)}
+\NormalTok{ErrorCritSTD <-}\StringTok{ }\NormalTok{ErrorCrit}
+\NormalTok{ErrorCritSTD}\OperatorTok{$}\NormalTok{adjrsq <-}\StringTok{ }\OperatorTok{-}\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{adjrsq}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{adjrsq))}\OperatorTok{/}\KeywordTok{sd}\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{adjrsq)}
+\NormalTok{ErrorCritSTD}\OperatorTok{$}\NormalTok{bic <-}\StringTok{ }\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{bic}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{bic))}\OperatorTok{/}\KeywordTok{sd}\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{bic)}
+\NormalTok{ErrorCritSTD}\OperatorTok{$}\NormalTok{cp <-}\StringTok{ }\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{cp}\OperatorTok{-}\KeywordTok{mean}\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{cp))}\OperatorTok{/}\KeywordTok{sd}\NormalTok{(ErrorCritSTD}\OperatorTok{$}\NormalTok{cp)}
+
+
+\NormalTok{allMLMSum}\OperatorTok{$}\NormalTok{adjr2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7435259 0.7981760 0.8444189 0.8567846 0.8563690 0.8557426
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ErrorCrit.tidy <-}\StringTok{ }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ ErrorCrit, }\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(adjrsq, bic, cp), }\DataTypeTok{names_to =} \StringTok{"adjTrError"}\NormalTok{)}
+\NormalTok{ErrorCrit.tidy <-}\StringTok{ }\KeywordTok{pivot_longer}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ ErrorCritSTD, }\DataTypeTok{cols =} \KeywordTok{c}\NormalTok{(adjrsq, bic, cp), }\DataTypeTok{names_to =} \StringTok{"adjTrError"}\NormalTok{)}
+
+
+
+\NormalTok{ErrorCrit.tidy}\OperatorTok{$}\NormalTok{adjTrError[ErrorCrit.tidy}\OperatorTok{$}\NormalTok{adjTrError}\OperatorTok{==}\StringTok{"adjrsq"}\NormalTok{] <-}\StringTok{ "Adjusted R-Squared"}
+\NormalTok{ErrorCrit.tidy}\OperatorTok{$}\NormalTok{adjTrError[ErrorCrit.tidy}\OperatorTok{$}\NormalTok{adjTrError}\OperatorTok{==}\StringTok{"bic"}\NormalTok{] <-}\StringTok{ "BIC"}
+\NormalTok{ErrorCrit.tidy}\OperatorTok{$}\NormalTok{adjTrError[ErrorCrit.tidy}\OperatorTok{$}\NormalTok{adjTrError}\OperatorTok{==}\StringTok{"cp"}\NormalTok{] <-}\StringTok{ "Cp"}
+
+\KeywordTok{ggplot}\NormalTok{(ErrorCrit.tidy, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{ preds, }\DataTypeTok{y =}\NormalTok{ value, }\DataTypeTok{col =}\NormalTok{ adjTrError)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{size =} \DecValTok{4}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Number of Predictors"}\NormalTok{ , }\DataTypeTok{y =} \StringTok{"Standardised Training RSS"}\NormalTok{ , }\DataTypeTok{col =} \StringTok{"Adjusted Training Error"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Model Performance Given Parameters"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{which.min}\NormalTok{(allMLMSum}\OperatorTok{$}\NormalTok{bic), }\DataTypeTok{col =} \StringTok{"IndianRed"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+This demonstrates that the best performing linear regression is the
+model with 4 predictors, the predictors being:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{coef}\NormalTok{(allMLM, }\DecValTok{4}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{signif}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##             (Intercept)       MinimumMainMemory       MaximumMainMemory 
+##                -41.0000                  0.0150                  0.0053 
+##               CacheSize MaximumNumberOfChannels 
+##                  0.5900                  1.4000
+\end{verbatim}
+
+and hence the model would be:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{best.Mod.mlm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{MinimumMainMemory }\OperatorTok{+}\StringTok{ }\NormalTok{MaximumMainMemory }\OperatorTok{+}\StringTok{ }\NormalTok{CacheSize }\OperatorTok{+}\StringTok{ }\NormalTok{MaximumNumberOfChannels, cpu)}
+\KeywordTok{summary}\NormalTok{(best.Mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Performance ~ MinimumMainMemory + MaximumMainMemory + 
+##     CacheSize + MaximumNumberOfChannels, data = cpu)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -186.73  -26.08    8.27   26.99  402.87 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)             -40.982864   6.041898  -6.783 1.25e-10 ***
+## MinimumMainMemory         0.014887   0.001815   8.202 2.61e-14 ***
+## MaximumMainMemory         0.005330   0.000645   8.263 1.79e-14 ***
+## CacheSize                 0.587097   0.135764   4.324 2.39e-05 ***
+## MaximumNumberOfChannels   1.436179   0.210954   6.808 1.08e-10 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 60.86 on 204 degrees of freedom
+## Multiple R-squared:  0.8595, Adjusted R-squared:  0.8568 
+## F-statistic: 312.1 on 4 and 204 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\[
+Y_{\textsf{Perf}} = -40 + 0.015\times \textsf{MinMem}  + 0.0053 \times \textsf{MaxMem} + 0.59\times \textsf{Cache} + 1.4\times \textsf{MaxChannels}
+\]
+
+Despite the high performance of frequency for simple linear regression,
+suprisingly, it is not a factor in the model, moreover, despite the
+anticipated correlation between minimum memory and maximum memory they
+are both factors in the best performing model, this is suprising,
+however we will next consider interaction between memory and frequency
+to see if that is a non-colinear and significant term.
+
+\hypertarget{consider-interaction-terms}{%
+\subsubsection{Consider interaction
+terms}\label{consider-interaction-terms}}
+
+We may now wish to consider the interactoin term frequency and memory,
+as it stands to reason that higher memory may offer more performance for
+a cpu that has a higher frequency, moreover the three way interaction
+term was significant previously and so an interaction term will by
+considered:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Int.Mod <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\OperatorTok{-}\NormalTok{CycleTime }\OperatorTok{+}\StringTok{ }\NormalTok{MinimumMainMemory }\OperatorTok{+}\StringTok{ }\NormalTok{MaximumMainMemory }\OperatorTok{+}\StringTok{ }\NormalTok{CacheSize }\OperatorTok{+}\StringTok{ }\NormalTok{MaximumNumberOfChannels }\OperatorTok{+}\StringTok{ }\NormalTok{MaximumMainMemory}\OperatorTok{:}\NormalTok{Frequency}\OperatorTok{:}\NormalTok{MaximumNumberOfChannels, }\DataTypeTok{data =}\NormalTok{ cpu)}
+
+\CommentTok{#vif(Int.Mod)}
+\NormalTok{newBIC <-}\StringTok{ }\NormalTok{(Int.Mod) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{BIC}\NormalTok{()}
+\NormalTok{origBIC <-}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\KeywordTok{regsubsets}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{-}\NormalTok{CycleTime, cpu))}\OperatorTok{$}\NormalTok{bic[}\DecValTok{4}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+Adding the interaction term increased the adjusted training error from
+-383.5184961 to 2161.5715357 and hence this interaction term is rejected
+on the grounds that it does not improve the model performance on unseen
+data as predicted by the BIC value.
+
+Hence the accepted linear model remains unchanged.
+
+\hypertarget{d-model-diagnostics}{%
+\subsection{(d) Model Diagnostics}\label{d-model-diagnostics}}
+
+The model should only be accepted if the residuals are normally
+distributed, otherwise the error in the model will not be consistent
+across the domain of the data, the model diagnostics may be previewed by
+using \texttt{plot()} over the model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{layout}\NormalTok{(}\KeywordTok{matrix}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{4}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{2}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(best.Mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+These plots are fairly poorly generated and so a better option would be
+to use ggplot2.
+
+\hypertarget{ggplot2}{%
+\subsubsection{ggplot2}\label{ggplot2}}
+
+An implementation for \texttt{ggplot2()} to plot model diagnostics has
+already been diagnosed.\footnote{\url{https://rpubs.com/therimalaya/43190}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diagPlot<-}\ControlFlowTok{function}\NormalTok{(model)\{}
+\NormalTok{    p1<-}\KeywordTok{ggplot}\NormalTok{(model, }\KeywordTok{aes}\NormalTok{(.fitted, .resid))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"IndianRed"}\NormalTok{)}
+\NormalTok{    p1<-p1}\OperatorTok{+}\KeywordTok{stat_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{"loess"}\NormalTok{, }\DataTypeTok{col =} \StringTok{"Purple"}\NormalTok{)}\OperatorTok{+}\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept=}\DecValTok{0}\NormalTok{, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{, }\DataTypeTok{linetype=}\StringTok{"dashed"}\NormalTok{)}
+\NormalTok{    p1<-p1}\OperatorTok{+}\KeywordTok{xlab}\NormalTok{(}\StringTok{"Fitted values"}\NormalTok{)}\OperatorTok{+}\KeywordTok{ylab}\NormalTok{(}\StringTok{"Residuals"}\NormalTok{)}
+\NormalTok{    p1<-p1}\OperatorTok{+}\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Residual vs Fitted Plot"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}
+    
+\NormalTok{    p2<-}\KeywordTok{ggplot}\NormalTok{(model, }\KeywordTok{aes}\NormalTok{(}\KeywordTok{qqnorm}\NormalTok{(.stdresid)[[}\DecValTok{1}\NormalTok{]], .stdresid))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"IndianRed"}\NormalTok{,}\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{    p2<-p2}\OperatorTok{+}\KeywordTok{geom_abline}\NormalTok{(}\DataTypeTok{slope =} \DecValTok{1}\NormalTok{, }\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{)}\OperatorTok{+}\KeywordTok{xlab}\NormalTok{(}\StringTok{"Theoretical Quantiles"}\NormalTok{)}\OperatorTok{+}\KeywordTok{ylab}\NormalTok{(}\StringTok{"Standardized Residuals"}\NormalTok{)}
+\NormalTok{    p2<-p2}\OperatorTok{+}\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Normal Q-Q"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}
+    
+\NormalTok{    p3<-}\KeywordTok{ggplot}\NormalTok{(model, }\KeywordTok{aes}\NormalTok{(.fitted, }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{abs}\NormalTok{(.stdresid))))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"IndianRed"}\NormalTok{,}\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\NormalTok{    p3<-p3}\OperatorTok{+}\KeywordTok{stat_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{"loess"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"Purple"}\NormalTok{ , }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}\OperatorTok{+}\KeywordTok{xlab}\NormalTok{(}\StringTok{"Fitted Value"}\NormalTok{)}
+\NormalTok{    p3<-p3}\OperatorTok{+}\KeywordTok{ylab}\NormalTok{(}\KeywordTok{expression}\NormalTok{(}\KeywordTok{sqrt}\NormalTok{(}\StringTok{"|Standardized residuals|"}\NormalTok{)))}
+\NormalTok{    p3<-p3}\OperatorTok{+}\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Scale-Location"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}
+    
+\NormalTok{    p4<-}\KeywordTok{ggplot}\NormalTok{(model, }\KeywordTok{aes}\NormalTok{(}\KeywordTok{seq_along}\NormalTok{(.cooksd), .cooksd))}\OperatorTok{+}\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{, }\DataTypeTok{position=}\StringTok{"identity"}\NormalTok{)}
+\NormalTok{    p4<-p4}\OperatorTok{+}\KeywordTok{xlab}\NormalTok{(}\StringTok{"Obs. Number"}\NormalTok{)}\OperatorTok{+}\KeywordTok{ylab}\NormalTok{(}\StringTok{"Cook's distance"}\NormalTok{)}
+\NormalTok{    p4<-p4}\OperatorTok{+}\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Cook's distance"}\NormalTok{)}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}
+    
+\NormalTok{    p5<-}\KeywordTok{ggplot}\NormalTok{(model, }\KeywordTok{aes}\NormalTok{(.hat, .stdresid))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"IndianRed"}\NormalTok{, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{size=}\NormalTok{.cooksd), }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\NormalTok{    p5<-p5}\OperatorTok{+}\KeywordTok{stat_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{"loess"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"Purple"}\NormalTok{ , }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\NormalTok{    p5<-p5}\OperatorTok{+}\KeywordTok{xlab}\NormalTok{(}\StringTok{"Leverage"}\NormalTok{)}\OperatorTok{+}\KeywordTok{ylab}\NormalTok{(}\StringTok{"Standardized Residuals"}\NormalTok{)}
+\NormalTok{    p5<-p5}\OperatorTok{+}\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Residual vs Leverage Plot"}\NormalTok{)}
+\NormalTok{    p5<-p5}\OperatorTok{+}\KeywordTok{scale_size_continuous}\NormalTok{(}\StringTok{"Cook's Distance"}\NormalTok{, }\DataTypeTok{range=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{))}
+\NormalTok{    p5<-p5}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}\OperatorTok{+}\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position=}\StringTok{"bottom"}\NormalTok{)}
+    
+\NormalTok{    p6<-}\KeywordTok{ggplot}\NormalTok{(model, }\KeywordTok{aes}\NormalTok{(.hat, .cooksd))}\OperatorTok{+}\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"IndianRed"}\NormalTok{, }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}\OperatorTok{+}\KeywordTok{stat_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{"loess"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"Purple"}\NormalTok{ , }\DataTypeTok{na.rm=}\OtherTok{TRUE}\NormalTok{)}
+\NormalTok{    p6<-p6}\OperatorTok{+}\KeywordTok{xlab}\NormalTok{(}\StringTok{"Leverage hii"}\NormalTok{)}\OperatorTok{+}\KeywordTok{ylab}\NormalTok{(}\StringTok{"Cook's Distance"}\NormalTok{)}
+\NormalTok{    p6<-p6}\OperatorTok{+}\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Cook's dist vs Leverage hii/(1-hii)"}\NormalTok{)}
+\NormalTok{    p6<-p6}\OperatorTok{+}\KeywordTok{geom_abline}\NormalTok{(}\DataTypeTok{slope=}\DecValTok{1}\NormalTok{, }\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{, }\DataTypeTok{color=}\StringTok{"gray"}\NormalTok{, }\DataTypeTok{linetype=}\StringTok{"dashed"}\NormalTok{)}
+\NormalTok{    p6<-p6}\OperatorTok{+}\KeywordTok{theme_bw}\NormalTok{()}
+    
+    \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{rvfPlot=}\NormalTok{p1, }\DataTypeTok{qqPlot=}\NormalTok{p2, }\DataTypeTok{sclLocPlot=}\NormalTok{p3, }\DataTypeTok{cdPlot=}\NormalTok{p4, }\DataTypeTok{rvlevPlot=}\NormalTok{p5, }\DataTypeTok{cvlPlot=}\NormalTok{p6))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{diagArray <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(model)\{}
+\KeywordTok{grid.arrange}\NormalTok{(}
+\KeywordTok{diagPlot}\NormalTok{(model)}\OperatorTok{$}\NormalTok{rvfPlot,}
+\KeywordTok{diagPlot}\NormalTok{(model)}\OperatorTok{$}\NormalTok{qqPlot,}
+\KeywordTok{diagPlot}\NormalTok{(model)}\OperatorTok{$}\NormalTok{rvlevPlot,}
+\KeywordTok{diagPlot}\NormalTok{(model)}\OperatorTok{$}\NormalTok{cvlPlot)}
+\NormalTok{\}}
+
+\KeywordTok{diagArray}\NormalTok{(best.Mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+The residuals appear somewhat non-normal in the plot of the fitted
+values against the model residuals, there appears to be a concave up
+pattern in the residuals across the fitted values, the normal QQ plot
+appears to deviate significantly from the line and there appears to be
+values with high points of leverage.
+
+It appears that the assumption of normally distributed residuals may be
+violated.
+
+\hypertarget{transform-the-data-to-overcome-diagnostic-issues.}{%
+\subsection{(5) Transform the data to overcome diagnostic
+issues.}\label{transform-the-data-to-overcome-diagnostic-issues.}}
+
+An appropriate transform for the data in order to adress the
+non-normality of the residuals would be a concave transform of the
+response.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu}\OperatorTok{$}\NormalTok{rootPerformance <-}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(cpu}\OperatorTok{$}\NormalTok{Performance)}
+
+\NormalTok{hist <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(cpu, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Performance)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \DecValTok{80}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{"Observations"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Histogram of Performance"}\NormalTok{)}
+
+\NormalTok{loghist <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(cpu, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ rootPerformance)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{binwidth =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{"Observations"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Histogram of Performance"}\NormalTok{, }\DataTypeTok{x =} \StringTok{"Root-Performance"}\NormalTok{)}
+
+
+\KeywordTok{ggarrange}\NormalTok{(hist, loghist, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-20-1.pdf}
+
+This clearly demonstrates log-normal response data, hence a
+log-transform may be appropriate, however a log-transform significantly
+compromises the normality of the residuals across the fitted data, and
+hence a root-transform is used instead:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{best.Mod.mlm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(rootPerformance }\OperatorTok{~}\StringTok{ }\NormalTok{MinimumMainMemory }\OperatorTok{+}\StringTok{ }\NormalTok{MaximumMainMemory }\OperatorTok{+}\StringTok{ }\NormalTok{CacheSize }\OperatorTok{+}\StringTok{ }\NormalTok{MaximumNumberOfChannels, cpu)}
+
+\KeywordTok{diagArray}\NormalTok{(best.Mod.mlm)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+The residuals, following the transform, are sufficiently normal in order
+to accept the model, although the model appears to have a few points of
+high leverage.
+
+The optimal multiple linear regression model is hence:
+
+\[
+Y_{\textsf{Perf}} = -40 + 0.015\times \textsf{MinMem}  + 0.0053 \times \textsf{MaxMem} + 0.59\times \textsf{Cache} + 1.4\times \textsf{MaxChannels}
+\]
+
+\hypertarget{question-2}{%
+\section{Question 2}\label{question-2}}
+
+\hypertarget{choose-an-appropriate-polynomial-attribute}{%
+\subsection{(1) Choose an appropriate polynomial
+attribute}\label{choose-an-appropriate-polynomial-attribute}}
+
+Select the most suitable attribute of CPU that can be used to predict
+accurately the performance of CPU using Polynomial Regression.
+
+\hypertarget{consider-cycle-time}{%
+\subsubsection{Consider Cycle Time}\label{consider-cycle-time}}
+
+The plot at @ref(fig:sp) shows a very strong non-linear, possibly
+directly inversely proprtional, relationship between CycleTime and
+performance, for this reason it will be considered as an attribute for a
+polynomial model.
+
+By the nature of the strong visual relationship between Cycle Time and
+performance, it will be considered as a potential attribute to predict
+CPU performance using a polynomial model.
+
+Create the various models
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\NormalTok{maxdeg <-}\StringTok{ }\DecValTok{15}
+
+\NormalTok{modsCT <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"list"}\NormalTok{, }\DataTypeTok{length =}\NormalTok{ maxdeg)}
+\NormalTok{modsCT[[}\DecValTok{1}\NormalTok{]] <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\KeywordTok{I}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{CycleTime), }\DataTypeTok{data =}\NormalTok{ cpu)}
+\KeywordTok{names}\NormalTok{(modsCT)[}\DecValTok{1}\NormalTok{] <-}\StringTok{ "Hyperbolic"}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{maxdeg)\{}
+\NormalTok{modsCT[[i}\OperatorTok{+}\DecValTok{1}\NormalTok{]] <-}\StringTok{  }\KeywordTok{glm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(CycleTime, i, }\DataTypeTok{raw =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{data =}\NormalTok{ cpu)}
+\KeywordTok{names}\NormalTok{(modsCT)[i}\OperatorTok{+}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"Degree "}\NormalTok{, i)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Perform cross Validation across the models
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{CycTime_CrossValDF <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\StringTok{"Model"}\NormalTok{ =}\StringTok{ }\KeywordTok{factor}\NormalTok{(}\KeywordTok{names}\NormalTok{(modsCT), }\DataTypeTok{levels =} \KeywordTok{names}\NormalTok{(modsCT), }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{), }\StringTok{"CVError"}\NormalTok{ =}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, maxdeg}\OperatorTok{+}\DecValTok{1}\NormalTok{))}
+
+
+\NormalTok{CycTime_CrossValDF[(}\DecValTok{1}\NormalTok{), }\StringTok{"CVError"}\NormalTok{] <-}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{cv.glm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpu, }\DataTypeTok{glmfit =}\NormalTok{ modsCT[[}\DecValTok{1}\NormalTok{]], }\DataTypeTok{K =} \DecValTok{10}\NormalTok{)}\OperatorTok{$}\NormalTok{delta[}\DecValTok{1}\NormalTok{])}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{(maxdeg)) \{}
+\NormalTok{  CycTime_CrossValDF[(i}\OperatorTok{+}\DecValTok{1}\NormalTok{), }\StringTok{"CVError"}\NormalTok{] <-}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{cv.glm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpu, }\DataTypeTok{glmfit =}\NormalTok{ modsCT[[(i}\OperatorTok{+}\DecValTok{1}\NormalTok{)]], }\DataTypeTok{K =} \DecValTok{10}\NormalTok{)}\OperatorTok{$}\NormalTok{delta[}\DecValTok{1}\NormalTok{])}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Now plot the CV Error
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ CycTime_CrossValDF, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{factor}\NormalTok{(Model, }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{y =}\NormalTok{ CVError, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"IndianRed"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{5}\NormalTok{) }\OperatorTok{+}
+\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{col =} \StringTok{"Purple"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Polynomial Model"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Expected Testing Error"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Cross Validation for Cycle Time"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =}  \DecValTok{1}\NormalTok{, }\DataTypeTok{col =} \StringTok{"RoyalBlue"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{which.min}\NormalTok{(CycTime_CrossValDF[[ }\StringTok{"CVError"}\NormalTok{]]), }\DataTypeTok{col =} \StringTok{"brown"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{90}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-24-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#which.min(CycTime_CrossValDF[[ "CVError"]])}
+\end{Highlighting}
+\end{Shaded}
+
+Although the Cycle Time performs well as a predictive feature within a
+polynomial model of a high degree, the simplest model that performs
+equallyas well is the hyperbolic model. The simpler model should be
+accepted because the higher degree of the model will increase the
+variance of the model without significantly improving the performance of
+the model. When Cycle time is chosen as the best attribute to model the
+performance of the cpu, the hyperbolic model is the optimal model:
+
+\[
+Y_{Perf} = \frac{8229.468}{X_{CycTime}}
+\]
+
+However a hyperbola is not a polynomial curve, but a \emph{rational}
+curve.
+
+\hypertarget{choose-the-best-performing-variable}{%
+\subsubsection{Choose the best performing
+variable}\label{choose-the-best-performing-variable}}
+
+However it may be such that cycle time is not the most appropriate
+variable, in order to determine the best single attribute that may be
+used to predict performance by way of a polynomialmodel the \emph{best
+attributes} algorithm may be extended:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For all predictors:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Fit all hyperbolic, linear and 2nd to nth degree polynomial models
+  using only a sinle predictor, choose the predictor that returns the
+  lowest training error
+\item
+  Repeat for all Predictors
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Select a single bestmodel from among the hyperbolic, linear and
+  polynomial models by using cross validation.
+\end{enumerate}
+
+This resulting model will be the best performing model given the
+constraints that it must be a polynomial model with only a single
+attribute.
+
+\hypertarget{implement-the-algorithm}{%
+\paragraph{Implement the Algorithm}\label{implement-the-algorithm}}
+
+Set the seed, create a tibble and create a data frame in which to store
+the best predictors:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Questoin 2 Scratch ------------------------------------------------------}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{31415}\NormalTok{)}
+
+
+\NormalTok{mdg <-}\StringTok{ }\DecValTok{9} \CommentTok{# Maximum Degree to Consider in Question 2}
+
+\NormalTok{cpu <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(cpu)}
+\NormalTok{predictors <-}\StringTok{ }\KeywordTok{select}\NormalTok{(cpu, }\KeywordTok{c}\NormalTok{( }\StringTok{"CycleTime"}\NormalTok{, }\StringTok{"MinimumMainMemory"}\NormalTok{, }\StringTok{"MaximumMainMemory"}\NormalTok{, }\StringTok{"CacheSize"}\NormalTok{, }\StringTok{"MinimumNumberOfChannels"}\NormalTok{, }\StringTok{"MaximumNumberOfChannels"}\NormalTok{))}
+\KeywordTok{names}\NormalTok{(cpu)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "CycleTime"               "MinimumMainMemory"      
+## [3] "MaximumMainMemory"       "CacheSize"              
+## [5] "MinimumNumberOfChannels" "MaximumNumberOfChannels"
+## [7] "Performance"             "Frequency"              
+## [9] "rootPerformance"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{BestPred <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\StringTok{"Degree"}\NormalTok{ =}\StringTok{ }\DecValTok{1}\OperatorTok{:}\NormalTok{(mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{), }\StringTok{"BestAttribute"}\NormalTok{ =}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, (mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+Now create a loop to determine the best attribute for each corresponding
+model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lin to 6th deg}
+
+
+\NormalTok{BestPred <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\StringTok{"Degree"}\NormalTok{ =}\StringTok{ }\DecValTok{1}\OperatorTok{:}\NormalTok{(mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{), }\StringTok{"BestAttribute"}\NormalTok{ =}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, (mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{)))}
+
+\ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in}\NormalTok{ (}\DecValTok{1}\OperatorTok{:}\NormalTok{mdg)) \{}
+  
+\NormalTok{RSSVals <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{names}\NormalTok{(predictors), }\StringTok{"RSS"}\NormalTok{ =}\StringTok{ }\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(predictors))}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(predictors)) \{}
+    
+\NormalTok{    RSSVals[i,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{(}\KeywordTok{glm}\NormalTok{(cpu}\OperatorTok{$}\NormalTok{Performance }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(}\KeywordTok{as_vector}\NormalTok{(predictors[i]), j))}\OperatorTok{$}\NormalTok{residuals)}\OperatorTok{^}\DecValTok{2} \OperatorTok{%>%}\StringTok{ }\KeywordTok{sum}\NormalTok{()}
+    
+\NormalTok{  \}}
+
+\NormalTok{BestPred[j,}\DecValTok{2}\NormalTok{] <-}\StringTok{  }\KeywordTok{as.character}\NormalTok{(RSSVals[}\KeywordTok{which.min}\NormalTok{(RSSVals[,}\DecValTok{2}\NormalTok{]),}\DecValTok{1}\NormalTok{][}\DecValTok{1}\NormalTok{])}
+\NormalTok{\}}
+
+\CommentTok{# Hyperbolic}
+
+\NormalTok{RSSVals <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{names}\NormalTok{(predictors), }\StringTok{"RSS"}\NormalTok{ =}\StringTok{ }\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(predictors))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(predictors)) \{}
+  
+\NormalTok{  RSSVals[i,}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\NormalTok{(}\KeywordTok{glm}\NormalTok{(cpu}\OperatorTok{$}\NormalTok{Performance }\OperatorTok{~}\StringTok{ }\NormalTok{(}\DecValTok{1}\OperatorTok{/}\KeywordTok{as_vector}\NormalTok{(predictors[i])))}\OperatorTok{$}\NormalTok{residuals)}\OperatorTok{^}\DecValTok{2} \OperatorTok{%>%}\StringTok{ }\KeywordTok{sum}\NormalTok{()}
+  
+\NormalTok{\}}
+
+\NormalTok{BestPred}\OperatorTok{$}\NormalTok{Degree[(mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{)] <-}\StringTok{ }\DecValTok{-1}
+\NormalTok{BestPred[(mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{),}\DecValTok{2}\NormalTok{] <-}\StringTok{  }\KeywordTok{as.character}\NormalTok{(RSSVals[}\KeywordTok{which.min}\NormalTok{(RSSVals[,}\DecValTok{2}\NormalTok{]),}\DecValTok{1}\NormalTok{][}\DecValTok{1}\NormalTok{])}
+
+\NormalTok{BestPred}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Degree     BestAttribute
+## 1       1 MaximumMainMemory
+## 2       2 MaximumMainMemory
+## 3       3 MaximumMainMemory
+## 4       4 MaximumMainMemory
+## 5       5 MaximumMainMemory
+## 6       6 MaximumMainMemory
+## 7       7 MaximumMainMemory
+## 8       8 MaximumMainMemory
+## 9       9 MaximumMainMemory
+## 10     -1         CycleTime
+\end{verbatim}
+
+\hypertarget{use-10-fold-cv-to-select-the-optimal-model}{%
+\subsection{(2) Use 10-fold CV to Select the Optimal
+Model}\label{use-10-fold-cv-to-select-the-optimal-model}}
+
+Now that we have the best attribute for any given model, we may use
+cross validation in order to decide upon the best model, first however
+create a list of models and a data frame in which to store the CV
+errors:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Now I have to perform cross validation on every model}
+\CommentTok{## Create a list of models}
+
+\CommentTok{### Create the model names}
+\NormalTok{modnames <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, (mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in}\NormalTok{ (}\DecValTok{1}\OperatorTok{:}\NormalTok{(mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{))) \{}
+\NormalTok{ modnames[i] <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"Degree "}\NormalTok{, i) }
+  
+\NormalTok{\}}
+\NormalTok{modnames[mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{] <-}\StringTok{ "Hyperbolic"}
+
+\CommentTok{### Create the list of Models}
+\NormalTok{mods <-}\StringTok{ }\KeywordTok{vector}\NormalTok{(}\DataTypeTok{mode =} \StringTok{"list"}\NormalTok{, }\DataTypeTok{length =} \KeywordTok{length}\NormalTok{(modnames))}
+\KeywordTok{names}\NormalTok{(mods) <-}\StringTok{ }\NormalTok{modnames}
+
+\CommentTok{### Assign the models}
+
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{mdg) \{}
+\NormalTok{ mods[[i]] <-}\StringTok{  }\KeywordTok{glm}\NormalTok{(}\DataTypeTok{formula =} \KeywordTok{paste}\NormalTok{(}\StringTok{"Performance ~ "}\NormalTok{, BestPred[i,}\DecValTok{2}\NormalTok{]), }\DataTypeTok{data =}\NormalTok{ cpu)}
+\NormalTok{\}}
+
+\NormalTok{mods[[(mdg}\OperatorTok{+}\DecValTok{1}\NormalTok{)]] <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\KeywordTok{I}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{CycleTime), }\DataTypeTok{data =}\NormalTok{ cpu)}
+
+
+\CommentTok{## Use the list to perform Cross Validation}
+
+\CommentTok{### Make a data frame to track the expected error}
+\NormalTok{BestPred}\OperatorTok{$}\NormalTok{CVError <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(BestPred))}
+\end{Highlighting}
+\end{Shaded}
+
+Now actually perform the 10-fold cross validation error:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{### Compute the CV Error}
+\ControlFlowTok{for}\NormalTok{ (r }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(BestPred)) \{}
+\NormalTok{BestPred[r,}\DecValTok{3}\NormalTok{] <-}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{cv.glm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cpu, }\DataTypeTok{glmfit =}\NormalTok{ mods[[r]], }\DataTypeTok{K =} \DecValTok{10}\NormalTok{)}\OperatorTok{$}\NormalTok{delta[}\DecValTok{1}\NormalTok{])}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Now clean up the names and plot the cross validation Errors:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{BestPred}\OperatorTok{$}\NormalTok{names <-}\StringTok{ }\KeywordTok{names}\NormalTok{(mods)}
+\NormalTok{BestPred <-}\StringTok{ }\KeywordTok{arrange}\NormalTok{(}\DataTypeTok{.data =}\NormalTok{ BestPred, }\DataTypeTok{sort.by =}\NormalTok{ Degree)}
+\KeywordTok{names}\NormalTok{(BestPred)[}\DecValTok{2}\NormalTok{] <-}\StringTok{ "Best Attribute"}
+
+
+\KeywordTok{ggplot}\NormalTok{(BestPred, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{factor}\NormalTok{(Degree, }\DataTypeTok{labels =}\NormalTok{ BestPred}\OperatorTok{$}\NormalTok{names, }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{y =}\NormalTok{ CVError, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{shape =} \StringTok{`}\DataTypeTok{Best Attribute}\StringTok{`}\NormalTok{, }\DataTypeTok{col =} \StringTok{`}\DataTypeTok{Best Attribute}\StringTok{`}\NormalTok{),  }\DataTypeTok{size =} \DecValTok{5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{()  }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Model Type"}\NormalTok{,}
+       \DataTypeTok{y =} \KeywordTok{TeX}\NormalTok{(}\StringTok{"Estimated Testing Error $}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{pm $ Performance"}\NormalTok{),}
+       \DataTypeTok{title =} \StringTok{"Cross Validation of Different Models"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{which.min}\NormalTok{(BestPred}\OperatorTok{$}\NormalTok{CVError))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{90}\NormalTok{, }\DataTypeTok{hjust =} \DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-29-1.pdf}
+
+If leave-one out CV is performed the optimal model will also be found to
+be a 3rd degree polynomial, hence the best polynomial model, using only
+one attribute, is a 3rd degree polynomial using
+\texttt{MaximumMainMemory}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bestPoly <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(MaximumMainMemory, }\DecValTok{3}\NormalTok{), cpu)}
+\KeywordTok{summary}\NormalTok{(bestPoly)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Performance ~ poly(MaximumMainMemory, 3), data = cpu)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -325.93  -22.30   -9.03   10.59  333.19 
+## 
+## Coefficients:
+##                             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)                  105.617      4.579  23.067   <2e-16 ***
+## poly(MaximumMainMemory, 3)1 2001.742     66.194  30.240   <2e-16 ***
+## poly(MaximumMainMemory, 3)2  684.557     66.194  10.342   <2e-16 ***
+## poly(MaximumMainMemory, 3)3  -79.978     66.194  -1.208    0.228    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 66.19 on 205 degrees of freedom
+## Multiple R-squared:  0.833,  Adjusted R-squared:  0.8306 
+## F-statistic:   341 on 3 and 205 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+so the model is:
+
+\[
+Y_{Perf} = 106 + 2002 \times \textsf{Mem} + 685 \times \textsf{Mem}^2 -80 \times \textsf{Mem}^3
+\]
+
+\hypertarget{comment-on-the-accuracy-of-the-model}{%
+\subsection{(3) Comment on the Accuracy of the
+Model}\label{comment-on-the-accuracy-of-the-model}}
+
+The expected RMSE of the model on unseen data is approximately 82.5 as
+determined by 10-fold Cross Validation, so it would be expected that
+this model will make predictions with an expected error of 82.5, this is
+significantly less than the standard deviation of the CPU performance
+and so the model would be expected to perform significantly better than
+mere chance.
+
+\hypertarget{model-diagnostics}{%
+\subsection{(4) Model Diagnostics}\label{model-diagnostics}}
+
+The residuals of the best performing model may be considered thusly:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{diagArray}\NormalTok{(bestPoly)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-31-1.pdf}
+
+The residuals appear to be bunched up to the left, however there is no
+clear pattern in them, although they do not necessarily look normally
+distributed, the normal q-q plot has a wave to it and so the
+distribution of the residuals would hence correspond to a `fat-tailed'
+distribution.
+
+The residual plots are not sufficiently non-normal to reject the model
+on grounds of non-normal residuals. Hence the attribute
+\texttt{MaximumMainMemory} is accepted as the most suitable attribute
+for the most optimal single variable polynomial regression, as measured
+by 10-fold Cross Validation.
+
+\hypertarget{question-3---wine-trees}{%
+\section{Question 3 - Wine Trees}\label{question-3---wine-trees}}
+
+\hypertarget{create-a-test-and-training-set}{%
+\subsection{(1) Create a test and training
+set}\label{create-a-test-and-training-set}}
+
+Divide the dataset into Training set with 4000 observations and assign
+rest of the observations into Test set. {[}Use set.seed as 10 to
+generate same randomness.{]}
+
+The data set may be imported and a training set indexed thusly:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{10}\NormalTok{)}
+
+\CommentTok{#Import the data}
+\NormalTok{wine <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{read.csv}\NormalTok{(}\DataTypeTok{file =} \StringTok{"./Code/Datasets/Wine.csv"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{sep =} \StringTok{","}\NormalTok{))}
+\KeywordTok{glimpse}\NormalTok{(wine)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Observations: 4,898
+## Variables: 12
+## $ WineQuality        <int> 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 7, 5...
+## $ FixedAcidity       <dbl> 7.0, 6.3, 8.1, 7.2, 7.2, 8.1, 6.2, 7.0, 6.3...
+## $ VolatileAcidity    <dbl> 0.27, 0.30, 0.28, 0.23, 0.23, 0.28, 0.32, 0...
+## $ CitricAcid         <dbl> 0.36, 0.34, 0.40, 0.32, 0.32, 0.40, 0.16, 0...
+## $ ResidualSugar      <dbl> 20.70, 1.60, 6.90, 8.50, 8.50, 6.90, 7.00, ...
+## $ Chlorides          <dbl> 0.045, 0.049, 0.050, 0.058, 0.058, 0.050, 0...
+## $ FreeSulfurDioxide  <dbl> 45, 14, 30, 47, 47, 30, 30, 45, 14, 28, 11,...
+## $ TotalSulfurDioxide <dbl> 170, 132, 97, 186, 186, 97, 136, 170, 132, ...
+## $ Density            <dbl> 1.0010, 0.9940, 0.9951, 0.9956, 0.9956, 0.9...
+## $ PH                 <dbl> 3.00, 3.30, 3.26, 3.19, 3.19, 3.26, 3.18, 3...
+## $ Sulphates          <dbl> 0.45, 0.49, 0.44, 0.40, 0.40, 0.44, 0.47, 0...
+## $ Alcohol            <dbl> 8.8, 9.5, 10.1, 9.9, 9.9, 10.1, 9.6, 8.8, 9...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Create a training set}
+\NormalTok{train <-}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(wine)), }\DataTypeTok{size =} \DecValTok{4000}\NormalTok{)}
+\NormalTok{wine.test  <-}\StringTok{ }\KeywordTok{slice}\NormalTok{(wine, }\OperatorTok{-}\NormalTok{train)}
+\NormalTok{wine.train <-}\StringTok{ }\KeywordTok{slice}\NormalTok{(wine, train)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{build-a-decision-tree}{%
+\subsection{(2) Build a decision tree}\label{build-a-decision-tree}}
+
+A decision tree may be constructed by using the following code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wine.tree <-}\StringTok{ }\KeywordTok{tree}\NormalTok{(WineQuality }\OperatorTok{~}\StringTok{ }\NormalTok{., wine.train)}
+\KeywordTok{summary}\NormalTok{(wine.tree)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Regression tree:
+## tree(formula = WineQuality ~ ., data = wine.train)
+## Variables actually used in tree construction:
+## [1] "Alcohol"           "VolatileAcidity"   "FreeSulfurDioxide"
+## Number of terminal nodes:  5 
+## Residual mean deviance:  0.5788 = 2312 / 3995 
+## Distribution of residuals:
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -3.5890 -0.3856  0.1013  0.0000  0.6144  3.6140
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{paste}\NormalTok{(}\StringTok{"SD of Quality: "}\NormalTok{, }\KeywordTok{sd}\NormalTok{(wine}\OperatorTok{$}\NormalTok{WineQuality))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "SD of Quality:  0.885638574967831"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{paste}\NormalTok{(}\StringTok{"Average Wine Quality: "}\NormalTok{, }\KeywordTok{mean}\NormalTok{(wine}\OperatorTok{$}\NormalTok{WineQuality))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Average Wine Quality:  5.87790935075541"
+\end{verbatim}
+
+reducing the number of terminal nodes (known as `pruning' the tree) may
+elicit better performance from the model, this ideal number of terminal
+nodes may be considered by using cross validation:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wine.treeCV <-}\StringTok{ }\KeywordTok{cv.tree}\NormalTok{(wine.tree)}
+
+\NormalTok{WineCVError <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\StringTok{"Nodes"}\NormalTok{ =}\StringTok{ }\NormalTok{wine.treeCV}\OperatorTok{$}\NormalTok{size, }\StringTok{"RSS"}\NormalTok{ =}\StringTok{ }\NormalTok{wine.treeCV}\OperatorTok{$}\NormalTok{dev, }\StringTok{"MSE"}\NormalTok{ =}\StringTok{ }\NormalTok{(wine.treeCV}\OperatorTok{$}\NormalTok{dev)}\OperatorTok{/}\KeywordTok{length}\NormalTok{(train), }\StringTok{"RMSE"}\NormalTok{ =}\StringTok{ }\KeywordTok{sqrt}\NormalTok{((wine.treeCV}\OperatorTok{$}\NormalTok{dev)}\OperatorTok{/}\KeywordTok{length}\NormalTok{(train)))}
+
+\KeywordTok{ggplot}\NormalTok{(WineCVError, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Nodes, }\DataTypeTok{y =}\NormalTok{ RMSE, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"#B223F5"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{col =} \StringTok{"#DBA0D6"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic2}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Cross Validation Error"}\NormalTok{, }\DataTypeTok{y =} \KeywordTok{TeX}\NormalTok{(}\StringTok{"Expected Error $ }\CharTok{\textbackslash{}\textbackslash{}}\StringTok{left(E ( }\CharTok{\textbackslash{}\textbackslash{}}\StringTok{epsilon) }\CharTok{\textbackslash{}\textbackslash{}}\StringTok{right)$"}\NormalTok{), }\DataTypeTok{caption =} \StringTok{"RMSE is an estimation of the mean residual value, hence it is expressed that RMSE is the expected model error"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{as.integer}\NormalTok{(}\KeywordTok{summary}\NormalTok{(wine.treeCV)[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{]), }\DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"#AB0FFF"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept =} \KeywordTok{min}\NormalTok{(WineCVError}\OperatorTok{$}\NormalTok{RMSE), }\DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"#AB0FFF"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{annotate}\NormalTok{(}\DataTypeTok{geom =} \StringTok{"text"}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ (}\KeywordTok{min}\NormalTok{(WineCVError}\OperatorTok{$}\NormalTok{RMSE)}\OperatorTok{+}\KeywordTok{sd}\NormalTok{(WineCVError}\OperatorTok{$}\NormalTok{RMSE)), }\DataTypeTok{x =}\NormalTok{ (}\DecValTok{4}\NormalTok{), }\DataTypeTok{label =} \KeywordTok{paste}\NormalTok{(}\StringTok{"SD of Error: "}\NormalTok{, }\KeywordTok{signif}\NormalTok{(}\KeywordTok{min}\NormalTok{(WineCVError}\OperatorTok{$}\NormalTok{RMSE), }\DecValTok{3}\NormalTok{))) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+This suggests that the model initially used, with 5 nodes, is the best
+performing model, hence a 5-node tree model is accepted:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(wine.tree)}
+\KeywordTok{text}\NormalTok{(wine.tree, }\DataTypeTok{pretty =} \DecValTok{1}\NormalTok{, }\DataTypeTok{cex =} \FloatTok{0.75}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-35-1.pdf}
+
+\hypertarget{superior-plot}{%
+\subsubsection{Superior plot}\label{superior-plot}}
+
+A superior plot (and automatic cross-validation) may be produced by
+using the \texttt{rpart()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{WineModTree.rpart <-}\StringTok{ }\KeywordTok{rpart}\NormalTok{(}\DataTypeTok{formula =}\NormalTok{ WineQuality}\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ wine.train)}
+\NormalTok{WineModTree.plot  <-}\StringTok{ }\KeywordTok{rpart.plot}\NormalTok{(WineModTree.rpart, }\DataTypeTok{box.palette=}\StringTok{"OrGy"}\NormalTok{, }\DataTypeTok{shadow.col=}\StringTok{"gray"}\NormalTok{, }\DataTypeTok{nn=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{SecAssignment_files/figure-latex/tree-1.pdf}
+\caption{Tree Model for Wine Quality}
+\end{figure}
+
+\hypertarget{significant-attributes}{%
+\subsubsection{Significant Attributes}\label{significant-attributes}}
+
+It can be oveserved from @ref(fig: tree) that in creating this model
+only the measurements of acohol, volatile acidity and free sulfur
+dioxide are found to be significant, the mean square error (MSE) of this
+model (errounesly listed as deviance by this package) is 0.58, which is
+a reasonably low training error, given that this is significantly lower
+than the standard deviation of the wine quality which is 0.89 with an
+average wine quality value of 5.9.
+
+\hypertarget{model-performance}{%
+\subsection{(3) Model Performance}\label{model-performance}}
+
+\hypertarget{comparison-to-testing-data}{%
+\paragraph{Comparison to testing
+data}\label{comparison-to-testing-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wineTreePreds.test <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ wine.tree, }\DataTypeTok{newdata =}\NormalTok{ wine.test)}
+
+\NormalTok{rmse <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(pred, obs)\{}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{require}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{))\{}
+\NormalTok{    (pred}\OperatorTok{-}\NormalTok{obs)}\OperatorTok{^}\DecValTok{2} \OperatorTok{%>%}\StringTok{ }\NormalTok{mean }\OperatorTok{%>%}\StringTok{ }\KeywordTok{sqrt}\NormalTok{()}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{\{}
+    \KeywordTok{print}\NormalTok{(}\StringTok{"Install Tidyverse first"}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\NormalTok{wineTree.rmse <-}\StringTok{ }\KeywordTok{rmse}\NormalTok{(}\DataTypeTok{pred =}\NormalTok{ wineTreePreds.test, }\DataTypeTok{obs =}\NormalTok{ wine.test}\OperatorTok{$}\NormalTok{WineQuality)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{comment-on-the-error}{%
+\subsubsection{Comment on the Error}\label{comment-on-the-error}}
+
+Cross validation provides that the expected error by using this model is
+0.77 units of quality, the same expected error value is returned from
+fitting the model to testing data, the standard deviation (i.e.~the
+expected difference between values of wine quality) is about 0.89, so
+this model is expected, by cross validation, to perform better than mere
+chance.
+
+\hypertarget{build-a-categorical-decision-tree}{%
+\subsection{(4) Build a categorical decision
+tree}\label{build-a-categorical-decision-tree}}
+
+First create a factor of variables for high and low wine quality
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wine}\OperatorTok{$}\NormalTok{WineCat <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(wine}\OperatorTok{$}\NormalTok{WineQuality }\OperatorTok{>}\StringTok{ }\DecValTok{6}\NormalTok{, }\StringTok{"high"}\NormalTok{, }\StringTok{"low"}\NormalTok{)}
+\NormalTok{wine}\OperatorTok{$}\NormalTok{WineCat <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ wine}\OperatorTok{$}\NormalTok{WineCat, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\StringTok{"low"}\NormalTok{, }\StringTok{"high"}\NormalTok{), }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{nmax =} \DecValTok{2}\NormalTok{)}
+
+\NormalTok{wine.test  <-}\StringTok{ }\KeywordTok{slice}\NormalTok{(wine, }\OperatorTok{-}\NormalTok{train)}
+\NormalTok{wine.train <-}\StringTok{ }\KeywordTok{slice}\NormalTok{(wine, train)}
+\end{Highlighting}
+\end{Shaded}
+
+the tree model may be constructed thusly:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wineCat.tree <-}\StringTok{ }\KeywordTok{tree}\NormalTok{(WineCat }\OperatorTok{~}\StringTok{ }\NormalTok{. }\OperatorTok{-}\NormalTok{WineQuality, wine.train)}
+\CommentTok{# plot(wineCat.tree)}
+\CommentTok{# text(wineCat.tree, pretty = 1, cex = 0.75)}
+\end{Highlighting}
+\end{Shaded}
+
+A better performing model may be found by `pruning' the tree, showing
+preference for a model that reduces the misclassification rate for cross
+validation (as opposed to cost complexity pruning):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wineCat.treeCV <-}\StringTok{ }\KeywordTok{cv.tree}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ wineCat.tree, }\DataTypeTok{FUN =}\NormalTok{ prune.misclass, }\DataTypeTok{K =} \DecValTok{10}\NormalTok{)}
+
+\NormalTok{wineCat.treeCV}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $size
+## [1] 6 5 3 1
+## 
+## $dev
+## [1] 835 835 837 857
+## 
+## $k
+## [1] -Inf  0.0  3.5 10.5
+## 
+## $method
+## [1] "misclass"
+## 
+## attr(,"class")
+## [1] "prune"         "tree.sequence"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(wineCat.tree)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Classification tree:
+## tree(formula = WineCat ~ . - WineQuality, data = wine.train)
+## Variables actually used in tree construction:
+## [1] "Alcohol"         "VolatileAcidity"
+## Number of terminal nodes:  6 
+## Residual mean deviance:  0.8307 = 3318 / 3994 
+## Misclassification error rate: 0.2065 = 826 / 4000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{WineCatCVError <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\StringTok{"Nodes"}\NormalTok{ =}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(wineCat.treeCV}\OperatorTok{$}\NormalTok{size), }\StringTok{"MisClas"}\NormalTok{ =}\StringTok{ }\NormalTok{wineCat.treeCV}\OperatorTok{$}\NormalTok{dev}\OperatorTok{/}\KeywordTok{length}\NormalTok{(train))}
+\NormalTok{WineCatCVError <-}\StringTok{ }\KeywordTok{arrange}\NormalTok{(WineCatCVError, Nodes)}
+
+\NormalTok{WineCatCVError <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\StringTok{"Nodes"}\NormalTok{ =}\StringTok{ }\KeywordTok{factor}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ WineCatCVError[[ }\StringTok{"Nodes"}\NormalTok{]], }\DataTypeTok{levels =}\NormalTok{ WineCatCVError[[ }\StringTok{"Nodes"}\NormalTok{]], }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{), }\StringTok{"MisClas"}\NormalTok{ =}\StringTok{ }\NormalTok{WineCatCVError[[ }\StringTok{"MisClas"}\NormalTok{]])}
+\NormalTok{bestNode <-}\StringTok{ }\NormalTok{WineCatCVError[[ }\StringTok{"Nodes"}\NormalTok{]][}\KeywordTok{which.min}\NormalTok{(WineCatCVError[[}\StringTok{"MisClas"}\NormalTok{]])]}
+\NormalTok{bestMisclas <-}\StringTok{ }\NormalTok{WineCatCVError[[ }\StringTok{"MisClas"}\NormalTok{]][bestNode]}
+
+\KeywordTok{ggplot}\NormalTok{(WineCatCVError, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Nodes, }\DataTypeTok{y =}\NormalTok{ MisClas, }\DataTypeTok{group =} \DecValTok{1}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"#B223F5"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{col =} \StringTok{"#DBA0D6"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic2}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Cross Validation Error"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Misclassificatoin Rate"}\NormalTok{, }\DataTypeTok{caption =} \StringTok{"Misclassification Rate is a measurement of the expected frequency of misclassification as determined by Cross Validation"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =} \KeywordTok{as.integer}\NormalTok{(bestNode), }\DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"#AB0FFF"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept =}\NormalTok{ bestMisclas, }\DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"#AB0FFF"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{annotate}\NormalTok{(}\DataTypeTok{geom =} \StringTok{"text"}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ bestMisclas}\OperatorTok{+}\KeywordTok{sd}\NormalTok{(WineCatCVError}\OperatorTok{$}\NormalTok{MisClas), }\DataTypeTok{x =}\NormalTok{ (}\FloatTok{1.1}\OperatorTok{+}\DecValTok{3}\NormalTok{), }\DataTypeTok{label =} \KeywordTok{paste}\NormalTok{(}\StringTok{"Misclassification Rate: }\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, }\KeywordTok{signif}\NormalTok{(}\KeywordTok{min}\NormalTok{(WineCatCVError}\OperatorTok{$}\NormalTok{MisClas), }\DecValTok{3}\NormalTok{))) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-40-1.pdf}
+
+The expected misclassification rate on unseen data for this model, as
+predicted by Cross Validatoin, will be minised by choosing five nodes
+and hence the model will be pruned from six to five terminal nodes, this
+can be acheived by using the \texttt{prune.misclass()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{wineCat.tree.prune <-}\StringTok{ }\KeywordTok{prune.misclass}\NormalTok{(wineCat.tree, }\DataTypeTok{best =}\NormalTok{ bestNode)}
+\KeywordTok{plot}\NormalTok{(wineCat.tree.prune)}
+\KeywordTok{text}\NormalTok{(wineCat.tree.prune, }\DataTypeTok{pretty =} \DecValTok{1}\NormalTok{, }\DataTypeTok{cex =} \FloatTok{0.75}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-41-1.pdf}
+
+\hypertarget{comment-on-the-performance-of-the-model}{%
+\subparagraph{(5) Comment on the performance of the
+model}\label{comment-on-the-performance-of-the-model}}
+
+the model can used to on the testing data in order to assess the rate of
+misclassification:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{WineTreeCatPreds <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(}\DataTypeTok{object =}\NormalTok{ wineCat.tree.prune, }\DataTypeTok{newdata =}\NormalTok{ wine.test, }\DataTypeTok{type =} \StringTok{"class"}\NormalTok{)}
+\NormalTok{WineTestObs <-}\StringTok{ }\NormalTok{wine.test}\OperatorTok{$}\NormalTok{WineCat}
+
+
+\CommentTok{# Now create the confusion Matrix}
+  \CommentTok{# This package prevents making mistakes}
+\NormalTok{  conf.mat <-}\StringTok{   }\NormalTok{caret}\OperatorTok{::}\KeywordTok{confusionMatrix}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ WineTreeCatPreds, }\DataTypeTok{reference =}\NormalTok{ WineTestObs)}
+\NormalTok{  conf.mat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction low high
+##       low  591  107
+##       high 101   99
+##                                           
+##                Accuracy : 0.7684          
+##                  95% CI : (0.7394, 0.7956)
+##     No Information Rate : 0.7706          
+##     P-Value [Acc > NIR] : 0.5813          
+##                                           
+##                   Kappa : 0.3381          
+##                                           
+##  Mcnemar's Test P-Value : 0.7288          
+##                                           
+##             Sensitivity : 0.8540          
+##             Specificity : 0.4806          
+##          Pos Pred Value : 0.8467          
+##          Neg Pred Value : 0.4950          
+##              Prevalence : 0.7706          
+##          Detection Rate : 0.6581          
+##    Detection Prevalence : 0.7773          
+##       Balanced Accuracy : 0.6673          
+##                                           
+##        'Positive' Class : low             
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \CommentTok{# This could otherwise be created by using, always go prediction, reference as a standard}
+\NormalTok{  mis.mat <-}\StringTok{ }\KeywordTok{table}\NormalTok{(}\StringTok{"prediction"}\NormalTok{ =}\StringTok{ }\NormalTok{WineTreeCatPreds, }\StringTok{"reference"}\NormalTok{ =}\StringTok{ }\NormalTok{WineTestObs)}
+\NormalTok{    mcr <-}\StringTok{ }\KeywordTok{signif}\NormalTok{((mis.mat[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\NormalTok{mis.mat[}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{])}\OperatorTok{/}\KeywordTok{sum}\NormalTok{(mis.mat),}\DecValTok{2}\NormalTok{)}
+\NormalTok{    mcr}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.23
+\end{verbatim}
+
+The misclassification error rate on the testing data is 23\%, this is
+comparable with what was predicted via cross validation which returned
+20.65\%, this misclassification rate corresponds to a tree model trained
+to minimise the cross validation misclassification rate (as opposed to
+cost-complexity).
+
+This misclassification rate is quite high, however for the trade off of
+interpretability, this is still an acceptable model. It's very
+interesting that a good wine is essenitally synonymous with a strong
+wine.
+
+\hypertarget{question-4}{%
+\section{Question 4}\label{question-4}}
+
+\hypertarget{design-a-support-vector-machine}{%
+\subsection{(1) Design a Support Vector
+Machine}\label{design-a-support-vector-machine}}
+
+\hypertarget{create-a-categorical-variable}{%
+\subsubsection{Create a categorical
+Variable}\label{create-a-categorical-variable}}
+
+Classify CPU performance as an ordered factor with levels of
+\texttt{high} and \texttt{low}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu <-}\StringTok{ }\KeywordTok{select}\NormalTok{(cpu, }\OperatorTok{-}\NormalTok{rootPerformance, }\OperatorTok{-}\NormalTok{Frequency)}
+\NormalTok{cpu}\OperatorTok{$}\NormalTok{Performance <-}\StringTok{ }\KeywordTok{if_else}\NormalTok{(cpu}\OperatorTok{$}\NormalTok{Performance }\OperatorTok{>}\StringTok{ }\DecValTok{500}\NormalTok{, }\StringTok{"high"}\NormalTok{, }\StringTok{"low"}\NormalTok{)}
+\NormalTok{cpu}\OperatorTok{$}\NormalTok{Performance <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(cpu}\OperatorTok{$}\NormalTok{Performance, }\KeywordTok{c}\NormalTok{(}\StringTok{"low"}\NormalTok{, }\StringTok{"high"}\NormalTok{), }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{create-the-svm}{%
+\subsubsection{Create the SVM}\label{create-the-svm}}
+
+\hypertarget{support-vector-classifier}{%
+\paragraph{Support Vector Classifier}\label{support-vector-classifier}}
+
+A support Vector Classifier can be constructed with a linear kernel by
+using the \texttt{svm} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\NormalTok{cpu.svm <-}\StringTok{ }\KeywordTok{svm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ cpu, }\DataTypeTok{kernel =} \StringTok{"linear"}\NormalTok{, }\DataTypeTok{cost =} \DecValTok{10}\NormalTok{, }\DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Cross validation can used in order to determine the best cost value via
+the \texttt{e1071::tune()} function, the cost is, to a degree, a measure
+of model flexibility and so there will be an optimal cost value, for
+non-linear kernel's differeng gamma values may be considered as well and
+hence they will be included in a function call:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{makeSVM <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(}\DataTypeTok{formula =}\NormalTok{ Performance }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ cpu, }\DataTypeTok{kernel =} \StringTok{"linear"}\NormalTok{, }\DataTypeTok{plotQ =} \OtherTok{TRUE}\NormalTok{)\{}
+\CommentTok{# cpu.svm <- svm(Performance ~ ., data = cpu, kernel = "linear", cost = 10, scale = FALSE)}
+
+\NormalTok{tune.cpu <-}\StringTok{ }\KeywordTok{tune}\NormalTok{(}\DataTypeTok{method =}\NormalTok{ svm, }\DataTypeTok{train.x =}\NormalTok{ formula, }\DataTypeTok{data =}\NormalTok{ data, }\DataTypeTok{kernel =}\NormalTok{ kernel, }\DataTypeTok{ranges =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{cost =} \KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \FloatTok{0.0001}\NormalTok{, }\DataTypeTok{to =} \DecValTok{10}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{50}\NormalTok{)), }\DataTypeTok{gamma =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(tune.cpu)}
+\NormalTok{CVErrors <-}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{(}\KeywordTok{summary}\NormalTok{(tune.cpu)[[}\DecValTok{7}\NormalTok{]])}
+\NormalTok{CVErrors}\OperatorTok{$}\NormalTok{error <-}\StringTok{ }\NormalTok{(CVErrors}\OperatorTok{$}\NormalTok{error)}
+
+\NormalTok{bestcost <-}\StringTok{ }\NormalTok{CVErrors}\OperatorTok{$}\NormalTok{cost[CVErrors}\OperatorTok{$}\NormalTok{error}\OperatorTok{<=}\KeywordTok{min}\NormalTok{(CVErrors[[ }\StringTok{"error"}\NormalTok{]])][}\DecValTok{1}\NormalTok{]}
+
+\NormalTok{tuneplot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(CVErrors, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ cost, }\DataTypeTok{y =}\NormalTok{ error)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{col =} \StringTok{"#B223F5"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{col =} \StringTok{"#DBA0D6"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic2}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Cross Validation estimation of Error given Cost Parameter"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Error"}\NormalTok{, }\DataTypeTok{x =} \StringTok{"Cost"}\NormalTok{, }\DataTypeTok{caption =} \KeywordTok{paste}\NormalTok{(}\StringTok{"The optimal cost parameter appears to occur at a cost value of"}\NormalTok{, }\KeywordTok{signif}\NormalTok{(bestcost, }\DecValTok{2}\NormalTok{))) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept =}\NormalTok{ (}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{summary}\NormalTok{(tune.cpu)[}\DecValTok{2}\NormalTok{])), }\DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"#AB0FFF"}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept =}\NormalTok{ bestcost, }\DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"#AB0FFF"}\NormalTok{))}
+
+
+
+\ControlFlowTok{if}\NormalTok{ (plotQ) \{}
+ \KeywordTok{return}\NormalTok{(tuneplot) }
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"ErrorRate"}\NormalTok{ =}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{summary}\NormalTok{(tune.cpu)[}\DecValTok{2}\NormalTok{]))))}
+\NormalTok{\}}
+
+
+\NormalTok{\}}
+
+\CommentTok{# Consider using `kernlab::ksvm()`}
+
+\KeywordTok{makeSVM}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-45-1.pdf}
+
+Using Cross Validation it may be determined that the best cost value for
+a linear kernel is 0.21.
+
+\hypertarget{compare-different-types-of-kernels}{%
+\subsubsection{Compare Different types of
+kernels}\label{compare-different-types-of-kernels}}
+
+In order to compare the performance of the different type of SVM
+kernel's a loop can be constructed and the expected testing error, as
+determined by cross validation, may be compared:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{models <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{"linear"}\NormalTok{, }\StringTok{"polynomial"}\NormalTok{, }\StringTok{"radial"}\NormalTok{, }\StringTok{"sigmoid"}\NormalTok{)}
+\NormalTok{KerDF <-}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\StringTok{"Kernel"}\NormalTok{ =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Linear"}\NormalTok{, }\StringTok{"Polynomial"}\NormalTok{, }\StringTok{"Radial"}\NormalTok{, }\StringTok{"Sigmoid"}\NormalTok{), }\StringTok{"CVError"}\NormalTok{ =}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+
+
+\NormalTok{i <-}\StringTok{ }\DecValTok{1}
+\ControlFlowTok{for}\NormalTok{ (mod }\ControlFlowTok{in}\NormalTok{ models)\{}
+\NormalTok{KerDF[i, }\DecValTok{2}\NormalTok{] <-}\StringTok{ }\KeywordTok{makeSVM}\NormalTok{(}\DataTypeTok{kernel =}\NormalTok{ mod, }\DataTypeTok{plotQ =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{i <-}\StringTok{ }\NormalTok{i}\OperatorTok{+}\DecValTok{1} 
+\NormalTok{\}}
+
+\CommentTok{#KerDF}
+
+\KeywordTok{ggplot}\NormalTok{(KerDF, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Kernel, }\DataTypeTok{y =}\NormalTok{ CVError, }\DataTypeTok{fill =}\NormalTok{ Kernel)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_col}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Kernel Model"}\NormalTok{, }\DataTypeTok{y =} \StringTok{"Expected Misclassification Rate"}\NormalTok{, }\DataTypeTok{title =} \StringTok{"Cross Validated Errors for SVM Models"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{SecAssignment_files/figure-latex/unnamed-chunk-46-1.pdf}
+
+The linear Model appears to have the lowest expected training error as
+determined by 10-fold cross validation, hence the linear SVM model is
+accepted as the optimal SVM model with a cost parameter of 0.21:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cpu.svm <-}\StringTok{ }\KeywordTok{svm}\NormalTok{(Performance }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ cpu, }\DataTypeTok{kernel =} \StringTok{"linear"}\NormalTok{, }\DataTypeTok{cost =} \DecValTok{10}\NormalTok{, }\DataTypeTok{scale =} \OtherTok{FALSE}\NormalTok{)}
+
+\NormalTok{tune.cpu <-}\StringTok{ }\KeywordTok{tune}\NormalTok{(}\DataTypeTok{method =}\NormalTok{ svm, }\DataTypeTok{train.x =}\NormalTok{ Performance }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ cpu, }\DataTypeTok{kernel =} \StringTok{"linear"}\NormalTok{, }\DataTypeTok{ranges =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{cost =} \KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \FloatTok{0.0001}\NormalTok{, }\DataTypeTok{to =} \DecValTok{2}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{30}\NormalTok{)))}
+\CommentTok{#summary(tune.cpu)}
+
+\KeywordTok{summary}\NormalTok{(tune.cpu}\OperatorTok{$}\NormalTok{best.model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## best.tune(method = svm, train.x = Performance ~ ., data = cpu, 
+##     ranges = list(cost = seq(from = 1e-04, to = 2, length.out = 30)), 
+##     kernel = "linear")
+## 
+## 
+## Parameters:
+##    SVM-Type:  C-classification 
+##  SVM-Kernel:  linear 
+##        cost:  0.2069862 
+## 
+## Number of Support Vectors:  7
+## 
+##  ( 3 4 )
+## 
+## 
+## Number of Classes:  2 
+## 
+## Levels: 
+##  low high
+\end{verbatim}
+
+The \#\#\# Optimal SVM
+
+because the \texttt{svm()} function works for more than linear kernels,
+it is not simple to return the coefficients of a linear decision
+boundary \footnote{\href{https://www.datacamp.com/community/tutorials/support-vector-machines-r}{Data
+  Camp SVM}}, in order to have this returned there is some more work.
+
+\hypertarget{what-is-the-peformance}{%
+\subsection{What is the peformance?}\label{what-is-the-peformance}}
+
+The error provided by the \texttt{e1071} package when applied to
+categorical data is the misclassification rate, hence the expected
+misclassification rate, as determined by 10-fold cross validation, is
+1/200, making this a very accurate model for predicting whether or not a
+cpu is above or below 500, however, this is a very broad category and
+the polynomial model previously had an expected error of aproximately
+100 units of performance, meaning that we would probably expect the
+polynomial model to perform just as well in this situation as the SVM.
+
+
+\end{document}

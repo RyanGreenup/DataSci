@@ -1,0 +1,81 @@
+#Remember alt+- inserts the assignment character <- 
+# Use <- over an equal sign for assingment
+# ctrl +l clears the console
+# rm is used to delete a data.frame
+
+
+# Summarise the Temperature Data
+
+head(Temperature)
+str(Temperature)
+summary(Temperature)
+
+#Now I need to find the correlation between the two variables
+  # I will assume that we are looking for the correlation coefficient
+      
+      #assign the sets of data (i.e. x and y axis if you will)
+          max_temp <- Temperature$`Max Temperature`
+          min_temp <- Temperature$`Min Temperature`
+
+      #Now I need to use a function to find the correlation coefficient
+          cor(max_temp, min_temp)
+          
+#Now I need to make plots, I could potentially make better plots with ggplot2 or something
+#But because I am still a bit of an amateur, I'll just use the base tools, further, I could
+#use another program entirely like MiniTab or even Excel, but for the long term R would be better
+#because it is more powerful.
+          
+          #Histogram
+          hist(max_temp)
+          
+          #Line Graph
+          plot(
+                Temperature$Day,
+                max_temp,
+                type="o",
+                xlab="Day", ylab="max_temp", main="Maximum Temperature", 
+                col="purple"
+                )      
+          
+          #Boxplot
+          boxplot(
+                  max_temp,
+                  min_temp,
+                  data = Temperature,
+                  ylab="Temperature (Celsius)",
+                  xlab="Max   ---   Min"
+                  )
+
+          
+          #Scatter Plot
+          plot(
+            min_temp,
+            max_temp,
+            type="p",
+            xlab="Minimum_Temp", ylab="Maximum_Temp", main="Maximum Temperature", 
+            col="purple"
+              )    
+          
+          #Bubble Plot
+          
+          x_bubble <- Benthic.df$Longitude ##MUST enable EnvStats package
+          y_bubble <- Benthic.df$Latitude
+          
+          plot(x_bubble, y_bubble,
+               type="n",
+               main="Bubble plot of Benthic Indices",
+               xlab="Longitude", ylab="Lattitude"
+          )
+          
+          symbols(x_bubble, y_bubble,
+                  circles = sqrt(Benthic.df$Index),
+                  add=T,
+                  inches=0.05
+          )
+          
+          
+
+          
+          
+    
+

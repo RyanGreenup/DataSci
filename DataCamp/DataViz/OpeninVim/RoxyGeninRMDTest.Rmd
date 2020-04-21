@@ -1,0 +1,51 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+#' First check that pacman is installed and install it if it isn't
+
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+#' Now use pacman to load everything you're going to want
+
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, mise,
+               parallel, dplyr, plotly, tidyverse)
+
+#' in order to make sure this script can stand on it's own two
+#' feet I'll make sure to clear everything that's ungood
+
+mise()
+
+MyVim <- function(){
+  library(rstudioapi)
+  system(paste("kitty -e nvim ", rstudioapi::getSourceEditorContext()$path, "& disown"))
+}
+
+
+Myema <- function(){
+  library(rstudioapi)
+  #system(paste("ema", rstudioapi::getSourceEditorContext()$path, "& disown"))
+  system(paste("emacsclient --create-frame", rstudioapi::getSourceEditorContext()$path, "& disown"))
+}
+
+MyEmacs <- function(){
+  library(rstudioapi)
+  #system(paste("ema", rstudioapi::getSourceEditorContext()$path, "& disown"))
+  system(paste("/usr/bin/env XLIB_SKIP_ARGB_VISUALS=1 emacs", rstudioapi::getSourceEditorContext()$path, "& disown"))
+}
+
+naut <- function(){
+  library(rstudioapi)
+  system(paste("nautilus ", rstudioapi::getSourceEditorContext()$path, "& disown"))
+}
+	       
+
+```
+

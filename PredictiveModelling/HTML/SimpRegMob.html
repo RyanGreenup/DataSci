@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Week 1" />
+  <title>Simple Linear Regression</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="/home/ryan/Dropbox/profiles/Template/CSS/pandoc.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Simple Linear Regression</h1>
+<p class="author">Week 1</p>
+</header>
+<h1 id="how-to-fit-a-line-to-data">How to Fit a Line to Data</h1>
+<p>Given a plot of data a Linear Regression would be the linear function that minimizes the error between the points.<br />
+</p>
+<figure>
+<img src="Capture" id="fig:diferror" alt="" /><figcaption>Differing error between linear functions<span label="fig:diferror"></span></figcaption>
+</figure>
+<p><br />
+The Linear function would be of the form: <span class="math display">\[y=w_0+w_1\times x+\epsilon\]</span> The value <span class="math inline">\(\epsilon\)</span> represents the residual, the difference between the observed value and the value predicted by the model: <span class="math inline">\(\epsilon_j=y_j-\hat{y_j}\)</span>.<br />
+</p>
+<p>To work out the linear function that best fits the points we use a concept called the <em>cost of a line</em> and it is the summed value of all the error for a line:<br />
+</p>
+<figure>
+<img src="coa" id="fig:cost" alt="" /><figcaption>Differing error between linear functions<span label="fig:cost"></span></figcaption>
+</figure>
+<p><br />
+The value of the error would be <span class="math inline">\(\epsilon_j\)</span>, because <span class="math inline">\(\epsilon\)</span> can be positive or negative we take the square value such that we have positive numbers and sum them.<br />
+Thus the <em>Residual Sum of Squares</em> (<strong><em>RSS</em></strong>) is:<br />
+<span class="math display">\[\begin{aligned}
+\sum_{i=1}^{n}[(\epsilon_i)^2]=\sum_{i=1}^{n}[(y_j-\hat{y_j})^2]\end{aligned}\]</span></p>
+<p>and the best fit for the line is defined as the one that minimimises the RSS.</p>
+<h1 id="how-to-minimise-the-rss">How to Minimise the RSS</h1>
+<h2 id="the-analytical-solution">The Analytical Solution</h2>
+<p>Obviously the RSS will depend on the line chosen to fit the data, the line depends on two variables, the gradient and intersect, <span class="math inline">\(w_0\)</span> and <span class="math inline">\(w_1\)</span>:</p>
+<p><span class="math display">\[\begin{aligned}
+                         RSS&amp;=\sum_{i=1}^{n}[(\epsilon_i)^2] \notag \\
+                            &amp;=\sum_{i=1}^{n}\big{[}(y_i-\hat{y_i})^2\big{]} \notag \\
+                            &amp;=\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1\times x_i\big{)}^2\big{]}\end{aligned}\]</span> Now given that the value <span class="math inline">\(y_i\)</span> is a constant fixed value that is observed and <span class="math inline">\(x_i\)</span> also refers to a fixed value observe that <span class="math inline">\(RSS=f(x,y)\)</span>, this RSS value represents a 3-dimensional parabolic curve:<br />
+</p>
+<figure>
+<img src="3dgraph" id="fig:3d" alt="" /><figcaption>The variation of RSS given various values of <span class="math inline">\(w_0\)</span> and <span class="math inline">\(w_1\)</span><span label="fig:3d"></span></figcaption>
+</figure>
+<p><br />
+Thus we now know that the minimum RSS value will occur at a stationary point and this can be solved with calculus.</p>
+<h4 id="example">Example</h4>
+<p> <br />
+<span class="math display">\[\begin{aligned}
+RSS(w)=10-8w+2w^2\\
+\frac{dRSS}{dw}=0-8+4w\end{aligned}\]</span> Let the derivative equal zero then find the value of w where the RSS is a minimum value: <span class="math display">\[\begin{aligned}
+0=-8+4w \notag \\
+4w=8\notag \\
+w=2\notag \end{aligned}\]</span> A quadratic function (like all convex functions) only has one minimum value and hence the solution is found. ( A convex function is any function that a straight line could only cross twice, e.g. logarithmic is converse but Sine is not)</p>
+<h2 id="least-squares-solution">Least-squares Solution</h2>
+<p>Given that we now know that:<br />
+<span class="math display">\[\begin{aligned}
+RSS&amp;=\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1\times x_i\big{)}^2\big{]}\end{aligned}\]</span> In order to find an equation that describes the minimum we will first find both the partial derivatives:<br />
+<span class="math display">\[\begin{aligned}
+\frac{\partial RSS}{\partial w_0}&amp;=\frac{\partial}{\partial w_0}[\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1\times x_i\big{)}^2\big{]}] \notag \\
+&amp;=\sum_{i=1}^{n}\big{[}\frac{\partial}{\partial w_0}[\big{(}y_i-w_0-w_1\times x_i\big{)}^2]\big{]}\notag \\
+&amp;=\sum_{i=1}^{n}\big{[}2\times\big{(}y_i-w_0-w_1\times x_i\big{)}^1\times -1\big{]}\notag \\
+&amp;=-2\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1x_i\big{)}^1\big{]} \label{partialw0}\end{aligned}\]</span></p>
+<p><span class="math display">\[\begin{aligned}
+\frac{\partial RSS}{\partial w_1}&amp;=\frac{\partial}{\partial w_1}[\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1\times x_i\big{)}^2\big{]}]\notag \\
+&amp;=\sum_{i=1}^{n}\big{[}\frac{\partial}{\partial w_1}[\big{(}y_i-w_0-w_1\times x_i\big{)}^2]\big{]}\notag \\
+&amp;=\sum_{i=1}^{n}\big{[}2\times \big{(}y_i-w_0-w_1\times x_i\big{)}^1 \times x_i\big{]}\notag \\
+&amp;=2\times\sum_{i=1}^{n}\big{[}x_i \times \big{(}y_i-w_0-w_1x_i \big{)}^1\big{]}\label{partialw1}\end{aligned}\]</span> Now we will let both partial derivatives equal zero, the point at which the RSS is minimized: <span class="math display">\[\begin{aligned}
+0&amp;=\frac{\partial RSS}{\partial w_0}\\
+0&amp;=-2\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1x_i\big{)}^1\big{]}\notag \\
+&amp;=\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1x_i\big{)}^1\big{]}\notag \\
+&amp;=\sum_{i=1}^{n}[y_i]-\sum_{i=1}^{n}[w_0]+\sum_{i=1}^{n}[w_1x_i]\notag \\
+&amp;=\sum_{i=1}^{n}[y_i]-nw_0+w_1\sum_{i=1}^{n}[x_i]\notag \\
+nw_0&amp;=\sum_{i=1}^{n}[y_i]+w_1\sum_{i=1}^{n}[x_i]\notag \\
+w_0&amp;=\frac{\sum_{i=1}^{n}[y_i]}{n}+\frac{w_1\sum_{i=1}^{n}[x_i]}{n} \label{valw0}\end{aligned}\]</span> <span>Observe that in (<a href="#valw0" data-reference-type="ref" data-reference="valw0">[valw0]</a>) the left term is the average value of <span class="math inline">\(y_i\)</span> and the right term is the average value of <span class="math inline">\(x_i\)</span>.</span> <span class="math display">\[\begin{aligned}
+0&amp;=\frac{\partial RSS}{\partial w_1}\\
+&amp;=2\times\sum_{i=1}^{n}\big{[}x_i \times \big{(}y_i-w_0-w_1x_i \big{)}\big{]}\notag \\
+&amp;=2\times\sum_{i=1}^{n}\big{[}x_i \times y_i-w_0x_i +w_1(x_i)^2 \big{]}\notag \\
+&amp;=\sum_{i=1}^{n}[x_iy_i]-\sum_{i=1}^{n}[w_0x_i]-\sum_{i=1}^{n}[w_1(x_i)^2]\notag \\
+w_1\sum_{i=1}^{n}[(x_i)^2]&amp;=\sum_{i=1}^{n}[x_iy_i]-w_0\sum_{i=1}^{n}[x_i] \label{valw1}\end{aligned}\]</span> Now we will substitute (<a href="#valw0" data-reference-type="ref" data-reference="valw0">[valw0]</a>) into (<a href="#valw1" data-reference-type="ref" data-reference="valw1">[valw1]</a>) such that the equation is only in terms of <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span>.<br />
+<span class="math display">\[\begin{aligned}
+w_1\sum_{i=1}^{n}[(x_i)^2]&amp;=\sum_{i=1}^{n}[x_iy_i]-[\frac{\sum_{i=1}^{n}[y_i]}{n}+\frac{w_1\sum_{i=1}^{n}[x_i]}{n} ]\sum_{i=1}^{n}[x_i] \notag \\
+&amp;=\sum_{i=1}^{n}[x_iy_i]-\frac{\sum_{i=1}^{n}[x_i]\sum_{i=1}^{n}[y_i]}{n}-w_1\frac{(\sum_{i=1}^{n}[x_i])^2}{n}  \notag \\
+w_1\sum_{i=1}^{n}[(x_i)^2]+w_1\frac{(\sum_{i=1}^{n}[x_i])^2}{n}&amp;=\sum_{i=1}^{n}[x_iy_i]-\frac{\sum_{i=1}^{n}[x_i]\sum_{i=1}^{n}[y_i]}{n}  \notag \\
+w_1[\sum_{i=1}^{n}[(x_i)^2]+\frac{(\sum_{i=1}^{n}[x_i])^2}{n}]&amp;=\sum_{i=1}^{n}[x_iy_i]-\frac{\sum_{i=1}^{n}[x_i]\sum_{i=1}^{n}[y_i]}{n}  \notag \\
+w_1&amp;=\frac{\sum_{i=1}^{n}[x_iy_i]}{[\sum_{i=1}^{n}[(x_i)^2]+\frac{(\sum_{i=1}^{n}[x_i])^2}{n}]}-\frac{\frac{\sum_{i=1}^{n}[x_i]\sum_{i=1}^{n}[y_i]}{n}}{[\sum_{i=1}^{n}[(x_i)^2]+\frac{(\sum_{i=1}^{n}[x_i])^2}{n}]}  \notag \\
+w_1&amp;=\frac{\sum_{i=1}^{n}[x_iy_i]-\frac{\sum_{n}^{i=1}[x_i]\sum_{n}^{i=1}[y_i]}{n}}{[\sum_{i=1}^{n}[(x_i)^2]+\frac{(\sum_{i=1}^{n}[x_i])^2}{n}]}  \end{aligned}\]</span></p>
+<h1 id="conclusion">Conclusion</h1>
+<p>A Linear Regression is a linear function that has the lowest Sum of Squared Error between the function values and the observed values and is given by the equation:<br />
+<span class="math display">\[\begin{aligned}
+y=w_0+w_1x+\epsilon\end{aligned}\]</span> Such that the coefficients are provided by the equations: <span class="math display">\[\begin{aligned}
+w_0&amp;=\frac{\sum_{i=1}^{n}[y_i]}{n}+\frac{w_1\sum_{i=1}^{n}[x_i]}{n} \label{valw0}\\
+w_1&amp;=\frac{\sum_{i=1}^{n}[x_iy_i]-\frac{\sum_{n}^{i=1}[x_i]\sum_{n}^{i=1}[y_i]}{n}}{[\sum_{i=1}^{n}[(x_i)^2]+\frac{(\sum_{i=1}^{n}[x_i])^2}{n}]}  \end{aligned}\]</span></p>
+</body>
+</html>

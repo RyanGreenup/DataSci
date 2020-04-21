@@ -1,0 +1,512 @@
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+points(x1,x2a,type="l", col = cols.vec[3], lwd = 3)
+points(x1,x2b,type="l", col = cols.vec[3], lwd = 3)
+cols.vec <- rainbow_hcl(3)
+plot(x2~x1, col = cols.vec[y], data = all.df)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+x1 <- seq(min(all.df$x1), max(all.df$x2), length.out = 1000)
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+points(x1,x2a,type="l", col = cols.vec[3], lwd = 3)
+points(x1,x2b,type="l", col = cols.vec[3], lwd = 3)
+#X-Axis
+x1 <- seq(min(all.df$x1), max(all.df$x2), length.out = 1000)
+#Coefficients
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+#Y-Axis
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+#X-Axis
+x1 <- seq(min(all.df$x1), max(all.df$x2), length.out = 1000)
+#Coefficients
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+#Y-Axis
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(x1,x2a,type="l", col = cols.vec[3], lwd = 3)
+points(x1,x2b,type="l", col = cols.vec[3], lwd = 3)
+col.plot <- ggplot(all.df, aes(y = x2, x = x1, col = y)) +
+geom_point() +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") #+
+geom_line(data = mod.df, aes(x = x1, y = x2a))
+#Dataframe
+mod.df <- (x = x2, ya = x2a, yb = x2b)
+#Dataframe
+mod.df <- as.data.frame(x = x2, ya = x2a, yb = x2b)
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(mod.df$x,mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x,mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(mod.df$x,mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x,mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x,mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(mod.df$x,mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x,mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(x1,x2a,type="l", col = cols.vec[3], lwd = 3)
+points(x1,x2b,type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x, mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(mod.df$x, mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x, mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(mod.df$x, mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x, mod.df$ya, type="l", col = cols.vec[3], lwd = 3)
+mod.df$yb
+mod.df$yb
+#Dataframe
+mod.df <- as.data.frame(x = x1, ya = x2a, yb = x2b)
+mod.df$ya
+#Y-Axis
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+#X-Axis
+x1 <- seq(min(all.df$x1), max(all.df$x2), length.out = 1000)
+#Coefficients
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+#Y-Axis
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+#Dataframe
+mod.df <- as.data.frame(x = x1, ya = x2a, yb = x2b)
+mod.df$ya
+#X-Axis
+x1 <- seq(min(all.df$x1), max(all.df$x2), length.out = 1000)
+#Coefficients
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+#Y-Axis
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+#Dataframe
+mod.df <- as.data.frame('x' = x1, 'ya' = x2a, 'yb' = x2b)
+mod.df$ya
+x2a
+head(mod.df)
+#Dataframe
+mod.df <- as.data.frame('x' = x1, 'ya' = 3, 'yb' = 4)
+head(mod.df)
+as.data.frame(x = 3, y = 4, y2 = 4)
+#Dataframe
+mod.df <- as.data.frame(xaxis = x1, yaxis = x2a, yaxis2 = x2b)
+#Dataframe
+mod.df <- data.frame(xaxis = x1, yaxis = x2a, yaxis2 = x2b)
+head(mod.df)
+#Dataframe
+mod.df <- data.frame(x = x1, yp = x2a, yn = x2b)
+head(mod.df)
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(mod.df$x, mod.df$yp, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x, mod.df$yn, type="l", col = cols.vec[3], lwd = 3)
+col.plot <- ggplot(all.df, aes(y = x2, x = x1, col = y)) +
+geom_point() +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") #+
+geom_line(data = mod.df, aes(x = x1, y = x2a))
+col.plot
+mod.df <- data.frame(x0 = x1, pred = x2a)
+col.plot
+#X-Axis
+x1 <- seq(min(all.df$x1), max(all.df$x2), length.out = 1000)
+#Coefficients
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+#Y-Axis
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+#Dataframe
+mod.df <- data.frame(x = x1, yp = x2a, yn = x2b)
+#X-Axis
+x1 <- seq(min(all.df$x1), max(all.df$x2), length.out = 1000)
+#Coefficients
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+#Y-Axis
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+#Dataframe
+mod.df <- data.frame(x = x1, yp = x2a, yn = x2b)
+cols.vec <- rainbow_hcl(3)
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+xlab = "Predictor 1",
+ylab = "Predictor 2",
+main = "Categorised Variables" )
+points(mod.df$x, mod.df$yp, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x, mod.df$yn, type="l", col = cols.vec[3], lwd = 3)
+col.plot <- ggplot(all.df, aes(y = x2, x = x1, col = y)) +
+geom_point() +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") +
+geom_line(data = mod.df, aes(x = x1, y = x2a))
+col.plot
+col.plot <- ggplot(all.df, aes(y = x2, x = x1, col = y)) +
+geom_point(data = all.df, aes(y = x2, x = x1, col = y)) +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") +
+geom_line(data = mod.df, aes(x = x1, y = x2a))
+col.plot
+col.plot <- ggplot(all.df) +
+geom_point(data = all.df, aes(y = x2, x = x1, col = y)) +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") +
+geom_line(data = mod.df, aes(x = x1, y = x2a))
+col.plot
+col.plot <- ggplot(all.df) +
+geom_point(data = all.df, aes(y = x2, x = x1, col = y)) +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") +
+geom_line(data = mod.df, aes(x = x1, y = x2a), col = "purple", lwd = 3) +
+geom_line(data = mod.df, aes(x = x1, y = x2a), col = "purple", lwd = 3)
+col.plot
+col.plot
+col.plot <- ggplot(all.df) +
+geom_point(data = all.df, aes(y = x2, x = x1, col = y)) +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") +
+geom_line(data = mod.df, aes(x = x1, y = x2a), col = "purple", lwd = 2) +
+geom_line(data = mod.df, aes(x = x1, y = x2b), col = "purple", lwd = 3)
+col.plot
+col.plot
+col.plot <- ggplot(all.df) +
+geom_point(data = all.df, aes(y = x2, x = x1, col = y)) +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") +
+geom_line(data = mod.df, aes(x = x1, y = x2a), col = "purple", lwd = 2) +
+geom_line(data = mod.df, aes(x = x1, y = x2b), col = "purple", lwd = 3)
+col.plot
+col.plot <- ggplot(all.df) +
+geom_point(data = all.df, aes(y = x2, x = x1, col = y)) +
+theme_classic() +
+labs(x = "Predictor 1", y = "Predictor 2",
+title = "Discrete Outcome From Predictor Values",
+col = "Output") +
+geom_line(data = mod.df, aes(x = x1, y = x2a), col = "purple", lwd = 2) +
+geom_line(data = mod.df, aes(x = x1, y = x2b), col = "purple", lwd = 2)
+col.plot
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+source('E:/One Drive/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 6/Practical/Titanic Plot/TitanicPlot.R', echo=TRUE)
+head(all.df)
+#Base Plot
+max(all.df$Pclass)
+#Base Plot
+min(all.df$Pclass)
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+#Base Plot
+plot(Survived ~ Pclass, data = all.df)
+plot(all.df$Pclass, all.df$Survived)
+plot(all.df$Pclass, all.df$Survived)
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+#Base Plot
+plot(Survived ~ Pclass, data = all.df)
+plot(all.df$Pclass, all.df$Survived)
+#Base Plot
+plot(Survived ~ age, data = all.df)
+#Base Plot
+plot(Survived ~ Age, data = all.df)
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+#Base Plot
+plot(Survived ~ Age, data = all.df)
+#Base Plot
+plot(Survived ~ Age, data = all.df)
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+plot(all.df$Pclass, all.df$age)
+plot(all.df$Pclass, all.df$age)
+#Base Plot
+plot(Survived ~ Age, data = all.df)
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+#Base Plot
+plot(Survived ~ Age, data = all.df)
+#Base Plot
+plot(x = Pclass, y = Age, data = all.df)
+#Base Plot
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df)
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+#Base Plot
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df)
+#Base Plot
+rainbow_hcl(3)
+#Base Plot
+PlotCol.vec <- rainbow_hcl(3)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived])
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+#Base Plot
+PlotCol.vec <- rainbow_hcl(2)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived])
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived], pch = 16)
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived], pch = 16)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived + 1], pch = 16)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived + 1], pch = 16, size = 3)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived + 1], pch = 16, size = 3)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived + 1], pch = 16, lwd = 3)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived + 1], pch = 16, cex = 3)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived + 1], pch = 16, cex = 2)
+##Create the Plot
+PlotCol.vec <- rainbow_hcl(2)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived], pch = 16)
+##Factors
+###Create Categorical Factors
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+##Create the Plot
+PlotCol.vec <- rainbow_hcl(2)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived], pch = 16)
+plot(all.df$Pclass, all.df$age)
+##Create the Plot (Box Plot)
+PlotCol.vec <- rainbow_hcl(2)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived], pch = 16)
+ggplot(all.df) +
+geom_point(all.df, aes(x = Pclass, y = Age, col = Survived))
+ggplot(all.df, aes(x = Pclass)) +
+geom_point(all.df, aes(x = Pclass, y = Age, col = Survived))
+#GGplot
+##Numeric
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+ggplot(all.df, aes(x = Pclass)) +
+geom_point(all.df, aes(x = Pclass, y = Age, col = Survived))
+ggplot(all.df, aes(x = Pclass, y = Age)) +
+geom_point()
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point()
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 3)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 3) +
+labs(col = FALSE)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 3) +
+labs(guides = FALSE)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 3) +
+guides(col = FALSE)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 3) +
+guides(col = FALSE)
+###Create Categorical Factors
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+###Create Categorical Factors
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 3)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(main = Titanic Survivors, x = "Passenger Class", y = "Passenger Age")
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(main = Titanic Survivors, x = "Passenger Class", y = "Passenger Age")
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(main = Titanic Survivors, x = "Passenger Class", y = "Passenger Age")
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(main = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age")
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age")
+###Create the Plot (Box Plot)
+PlotCol.vec <- rainbow_hcl(2)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df,
+col = PlotCol.vec[all.df$Survived], pch = 16,
+xlab = "Passenger Class", ylab = "Passenger Age",
+main = "Titanic Survivors")
+source('E:/One Drive/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 6/Practical/Titanic Plot/TitanicPlot.R', echo=TRUE)
+head(all.df)
+##Numeric
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 3) +
+guides(col = FALSE) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age")
+##Factors
+###Create Categorical Factors
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age")
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_fill_discrete(breaks = c("Perished", "Survived"))
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_fill_discrete(breaks = c("Perished", "Survived"))
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_fill_discrete(labels = c("Perished", "Survived"))
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_fill_discrete(breaks = c(0,1), labels = c("Perished", "Survived"))
+scale_fill_discrete(name = "Survived?", breaks = c(0labels = c("Perished", "Survived"))
+scale_fill_discrete(name = "Survived?", breaks = c(0labels = c("Perished", "Survived"))
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_fill_discrete(name = "Survived?", labels = c("Perished", "Survived"))
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_shape_discrete(labels=c("test", "test"))
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_color_discrete(labels=c("test", "test"))
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_color_discrete()
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_color_discrete(labels = c("Perished", "Survived"), name = "Test")
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_color_discrete(labels = c("Perished", "Survived"), name = "Passenger Fate")
+##Load Packages
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr,
+stringr, reshape2, cowplot, ggpubr, tidyverse, reshape2, ggplot2,
+rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer,
+colorspace)
+#Load data
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+head(all.df)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df, col = PlotCol.vec[all.df$Survived + 1], pch = 16, cex = 2)
+###Create Categorical Factors
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+###Create the Plot (Box Plot)
+PlotCol.vec <- rainbow_hcl(2)
+plot(x = all.df$Pclass, y = all.df$Age, data = all.df,
+col = PlotCol.vec[all.df$Survived], pch = 16,
+xlab = "Passenger Class", ylab = "Passenger Age",
+main = "Titanic Survivors")
+##Numeric
+all.df <- read.csv("titanictrain.csv", TRUE, ",")
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 3) +
+guides(col = FALSE) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age")
+#This is undesirable because the legend isn't done with discrete variables
+##Factors
+###Create Categorical Factors
+all.df$Pclass <- as.factor(all.df$Pclass)
+all.df$Survived <- as.factor(all.df$Survived)
+ggplot(all.df, aes(x = Pclass, y = Age, col = Survived)) +
+geom_point(lwd = 4) +
+labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+scale_color_discrete(labels = c("Perished", "Survived"), name = "Passenger Fate")

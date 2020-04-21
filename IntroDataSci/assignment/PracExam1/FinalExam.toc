@@ -1,0 +1,13 @@
+\contentsline {subsection}{Import the DataSets}{1}{Doc-Start}% 
+\contentsline {section}{Question 1}{2}{table.2}% 
+\contentsline {subsection}{Sub Question A}{2}{table.2}% 
+\contentsline {subsection}{Sub Question B}{4}{lstnumber.-6.3}% 
+\contentsline {subsubsection}{First Perform PCA in order to reduce the dimensions of the clustering:}{4}{Item.1}% 
+\contentsline {subsection}{Sub Question C}{6}{lstnumber.-10.4}% 
+\contentsline {subsection}{Sub Question D}{8}{lstnumber.-18.4}% 
+\contentsline {subsection}{Sub Question E}{9}{lstnumber.-22.3}% 
+\contentsline {subsection}{Sub Question F}{12}{lstnumber.-33.1}% 
+\contentsline {section}{Question 2}{12}{lstnumber.-33.1}% 
+\contentsline {subsubsection}{Sub-Question 1}{12}{lstnumber.-33.1}% 
+\contentsline {section}{Question 3}{14}{lstnumber.-35.7}% 
+\contentsline {section}{Use Pandoc to Create PDF}{14}{lstnumber.-35.7}% 

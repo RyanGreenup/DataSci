@@ -1,0 +1,3898 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-02-08 Sat 19:29 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Template</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Ryan G" />
+<style type="text/css">
+<!-- [CDATA] -->
+/*! normalize.css v2.1.3 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+ * Taken from [Github](https://raw.githubusercontent.com/gongzhitaao/orgcss/master/src/css/org.css)
+   ========================================================================== */
+
+@import "normalize";
+@import "htmlize";
+
+$sans: Helvetica, sans-serif;
+$serif: Georgia, serif;
+$monospace: Lucida Console, monospace;
+$code-size: 80%;
+$smaller: 90%;
+$max-width: 710px;
+
+body {
+    width: 95%;
+    margin: 2% auto;
+    font-size: 14px;
+    line-height: 1.4em;
+    font-family: $serif;
+    color: #333;
+}
+
+@media screen and (min-width: 600px) {
+    body {
+        font-size: 18px;
+    }
+}
+
+@media screen and (min-width: 910px) {
+    body {
+        width: 900px;
+    }
+}
+
+::selection {
+    background: #D6EDFF;
+}
+
+p {
+    margin: 1em auto;
+}
+
+ol,ul {
+    margin: 0 auto;
+}
+
+dl {
+    margin: 0 auto;
+}
+
+.title {
+    text-align: center;
+    margin: 0.8em auto;
+    color: black;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 1.1em;
+    line-height: 1.4;
+    font-weight: bold;
+    margin: 1em auto;
+}
+
+.abstract {
+    margin: auto;
+    width: 80%;
+    font-style: italic;
+}
+
+.abstract p:last-of-type:before {
+    content: "    ";
+    white-space: pre;
+}
+
+.status {
+    font-size: $smaller;
+    margin: 2em auto;
+}
+
+[class^="section-number-"] {
+    margin-right: .5em;
+}
+
+[id^="orgheadline"] {
+    clear: both;
+}
+
+#footnotes {
+    font-size: $smaller;
+}
+
+.footpara {
+    display: inline;
+    margin: .2em auto;
+}
+
+.footdef {
+    margin-bottom: 1em;
+}
+
+.footdef sup {
+    padding-right: .5em;
+}
+
+a {
+    color: #527d9a;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #003355;
+    border-bottom: 1px dotted;
+}
+
+figure {
+    padding: 0px;
+    margin: 1em auto;
+    text-align: center;
+}
+
+img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+.MathJax_Display {
+    margin: 0!important;
+    width: $smaller!important;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: #A5573E;
+    line-height: 1em;
+    font-family: $sans;
+}
+
+h1,h2,h3 {
+    line-height: 1.4em;
+}
+
+h4,h5,h6 {
+    font-size: 1em;
+}
+
+@media screen and (min-width: 600px) {
+    h1 {
+        font-size: 2em;
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+    h3 {
+        font-size: 1.3em;
+    }
+    h1,h2,h3 {
+        line-height: 1.4em;
+    }
+    h4,h5,h6 {
+        font-size: 1.1em;
+    }
+}
+
+dt {
+    font-weight: bold;
+}
+
+/* table */
+
+table {
+    margin: 1em auto;
+    border-top: 2px solid;
+    border-bottom: 2px solid;
+    border-collapse: collapse;
+}
+
+thead {
+    border-bottom: 2px solid;
+}
+
+table td + td, table th + th {
+    border-left: 1px solid gray;
+}
+
+table tr {
+    border-top: 1px solid lightgray;
+}
+
+td,th {
+    padding: 0.3em 0.6em;
+    vertical-align: middle;
+}
+
+caption.t-above {
+    caption-side: top;
+}
+
+caption.t-bottom {
+    caption-side: bottom;
+}
+
+caption {
+    margin-bottom: 0.3em;
+}
+
+figcaption {
+    margin-top: 0.3em;
+}
+
+th.org-right {
+    text-align: center;
+}
+
+th.org-left {
+    text-align: center;
+}
+
+th.org-center {
+    text-align: center;
+}
+
+td.org-right {
+    text-align: right;
+}
+
+td.org-left {
+    text-align: left;
+}
+
+td.org-center {
+    text-align: center;
+}
+
+blockquote {
+    margin: 1em 2em;
+    padding-left: 1em;
+    border-left: 3px solid #ccc;
+}
+
+kbd {
+    background-color: #f7f7f7;
+    font-size: $code-size;
+    margin: 0 .1em;
+    padding: .1em .6em;
+}
+
+.todo {
+    background-color: red;
+    color: white;
+    padding: .1em 0.3em;
+    border-radius: 3px;
+    background-clip: padding-box;
+    font-size: $code-size;
+    font-family: $monospace;
+    line-height: 1;
+}
+
+.done {
+    background-color: green;
+    color: white;
+    padding: .1em 0.3em;
+    border-radius: 3px;
+    background-clip: padding-box;
+    font-size: $code-size;
+    font-family: $monospace;
+    line-height: 1;
+}
+
+.priority {
+    color: orange;
+    font-family: $monospace;
+}
+
+/* Because tag span is set to float.  This is more like a hacking.  Maybe we
+   need a cleaner solution. */
+#table-of-contents li {
+    clear: both;
+}
+
+.tag {
+    font-family: $monospace;
+    font-size: 0.7em;
+    font-weight: normal;
+}
+
+.tag span {
+    padding: 0.3em 0.3em;
+    float: right;
+    margin-right: .5em;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    background-clip: padding-box;
+    color: #333;
+    background-color: #eee;
+    line-height: 1;
+}
+
+.timestamp {
+    color: #bebebe;
+    font-size: $smaller;
+}
+
+.timestamp-kwd {
+    color: #5f9ea0;
+}
+
+.org-right {
+    margin-left: auto;
+    margin-right: 0px;
+    text-align: right;
+}
+
+.org-left {
+    margin-left: 0px;
+    margin-right: auto;
+    text-align: left;
+}
+
+.org-center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+#postamble p, #preamble p {
+    font-size: $smaller;
+    margin: .2em;
+}
+
+p.verse {
+    margin-left: 3%;
+}
+
+:not(pre) > code {
+    padding: 2px 5px;
+    margin: auto 1px;
+    border: 1px solid #DDD;
+    border-radius: 3px;
+    background-clip: padding-box;
+    color: #333;
+    font-size: $code-size;
+}
+
+.org-src-container {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    font-family: $monospace;
+    font-size: $code-size;
+    margin: 1em auto;
+    padding: 0.1em 0.5em;
+    position: relative;
+}
+
+.org-src-container>pre {
+    overflow: auto;
+}
+
+.org-src-container>pre:before {
+    display: block;
+    position: absolute;
+    background-color: #b3b3b3;
+    top: 0;
+    right: 0;
+    padding: 0 0.5em;
+    border-bottom-left-radius: 8px;
+    border: 0;
+    color: white;
+    font-size: $code-size;
+}
+
+/* from http://demo.thi.ng/org-spec/ */
+
+.org-src-container>pre.src-sh:before {
+    content: 'sh';
+}
+.org-src-container>pre.src-bash:before {
+    content: 'bash';
+}
+.org-src-container>pre.src-emacs-lisp:before {
+    content: 'Emacs Lisp';
+}
+.org-src-container>pre.src-R:before {
+    content: 'R';
+}
+.org-src-container>pre.src-org:before {
+    content: 'Org';
+}
+.org-src-container>pre.src-cpp:before {
+    content: 'C++';
+}
+.org-src-container>pre.src-c:before {
+    content: 'C';
+}
+.org-src-container>pre.src-html:before {
+    content: 'HTML'
+}
+.org-src-container>pre.src-js:before {
+    content: 'Javascript'
+}
+.org-src-container>pre.src-javascript:before {
+    content: 'Javascript'
+}
+
+// More languages from http://orgmode.org/worg/org-contrib/babel/languages.html
+
+.org-src-container>pre.src-abc:before {
+    content: 'ABC';
+}
+.org-src-container>pre.src-asymptote:before {
+    content: 'Asymptote';
+}
+.org-src-container>pre.src-awk:before {
+    content: 'Awk';
+}
+.org-src-container>pre.src-C:before {
+    content: 'C';
+}
+.org-src-container>pre.src-calc:before {
+    content: 'Calc';
+}
+.org-src-container>pre.src-clojure:before {
+    content: 'Clojure';
+}
+.org-src-container>pre.src-comint:before {
+    content: 'comint';
+}
+.org-src-container>pre.src-css:before {
+    content: 'CSS';
+}
+.org-src-container>pre.src-D:before {
+    content: 'D';
+}
+.org-src-container>pre.src-ditaa:before {
+    content: 'Ditaa';
+}
+.org-src-container>pre.src-dot:before {
+    content: 'Dot';
+}
+.org-src-container>pre.src-ebnf:before {
+    content: 'ebnf';
+}
+.org-src-container>pre.src-forth:before {
+    content: 'Forth';
+}
+.org-src-container>pre.src-F90:before {
+    content: 'Fortran';
+}
+.org-src-container>pre.src-gnuplot:before {
+    content: 'Gnuplot';
+}
+.org-src-container>pre.src-haskell:before {
+    content: 'Haskell';
+}
+.org-src-container>pre.src-io:before {
+    content: 'Io';
+}
+.org-src-container>pre.src-java:before {
+    content: 'Java';
+}
+.org-src-container>pre.src-latex:before {
+    content: 'LaTeX';
+}
+.org-src-container>pre.src-ledger:before {
+    content: 'Ledger';
+}
+.org-src-container>pre.src-ly:before {
+    content: 'Lilypond';
+}
+.org-src-container>pre.src-lisp:before {
+    content: 'Lisp';
+}
+.org-src-container>pre.src-makefile:before {
+    content: 'Make';
+}
+.org-src-container>pre.src-matlab:before {
+    content: 'Matlab';
+}
+.org-src-container>pre.src-max:before {
+    content: 'Maxima';
+}
+.org-src-container>pre.src-mscgen:before {
+    content: 'Mscgen';
+}
+.org-src-container>pre.src-Caml:before {
+    content: 'Objective';
+}
+.org-src-container>pre.src-octave:before {
+    content: 'Octave';
+}
+.org-src-container>pre.src-org:before {
+    content: 'Org';
+}
+.org-src-container>pre.src-perl:before {
+    content: 'Perl';
+}
+.org-src-container>pre.src-picolisp:before {
+    content: 'Picolisp';
+}
+.org-src-container>pre.src-plantuml:before {
+    content: 'PlantUML';
+}
+.org-src-container>pre.src-python:before {
+    content: 'Python';
+}
+.org-src-container>pre.src-ruby:before {
+    content: 'Ruby';
+}
+.org-src-container>pre.src-sass:before {
+    content: 'Sass';
+}
+.org-src-container>pre.src-scala:before {
+    content: 'Scala';
+}
+.org-src-container>pre.src-scheme:before {
+    content: 'Scheme';
+}
+.org-src-container>pre.src-screen:before {
+    content: 'Screen';
+}
+.org-src-container>pre.src-sed:before {
+    content: 'Sed';
+}
+.org-src-container>pre.src-shell:before {
+    content: 'shell';
+}
+.org-src-container>pre.src-shen:before {
+    content: 'Shen';
+}
+.org-src-container>pre.src-sql:before {
+    content: 'SQL';
+}
+.org-src-container>pre.src-sqlite:before {
+    content: 'SQLite';
+}
+.org-src-container>pre.src-stan:before {
+    content: 'Stan';
+}
+.org-src-container>pre.src-vala:before {
+    content: 'Vala';
+}
+.org-src-container>pre.src-axiom:before {
+    content: 'Axiom';
+}
+.org-src-container>pre.src-browser:before {
+    content: 'HTML';
+}
+.org-src-container>pre.src-cypher:before {
+    content: 'Neo4j';
+}
+.org-src-container>pre.src-elixir:before {
+    content: 'Elixir';
+}
+.org-src-container>pre.src-request:before {
+    content: 'http';
+}
+.org-src-container>pre.src-ipython:before {
+    content: 'iPython';
+}
+.org-src-container>pre.src-kotlin:before {
+    content: 'Kotlin';
+}
+.org-src-container>pre.src-Flavored Erlang  lfe:before {
+    content: 'Lisp';
+}
+.org-src-container>pre.src-mongo:before {
+    content: 'MongoDB';
+}
+.org-src-container>pre.src-prolog:before {
+    content: 'Prolog';
+}
+.org-src-container>pre.src-rec:before {
+    content: 'rec';
+}
+.org-src-container>pre.src-ML  sml:before {
+    content: 'Standard';
+}
+.org-src-container>pre.src-Translate  translate:before {
+    content: 'Google';
+}
+.org-src-container>pre.src-typescript:before {
+    content: 'Typescript';
+}
+.org-src-container>pre.src-rust:before {
+    content: 'Rust';
+}
+
+.inlinetask {
+    background: #ffffcc;
+    border: 2px solid gray;
+    margin: 10px;
+    padding: 10px;
+}
+
+#org-div-home-and-up {
+    font-size: 70%;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.linenr {
+    font-size: $smaller;
+}
+
+.code-highlighted {
+    background-color: #ffff00;
+}
+
+#bibliography {
+    font-size: $smaller;
+}
+
+#bibliography table {
+    width: 100%;
+}
+
+.creator {
+    display: block;
+}
+
+@media screen and (min-width: 600px) {
+    .creator {
+        display: inline;
+        float: right;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+The typical Github Style:
+   ========================================================================== */
+
+
+
+
+
+/**
+ * Correct `block` display not defined in IE 8/9.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 8/9.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address `[hidden]` styling not present in IE 8/9.
+ * Hide the `template` element in IE, Safari, and Firefox < 22.
+ */
+
+[hidden],
+template {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Set default font family to sans-serif.
+ * 2. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    font-family: sans-serif; /* 1 */
+    -ms-text-size-adjust: 100%; /* 2 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/**
+ * Remove default margin.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Remove the gray background color from active links in IE 10.
+ */
+
+a {
+    background: transparent;
+}
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address variable `h1` font-size and margin within `section` and `article`
+ * contexts in Firefox 4+, Safari 5, and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+/**
+ * Address styling not present in IE 8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 4+, Safari 5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Correct font family set oddly in Safari 5 and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre-wrap;
+}
+
+/**
+ * Set consistent quote types.
+ */
+
+q {
+    quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * Remove border when inside `a` element in IE 8/9.
+ */
+
+img {
+    border: 0;
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 8/9 and Safari 5.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct `color` not being inherited in IE 8/9.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0; /* 2 */
+}
+
+/**
+ * 1. Correct font family not being inherited in all browsers.
+ * 2. Correct font size not being inherited in all browsers.
+ * 3. Address margins set differently in Firefox 4+, Safari 5, and Chrome.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit; /* 1 */
+    font-size: 100%; /* 2 */
+    margin: 0; /* 3 */
+}
+
+/**
+ * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 8+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to `content-box` in IE 8/9/10.
+ * 2. Remove excess padding in IE 8/9/10.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.go-top {
+position: fixed;
+bottom: 2em;
+right: 2em;
+text-decoration: none;
+background-color: #E0E0E0;
+font-size: 12px;
+padding: 1em;
+display: inline;
+}
+
+/* Github css */
+
+html,body{        margin: auto;
+    padding-right: 1em;
+    padding-left: 1em;
+    max-width: 60em; color:black;}*:not('#mkdbuttons'){margin:0;padding:0}body{font:13.34px helvetica,arial,freesans,clean,sans-serif;-webkit-font-smoothing:subpixel-antialiased;line-height:1.4;padding:3px;background:#fff;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px}p{margin:1em 0}a{color:#4183c4;text-decoration:none}body{background-color:#fff;padding:30px;margin:15px;font-size:14px;line-height:1.6}body>*:first-child{margin-top:0!important}body>*:last-child{margin-bottom:0!important}@media screen{body{box-shadow:0 0 0 1px #cacaca,0 0 0 4px #eee}}h1,h2,h3,h4,h5,h6{margin:20px 0 10px;padding:0;font-weight:bold;-webkit-font-smoothing:subpixel-antialiased;cursor:text}h1{font-size:28px;color:#000}h2{font-size:24px;border-bottom:1px solid #ccc;color:#000}h3{font-size:18px;color:#333}h4{font-size:16px;color:#333}h5{font-size:14px;color:#333}h6{color:#777;font-size:14px}p,blockquote,table,pre{margin:15px 0}ul{padding-left:30px}ol{padding-left:30px}ol li ul:first-of-type{margin-top:0}hr{background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;border:0 none;color:#ccc;height:4px;padding:0}body>h2:first-child{margin-top:0;padding-top:0}body>h1:first-child{margin-top:0;padding-top:0}body>h1:first-child+h2{margin-top:0;padding-top:0}body>h3:first-child,body>h4:first-child,body>h5:first-child,body>h6:first-child{margin-top:0;padding-top:0}a:first-child h1,a:first-child h2,a:first-child h3,a:first-child h4,a:first-child h5,a:first-child h6{margin-top:0;padding-top:0}h1+p,h2+p,h3+p,h4+p,h5+p,h6+p,ul li>:first-child,ol li>:first-child{margin-top:0}dl{padding:0}dl dt{font-size:14px;font-weight:bold;font-style:italic;padding:0;margin:15px 0 5px}dl dt:first-child{padding:0}dl dt>:first-child{margin-top:0}dl dt>:last-child{margin-bottom:0}dl dd{margin:0 0 15px;padding:0 15px}dl dd>:first-child{margin-top:0}dl dd>:last-child{margin-bottom:0}blockquote{border-left:4px solid #DDD;padding:0 15px;color:#777}blockquote>:first-child{margin-top:0}blockquote>:last-child{margin-bottom:0}table{border-collapse:collapse;border-spacing:0;font-size:100%;font:inherit}table th{font-weight:bold;border:1px solid #ccc;padding:6px 13px}table td{border:1px solid #ccc;padding:6px 13px}table tr{border-top:1px solid #ccc;background-color:#fff}table tr:nth-child(2n){background-color:#f8f8f8}img{max-width:100%}code,tt{margin:0 2px;padding:0 5px;white-space:nowrap;border:1px solid #eaeaea;background-color:#f8f8f8;border-radius:3px;font-family:Consolas,'Liberation Mono',Courier,monospace;font-size:12px;color:#333}pre>code{margin:0;padding:0;white-space:pre;border:0;background:transparent}.highlight pre{background-color:#f8f8f8;border:1px solid #ccc;font-size:13px;line-height:19px;overflow:auto;padding:6px 10px;border-radius:3px}pre{background-color:#f8f8f8;border:1px solid #ccc;font-size:13px;line-height:19px;overflow:auto;padding:6px 10px;border-radius:3px}pre code,pre tt{background-color:transparent;border:0}.poetry pre{font-family:Georgia,Garamond,serif!important;font-style:italic;font-size:110%!important;line-height:1.6em;display:block;margin-left:1em}.poetry pre code{font-family:Georgia,Garamond,serif!important;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;hyphens:auto;white-space:pre-wrap}sup,sub,a.footnote{font-size:1.4ex;height:0;line-height:1;vertical-align:super;position:relative}sub{vertical-align:sub;top:-1px}@media print{body{background:#fff}img,pre,blockquote,table,figure{page-break-inside:avoid}body{background:#fff;border:0}code{background-color:#fff;color:#333!important;padding:0 .2em;border:1px solid #dedede}pre{background:#fff}pre code{background-color:white!important;overflow:visible}}@media screen{body.inverted{color:#eee!important;border-color:#555;box-shadow:none}.inverted body,.inverted hr .inverted p,.inverted td,.inverted li,.inverted h1,.inverted h2,.inverted h3,.inverted h4,.inverted h5,.inverted h6,.inverted th,.inverted .math,.inverted caption,.inverted dd,.inverted dt,.inverted blockquote{color:#eee!important;border-color:#555;box-shadow:none}.inverted td,.inverted th{background:#333}.inverted h2{border-color:#555}.inverted hr{border-color:#777;border-width:1px!important}::selection{background:rgba(157,193,200,0.5)}h1::selection{background-color:rgba(45,156,208,0.3)}h2::selection{background-color:rgba(90,182,224,0.3)}h3::selection,h4::selection,h5::selection,h6::selection,li::selection,ol::selection{background-color:rgba(133,201,232,0.3)}code::selection{background-color:rgba(100,100,100,1);color:#eee}code span::selection{background-color:rgba(100,100,100,1)!important;color:#eee!important}a::selection{background-color:rgba(255,230,102,0.2)}.inverted a::selection{background-color:rgba(255,230,102,0.6)}td::selection,th::selection,caption::selection{background-color:rgba(180,237,95,0.5)}.inverted{background:#0b2531;background:#252a2a}.inverted body{background:#252a2a}.inverted a{color:#acd1d5}}.highlight .c{color:#998;font-style:italic}.highlight .err{color:#a61717;background-color:#e3d2d2}.highlight .k,.highlight .o{font-weight:bold}.highlight .cm{color:#998;font-style:italic}.highlight .cp{color:#999;font-weight:bold}.highlight .c1{color:#998;font-style:italic}.highlight .cs{color:#999;font-weight:bold;font-style:italic}.highlight .gd{color:#000;background-color:#fdd}.highlight .gd .x{color:#000;background-color:#faa}.highlight .ge{font-style:italic}.highlight .gr{color:#a00}.highlight .gh{color:#999}.highlight .gi{color:#000;background-color:#dfd}.highlight .gi .x{color:#000;background-color:#afa}.highlight .go{color:#888}.highlight .gp{color:#555}.highlight .gs{font-weight:bold}.highlight .gu{color:#800080;font-weight:bold}.highlight .gt{color:#a00}.highlight .kc,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr{font-weight:bold}.highlight .kt{color:#458;font-weight:bold}.highlight .m{color:#099}.highlight .s{color:#d14}.highlight .na{color:#008080}.highlight .nb{color:#0086b3}.highlight .nc{color:#458;font-weight:bold}.highlight .no{color:#008080}.highlight .ni{color:#800080}.highlight .ne,.highlight .nf{color:#900;font-weight:bold}.highlight .nn{color:#555}.highlight .nt{color:#000080}.highlight .nv{color:#008080}.highlight .ow{font-weight:bold}.highlight .w{color:#bbb}.highlight .mf,.highlight .mh,.highlight .mi,.highlight .mo{color:#099}.highlight .sb,.highlight .sc,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .si,.highlight .sx{color:#d14}.highlight .sr{color:#009926}.highlight .s1{color:#d14}.highlight .ss{color:#990073}.highlight .bp{color:#999}.highlight .vc,.highlight .vg,.highlight .vi{color:#008080}.highlight .il{color:#099}.highlight .gc{color:#999;background-color:#eaf2f5}.type-csharp .highlight .k,.type-csharp .highlight .kt{color:#00F}.type-csharp .highlight .nf{color:#000;font-weight:normal}.type-csharp .highlight .nc{color:#2b91af}.type-csharp .highlight .nn{color:#000}.type-csharp .highlight .s,.type-csharp .highlight .sc{color:#a31515}
+
+
+
+/* I just cannot fix the background colour of comments !!!!
+  So for the moment I've just coloured the background black */
+
+
+
+Pre {
+    background: #2c2e38 ! important;
+    color: white ! important;   
+    border-radius: 5px ! important;
+}
+
+/* this doesn't help */
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion {
+    color: #6272a4 ! important;
+    background: rgba(300, 300, 300, 0) ! important;
+}
+
+/;]]>;/-->
+</style>
+
+<script type="text/javascript" src="https://orgmode.org/org-info.js">
+/**
+ *
+ * @source: https://orgmode.org/org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in https://orgmode.org/org-info.js.
+ *
+ * Copyright (C) 2012-2020 Free Software Foundation, Inc.
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in https://orgmode.org/org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "4");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Template</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org2d5e924">1. <span class="todo TODO">TODO</span> Create Links to Files and Scripts</a>
+<ul>
+<li><a href="#org29ed2df">1.1. Environmental Informatics (Time Series Analysis)</a></li>
+<li><a href="#orgdf144ba">1.2. Predictive Modelling</a></li>
+<li><a href="#orgcafd0cf">1.3. IntroDataSci</a>
+<ul>
+<li><a href="#org283bcaf">1.3.1. Simple Linear Regression&#xa0;&#xa0;&#xa0;<span class="tag"><span class="IntroDataSci">IntroDataSci</span></span></a></li>
+<li><a href="#multiple-linear-regression">1.3.2. Multiple Linear Regression</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgdde84d6">2. References</a></li>
+</ul>
+</div>
+</div>
+
+
+<ul class="org-ul">
+<li><a href='index.html'>PrivateIndex</a></li>
+
+<li>Related:  <a href='02_Practical_org.html'>Intro Data Science</a>  <a href='TSANotes.html'>Time Series Analysis</a></li>
+</ul>
+
+
+<p>
+
+</p>
+
+<p>
+#* Template
+#** Inline Code
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"> adv$MeanAdvertising <span style="color: #a45bad;">&lt;-</span> rowMeans(adv[,c(!(names(adv) == <span style="color: #2d9574;">"Sales"</span>))])
+
+ AdvTVPlot <span style="color: #a45bad;">&lt;-</span> ggplot(data = adv, aes(x = TV, y = Sales, col = MeanAdvertising)) +
+   geom_point() +
+   theme_bw() +
+   stat_smooth(method = <span style="color: #2d9574;">'lm'</span>, formula = y ~ poly(x, 2, raw = <span style="color: #ce537a; font-weight: bold;">TRUE</span>), se = <span style="color: #ce537a; font-weight: bold;">FALSE</span>) +
+  <span style="color: #2aa1ae; background-color: #292e34;">##</span><span style="color: #2aa1ae; background-color: #292e34;">stat_smooth(method = 'lm', formula = y ~ log(x), se = FALSE) +</span>
+   labs(col = <span style="color: #2d9574;">"Mean Advertising"</span>, x= <span style="color: #2d9574;">"TV Advertising"</span>)
+print(AdvTVPlot)
+
+  <span style="color: #4f97d7; font-weight: bold;">if</span>(knitr::is_html_output()){
+    ggplotly(knitr::is_latex_output())
+  } <span style="color: #4f97d7; font-weight: bold;">else</span> {
+    AdvTVPlot
+  }
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+
+<div id="outline-container-org2d5e924" class="outline-2">
+<h2 id="org2d5e924"><span class="section-number-2">1</span> <span class="todo TODO">TODO</span> Create Links to Files and Scripts</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org29ed2df" class="outline-3">
+<h3 id="org29ed2df"><span class="section-number-3">1.1</span> Environmental Informatics (Time Series Analysis)</h3>
+</div>
+<div id="outline-container-orgdf144ba" class="outline-3">
+<h3 id="orgdf144ba"><span class="section-number-3">1.2</span> Predictive Modelling</h3>
+</div>
+<div id="outline-container-orgcafd0cf" class="outline-3">
+<h3 id="orgcafd0cf"><span class="section-number-3">1.3</span> IntroDataSci</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+I did do this as an org file to, I like it but I think <code>nvim-r</code> is just easier
+to use, albeit a little janky, I include this below merely as an example, refer
+to the actual file in the Notes Repo.
+</p>
+</div>
+<div id="outline-container-org283bcaf" class="outline-4">
+<h4 id="org283bcaf"><span class="section-number-4">1.3.1</span> Simple Linear Regression&#xa0;&#xa0;&#xa0;<span class="tag"><span class="IntroDataSci">IntroDataSci</span></span></h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+Material of Tue 12 2019, week 2
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org23143c1"></a>Load Packages<br />
+<div class="outline-text-5" id="text-1-3-1-1">
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Load Packages</span>
+<span style="color: #4f97d7; font-weight: bold;">if</span>(<span style="color: #a45bad;">require</span>(<span style="color: #2d9574;">'pacman'</span>)){
+  <span style="color: #a45bad;">library</span>(<span style="color: #2d9574;">'pacman'</span>)
+}<span style="color: #4f97d7; font-weight: bold;">else</span>{
+  install.packages(<span style="color: #2d9574;">'pacman'</span>)
+  <span style="color: #a45bad;">library</span>(<span style="color: #2d9574;">'pacman'</span>)
+}
+
+pacman::p_load(caret, scales, ggplot2, rmarkdown, shiny, ISLR, class, BiocManager,
+               corrplot, plotly, tidyverse, latex2exp, stringr, reshape2, cowplot, ggpubr,
+               rstudioapi, wesanderson, RColorBrewer, colorspace, gridExtra, grid, car,
+               boot, colourpicker, tree, ggtree, mise, rpart, rpart.plot, knitr, MASS,
+               magrittr, EnvStats,tidyverse,tidyr,devtools, bookdown, leaps, car, clipr,
+               tikzDevice, e1071)
+
+
+
+mise()
+set.seed(0932)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="question-1"></a>Question 1<br />
+<div class="outline-text-5" id="text-question-1">
+</div>
+<ol class="org-ol">
+<li><a id="a-import-the-data"></a>(a) Import the Data&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span><br />
+<div class="outline-text-6" id="text-a-import-the-data">
+<div class="org-src-container">
+<pre class="src src-R">adv <span style="color: #a45bad;">&lt;-</span> read.csv(file = <span style="color: #2d9574;">"./data/83/4c42c3-8dd8-4fef-b402-7e341764d5e9/Advertising.csv"</span>, header = <span style="color: #ce537a; font-weight: bold;">TRUE</span>, sep = <span style="color: #2d9574;">","</span>)
+</pre>
+</div>
+</div>
+
+<ol class="org-ol">
+<li><a id="inspect-the-structure-of-the-data-set"></a>Inspect the structure of the Data Set<br />
+<div class="outline-text-7" id="text-inspect-the-structure-of-the-data-set">
+<div class="org-src-container">
+<pre class="src src-R">head(adv)
+</pre>
+</div>
+
+<pre class="example">
+   ##      TV Radio Newspaper Sales
+   ## 1 230.1  37.8      69.2  22.1
+   ## 2  44.5  39.3      45.1  10.4
+   ## 3  17.2  45.9      69.3   9.3
+   ## 4 151.5  41.3      58.5  18.5
+   ## 5 180.8  10.8      58.4  12.9
+   ## 6   8.7  48.9      75.0   7.2
+outputoutputoutput
+ #valuevaluevalue+Bboth boutput 
+ str(adv)
+ #+END_SRC
+
+ #+BEGIN_EXAMPLE
+   ## 'data.frame':    200 obs. of  4 variables:
+   ##  $ TV       : num  230.1 44.5 17.2 151.5 180.8 ...
+   ##  $ Radio    : num  37.8 39.3 45.9 41.3 10.8 48.9 32.8 19.6 2.1 2.6 ...
+   ##  $ Newspaper: num  69.2 45.1 69.3 58.5 58.4 75 23.5 11.6 1 21.2 ...
+   ##  $ Sales    : num  22.1 10.4 9.3 18.5 12.9 7.2 11.8 13.2 4.8 10.6 ...
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">summary(adv)
+</pre>
+</div>
+
+<pre class="example">
+##        TV             Radio          Newspaper          Sales
+##  Min.   :  0.70   Min.   : 0.000   Min.   :  0.30   Min.   : 1.60
+##  1st Qu.: 74.38   1st Qu.: 9.975   1st Qu.: 12.75   1st Qu.:10.38
+##  Median :149.75   Median :22.900   Median : 25.75   Median :12.90
+##  Mean   :147.04   Mean   :23.264   Mean   : 30.55   Mean   :14.02
+##  3rd Qu.:218.82   3rd Qu.:36.525   3rd Qu.: 45.10   3rd Qu.:17.40
+##  Max.   :296.40   Max.   :49.600   Max.   :114.00   Max.   :27.00
+</pre>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="b-construct-scatter-plots"></a>(b) Construct Scatter Plots<br />
+<div class="outline-text-6" id="text-b-construct-scatter-plots">
+<p>
+So I'd like to do a shiny ggplot here, however it's probably just as
+easy to use tabset by appending <code>{.tabset}</code> to the heading
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">par(mfrow=c(2,2))</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">plot(lm(y~x))</span>
+</pre>
+</div>
+
+<p>
+Multiple Plots may be fitted into one output using either the <code>par()</code>
+package or the <code>layout()</code> package, I personally prefer the <code>layout()</code>
+package, I think because in the past I had a bad experience with
+<code>par()</code>:
+</p>
+
+<ul class="org-ul">
+<li><b>In order to use <code>par</code></b>:
+
+<ul class="org-ul">
+<li><code>par( mfcol = c(ROW, COLS))</code></li>
+<li><code>par (mfcol = c(ROW, COLS))</code>
+
+<ul class="org-ul">
+<li>That's not a typo, <code>mfrow</code> and <code>mfcol</code> are identical in this case</li>
+</ul></li>
+</ul></li>
+
+<li><b>In order to use <code>layout</code></b>:
+
+<ul class="org-ul">
+<li><code>layout(MATRIX)</code>
+
+<ul class="org-ul">
+<li><p>
+The matrix should be a grid, the plots will be fed to that grid in
+numerical order so for example:
+</p>
+
+<ul class="org-ul">
+<li><code>layout(matrix(1:3, nrow = 1))</code> will fit the plots to the
+following matrix in the order specified:</li>
+</ul>
+
+<p>
+$$
+</p>
+\begin{bmatrix}
+1 & 2 & 3
+\end{bmatrix}
+<p>
+$$
+</p></li>
+</ul></li>
+</ul></li>
+
+<li>**In order to use `grid.layout():
+
+<ul class="org-ul">
+<li>grid.arrange(plot1, plot2, ncol = 2))
+
+<ul class="org-ul">
+<li>This is the only one that will work with ggplot2</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<ol class="org-ol">
+<li><a id="multi-fit-base-plots"></a>Multi Fit Base Plots&#xa0;&#xa0;&#xa0;<span class="tag"><span class="r">r</span>&#xa0;<span class="BasePlot">BasePlot</span></span><br />
+<div class="outline-text-7" id="text-multi-fit-base-plots">
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Set the layout:</span>
+  <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Using `layout()` command:</span>
+
+    layout(matrix(1:3, nrow =1))
+
+  <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">using `par()` command:</span>
+
+    <span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">par(mfrow=c(1,3)) # Specify the</span>
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Set the plot Domain</span>
+pdom <span style="color: #a45bad;">&lt;-</span> c(0, 300) <span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">Plot Domain</span>
+
+<span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">Generate the plots</span>
+plot(formula = Sales ~ TV, data = adv, xlim = pdom,
+     main = <span style="color: #2d9574;">"Sales Given TV Advertising"</span>)
+plot(formula = Sales ~ Newspaper, data = adv, xlim = pdom,
+     main = <span style="color: #2d9574;">"Sales Given Newspaper Advertising"</span>)
+plot(formula = Sales ~ Radio, data = adv, xlim = pdom,
+     main = <span style="color: #2d9574;">"Sales Given Radio Advertising"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="BaseMergedPlots02IntroData.png" alt="BaseMergedPlots02IntroData.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="02_Practical_files/figure-html/unnamed-chunk-4-1.png" alt="unnamed-chunk-4-1.png" />
+</p>
+</div>
+</div>
+</li>
+<li><a id="ggplot"></a>GGPlot&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ggplot2">ggplot2</span>&#xa0;<span class="linear">linear</span>&#xa0;<span class="regression">regression</span></span><br />
+<div class="outline-text-7" id="text-ggplot">
+</div>
+<ol class="org-ol">
+<li><a id="television-advertising"></a>Television Advertising<br />
+<div class="outline-text-8" id="text-television-advertising">
+<div class="org-src-container">
+<pre class="src src-R"> adv$MeanAdvertising <span style="color: #a45bad;">&lt;-</span> rowMeans(adv[,c(!(names(adv) == <span style="color: #2d9574;">"Sales"</span>))])
+
+ AdvTVPlot <span style="color: #a45bad;">&lt;-</span> ggplot(data = adv, aes(x = TV, y = Sales, col = MeanAdvertising)) +
+   geom_point() +
+   theme_bw() +
+   stat_smooth(method = <span style="color: #2d9574;">'lm'</span>, formula = y ~ poly(x, 2, raw = <span style="color: #ce537a; font-weight: bold;">TRUE</span>), se = <span style="color: #ce537a; font-weight: bold;">FALSE</span>) +
+  <span style="color: #2aa1ae; background-color: #292e34;">##</span><span style="color: #2aa1ae; background-color: #292e34;">stat_smooth(method = 'lm', formula = y ~ log(x), se = FALSE) +</span>
+   labs(col = <span style="color: #2d9574;">"Mean Advertising"</span>, x= <span style="color: #2d9574;">"TV Advertising"</span>)
+print(AdvTVPlot)
+
+  <span style="color: #4f97d7; font-weight: bold;">if</span>(knitr::is_html_output()){
+    ggplotly(knitr::is_latex_output())
+  } <span style="color: #4f97d7; font-weight: bold;">else</span> {
+    AdvTVPlot
+  }
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+</div>
+</li>
+
+<li><a id="radio-advertising"></a>Radio Advertising<br />
+<div class="outline-text-8" id="text-radio-advertising">
+<div class="org-src-container">
+<pre class="src src-R">  AdvRadPlot <span style="color: #a45bad;">&lt;-</span> ggplot(data = adv, aes(x = Radio, y = Sales, col = MeanAdvertising)) +
+    geom_point() +
+    theme_bw() +
+    labs(col = <span style="color: #2d9574;">"Mean Advertising"</span>, x= <span style="color: #2d9574;">"Radio Advertising"</span>) +
+    geom_smooth(method = <span style="color: #2d9574;">'lm'</span>)
+
+ <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">padv %&gt;% ggplotly() plotly doesn't work with knitr/LaTeX so test the output and choose accordingly:</span>
+ <span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">Thise could be combined into an interactive graph by wrapping in ggplotly(padv)</span>
+
+<span style="color: #4f97d7; font-weight: bold;">if</span>(knitr::is_html_output()){
+AdvRadPlot <span style="color: #a45bad;">%&gt;%</span> ggplotly()
+ } <span style="color: #4f97d7; font-weight: bold;">else</span> {
+   AdvRadPlot
+ }
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvRadioPlotLinMod.png" alt="Intro02AdvRadioPlotLinMod.png" />
+</p>
+</div>
+</div>
+</li>
+
+<li><a id="newspaper-advertising"></a>Newspaper Advertising<br />
+<div class="outline-text-8" id="text-newspaper-advertising">
+<div class="org-src-container">
+<pre class="src src-R">AdvNewsPlot <span style="color: #a45bad;">&lt;-</span> ggplot(data = adv, aes(x = Newspaper, y = Sales, col = MeanAdvertising)) +
+  geom_point() +
+  theme_bw() +
+  labs(col = <span style="color: #2d9574;">"Mean Advertising"</span>, x= <span style="color: #2d9574;">"Newspaper Advertising"</span>)
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">padv %&gt;% ggplotly() plotly doesn't work with knitr/LaTeX so test the output and choose accordingly:</span>
+<span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">Thise could be combined into an interactive graph by wrapping in ggplotly(padv)</span>
+
+ <span style="color: #4f97d7; font-weight: bold;">if</span>(knitr::is_html_output()){
+AdvNewsPlot <span style="color: #a45bad;">%&gt;%</span> ggplotly()
+} <span style="color: #4f97d7; font-weight: bold;">else</span> {
+AdvNewsPlot
+}
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvRadioPlotLinMod.png" alt="Intro02AdvRadioPlotLinMod.png" />
+</p>
+</div>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="base-plot"></a>Base Plot&#xa0;&#xa0;&#xa0;<span class="tag"><span class="r">r</span>&#xa0;<span class="BasePlot">BasePlot</span></span><br />
+<div class="outline-text-7" id="text-base-plot">
+<div class="org-src-container">
+<pre class="src src-R">pdom <span style="color: #a45bad;">&lt;-</span> c(0, 300) <span style="color: #2aa1ae; background-color: #292e34;">#</span><span style="color: #2aa1ae; background-color: #292e34;">Plot Domain</span>
+plot(formula = Sales ~ TV, data = adv, xlim = pdom,
+     main = <span style="color: #2d9574;">"Sales Given TV Advertising"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="02_Practical_files/figure-html/unnamed-chunk-8-1.png" alt="unnamed-chunk-8-1.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">plot(formula = Sales ~ Newspaper, data = adv, xlim = pdom,
+     main = <span style="color: #2d9574;">"Sales Given Newspaper Advertising"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="02_Practical_files/figure-html/unnamed-chunk-8-2.png" alt="unnamed-chunk-8-2.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">plot(formula = Sales ~ Radio, data = adv, xlim = pdom,
+     main = <span style="color: #2d9574;">"Sales Given Radio Advertising"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="02_Practical_files/figure-html/unnamed-chunk-8-3.png" alt="unnamed-chunk-8-3.png" />
+</p>
+</div>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="c-find-the-correlation-coefficient"></a>(c) Find the Correlation Coefficient&#xa0;&#xa0;&#xa0;<span class="tag"><span class="linear">linear</span>&#xa0;<span class="regression">regression</span></span><br />
+<div class="outline-text-6" id="text-c-find-the-correlation-coefficient">
+<p>
+The corellation coefficient can be found by using the <code>cor</code> function, it
+is a measurement of the strength of a linear relationship ranging from
+-1, to 1, wherein a value of 0 would represent no relationship.
+</p>
+
+<p>
+The Pearson Correlation Coeffient tends to be used over other models and
+it's value is determined by:
+</p>
+
+<p>
+\[
+   r_{xy} = \frac{\sum^{n}_{i= 1}   \left[ x_i - \overline{x} \right] \times \left( y_i - \overline{y} \right)}{\sqrt{\sum^{n}_{i= 1}   \left[\left(  x_i - \overline{x} \right)^2 \right]} \sqrt{\sum^{n}_{i= 1}   \left[ \left( y_i- \overline{y} \right)^2 \right]}}
+  \]
+</p>
+
+<p>
+Some of the assumptions underlying the Correlation Coefficient
+are: <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+
+<ul class="org-ul">
+<li>Independent Observations</li>
+<li>Normally distributed observations (i.e. follows a bell curve)</li>
+<li>hmoscedasticity <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>
+
+<ul class="org-ul">
+<li>This means equal variance of observations
+
+<ul class="org-ul">
+<li>i.e. all there is no pattern between the variables and the plot,
+the points should make a rectangle, not a triangle</li>
+</ul></li>
+</ul></li>
+
+<li>Normally distributed points</li>
+<li>the points must make a straight line not a curve</li>
+</ul>
+
+<p>
+the correlation coefficient in this case can be found by using
+<code>cor(x = adv$TV, y = adv$Sales)</code> and provides that \(r \approx\) 0.78 This
+might not be a meaningufl value however because the variance of the
+sales appears to increase as advertising increases, if that is
+overlooked however the pearson correlation coefficient provides that the
+model is a reasonably strong positive linear model.
+</p>
+</div>
+</li>
+<li><a id="d-assess-the-accuracy-of-the-parameter-estimates"></a>(d) Assess the accuracy of the parameter estimates&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ModelEvaluation">ModelEvaluation</span></span><br />
+<div class="outline-text-6" id="text-d-assess-the-accuracy-of-the-parameter-estimates">
+<p>
+The parameter estimates may be returned by summarising the model with
+<code>summary(lm)</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">lmMod <span style="color: #a45bad;">&lt;-</span> lm(formula = Sales ~ TV, data = adv)
+lmSum <span style="color: #a45bad;">&lt;-</span> summary(lmMod)
+lmSum
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+<pre class="example">
+##
+## Call:
+## lm(formula = Sales ~ TV, data = adv)
+##
+## Residuals:
+##     Min      1Q  Median      3Q     Max
+## -8.3860 -1.9545 -0.1913  2.0671  7.2124
+##
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) 7.032594   0.457843   15.36   &lt;2e-16 ***
+## TV          0.047537   0.002691   17.67   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+##
+## Residual standard error: 3.259 on 198 degrees of freedom
+## Multiple R-squared:  0.6119, Adjusted R-squared:  0.6099
+## F-statistic: 312.1 on 1 and 198 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">lmSum$coefficients
+</pre>
+</div>
+
+<pre class="example">
+              Estimate  Std. Error  t value    Pr(&gt;|t|)
+(Intercept) 7.03259355 0.457842940 15.36028 1.40630e-35
+TV          0.04753664 0.002690607 17.66763 1.46739e-42
+</pre>
+
+
+<pre class="example">
+##               Estimate  Std. Error  t value    Pr(&gt;|t|)
+## (Intercept) 7.03259355 0.457842940 15.36028 1.40630e-35
+## TV          0.04753664 0.002690607 17.66763 1.46739e-42
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">lmMod2 <span style="color: #a45bad;">&lt;-</span> lm(formula = Sales ~ TV, data = adv)
+</pre>
+</div>
+
+<p>
+In this case we have:
+</p>
+
+<ul class="org-ul">
+<li>a slope of \(\beta_1 \approx\) 0.048 \(\pm\) 0.0027</li>
+<li>an Intercept of \(\beta_0 \approx\) 7 \(\pm\) 0.46</li>
+</ul>
+
+<p>
+The standard deviation of a statistic used as an estimator of a
+population parameter is often referred to as the <b>standard error of the
+estimator (S.E.)</b>; it is the \(\pm\) values specified above:
+</p>
+
+<ul class="org-ul">
+<li>Standard Error of Slope Coefficient
+\(\sigma_{\beta_1} = s\sqrt{\frac{1}{n}+ \frac{\overline{x}^2}{SS_x}} = 0.00027\)</li>
+<li>Standard Errof of Intercept Coefficint
+\(\sigma_{\beta_0} = \frac{s}{\sqrt{SS_x}} = 0.46\)</li>
+</ul>
+
+<p>
+Where:
+</p>
+
+<ul class="org-ul">
+<li>\(s\) is the sample standard deviation (OF WHAT?)</li>
+<li>\(SS_x = \sum^{n}_{i= 1} \left[ x^2_i \right] - n\cdot \left( \overline{x} \right)^2\)</li>
+<li>s is the sample standard deviation of \(x\)</li>
+<li>because the sample standard deiation of \(x\) predicts the deviation of
+\(y\) anyway</li>
+</ul>
+
+<p>
+You may also have the standard deviation of the residuals (the distance
+along the y-axis of a point from the regression line), this is known as
+the <b>Residual Standard Error</b> and is calculated via the <i>Ordinary Least
+Squares Method</i> <sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>, it is is given by:
+</p>
+
+\begin{align}
+ \sigma_{\varepsilon} = S.E. & = \sqrt{\frac{\textbf{RSS}}{N}}\\
+ \ \\
+ &= \sqrt{\frac{\sum^{n}_{i= 1}   \left[ \left( y_i - \hat{y}_i \right)^2 \right]}{N}}
+\end{align}
+
+<p>
+Which you'll notice is identical to the <b><i>RMSE</i></b>.
+</p>
+
+<p>
+so by the emperical method \(2\times \text{S.E.}\) would represent a 95%
+confidence interval (rather than prediction interval) of the expected
+$y$-values. Drawing such a confidence interval:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">paramint <span style="color: #a45bad;">&lt;-</span> confint(object = lm(adv$Sales ~ adv$TV), level = 0.95) <span style="color: #a45bad;">%&gt;%</span> signif(2)
+paramint
+</pre>
+</div>
+
+<pre class="example">
+##             2.5 % 97.5 %
+## (Intercept) 6.100  7.900
+## adv$TV      0.042  0.053
+</pre>
+
+<p>
+So drawing from this we could expect, with only a 5% probability of
+incorrectly rejecting the null hypothesis that there is no relationship,
+that in the absence of advertising, the TV sales to fall between 6.1 and
+7.9.
+</p>
+
+<p>
+With the same degree and type of certainty it could also be oncluded
+that for every $1000 increase in advertising, the tv sales will increase
+by between 42 and 53.
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="f-test-the-significance-of-the-slope-of-the-linear-model"></a>(f) Test the significance of the slope of the linear model<br />
+<div class="outline-text-7" id="text-f-test-the-significance-of-the-slope-of-the-linear-model">
+<p>
+If it is appropriate to fit a linear model to data, then we can test for
+correlation between the data points by considering whether or not the
+slope value is non-zero \(\beta_1 \neq 0\), this is because a zero
+coefficient would be such that the model would predict
+\(Y = C + \varepsilon\), this means that \(X\) is not a feature/predictor of
+\(Y\), however \(Y\) may still be a function of (or rather response variable
+of) other values other factors that are 'behind the scenes'.<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>
+</p>
+
+<p>
+So our hypotheses would be:
+</p>
+
+\begin{align}
+H_0 : \enspace \beta_1 &= 0 \qquad ( \small {\text{ The null hypothesis is that nothings related}})\\
+H_1 : \enspace \beta_1 &= 1
+\end{align}
+
+<p>
+So our interest is to determine how far from 0 our expected \(\beta_1\)
+value needs to be from 0 for us to conclude
+</p>
+
+<blockquote>
+<p>
+The expected value of \(\beta_1\) is so far from zero we can conclude
+that it it's not zero at some significance level \(^{\dagger}\)"
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+
+</p>
+
+<p>
+#+BEGIN<sub>QUOTE</sub>
+  <i>\(\dagger\) at some low probability of incorrectly rejecting the null
+  hypothesis</i>
+</p>
+</blockquote>
+<p>
+#+END<sub>QUOTE</sub>
+</p>
+
+<p>
+The problem is defining how far from zero is far enough, for this we use
+the expected distance from the regression line, the standard error from
+above, a value observed observed too many standard deviations to the
+right of the mean are not very likely too occur.
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="choosing-a-parametric-method"></a>Choosing a Parametric method<br />
+<div class="outline-text-8" id="text-choosing-a-parametric-method">
+<p>
+A statistical method that relies on an underlying assumption of the
+statistical distribution of the data is known as a a parametric method,
+in this case, it is a fundamental assumption of <b>Ordinary Least Squares</b>
+Linear regression that the data is normally distributed.<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup>
+</p>
+
+<p>
+This is a situation where we use the <i>Student's t-test</i> because this is
+a sample, and the population standard deviation \(\left( \sigma \right)\)
+is not known and hence the confidence interval for the mean must be made
+broader in order to account for the fact that the sample standard
+deviation \(s\) is being used to estimate \(\sigma\)
+</p>
+
+<p>
+because the sampled population is normally distributed, the sampling
+distribution of \(\bar{x}\) will be normally distributed <sup><a id="fnr.6" class="footref" href="#fn.6">6</a></sup>
+(regardless of sample size) and centred about \(\mu\) with a a standard
+deviation of \(\frac{\sigma}{\sqrt{n}}\). If the population was non-normal
+the sampling distribution will be approximately normal for \(n\geq 30\).
+</p>
+
+<p>
+Because \(\frac{\sigma}{n}\) is the standard deviation of the the sample
+mean \(\bar{x}\) it is reffered to as the <b>Standard Error of the
+mean</b> <sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup>, so we could calculate the critical value along the
+standard normal distribution corresponding to the the sampling
+distribution in order to determine probabilities, however, \(\sigma\) is
+unknown and using \(s\) instead will not create a normal distribution, the
+distriution it creates is Gosset's <b>Student's t-distribution</b> <sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup>:
+</p>
+
+\begin{align}
+  t = \frac{\overline{x}- \mu}{\frac{s}{\sqrt{n}}}
+\end{align}
+
+<p>
+So in this case our test statistic will be:
+</p>
+
+\begin{align}
+t = \frac{\hat{\beta}_1- 0}{\text{SE}\left( \hat{\beta}_1 \right)}
+\end{align}
+
+<p>
+In order to perform this test in R we can use <code>qnorm</code> and <code>qt</code> to return
+critical values, <code>t.test</code> will perform a hypothesis test directly from
+input data but that's not suitable here.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">tcritval <span style="color: #a45bad;">&lt;-</span> qt(p = 0.05,df =nrow(adv)-2 )
+tcritval <span style="color: #a45bad;">%&gt;%</span> signif(2)
+</pre>
+</div>
+
+<pre class="example">
+## [1] -1.7
+</pre>
+
+<p>
+So the critical t-value is -1.7 and from the summary call from before we
+have that the t-statistic is 17, which far exceeds this, as a matter of
+fact further over to the right the p-value is reported at
+\(\alpha = 10^{-16}\).
+</p>
+
+<p>
+In practice you'd just read off the <i>p</i>-values and pick the ones with
+<code>*</code> to the right of them, the more <code>*</code> the more significance.
+</p>
+
+<p>
+Hence we reject the hypothesis that no relationship exists at an
+extremely low probability of incorrectly doing so (i.e. low probability
+of commiting type 1 error).
+</p>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="g-plot-the-straight-line-within-the-scatter-plot-and-comment"></a>(g) Plot the straight line within the scatter plot and comment<br />
+<div class="outline-text-7" id="text-g-plot-the-straight-line-within-the-scatter-plot-and-comment">
+</div>
+<ol class="org-ol">
+<li><a id="base-plot-1"></a>Base Plot<br />
+<div class="outline-text-8" id="text-base-plot-1">
+<p>
+In order to plot this inside base packages, feed the model object,
+i.e. =lm(Y~X)= inside a call to <code>abline()</code> in order to plot the model
+over the top of the base plot, so all together it might look
+like: <sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup>
+</p>
+
+<pre class="example">
+Form &lt;- Sales ~ TV
+Lmodel &lt;- lm(formula = Form, data = adv, na.action = na.exclude)
+plot(Form, data = adv)
+abline(Lmodel)
+</pre>
+
+<p>
+Or you could do it like this even, but I think the way above is better
+syntax because it will behave better with 'predict' function and follows
+<code>tidyverse</code> syntax
+</p>
+
+<pre class="example">
+Lmodel &lt;- lm(adv$Sales ~ adv$TV)
+plot(x = adv$TV, y = adv$Sales)
+abline(a = Lmodel$coefficients[1], b = Lmodel$coefficients[2])
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">plot(formula = Sales ~ TV, data = adv, xlim = pdom,
+     main = <span style="color: #2d9574;">"Sales Given TV Advertising"</span>)
+
+abline(lmMod)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="02_Practical_files/figure-html/unnamed-chunk-12-1.png" alt="unnamed-chunk-12-1.png" />
+</p>
+</div>
+</div>
+</li>
+<li><a id="ggplot-1"></a>GGplot&#xa0;&#xa0;&#xa0;<span class="tag"><span class="linear">linear</span>&#xa0;<span class="regression">regression</span>&#xa0;<span class="ggplot2">ggplot2</span></span><br />
+<div class="outline-text-8" id="text-ggplot-1">
+<div class="org-src-container">
+<pre class="src src-R">AdvTVPlot <span style="color: #a45bad;">&lt;-</span> ggplot(data = adv, aes(x = TV, y = Sales, col = MeanAdvertising)) +
+  geom_point() +
+  theme_bw() +
+  stat_smooth(method = <span style="color: #2d9574;">'lm'</span>, formula = y ~ x, se = <span style="color: #ce537a; font-weight: bold;">FALSE</span>)
+
+AdvTVPlot
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="02_Practical_files/figure-html/unnamed-chunk-13-1.png" alt="unnamed-chunk-13-1.png" />
+</p>
+</div>
+
+<p>
+If we needed to feed ggplot a specific model we could do that like this,
+but it's a whole thing to do and you'd probably rather not do it this
+way, but if you really really need to
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">AdvTVPlot <span style="color: #a45bad;">&lt;-</span> ggplot(data = adv, aes(x = TV, y = Sales, col = MeanAdvertising)) +
+  geom_point() +
+  theme_bw() +
+  stat_smooth(
+      method = <span style="color: #2d9574;">"lm"</span>,
+      mapping = aes( y = predict(lmMod)
+                     )
+      )
+
+AdvTVPlot
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="02_Practical_files/figure-html/unnamed-chunk-14-1.png" alt="unnamed-chunk-14-1.png" />
+</p>
+</div>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="h-assess-the-overall-accuracy-of-the-model"></a>(h) Assess the overall accuracy of the model<br />
+<div class="outline-text-7" id="text-h-assess-the-overall-accuracy-of-the-model">
+<p>
+The model can be assed by considering the:
+</p>
+
+<ul class="org-ul">
+<li>Coefficient of determination \(R^2\) which is the proportion of variance
+in the data that is explained by the model</li>
+<li>Only in the case of simple linear regression is \(R^2 = (r)^2\)</li>
+<li>The Residual Standard Error is the standard deviation of the
+residuals, i.e. it is the expected distance between each point to the
+regression line, taken along the $y$-axis.</li>
+</ul>
+</div>
+<ol class="org-ol">
+<li><a id="terminology"></a>Terminology<br />
+<div class="outline-text-8" id="text-terminology">
+<p>
+The texbook makes, in my opinion, a mistake in that it refers to the the
+<i>Root Mean Square Error</i> (<b><i>RMSE</i></b>) as the <i>Residual Standard Error</i>
+(<b><i>RSE</i></b>) <sup><a id="fnr.10" class="footref" href="#fn.10">10</a></sup>, this is true, the standard error of the residuals
+(\(\varepsilon\)) would be the RMSE, so we would have <b><i>RMSE</i></b>
+\(= \sigma_{\varepsilon}\), that's fine.
+</p>
+
+<p>
+The issue is there is another common term used called the <i>Relative
+Squared Error</i> (<b><i>RSE</i></b>) is often used <sup><a id="fnr.11" class="footref" href="#fn.11">11</a></sup> and so this is hence
+ambiguous, hence forth I will:
+</p>
+
+<ul class="org-ul">
+<li>Refer to the Standard Error of the residuals (\(\sigma_{varepsilon}\))
+as <b><i>RMSE</i></b>:
+
+<ul class="org-ul">
+<li>\(\text{RMSE} = \sqrt{\frac{\sum{\varepsilon ^2}}{n}}\)</li>
+</ul></li>
+
+<li>Refer to the Relative Standard Error as <b><i>RSE</i></b>
+
+<ul class="org-ul">
+<li>\(\text{RSE} = \frac{\sigma_{\varepsilon} ^2}{\sigma_y ^2} = \frac{\sum{\left( y-\hat{y} \right)^2 }}{ \sum{ \left( y-\bar{y} \right)^2 } }\)
+
+<ul class="org-ul">
+<li>The advantage to the RSE is that it can be compared between models
+with different units, whereas the RMSE cannot, just another tool
+in the belt I suppose.</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</li>
+<li><a id="root-mean-square-error"></a>Root Mean Square Error&#xa0;&#xa0;&#xa0;<span class="tag"><span class="LossFunction">LossFunction</span></span><br />
+<div class="outline-text-8" id="text-root-mean-square-error">
+<p>
+Recall that the model was of the form
+\(Y = \beta_1 X + \beta_0 + \varepsilon\), the <b><i>RMSE</i></b> (<i>Root Mean Square
+Error</i>) is the standard deviation of \(\varepsilon\) as measured along the
+$Y$-axis:
+</p>
+
+\begin{align}
+ \sigma_{\varepsilon} =  \sqrt{\frac{\sum^{n}_{i= 1}   \left[ \left( y_i - \hat{y}_i \right)^2 \right]}{N}}
+\end{align}
+
+<p>
+This value can be returned from R by investigating the anova table:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">anova(lmMod)
+</pre>
+</div>
+
+<pre class="example">
+## Analysis of Variance Table
+##
+## Response: Sales
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)
+## TV          1 3314.6  3314.6  312.14 &lt; 2.2e-16 ***
+## Residuals 198 2102.5    10.6
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+</pre>
+
+<p>
+From the <i>ANOVA</i> table it can be seen that the average squared residual
+is 10.6
+</p>
+
+\begin{align}
+\text{mean}\left( \varepsilon^2\right) &= 10.6\\
+\implies \frac{1}{n} \cdot \sum^{n}_{i=1} \left[ \varepsilon_i \right] & =10.6\\
+\implies \frac{1}{n} \cdot \sum^{n}_{i=1} \left[ \left( \hat{y}_i - y_i \right)^2 \right] & =10.6\\
+\implies \sqrt{\frac{1}{n} \cdot \sum^{n}_{i=1} \left[ \left( \hat{y}_i - y_i \right)^2 \right] } & = 3.2\\
+\ \\
+\implies \sigma_{\varepsilon} &= 3.2
+\end{align}
+
+<p>
+Thus we may conclude that we expect the model to predict the sales
+within \(\pm\) 3.2 units, which is quite predictive and hence useful.
+</p>
+</div>
+</li>
+<li><a id="coefficient-of-determination"></a>Coefficient of Determination<br />
+<div class="outline-text-8" id="text-coefficient-of-determination">
+<p>
+The coefficient of determination is the proportion of variation within
+the model that is explained by the model:
+</p>
+
+\begin{align}
+R^2 &= \frac{TSS-RSS}{TSS}\\
+&= \frac{3315}{3315+2103}\\
+\ \\
+&= 0.612
+\end{align}
+
+<p>
+In practice we would simply extract the coefficient of determination
+(\(R^2\)) from the model-summary:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">lmSum$r.squared <span style="color: #a45bad;">%&gt;%</span> round(3) <span style="color: #a45bad;">%&gt;%</span> percent()
+</pre>
+</div>
+
+<pre class="example">
+## [1] "61.2%"
+</pre>
+
+<p>
+This value suggests that a reasonable amount of the variation is
+explained by the model, but perhaps a non-linear model could explain
+more of the variance. (be careful a significant coefficient of
+determination doesn't necessarily mean that the slope is significantly
+different from 0)
+</p>
+</div>
+</li>
+<li><a id="residual-analysis"></a>Residual Analysis<br />
+<div class="outline-text-8" id="text-residual-analysis">
+<div class="org-src-container">
+<pre class="src src-R">layout(matrix(1:4, nrow = 2))
+plot(lmMod)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="Intro02AdvPlotLinMod.png" alt="Intro02AdvPlotLinMod.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="02_Practical_files/figure-html/unnamed-chunk-17-1.png" alt="unnamed-chunk-17-1.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>The residual plot does not appear to normally distributed, there is a
+slight logarithmic trend, this violates assumptions of the linear
+model undermining the predictive capacity of the model in this case.</li>
+<li>The variance is also non-constant, for a linear model to be used in
+must be homoscedastic (i.e. constant variance), this is not the case
+implying that the assumptions of the linear model have been violated
+and hence this model may not be appropriate <sup><a id="fnr.12" class="footref" href="#fn.12">12</a></sup></li>
+<li>the standardised residuals should be normally distriuted with a mean
+of 0 and standard deviation of 1, whilst the standard deviation
+appears acceptable, the standardised residuals are centred around
+\(\approx 3/4\) with a positive upward slope violating the assumption of
+normality.</li>
+<li>The normal Q-Q plot is a straight line so actually the data is
+probably normally distributed, the only issue is the
+heteroscedasticity of the data.</li>
+<li>The Cook's Distance plot suggests that there are some points with a
+high amount of leverage, so perhaps there are some outliers or perhaps
+the increasing variance is undermining the appropriateness of the
+model.</li>
+</ul>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="i-use-the-model-to-make-predictions"></a>(i) Use the model to make predictions<br />
+<div class="outline-text-7" id="text-i-use-the-model-to-make-predictions">
+<p>
+When making predictions is important to ensure that the names of a data
+frame are <code>syntactically correct</code>, otherwise you will have a bad day
+trying to get predict to work and ggplot2 to work because specifying the
+data frame names in a formula will be difficult, make sure that names
+are always syntactically valid.
+</p>
+
+<p>
+what is important is you create your model with the correct syntax, if
+you create your model like this:
+</p>
+
+<pre class="example">
+mymodelWRONG &lt;- lm(adv$Sales ~ adv$TV)
+</pre>
+
+<p>
+you won't be able to predict data like this:
+</p>
+
+<pre class="example">
+predict(object = lmMod, newdata = data.frame("TV" = 300))
+</pre>
+
+<p>
+you'll just get an error that says
+<code>'newdata' had 1 row but variables found have 200 rows</code>, you have to
+give the variables corresponding names so that the model object can save
+them for later and make the connection, for instance, if inspect the
+terms from above you will get:
+</p>
+
+<pre class="example">
+mymodelWRONG[["terms"]]
+</pre>
+
+<p>
+which outputs, at the tail end:
+</p>
+
+<pre class="example">
+adv$Sales    adv$TV
+"numeric" "numeric"
+</pre>
+
+<p>
+where as if you create the model like this:
+</p>
+
+<pre class="example">
+lmModCORRECT &lt;- lm(formula = Sales ~ TV, data = adv)
+predict(object = lmModCORRECT, newdata = data.frame("TV" = 300))
+</pre>
+
+<p>
+and inspect the terms with:
+</p>
+
+<pre class="example">
+lmModCORRECT[["terms"]]
+</pre>
+
+<p>
+you will get this as output
+</p>
+
+<pre class="example">
+  Sales        TV
+"numeric" "numeric"
+</pre>
+
+<p>
+where <code>Sales</code> and <code>TV</code> are the outputs of <code>names(adv)</code> and so I can use
+that when I use predict. You should not use <code>attach</code> it will cause
+problems later, however, it can be nice to use attach just before a
+predict call to get auto completed names and then remove attach and
+re-execute the script .
+</p>
+
+<p>
+So always use the <code>lm(formula = Y~X, data = myDF)</code> because it works the
+best; you have to use the same syntax/format when using predict or
+ggplot anyway so there's no reason not to use the same syntax throughout
+anyway.
+</p>
+
+<p>
+Also the lecturer said to use lists, I reckon use data frames because
+that way your <code>newdata</code> matches the input data one-to-one, moreover:
+</p>
+
+<ul class="org-ul">
+<li>It makes it far simpler to assign names, because again, the
+input/ouptu data will all be the same format</li>
+<li>when creating <i>Lasso</i> Regression Models you have to use matrices as
+input data and it's easier to set your workflow up to go from
+dataframe to matrix (You have to do this in predictive modelling)</li>
+</ul>
+</div>
+<ol class="org-ol">
+<li><a id="predict-the-data"></a>Predict the Data<br />
+<div class="outline-text-8" id="text-predict-the-data">
+</div>
+<ol class="org-ol">
+<li><a id="one-point"></a>One Point<br />
+<div class="outline-text-9" id="text-one-point">
+<div class="org-src-container">
+<pre class="src src-R">input = 3
+output <span style="color: #a45bad;">&lt;-</span> predict(object = lmMod, newdata = data.frame(<span style="color: #2d9574;">"TV"</span> = 3))
+predDatasingle <span style="color: #a45bad;">&lt;-</span> data.frame(input, output)
+names(predDatasingle) <span style="color: #a45bad;">&lt;-</span> names(adv[c(1,4)])
+
+print(predDatasingle)
+</pre>
+</div>
+
+<pre class="example">
+##   TV    Sales
+## 1  3 7.175203
+</pre>
+</div>
+</li>
+<li><a id="multiple-points"></a>Multiple points<br />
+<div class="outline-text-9" id="text-multiple-points">
+<div class="org-src-container">
+<pre class="src src-R">input <span style="color: #a45bad;">&lt;-</span> seq(from = 100, to = 900, by = 100)
+output <span style="color: #a45bad;">&lt;-</span> predict(object = lmMod, newdata = data.frame(<span style="color: #2d9574;">"TV"</span> = input))
+
+predDF <span style="color: #a45bad;">&lt;-</span> data.frame(input, output)
+names(predDF) <span style="color: #a45bad;">&lt;-</span> names(adv[c(1,4)])
+predDF
+</pre>
+</div>
+
+<pre class="example">
+##    TV    Sales
+## 1 100 11.78626
+## 2 200 16.53992
+## 3 300 21.29359
+## 4 400 26.04725
+## 5 500 30.80091
+## 6 600 35.55458
+## 7 700 40.30824
+## 8 800 45.06191
+## 9 900 49.81557
+</pre>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><a id="question-02"></a>Question 02<br />
+<div class="outline-text-5" id="text-question-02">
+</div>
+<ol class="org-ol">
+<li><a id="a-upload-the-auto-dataset-and-explore-it."></a>(a) Upload the Auto Dataset and explore it.<br />
+<div class="outline-text-6" id="text-a-upload-the-auto-dataset-and-explore-it.">
+</div>
+</li>
+<li><a id="org7bbc230"></a>(b) Construct scatter plots to visualize the relationship between<br />
+<div class="outline-text-6" id="text-1-3-1-3-2">
+<p>
+mpg and displacement, weight and accellertion:
+</p>
+<p>
+:CUSTOM<sub>ID</sub>: b-construct-scatter-plots-to-visualize-the-relationship-between-mpg-and-displacement-weight-and-accellertion
+</p>
+</div>
+</li>
+<li><a id="repeat-the-analysis-in-q1-c-to-i-using-mpg-and-weight."></a>Repeat the analysis in Q1 (c) to (i) using mpg and weight.<br />
+<div class="outline-text-6" id="text-repeat-the-analysis-in-q1-c-to-i-using-mpg-and-weight.">
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-org961fb41" class="outline-4">
+<h4 id="multiple-linear-regression"><span class="section-number-4">1.3.2</span> Multiple Linear Regression</h4>
+<div class="outline-text-4" id="text-multiple-linear-regression">
+<p>
+Material of Tue 19 March2019, week 3
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="questoin-01---multiple-linear-regression"></a>Question 01 - Multiple Linear Regression<br />
+<div class="outline-text-5" id="text-questoin-01---multiple-linear-regression">
+</div>
+
+<ol class="org-ol">
+<li><a id="org015cdeb"></a>Load Packages<br />
+<div class="outline-text-6" id="text-1-3-2-1-1">
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Load Packages</span>
+<span style="color: #4f97d7; font-weight: bold;">if</span>(<span style="color: #a45bad;">require</span>(<span style="color: #2d9574;">'pacman'</span>)){
+  <span style="color: #a45bad;">library</span>(<span style="color: #2d9574;">'pacman'</span>)
+}<span style="color: #4f97d7; font-weight: bold;">else</span>{
+  install.packages(<span style="color: #2d9574;">'pacman'</span>)
+  <span style="color: #a45bad;">library</span>(<span style="color: #2d9574;">'pacman'</span>)
+}
+
+pacman::p_load(caret, scales, ggplot2, rmarkdown, shiny, ISLR, class, BiocManager,
+               corrplot, plotly, tidyverse, latex2exp, stringr, reshape2, cowplot, ggpubr,
+               rstudioapi, wesanderson, RColorBrewer, colorspace, gridExtra, grid, car,
+               boot, colourpicker, tree, ggtree, mise, rpart, rpart.plot, knitr, MASS,
+               magrittr, EnvStats,tidyverse,tidyr,devtools, bookdown, leaps, car, clipr,
+               tikzDevice, e1071)
+
+
+
+mise()
+set.seed(0932)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="a-upload-the-data-advertising.csv-and-explore-it."></a>(a) Upload the data "Advertising.csv" and explore it.&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span><br />
+<div class="outline-text-6" id="text-a-upload-the-data-advertising.csv-and-explore-it.">
+<p>
+First import the data and investigate it:
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-R">adv <span style="color: #a45bad;">&lt;-</span> read.csv(file = <span style="color: #2d9574;">"./data/83/4c42c3-8dd8-4fef-b402-7e341764d5e9/Advertising.csv"</span>, header = <span style="color: #ce537a; font-weight: bold;">TRUE</span>, sep = <span style="color: #2d9574;">","</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">head(adv)
+</pre>
+</div>
+
+<pre class="example">
+##      TV Radio Newspaper Sales
+## 1 230.1  37.8      69.2  22.1
+## 2  44.5  39.3      45.1  10.4
+## 3  17.2  45.9      69.3   9.3
+## 4 151.5  41.3      58.5  18.5
+## 5 180.8  10.8      58.4  12.9
+## 6   8.7  48.9      75.0   7.2
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">writeLines(<span style="color: #2d9574;">"\n"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">print(<span style="color: #2d9574;">"***Dimensions***"</span>)
+</pre>
+</div>
+
+<pre class="example">
+## [1] "***Dimensions***"
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">writeLines(<span style="color: #2d9574;">"\n"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">dim(adv)
+</pre>
+</div>
+
+<pre class="example">
+## [1] 200   4
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">writeLines(<span style="color: #2d9574;">"\n"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">print(<span style="color: #2d9574;">"***Summary***"</span>)
+</pre>
+</div>
+
+<pre class="example">
+## [1] "***Summary***"
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">writeLines(<span style="color: #2d9574;">"\n"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">summary(adv)
+</pre>
+</div>
+
+<pre class="example">
+##        TV             Radio          Newspaper          Sales      
+##  Min.   :  0.70   Min.   : 0.000   Min.   :  0.30   Min.   : 1.60  
+##  1st Qu.: 74.38   1st Qu.: 9.975   1st Qu.: 12.75   1st Qu.:10.38  
+##  Median :149.75   Median :22.900   Median : 25.75   Median :12.90  
+##  Mean   :147.04   Mean   :23.264   Mean   : 30.55   Mean   :14.02  
+##  3rd Qu.:218.82   3rd Qu.:36.525   3rd Qu.: 45.10   3rd Qu.:17.40  
+##  Max.   :296.40   Max.   :49.600   Max.   :114.00   Max.   :27.00
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">writeLines(<span style="color: #2d9574;">"\n"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">print(<span style="color: #2d9574;">"***Structure***"</span>)
+</pre>
+</div>
+
+<pre class="example">
+## [1] "***Structure***"
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">writeLines(<span style="color: #2d9574;">"\n"</span>)
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">str(adv)
+</pre>
+</div>
+
+<pre class="example">
+## 'data.frame':    200 obs. of  4 variables:
+##  $ TV       : num  230.1 44.5 17.2 151.5 180.8 ...
+##  $ Radio    : num  37.8 39.3 45.9 41.3 10.8 48.9 32.8 19.6 2.1 2.6 ...
+##  $ Newspaper: num  69.2 45.1 69.3 58.5 58.4 75 23.5 11.6 1 21.2 ...
+##  $ Sales    : num  22.1 10.4 9.3 18.5 12.9 7.2 11.8 13.2 4.8 10.6 ...
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">writeLines(<span style="color: #2d9574;">"\n"</span>)
+</pre>
+</div>
+
+<p>
+Fom this we can tell that there is one output, with 3 input values and
+200 Observations.
+</p>
+</div>
+</li>
+
+<li><a id="org2021545"></a><br /></li>
+
+<li><a id="orgf08eba8"></a>(b) Find the Covariance and Correlation Matrix of Sales, TV, Radio<br />
+<div class="outline-text-6" id="text-1-3-2-1-4">
+<p>
+and Newspaper.
+</p>
+<p>
+:CUSTOM<sub>ID</sub>: b-find-the-covariance-and-correlation-matrix-of-sales-tv-radio-and-newspaper.
+:CLASS: tabset
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="base-packages"></a>Base Packages<br />
+<div class="outline-text-7" id="text-base-packages">
+<div class="org-src-container">
+<pre class="src src-R">pairs(x = adv)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="AdvCorPlotMultLinReg.png" alt="AdvCorPlotMultLinReg.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-4-1.png" alt="MultLinReg727unnamed-chunk-4-1.png" />
+</p>
+</div>
+</div>
+</li>
+
+<li><a id="corrplot"></a>corrplot<br />
+<div class="outline-text-7" id="text-corrplot">
+<p>
+In order to use <code>corrplot</code> first create a correlation matrix using
+<code>cor(adv)</code> then feed that matrix to <code>corrplot</code> with the command
+<code>corrplot(cor(adv))</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">coriris &lt;- cor(iris[,!(names(iris) == "Species")])</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">corrplot(method = 'ellipse', type = 'lower', corr = coriris)</span>
+
+corMat <span style="color: #a45bad;">&lt;-</span> cor(x = adv)
+corrplot(corr = corMat, method = <span style="color: #2d9574;">"ellipse"</span>, type = <span style="color: #2d9574;">"lower"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="CorrPlotMultLinReg.png" alt="CorrPlotMultLinReg.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-5-1.png" alt="MultLinReg727unnamed-chunk-5-1.png" />
+</p>
+</div>
+
+<div class="HTML">
+<p>
+&lt;/div&gt;
+</p>
+
+</div>
+
+<p>
+From this we can see that there is a significant amount of correlation
+between Radio and newspaper (moreso even that newspaper and sales), we
+should consider this variable interaction when decide upon our model
+</p>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="org0d88835"></a>(c) Construct the multiple linear regression model and find the<br />
+<div class="outline-text-6" id="text-1-3-2-1-5">
+<p>
+least square estimates of the model
+</p>
+<p>
+:CUSTOM<sub>ID</sub>: c-construct-the-multiple-linear-regression-model-and-find-the-least-square-estimates-of-the-model
+</p>
+
+<p>
+A multiple linear regression would give the model:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">advModMult <span style="color: #a45bad;">&lt;-</span> lm(formula = Sales ~ TV + Radio + Newspaper, data = adv)
+advModMult
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ TV + Radio + Newspaper, data = adv)
+## 
+## Coefficients:
+## (Intercept)           TV        Radio    Newspaper  
+##    2.938889     0.045765     0.188530    -0.001037
+</pre>
+
+<p>
+This gives that the appropriate linear model is:
+</p>
+
+<p>
+\[
+  Y_{Sales} = 0.0458 \times \text{TV} + 0.19 \times \text{Radio} - 0.001 \times \text{Newspaper}
+  \] the fact that Newspaper has a negative coefficient despite being
+positively correlated with sales is indicative of the weak effect
+newspaper advertising has on sales as well as the interaction between
+newspaper and sales.
+</p>
+
+<p>
+from this it can be ### (d) Test the significance of the parameters and
+find the resulting model to model Sales in terms of advertising modes,
+TV, Radio and Newspaper. First Summarise the Model:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">advModMult <span style="color: #a45bad;">%&gt;%</span> summary()
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ TV + Radio + Newspaper, data = adv)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.8277 -0.8908  0.2418  1.1893  2.8292 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2.938889   0.311908   9.422   &lt;2e-16 ***
+## TV           0.045765   0.001395  32.809   &lt;2e-16 ***
+## Radio        0.188530   0.008611  21.893   &lt;2e-16 ***
+## Newspaper   -0.001037   0.005871  -0.177     0.86    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.686 on 196 degrees of freedom
+## Multiple R-squared:  0.8972, Adjusted R-squared:  0.8956 
+## F-statistic: 570.3 on 3 and 196 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<p>
+A summary of the model provides that given the hypothesis test: \[
+  H_0: \enspace \beta_i = 0\\
+  H_a: \enspace \beta_i \neq 0 \\
+  \qquad \qquad \qquad \qquad \forall i \in \mathbb{N}
+  \]
+</p>
+
+<p>
+There would be an extremely low probability of incorrectly rejecting the
+null hypothesis that the given a linear model the coefficients would be
+zero, hence it is accepted that the coefficients are non-zero except for
+newspaper advertising.
+</p>
+
+<p>
+There is a high probability of incorrectly rejecting the null-hypothesis
+and hence that should not be rejected and the nespaper advertising
+should not be seen as significant predictor for sales in this linear
+model.
+</p>
+
+<p>
+It is hence approprate to remove, via backwards selection, Newspaper
+from the model, which gives:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;">## </span><span style="color: #2aa1ae; background-color: #292e34;">Calculate Power??</span>
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">n &lt;-  length(adv)</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">sigma &lt;-  sd(adv$Newspaper)</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">sem = sigma/sqrt(n)</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">alpha &lt;-  0.05</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">mu0 &lt;- 0</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">q &lt;- qnorm(p = 0.005, mean = mu0, sd = sem);q</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">mu &lt;- q # assumed actual mean value</span>
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">pnorm(q, mean = mu, sd = sem, lower.tail = FALSE)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">advModMultb1 <span style="color: #a45bad;">&lt;-</span> lm(formula = Sales ~ TV + Radio, data = adv)
+advModMultb1
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ TV + Radio, data = adv)
+## 
+## Coefficients:
+## (Intercept)           TV        Radio  
+##     2.92110      0.04575      0.18799
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">advModMultb1.sum <span style="color: #a45bad;">&lt;-</span> summary(advModMultb1)
+</pre>
+</div>
+
+<p>
+\[
+  \text{Sales} = 0.045 \times \text{TV} + 0.19 \times \text{Radio} + 2.9211
+  \]
+</p>
+
+<p>
+All parameters are highly significant and hence the model is deemed
+adequate, the model explains 100% of the variation, this can be found by
+appending <code>$r.squared</code> to the model object.
+</p>
+</div>
+</li>
+
+<li><a id="e-assess-the-overall-accuracy-of-the-model."></a>(e) Assess the overall accuracy of the model.<br />
+<div class="outline-text-6" id="text-e-assess-the-overall-accuracy-of-the-model.">
+<p>
+In order to assess the model, consider the anova table and derive the
+RMSE and \(R^2\) values:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">advModMultb1.anova <span style="color: #a45bad;">&lt;-</span> anova(advModMultb1)
+advModMultb1.anova
+</pre>
+</div>
+
+<pre class="example">
+## Analysis of Variance Table
+## 
+## Response: Sales
+##            Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## TV          1 3314.6  3314.6 1172.50 &lt; 2.2e-16 ***
+## Radio       1 1545.6  1545.6  546.74 &lt; 2.2e-16 ***
+## Residuals 197  556.9     2.8                      
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+</pre>
+
+<p>
+From this we can see that that the \(F\) statistic is associated with a
+very low p-value, these are the exact same p-values from the <code>summary</code>
+call.
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="rmse"></a>RMSE<br />
+<div class="outline-text-7" id="text-rmse">
+<p>
+The RMSE value is the Root mean square error, it is the standard error
+of the residuals (recall that the standard error is the standard
+deviation of a model parameter), so the RMSE is basically the standard
+deviation of the residuals of the model (as measured along the
+$y$-axis).
+</p>
+
+<p>
+\[
+  \text{RMSE} = \sqrt{\frac{\sum{\varepsilon^2}}{n}}
+  \]
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #bc6ec5; font-weight: bold;">rmse</span> <span style="color: #a45bad;">&lt;-</span> <span style="color: #4f97d7; font-weight: bold;">function</span>(model){
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">(sum(model$residuals**2)/length(model$residuals))**0.5</span>
+sd(advModMultb1$residuals)
+}
+
+<span style="color: #bc6ec5; font-weight: bold;">rse</span> <span style="color: #a45bad;">&lt;-</span> <span style="color: #4f97d7; font-weight: bold;">function</span>(model){
+  var(model$residuals)/var(model$residuals - model$fitted.values)
+}
+
+data.frame(<span style="color: #2d9574;">"RMSE"</span> = rmse(advModMultb1) , <span style="color: #2d9574;">"RSE"</span> = rse(advModMultb1) )
+</pre>
+</div>
+
+<pre class="example">
+##       RMSE       RSE
+## 1 1.672891 0.1028057
+</pre>
+
+<p>
+So the expected error of the model is \(\pm\) 1.7 units of sale, we could
+use this to create a confidence interval by multiplying by the
+corresponding <i>Student's t-statistic</i> and saying that we would expect an
+observed value to lie within \(1.96 * \text{S.E}\) of the model 95% of the
+time (is this correct or is it the expected mean or something because of
+the Central Limit Theorem?).
+</p>
+</div>
+</li>
+
+<li><a id="coefficient-of-determination"></a>Coefficient of Determination<br />
+<div class="outline-text-7" id="text-coefficient-of-determination">
+<p>
+The coefficient of determination is 89.7%, this can be returned by
+extracting the value from the object by apending <code>$r.squared</code> to the
+model summary (i.e. use <code>summary(lm( Y ~ X1 + X2  )))$r.squared</code>).
+</p>
+
+<p>
+The \(R^2\) value will be very nearly the same between the initial model
+and the backwards selected model, however given that the initial model
+had non-significant predictors it could be considered as
+over-parameterized, i.e. it violates
+<a href="https://en.wikipedia.org/wiki/Occam%27s_razor">Occam's Razor</a>.
+</p>
+
+<p>
+The coefficient of determination is the ratio of the total variance of
+the data that is explained by the model, in this case it could be
+determined by:
+</p>
+
+<p>
+\[
+  R^2 = \frac{TSS-SSE}{TSS} = \frac{3314.6+1546+0.1}{3315+1545+0.1+556.8} = 89\%
+  \ \\
+  \]
+</p>
+</div>
+</li>
+
+<li><a id="coefficient-of-determination-from-anova"></a>Coefficient of Determination from ANOVA<br />
+<div class="outline-text-7" id="text-coefficient-of-determination-from-anova">
+<p>
+The \(R^2\) value is derived from the ANOVA table thusly:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">advModMultb1.anova <span style="color: #a45bad;">&lt;-</span> anova(advModMultb1)
+TSS_Multb1 <span style="color: #a45bad;">&lt;-</span> advModMultb1.anova$<span style="color: #b2b2b2; background-color: #292b2e;">`Sum Sq`</span> <span style="color: #a45bad;">%&gt;%</span> sum()
+RSS_Multb1 <span style="color: #a45bad;">&lt;-</span> advModMultb1$residuals^2 <span style="color: #a45bad;">%&gt;%</span> sum()
+
+((TSS_Multb1- RSS_Multb1)/(TSS_Multb1)) <span style="color: #a45bad;">%&gt;%</span> signif(3) <span style="color: #a45bad;">%&gt;%</span> percent()   <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Requires `scales` package</span>
+</pre>
+</div>
+
+<pre class="example">
+## [1] "89.7%"
+</pre>
+
+
+<div class="figure">
+<p><img src="./../Practicals/Images/AnovaCalc.jpg" alt="AnovaCalc.jpg" />
+</p>
+</div>
+</div>
+</li>
+
+<li><a id="residual-analysis"></a>Residual analysis<br />
+<div class="outline-text-7" id="text-residual-analysis">
+<p>
+When determining the accuracy or performance of amodel, always turn your
+mind to residual analysis (i.e. how normally are they distributed), this
+will be performed below.
+</p>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="f-calculate-the-predicted-values-and-residuals"></a>(f) Calculate the predicted values and residuals<br />
+<div class="outline-text-6" id="text-f-calculate-the-predicted-values-and-residuals">
+<p>
+The residuals and fitted values may be returned by extracting them from
+the model (you could always derive them from first principles but you
+should use the tools at your disposal, it is quicker, less error prone
+and makes more readable code)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">ResDF <span style="color: #a45bad;">&lt;-</span> data.frame(<span style="color: #2d9574;">"Input"</span> = advModMultb1$fitted.values - advModMultb1$residuals, <span style="color: #2d9574;">"Output"</span> = advModMultb1$fitted.values, <span style="color: #2d9574;">"Error"</span> = advModMultb1$residuals) 
+ResDF <span style="color: #a45bad;">%&gt;%</span> head()
+</pre>
+</div>
+
+<pre class="example">
+##      Input   Output      Error
+## 1 19.01093 20.55546  1.5445354
+## 2 14.29072 12.34536 -1.9453623
+## 3 15.37404 12.33702 -3.0370177
+## 4 16.73423 17.61712  0.8828840
+## 5 13.54782 13.22391 -0.3239081
+## 6 17.82417 12.51208 -5.3120845
+</pre>
+
+<p>
+<code>Predict</code> will also return fitted values if no <code>newdata</code> is specified.
+</p>
+</div>
+</li>
+
+<li><a id="g-plot-the-residuals-against-the-predicted-values"></a>(g) Plot the residuals against the predicted values<br />
+<div class="outline-text-6" id="text-g-plot-the-residuals-against-the-predicted-values">
+</div>
+
+<ol class="org-ol">
+<li><a id="ggplot"></a>ggplot<br />
+<div class="outline-text-7" id="text-ggplot">
+<div class="org-src-container">
+<pre class="src src-R">ggplot(data = ResDF, aes(x = Output, y = Error, col = Error )) +
+  geom_point() +
+  theme_bw() +
+  stat_smooth(col = <span style="color: #2d9574;">"grey"</span>)+
+  stat_smooth(method = <span style="color: #2d9574;">"lm"</span>, se = 0, ) +
+scale_color_gradient(low = <span style="color: #2d9574;">"indianred"</span>, high = <span style="color: #2d9574;">"royalblue"</span>) +
+  labs(y = <span style="color: #2d9574;">"Residuals"</span>, x = <span style="color: #2d9574;">"Predicted Value"</span>, title = <span style="color: #2d9574;">"Residuals Plotted against Output"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="ResidualPlotMultLinRegIntroDataSci.png" alt="ResidualPlotMultLinRegIntroDataSci.png" />
+</p>
+</div>
+
+<pre class="example">
+## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+</pre>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-14-1.png" alt="MultLinReg727unnamed-chunk-14-1.png" />
+</p>
+</div>
+</div>
+</li>
+
+<li><a id="base"></a>base<br />
+<div class="outline-text-7" id="text-base">
+<div class="org-src-container">
+<pre class="src src-R">plot(Error ~ Output, data = ResDF, pch = 19, col = <span style="color: #2d9574;">"IndianRed"</span>, main = <span style="color: #2d9574;">"Residuals against Predictions"</span>)
+smooth <span style="color: #a45bad;">&lt;-</span> loess(formula = Error ~ Output, data = ResDF, span = 0.8)
+predict(smooth) <span style="color: #a45bad;">%&gt;%</span> lines(col = <span style="color: #2d9574;">"Blue"</span>)
+abline(lm(Error ~ Output, data = ResDF), col = <span style="color: #2d9574;">"Purple"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="ResidualAgainstPredMultLinReg.png" alt="ResidualAgainstPredMultLinReg.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-15-1.png" alt="MultLinReg727unnamed-chunk-15-1.png" />
+</p>
+</div>
+
+<div class="HTML">
+<p>
+&lt;/div&gt;
+</p>
+
+</div>
+
+<p>
+From this it can be seen that the residuals are centred around zero, but
+they are not normally distributed, the model performance appears to fail
+normality assumptions for values \(\in \left( 10, 20 \right)\)
+</p>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="h-plot-the-histogram-of-the-residuals"></a>(h) Plot the histogram of the residuals<br />
+<div class="outline-text-6" id="text-h-plot-the-histogram-of-the-residuals">
+</div>
+
+<ol class="org-ol">
+<li><a id="ggplot-1"></a>ggplot<br />
+<div class="outline-text-7" id="text-ggplot-1">
+</div>
+
+<ol class="org-ol">
+<li><a id="absolute-count"></a>Absolute Count<br />
+<div class="outline-text-8" id="text-absolute-count">
+<div class="org-src-container">
+<pre class="src src-R">ggplot(data = ResDF, aes(x = Error, col = Output)) +
+  geom_histogram() +
+  theme_classic() +
+  labs(y = <span style="color: #2d9574;">"Absolute Count"</span>, x = <span style="color: #2d9574;">"Residual Value"</span>, title = <span style="color: #2d9574;">"Residual Distribution"</span>) 
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="HistResGGMultLinReg.png" alt="HistResGGMultLinReg.png" />
+</p>
+</div>
+
+<pre class="example">
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+</pre>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-16-1.png" alt="MultLinReg727unnamed-chunk-16-1.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-elisp">(<span style="color: #4f97d7; font-weight: bold;">setq</span> org-complete-tags-always-offer-all-agenda-tags t)
+(<span style="color: #4f97d7; font-weight: bold;">setq</span> org-fast-tag-selection-single-key nil)
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="density"></a>Density&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ggplot2">ggplot2</span>&#xa0;<span class="Histogram">Histogram</span></span><br />
+<div class="outline-text-8" id="text-density">
+<div class="org-src-container">
+<pre class="src src-R">df <span style="color: #a45bad;">&lt;-</span> data.frame(x = rnorm(1000, 2, 2))
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">overlay histogram and normal density</span>
+ggplot(ResDF, aes(x=Error)) +
+  geom_histogram(aes(y = stat(density))) +
+  stat_function(
+    fun = dnorm, 
+    args = list(mean = mean(df$x), sd = sd(df$x)), 
+    lwd = 2, 
+    col = <span style="color: #2d9574;">'IndianRed'</span>
+  ) +
+  theme_classic() +
+  labs(title = <span style="color: #2d9574;">"Histogram of Residuals"</span>, y = <span style="color: #2d9574;">"Density of Observations"</span>, x= <span style="color: #2d9574;">"Residuals"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="HistOverlayMultLinReg.png" alt="HistOverlayMultLinReg.png" />
+</p>
+</div>
+
+<pre class="example">
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+</pre>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-17-1.png" alt="MultLinReg727unnamed-chunk-17-1.png" />
+</p>
+</div>
+</div>
+</li>
+
+<li><a id="white-noise"></a>White Noise<br />
+<div class="outline-text-8" id="text-white-noise">
+<p>
+We can visualise the residuals as white noise:
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="our-residuals"></a>Our Residuals<br />
+<div class="outline-text-9" id="text-our-residuals">
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #a45bad;">library</span>(tidyverse)
+<span style="color: #2aa1ae; background-color: #292e34;">## </span><span style="color: #2aa1ae; background-color: #292e34;">Put some White Noise on the ResDF</span>
+ResDF <span style="color: #a45bad;">&lt;-</span> cbind(ResDF, <span style="color: #2d9574;">"Wnoise"</span> = rnorm(nrow(ResDF), mean = 0, sd = sd(ResDF$Error)))
+head(ResDF)
+
+
+<span style="color: #2aa1ae; background-color: #292e34;">## </span><span style="color: #2aa1ae; background-color: #292e34;">Our Residuals</span>
+ggplot(ResDF, aes(x = Input, y = Error, col = Output)) +
+  geom_line() +
+  geom_abline(slope = 0, intercept = 0, lty = <span style="color: #2d9574;">"twodash"</span>, col = <span style="color: #2d9574;">"IndianRed"</span>) +
+  theme(legend.position = <span style="color: #2d9574;">"none"</span>) + 
+  labs(title = <span style="color: #2d9574;">"Distribution of Residuals"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="aljas.png" alt="aljas.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-18-1.png" alt="MultLinReg727unnamed-chunk-18-1.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;">## </span><span style="color: #2aa1ae; background-color: #292e34;">White Noise</span>
+
+ggplot(ResDF, aes(x = Input, y = Wnoise, col = Output)) +
+  geom_line() +
+  geom_abline(slope = 0, intercept = 0, lty = <span style="color: #2d9574;">"twodash"</span>, col = <span style="color: #2d9574;">"IndianRed"</span>) +
+  theme(legend.position = <span style="color: #2d9574;">"none"</span>) + 
+  labs(title = <span style="color: #2d9574;">"Distribution of Residuals"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="LinePlotResiduals.png" alt="LinePlotResiduals.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-18-2.png" alt="MultLinReg727unnamed-chunk-18-2.png" />
+</p>
+</div>
+
+<p>
+This clearly shows that the Residuals are non-normal.
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+
+<li><a id="base-1"></a>Base&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ggplot2">ggplot2</span>&#xa0;<span class="Histogram">Histogram</span>&#xa0;<span class="BasePlot">BasePlot</span></span><br />
+<div class="outline-text-7" id="text-base-1">
+<div class="org-src-container">
+<pre class="src src-R">hist(ResDF$Error
+     , breaks = 30,
+     prob=<span style="color: #ce537a; font-weight: bold;">TRUE</span>,
+     lwd=2,
+    main = <span style="color: #2d9574;">"Residual Distribution"</span>,
+    xlab = <span style="color: #2d9574;">"Distance from the Model"</span>, border = <span style="color: #2d9574;">"purple"</span>
+    ) 
+
+  <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Overlay the Normal Dist Curve</span>
+x <span style="color: #a45bad;">&lt;-</span> 1:100    <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Stupid base package wants some f(x), this is hacky but easier than stuffing around with lines or defining a function</span>
+curve(dnorm(x, mean(ResDF$Error), sd(ResDF$Error)), add=<span style="color: #ce537a; font-weight: bold;">TRUE</span>, col=<span style="color: #2d9574;">"purple"</span>, lwd=2) <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Draws the actual density function</span>
+
+<span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">lines(density(possibleyvals_conf), col='purple', lwd=2) # Draws the observed density function</span>
+lwr_conf <span style="color: #a45bad;">&lt;-</span> qnorm(p = 0.05, mean(ResDF$Error), sd(ResDF$Error))
+upr_conf <span style="color: #a45bad;">&lt;-</span> qnorm(p = 1-0.05, mean(ResDF$Error), sd(ResDF$Error))
+abline(v=upr_conf, col=<span style="color: #2d9574;">'pink'</span>, lwd=3)  
+abline(v=lwr_conf, col=<span style="color: #2d9574;">'pink'</span>, lwd=3)     
+abline(v=mean(ResDF$Error), lwd=2, lty=<span style="color: #2d9574;">'dotted'</span>)  
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="BasePlotResidualHistMultLinReg.png" alt="BasePlotResidualHistMultLinReg.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-19-1.png" alt="MultLinReg727unnamed-chunk-19-1.png" />
+</p>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R">lwr_conf <span style="color: #a45bad;">&lt;-</span> qnorm(p = 0.05, mean(ResDF$Error), sd(ResDF$Error))
+upr_conf <span style="color: #a45bad;">&lt;-</span> qnorm(p = 1-0.05, mean(ResDF$Error), sd(ResDF$Error))
+</pre>
+</div>
+
+<div class="HTML">
+<p>
+&lt;/div&gt;
+</p>
+
+</div>
+
+<p>
+It hence appears that the Residuals skewed left, which suggests an upper
+bound on the residual value, the histogram is sufficiently non-normal to
+reject the assumption that the residuals are normally distributed
+</p>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="i-comment-on-the-residual-plots"></a>(i) Comment on the residual plots<br />
+<div class="outline-text-6" id="text-i-comment-on-the-residual-plots">
+<p>
+The Residuals can be analised by plotting the model:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">layout(matrix(data = 1:4, nrow = 2))
+plot(advModMultb1)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="ResidualLinePlotMultLinReg.png" alt="ResidualLinePlotMultLinReg.png" />
+</p>
+</div>
+
+<p>
+<img src="./attachments/MultLinReg727unnamed-chunk-21-1.png" alt="MultLinReg727unnamed-chunk-21-1.png" /><img src="./attachments/MultLinReg727unnamed-chunk-21-2.png" alt="MultLinReg727unnamed-chunk-21-2.png" /><img src="./attachments/MultLinReg727unnamed-chunk-21-3.png" alt="MultLinReg727unnamed-chunk-21-3.png" /><img src="./attachments/MultLinReg727unnamed-chunk-21-4.png" alt="MultLinReg727unnamed-chunk-21-4.png" />
+</p>
+
+<p>
+This is an inappropriate model because the residuals are non-normally
+distributed.
+</p>
+</div>
+</li>
+
+<li><a id="j-use-the-multivariate-model-for-predictions"></a>(j) Use the multivariate model for predictions<br />
+<div class="outline-text-6" id="text-j-use-the-multivariate-model-for-predictions">
+<div class="org-src-container">
+<pre class="src src-R">newdata =  data.frame(<span style="color: #2d9574;">"TV"</span> = c(3, 1, 2), <span style="color: #2d9574;">"Radio"</span> = c(4, 5, 6))
+Mod_Adv_Mult_b1 <span style="color: #a45bad;">&lt;-</span> predict(object = advModMultb1, newdata)
+
+mypreds <span style="color: #a45bad;">&lt;-</span> data.frame(<span style="color: #2d9574;">"Input"</span> = newdata, <span style="color: #2d9574;">"Output"</span> =  Mod_Adv_Mult_b1)
+mypreds <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Careful with the names, they workout as Input.name in this case.</span>
+</pre>
+</div>
+
+<pre class="example">
+##   Input.TV Input.Radio   Output
+## 1        3           4 3.810341
+## 2        1           5 3.906826
+## 3        2           6 4.140575
+</pre>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="question-02-non-linear-models-use-advertising-data-set"></a>Question 02: Non Linear Models: Use Advertising data set<br />
+<div class="outline-text-5" id="text-question-02-non-linear-models-use-advertising-data-set">
+</div>
+
+<ol class="org-ol">
+<li><a id="org47b1f26"></a>(a) Add the Interaction Term TV*Radio and test the significance of<br />
+<div class="outline-text-6" id="text-1-3-2-2-1">
+<p>
+the interaction term {.tabset}
+</p>
+<p>
+:CUSTOM<sub>ID</sub>: a-add-the-interaction-term-tvradio-and-test-the-significance-of-the-interaction-term-.tabset
+</p>
+
+<p>
+reconsider the correlationplots:
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="base-2"></a>Base<br />
+<div class="outline-text-7" id="text-base-2">
+<div class="org-src-container">
+<pre class="src src-R">pairs(x = adv)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="ResPlotAdvertisingMultLinReg2.png" alt="ResPlotAdvertisingMultLinReg2.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-23-1.png" alt="MultLinReg727unnamed-chunk-23-1.png" />
+</p>
+</div>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="corrplot-1"></a>corrplot<br />
+<div class="outline-text-6" id="text-corrplot-1">
+<div class="org-src-container">
+<pre class="src src-R">adv[, names(adv)!=<span style="color: #2d9574;">"Newspaper"</span>] <span style="color: #a45bad;">%&gt;%</span> cor() <span style="color: #a45bad;">%&gt;%</span> corrplot(method = <span style="color: #2d9574;">"ellipse"</span>, type = <span style="color: #2d9574;">"lower"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="CorrelationPlotMultLinReg2.png" alt="CorrelationPlotMultLinReg2.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./attachments/MultLinReg727unnamed-chunk-24-1.png" alt="MultLinReg727unnamed-chunk-24-1.png" />
+</p>
+</div>
+
+<div class="HTML">
+<p>
+&lt;/div&gt;
+</p>
+
+</div>
+
+<p>
+From this we can determine that there is no interaction between TV and
+radio (however previously there was interaction between newspaper and
+Radio, we should consider that next)
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="create-the-mlreg"></a>Create the MLReg<br />
+<div class="outline-text-7" id="text-create-the-mlreg">
+<div class="org-src-container">
+<pre class="src src-R">int_mod_adv <span style="color: #a45bad;">&lt;-</span> lm(formula = Sales ~ TV * Radio + TV + Radio, data = adv)
+int_mod_adv
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ TV * Radio + TV + Radio, data = adv)
+## 
+## Coefficients:
+## (Intercept)           TV        Radio     TV:Radio  
+##    6.750220     0.019101     0.028860     0.001086
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">summary(int_mod_adv)
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ TV * Radio + TV + Radio, data = adv)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.3366 -0.4028  0.1831  0.5948  1.5246 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 6.750e+00  2.479e-01  27.233   &lt;2e-16 ***
+## TV          1.910e-02  1.504e-03  12.699   &lt;2e-16 ***
+## Radio       2.886e-02  8.905e-03   3.241   0.0014 ** 
+## TV:Radio    1.086e-03  5.242e-05  20.727   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.9435 on 196 degrees of freedom
+## Multiple R-squared:  0.9678, Adjusted R-squared:  0.9673 
+## F-statistic:  1963 on 3 and 196 DF,  p-value: &lt; 2.2e-16
+</pre>
+</div>
+</li>
+</ol>
+</li>
+
+<li><a id="org9ffc170"></a>(b) Give the resulting model after considering this interaction<br />
+<div class="outline-text-6" id="text-1-3-2-2-3">
+<p>
+term.
+</p>
+<p>
+:CUSTOM<sub>ID</sub>: b-give-the-resulting-model-after-considering-this-interaction-term.
+</p>
+
+<p>
+The model will be of the form:
+</p>
+
+<p>
+\[
+  \text{Sales} = 0.0019 \times \text{TV} \times + \text{Radio} \times  0.002886 + \text{TV} \times \text{Radio} \times 0.001086
+  \]
+</p>
+
+<p>
+Note that all the terms of the model are significant, hence we deem the
+model as adequate.
+</p>
+</div>
+</li>
+
+<li><a id="orgcb0581a"></a>(c) Construct the Polynomial Regression Model of order 3 and test<br />
+<div class="outline-text-6" id="text-1-3-2-2-4">
+<p>
+the model significance
+</p>
+<p>
+:CUSTOM<sub>ID</sub>: c-construct-the-polynomial-regression-model-of-order-3-and-test-the-model-significance
+</p>
+
+<p>
+When creating polynomial models there are raw and orthogonal
+polynomials,
+</p>
+
+<ul class="org-ul">
+<li>A raw polynomial will be the the standard System of equations that you
+get by minimising the RSS
+
+<ul class="org-ul">
+<li>The problem with this is that the values will be correlated with
+each other</li>
+</ul></li>
+
+<li>An orthogonal polynomial is a transformed but equivalent polynomial
+
+<ul class="org-ul">
+<li>The advantage to this is that the p-value's will be moremeaningful
+because the coefficients aren't correlated with each other</li>
+<li>The disadvantage is that the values are not directly related to our
+data and are not hence meaningful.</li>
+</ul></li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Orthogonal (fixes the correlation between the coefficients))</span>
+
+polymodel_Orth <span style="color: #a45bad;">&lt;-</span> lm(Sales ~ poly(x = TV, degree = 3, raw = <span style="color: #ce537a; font-weight: bold;">FALSE</span>), data = adv)
+summary(polymodel_Orth)
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ poly(x = TV, degree = 3, raw = FALSE), data = adv)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.9734 -1.8900 -0.0897  2.0189  7.3765 
+## 
+## Coefficients:
+##                                        Estimate Std. Error t value
+## (Intercept)                             14.0225     0.2286  61.353
+## poly(x = TV, degree = 3, raw = FALSE)1  57.5727     3.2322  17.812
+## poly(x = TV, degree = 3, raw = FALSE)2  -6.2288     3.2322  -1.927
+## poly(x = TV, degree = 3, raw = FALSE)3   4.0074     3.2322   1.240
+##                                        Pr(&gt;|t|)    
+## (Intercept)                              &lt;2e-16 ***
+## poly(x = TV, degree = 3, raw = FALSE)1   &lt;2e-16 ***
+## poly(x = TV, degree = 3, raw = FALSE)2   0.0554 .  
+## poly(x = TV, degree = 3, raw = FALSE)3   0.2165    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.232 on 196 degrees of freedom
+## Multiple R-squared:  0.622,  Adjusted R-squared:  0.6162 
+## F-statistic: 107.5 on 3 and 196 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Pure/Raw (has the advantage that you can interpret the coefficients, but the coefficients will depend on each other and be hence correlated.)</span>
+
+polymodel <span style="color: #a45bad;">&lt;-</span> lm(Sales ~ I(TV*TV*TV) + I(TV*TV) + (TV), data = adv)
+summary(polymodel)    <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">I is used to inhibit the interpretation of * as relating to the model,</span>
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ I(TV * TV * TV) + I(TV * TV) + (TV), data = adv)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.9734 -1.8900 -0.0897  2.0189  7.3765 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      5.420e+00  8.641e-01   6.272 2.23e-09 ***
+## I(TV * TV * TV)  5.572e-07  4.494e-07   1.240 0.216519    
+## I(TV * TV)      -3.152e-04  2.022e-04  -1.559 0.120559    
+## TV               9.643e-02  2.580e-02   3.738 0.000243 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.232 on 196 degrees of freedom
+## Multiple R-squared:  0.622,  Adjusted R-squared:  0.6162 
+## F-statistic: 107.5 on 3 and 196 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-R">                            <span style="color: #2aa1ae; background-color: #292e34;"># </span><span style="color: #2aa1ae; background-color: #292e34;">Instead of representing interaction it represents TV^3</span>
+
+polymodel_Raw<span style="color: #a45bad;">&lt;-</span> lm(Sales ~ poly(x = TV, degree = 3, raw = <span style="color: #ce537a; font-weight: bold;">TRUE</span>), data = adv)
+summary(polymodel_Raw)
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ poly(x = TV, degree = 3, raw = TRUE), data = adv)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.9734 -1.8900 -0.0897  2.0189  7.3765 
+## 
+## Coefficients:
+##                                         Estimate Std. Error t value
+## (Intercept)                            5.420e+00  8.641e-01   6.272
+## poly(x = TV, degree = 3, raw = TRUE)1  9.643e-02  2.580e-02   3.738
+## poly(x = TV, degree = 3, raw = TRUE)2 -3.152e-04  2.022e-04  -1.559
+## poly(x = TV, degree = 3, raw = TRUE)3  5.572e-07  4.494e-07   1.240
+##                                       Pr(&gt;|t|)    
+## (Intercept)                           2.23e-09 ***
+## poly(x = TV, degree = 3, raw = TRUE)1 0.000243 ***
+## poly(x = TV, degree = 3, raw = TRUE)2 0.120559    
+## poly(x = TV, degree = 3, raw = TRUE)3 0.216519    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.232 on 196 degrees of freedom
+## Multiple R-squared:  0.622,  Adjusted R-squared:  0.6162 
+## F-statistic: 107.5 on 3 and 196 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<p>
+The 3rd degree coefficient is not significant, hence we consider the 2nd
+degree:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R">quadmod <span style="color: #a45bad;">&lt;-</span> lm(formula = Sales ~ I(TV*TV) + TV, data = adv)
+summary(quadmod)
+</pre>
+</div>
+
+<pre class="example">
+## 
+## Call:
+## lm(formula = Sales ~ I(TV * TV) + TV, data = adv)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.6844 -1.7843 -0.1562  2.0088  7.5097 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  6.114e+00  6.592e-01   9.275  &lt; 2e-16 ***
+## I(TV * TV)  -6.847e-05  3.558e-05  -1.924   0.0557 .  
+## TV           6.727e-02  1.059e-02   6.349 1.46e-09 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.237 on 197 degrees of freedom
+## Multiple R-squared:  0.619,  Adjusted R-squared:  0.6152 
+## F-statistic: 160.1 on 2 and 197 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<p>
+The quadratic term is not sufficiently significant so the model is
+rejected
+</p>
+</div>
+</li>
+
+<li><a id="d-give-the-resulting-selected-model"></a>(d) Give the resulting selected model<br />
+<div class="outline-text-6" id="text-d-give-the-resulting-selected-model">
+<p>
+The model selected is the multiple linear regression with the
+interaction from before:
+</p>
+
+<p>
+\[
+  \text{Sales} = 0.0019 \times \text{TV} \times + \text{Radio} \times  0.002886 + \text{TV} \times \text{Radio} \times 0.001086
+  \]
+</p>
+
+<p>
+This was converted from `md` to `org` using `pandoc -f gfm` at time: 
+2020-02-08T05-00-13
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="outline-container-orgdde84d6" class="outline-2">
+<h2 id="orgdde84d6"><span class="section-number-2">2</span> References</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<a id="orgff61701"></a>
+<a href="/home/ryan/Dropbox/Studies/Papers/references.bib">/home/ryan/Dropbox/Studies/Papers/references.bib</a>
+</p>
+
+<p>
+<a id="org5fe447f"></a>
+
+</p>
+
+
+<p>
+\printbibliography
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<a href="spss-tutorials.com/pearson-correlation-coefficient/">Corellation
+Coefficient</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+<a href="newonlinecourses.science.psu.edu/stat501">PennState
+University</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+i.e. chosing \(\beta_0\) and \(\beta_1\) to minimise
+\(\left(\textbf{RSS} = \sum^{n}_{i= 1} \left[ \left( y_i - \hat{y_i} \right)^2 \right] \right)\)
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+Refer to page 67 of the text book, section [3.1.2]
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
+Mendenhall, <i>Introduction to Probability &amp; Statistics</i> p. 254
+[7.4]
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <div class="footpara"><p class="footpara">
+By the Central Limit Theorem
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <div class="footpara"><p class="footpara">
+Mendenhall, <i>Introduction to Probability &amp; Statistics</i> p. 254
+[7.4]
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8">8</a></sup> <div class="footpara"><p class="footpara">
+Mendenhall, <i>Introduction to Probability &amp; Statistics</i> p. 254
+[7.4]
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.9" class="footnum" href="#fnr.9">9</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://stats.stackexchange.com/a/11028"><code>na.exclude</code> will pad
+values extracted so lengths are the same, <code>na.omit</code> will not</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.10" class="footnum" href="#fnr.10">10</a></sup> <div class="footpara"><p class="footpara">
+Refer to Page 69 of the TB for RMSE definition, the TB divides
+by DF which is probably more correct that dividing by sample
+size.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.11" class="footnum" href="#fnr.11">11</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://www.saedsayad.com/model_evaluation_r.htm">An
+Introduction to Data Science : Model Evaluation - Regression</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.12" class="footnum" href="#fnr.12">12</a></sup> <div class="footpara"><p class="footpara">
+refer to page 96 of the TB, log or exp transforming may be
+appropriate here, the data is not homosdcedastic and is hence
+said to be heteroscedastic. #### How to use predict
+</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Ryan G</p>
+<p class="date">Created: 2020-02-08 Sat 19:29</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

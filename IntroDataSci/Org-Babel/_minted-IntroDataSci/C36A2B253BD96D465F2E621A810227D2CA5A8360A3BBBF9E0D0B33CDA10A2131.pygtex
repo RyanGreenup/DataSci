@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+AdvTVPlot \PYG{o}{\PYGZlt{}\PYGZhy{}} ggplot\PYG{p}{(}data \PYG{o}{=} adv\PYG{p}{,} aes\PYG{p}{(}x \PYG{o}{=} TV\PYG{p}{,} y \PYG{o}{=} Sales\PYG{p}{,} col \PYG{o}{=} MeanAdvertising\PYG{p}{))} \PYG{o}{+}
+  geom\PYGZus{}point\PYG{p}{()} \PYG{o}{+}
+  theme\PYGZus{}bw\PYG{p}{()} \PYG{o}{+}
+  stat\PYGZus{}smooth\PYG{p}{(}method \PYG{o}{=} \PYG{l+s}{\PYGZsq{}lm\PYGZsq{}}\PYG{p}{,} formula \PYG{o}{=} y \PYG{o}{\PYGZti{}} x\PYG{p}{,} se \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{)}
+
+AdvTVPlot
+\end{Verbatim}

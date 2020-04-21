@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{library}\PYG{p}{(}tidyverse\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Put some White Noise on the ResDF}
+ResDF \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{cbind}\PYG{p}{(}ResDF\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Wnoise\PYGZdq{}} \PYG{o}{=} rnorm\PYG{p}{(}\PYG{k+kp}{nrow}\PYG{p}{(}ResDF\PYG{p}{),} mean \PYG{o}{=} \PYG{l+m}{0}\PYG{p}{,} sd \PYG{o}{=} sd\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{)))}
+\PYG{k+kp}{head}\PYG{p}{(}ResDF\PYG{p}{)}
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Our Residuals}
+ggplot\PYG{p}{(}ResDF\PYG{p}{,} aes\PYG{p}{(}x \PYG{o}{=} Input\PYG{p}{,} y \PYG{o}{=} Error\PYG{p}{,} col \PYG{o}{=} Output\PYG{p}{))} \PYG{o}{+}
+  geom\PYGZus{}line\PYG{p}{()} \PYG{o}{+}
+  geom\PYGZus{}abline\PYG{p}{(}slope \PYG{o}{=} \PYG{l+m}{0}\PYG{p}{,} intercept \PYG{o}{=} \PYG{l+m}{0}\PYG{p}{,} lty \PYG{o}{=} \PYG{l+s}{\PYGZdq{}twodash\PYGZdq{}}\PYG{p}{,} col \PYG{o}{=} \PYG{l+s}{\PYGZdq{}IndianRed\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+  theme\PYG{p}{(}legend.position \PYG{o}{=} \PYG{l+s}{\PYGZdq{}none\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+  labs\PYG{p}{(}title \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Distribution of Residuals\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

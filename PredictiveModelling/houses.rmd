@@ -1,0 +1,193 @@
+---
+title: "03 Multiple Linear Regression, Housing"
+tags: [Notebooks/Predictive Modelling]
+author: "Ryan Greenup"
+date: "25 March 2018"
+output: 
+  html_document: 
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Preamble
+First as a matter of housekeeping, we need to load in pertinent packages and 
+set the working directory
+
+```{r}
+# Load Packages -----------------------------------------------------------
+
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+               parallel, dplyr, plotly)
+
+
+# Set the Working Directory -----------------------------------------------
+
+set_wd <- function() {
+  
+  #Install the RStudio API package
+  
+  if(require('rstudioapi')){
+    library('rstudioapi')
+  }else{
+    install.packages('rstudioapi')
+    library('rstudioapi')
+  }
+  
+  #Use the Rstudio API to get the working directory
+  
+  current_path <- getActiveDocumentContext()$path 
+  setwd(dirname(current_path ))
+  print( getwd() )
+}
+
+#set_wd()
+
+# Import the Data Set -----------------------------------------------------
+house.df <- read.csv("house2018.csv", header = TRUE, sep = ",")
+house.df <- house.df[,c("price", "sqm", "bedrooms")]
+
+    ##Create Assignments
+    price <- house.df$price
+    sqm   <- house.df$sqm
+    broom <- house.df$bedrooms
+  
+```
+
+#Inspect the Data
+
+First we will Inspect the data:
+
+```{r}
+head(house.df)
+```
+
+##Use Plotting Tools
+
+###Base Plot
+
+A base plot can be used to get a rough idea for the distribution of the data: 
+```{r}
+layout(matrix(nrow = 1, 1:2))
+plot(y = price, x = sqm, main = "House Size")
+boxplot(price~broom, main = "Number of Rooms")
+```
+
+###GGplot
+
+GGplot will allow us to look at all the data together:
+
+```{r}
+house.df$bedrooms <- as.factor(house.df$bedrooms)
+ggplot(data = house.df, aes(x = sqm, y = price, col = bedrooms, shape = bedrooms)) +
+  geom_point() +
+  labs(col = "Bedrooms", shape = "Bedrooms") +
+  xlab("Size (m^2)") +
+  ylab("Price ($)") +
+ggtitle("House Prices") +
+  theme_classic()
+
+
+```
+
+##Discussion
+By looking at the plots, it appears that both trends of price relative to these 
+variables are linear,
+thus geometrically it is likely the appropriate model is a plane.
+
+Hence a muliple linear regression will be fitted to the data.
+
+
+#Fit a model
+A multiple linear regression can be fitted to the data thusly:
+```{r}
+#Remember that bedrooms MUST be a factor, NOT a continuous variable
+
+houses.lm <- lm(price ~ sqm + broom)
+summary(houses.lm)
+```
+
+Thus the best fitting multiple linear regression model is:
+
+$$PRICE = 5362 \times SIZE + ROOMS \times 124239 - 65342$$
+##Test the Model
+
+```{r}
+layout(matrix(nrow =2, 1:4))
+plot(houses.lm)
+houses.lm %>% resid() %>% shapiro.test()
+```
+
+The residuals of this model are slightly non-normal and the *Shapiro* p-value 
+is greater than 0.1, thus this model may not be the appropriate one to use 
+
+#Plot the Model
+##Predict over a data frame
+In order to plot this model, it is necessary to predict the model over a data frame.
+
+```{r}
+independent.df <- data.frame("sqm" = seq(from = 100, to = 200, length.out = 999),
+                      "broom" = seq(from = 3, to = 3, length.out = 999))
+
+#Remember bedrooms is a factor (i.e. discrete variable), that may or may not 
+#need to be adjusted
+#independent.df$broom <- as.factor(independent.df$broom)
+
+price.mod.df <- predict(object = houses.lm, newdata = independent.df)
+price.mod.df <- data.frame("Model.Price" = price.mod.df,
+                           "Size" = independent.df)
+
+head(price.mod.df)
+
+
+```
+
+##Create the Base Plots
+
+```{r}
+
+layout(matrix(nrow = 1, 1:2))
+plot(y = price, x = sqm, 
+     main = "House Size, 3 Bedrooms",
+     xlab = "Size", ylab = "Price")
+lines(y = price.mod.df$Model.Price,
+      x = price.mod.df$Size.sqm)
+plot(y = price.mod.df$Model.Price,
+     x = price.mod.df$Size.sqm,
+     pch = ".", main = "House Sizes, 3 Bedrooms",
+     xlab = "size", ylab = "Price")
+
+
+```
+
+##Create GGPlots for better visualisation
+
+```{r}
+house.df.b3 <- subset(house.df, bedrooms == 3)
+
+ggplot(data = house.df.b3, aes(x = sqm, y = price, shape = "b")) +
+  geom_point(col = "limegreen", shape = 17, size = 2) +
+  xlab("Size (m^2)") +
+  ylab("Price ($)") +
+ggtitle("House Prices, 3 Bedroom") +
+  theme_classic() +
+  geom_line(data = price.mod.df, mapping = aes(x = Size.sqm, y = Model.Price), col = "skyblue", lwd = 2)
+
+```
+
+#Conclusion
+A multiple linear regression is a pretty poor model of house prices relative 
+to size and number of bedrooms
+
+This is demonstrated by observing the model at a cross section 
+taken for 3 bedroom houses, the linear model only barely follows 
+the data trend.

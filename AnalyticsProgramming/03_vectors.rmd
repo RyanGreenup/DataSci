@@ -1,0 +1,468 @@
+---
+title: "03 Vectors and Data Manipulation"
+tags: [Notebooks/Analytics Programming]
+# output: 
+#   html_document: 
+#     keep_md: yes
+output: 
+  pdf_document: 
+  html_notebook: 
+    toc: yes
+    toc_depth: 5
+# header-includes:
+# - \usepackage{\string~/Dropbox/profiles/Templates/LaTeX/ScreenStyle}
+# - \usepackage{listings}
+  # TRY DELETING AUX AND BIB FILES
+---
+
+
+
+# Practical 03
+
+
+## Preamble
+  
+```{r}
+
+## (01) Clean up the Iris Data
+
+# Preamble
+## Install Pacman
+load.pac <- function() {
+  
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart)
+  
+}
+
+load.pac()
+mise()
+```
+
+## (01) Reading in iris data
+
+```{r}
+iris_bad <- read.csv(file = "./DataSets/iris_badvalues.csv", header = TRUE, sep = ",")
+load(file = "./iriswithbadvalues.RData")
+
+head(iris_bad)
+str(iris_bad)
+summary(iris_bad)
+```
+
+### Clean the Data
+
+Copy the data into another data frame to work with:
+
+```{r}
+(iris_tib <- as_tibble(iris_bad))
+iris_df <- iris_bad
+```
+
+
+#### Negative Values
+
+##### Remove Negative Values
+In order to remove negative values the `abs` function could be used:
+
+```{r}
+# Easy Built in
+iris_df[, 1:5] %>% abs() %>% head()
+iris_tib[, 1:5] %>% abs() %>% head()
+
+
+```
+
+It's always possible to roll your own function but in doing so it is necessary to:
+
+1. Check for `na` values
+  + notice that `is.numeric()` will return `TRUE` if the `NA` value is an element of a `data.frame`, for this reason use `! is.na()`
+2. Don't assign Null Values
+
+
+So it's usually better to use built in functions where possible:
+
+```{r}
+
+# Roll your own
+
+my_abs <- function(x) {
+  if (!is.na(x)) {
+    if (x < 0) {
+      -x
+    } else {
+      x
+    }
+  }
+}
+
+
+new_df <- iris_df
+for (r in 1:nrow(iris_df)) {
+  for (c in 1:5) {
+    if (length(my_abs(iris_df[r, c])) == 1) {
+      new_df[r, c] <- my_abs(iris_df[r, c])
+    }
+  }
+}
+new_df %>% head()
+
+```
+
+
+##### Show Negative Values
+
+###### Base Packages 
+
+We may wan't to preview rows that have negative values rather than just making them positive. 
+
+A possible way to do this is to use `df[df<0]`, but tht will not work with tibbles, instead create a logical matrix in order to find the negative values, bear in mind that **_R_** consideres any number that isn't 0 to be *truthy* so `sum()` and `prod()` may be used to with `apply()` to create logical tests:
+
+```
+| Description | Command   | Code Syntax | Mathematical |
+| ---         | ----      | --          | ---          |
+| And         | `prod()` / $\Pi^n_{i=1}$ | `&`   | $\wedge$     |
+| Or          | `sum` / $\sum^n_{i=1}$ | `|`     | $\vee$       |
+```
+
+
+
+This method will work with both tibbles and data frames.
+
+```{r}
+# is the entry negative but not missing
+is_neg <- iris_df[,1:5]<0 & !is.na(iris_df[,1:5]) 
+# is any column in the row negative?
+  # **and** / $^$ ; is `prod()`, **or** / $V$ is `sum()`
+is_row_neg <- apply(is_neg, 1, sum) %>% as.logical()
+# Which Rows are negatives
+neg_rows <- which(is_row_neg)
+
+# Return the rows that contain negative observations
+negvals  <- iris_df[neg_rows,]
+meanvals <- apply(na.omit(abs(iris_df[,-6])), 2, mean) %>% round(1)
+sdvals   <- apply(na.omit(abs(iris_df[,-6])), 2, sd) %>% round(2)
+rbind(negvals, meanvals, sdvals) 
+
+# Remove Rows that have negative values
+# iris_df[-neg_rows,]
+
+```
+
+###### TidyVerse
+
+In order to view negative values with tibbles it's quite simple to use `dplyr`:
+
+```{r}
+iris_tib %>%
+  dplyr::filter(Petal.Length < 0 |  Sepal.Length < 0 |  Petal.Width< 0 |  Sepal.Width< 0 )
+
+
+```
+
+if you don't want to type in all the column names it might be ideal to transform the table into `longer` format 
+> (like tidy data but more about making it longer so there's only one relevant column not necessarily conforming to the rules of tidy)
+
+```{r}
+# Make it Longer
+
+pivot_longer(iris_tib, cols = names(iris_df)[2:5]) 
+  
+# Filter out Negative Results
+pivot_longer(iris_tib, cols = names(iris_df)[2:5]) %>% 
+  dplyr::filter(value < 0) 
+  
+```
+
+
+###### Discussing Negative Values
+
+The negative values seem to be pretty close to what was expected so they won't be removed but converted to positive values.
+
+```{r}
+iris_df[,-6] <- abs(iris_df[,-6])
+iris_tib[,-6] <- abs(iris_tib[,-6])
+```
+
+#### Zero Values
+
+Before values that are too large can be considered, it is necessary to remove the zero values.
+
+
+the zero values can be removed for a data frame or matrix by using na.omit (this doesn't work for tibbles):
+
+```{r}
+iris_df[iris_df==0] <- NA
+na.omit(iris_df) %>% head()
+```
+
+
+##### View Zero Observations
+
+The observations with zeroes can be previewed:
+
+```{r}
+is_zero <-iris_tib==0
+is_zero[is.na(is_zero)] <- FALSE
+zero_rows <- apply(is_zero, 1, sum) %>% as.logical()
+
+iris_tib[zero_rows,] %>% head()
+```
+
+in order to remove these values use the following:
+
+```{r}
+iris_tib[-zero_rows, ] %>% head()
+```
+
+
+#### Values that are too Large
+
+In order to consider values that are too large the mean value and standard deviation can be used.
+
+Create a function to return the index values of a vector which has values that are extremely far from the mean.
+
+* Create an argument to specify the probability of detecting an extreme value
+  assuming that value is to be expected from the population
+  * This would be the $\alpha$ level / the FPR / the probability of a type I error.
+
+
+```{r}
+# This Function will take a vector as input and a False Positive Rate
+    # It will return the index values that are sufficiently far from the 
+    # the mean to indicate that they are extreme (considering the variance)
+        # Assuming there is no difference, the probability detecting one
+        # is the FPR
+
+is_extreme <- function(x, fpr=1/100) {
+ Z   <- abs(qnorm(fpr/2, 0, 1)) 
+ mu  <- mean(na.omit(x))
+ sig <- sd(na.omit(x)) 
+  
+  is_small <- x < mu - Z * sig
+  is_big   <- x > mu + Z * sig
+  
+  is_small | is_big
+}
+
+extreme_vals <- function(x, fpr) {
+ which(is_extreme(x, fpr)) 
+}
+
+#   # Example
+# rvals <- rnorm(100)
+# rvals[is_extreme(rvals, fpr = 5/100)]
+# 
+# # Return Extreme Rows
+# iris_df[,2] %>% extreme_vals(fpr = 1/200)
+# iris_df[,3] %>% extreme_vals(fpr = 1/200)
+# iris_df[,4] %>% extreme_vals(fpr = 1/200)
+# iris_df[,5] %>% extreme_vals(fpr = 1/200)
+
+extreme_rows <- c()
+for (i in 2:5) {
+  extreme_rows <-
+    c(extreme_rows, extreme_vals(iris_df[, i], fpr = 1 / 200))
+}
+
+iris_df[extreme_rows,]
+
+
+```
+
+Although this value is very far from the mean-value, it doesn't appear to be any sort of transcription error, without good cause to remove the data it will be left in.
+
+#### Mis-Spelling
+
+Before this can be plotted it is necessary to make the `Species` a factor, this will necessitate fixing mis-spellings.
+
+Mis-Spellings can be checked by using `unique` and `factor`:
+
+```{r}
+unique(iris_df$Species)
+```
+
+#### Duplicate Records
+
+Duplicate Records can be checked by using:
+
+```{r}
+dupQ <- duplicated(iris_df)
+iris_df[dupQ,]
+```
+
+In this case no duplicate records could be identified.
+
+
+#### Missing Values
+
+##### Should values be removed
+
+Removing all missing records isn't necessarily desirable because the missing element may be a feature that we are not concerned with (e.g. plotting sepal length and width but ignoring petal length), or it may be appropriate to use some function to predict what that value could be:
+
+* using a Modelling Technique
+  + Regression
+  + Classification Trees or random Forrest
+    + Random Forrest
+* Using the mean Value
+* Using the median value
+
+This can be particulary helpful if a dimension-reduction technique is being used anyway.
+
+For this reason this step will be performed
+
+###### Modelling Missing Values
+
+Trees are a really easy way to model missing values because there a type of model that will *tolerate* missing predictive variables, for example to predict missing sepal length values:
+
+
+```{r}
+iris_df_pred <- iris_df
+
+sep.tree <- tree(formula = Sepal.Length ~ ., data = na.omit(iris_df_pred[,2:5]))
+
+plot(sep.tree)
+text(sep.tree)
+
+missing_sep_length <- which(is.na(iris_df_pred$Sepal.Length))
+
+
+iris_df_pred[missing_sep_length,]
+iris_df_pred[missing_sep_length,2] <- predict(sep.tree,newdata = iris[missing_sep_length,])
+iris_df_pred[missing_sep_length,]
+
+```
+
+##### How to remove them
+
+In this context by cleaning the data we meen to remove missing rows, this can easily be achieved by using the `na.rm` argument or `na.omit` function, however it could also be acheived by:
+
+1. identifying elements that have missing data with `is.na`
+2. sum the columns using `apply(is.na(data), MARGIN = 1, sum)`
+  * logical values are treated as 1/0 by **_R_**.
+  * `MARGIN = 1` means that the function should be applied column wise
+  * `MARGIN = 2` means that the function should be applied row wise
+3. remove those indexed values by passing `[-bad_rows,]` as a logical filtering vector to the data frame.
+
+and then removing those rows by passing that index to :
+
+
+```{r}
+## Complex Way
+bad_rows <- is.na(iris_df) %>% apply(1, sum) %>% as.logical()
+iris_df_clean <- iris_df[-bad_rows,]
+
+## Easy Way
+iris_df <- na.omit(iris_df)
+```
+
+
+## (02) Linear Regression
+
+The first thing to do when modelling data is to consider the correlation between the predictive features:
+
+```{r}
+iris_df_pretty <- iris_df[,2:5]
+names(iris_df_pretty) <- c("Sepal\nLength", "Sepal\nWidth", "Petal\nLength", "Petal\nWidth")
+corrplot(cor(iris_df_pretty), method = "ellipse", type = "upper")
+```
+
+this clearly shows that the Petal Width and Length have the most linear relationship, although this may differ accross species and should be potentially investigated with a second correlation plot or a scatter plot.
+
+### Pair wise Plot
+
+various pairwise scatter plots can be prepared by using the `pairs()` function:
+
+```{r}
+pairs(iris_df_pretty)
+
+```
+
+If the Species Data was also to be considered that could be done by creating a boxplot:
+
+```{r}
+data_cols <- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+ggplot(data = pivot_longer(iris_df, cols = names(iris_df)[2:5]), aes(x = Species, fill = name, y = value)) +
+  geom_boxplot() + 
+  theme_bw() +
+  scale_fill_discrete(labels = c("Sepal Length", "Sepal Width", "Petal Length", "Petal Width")) +
+  labs(title = "Iris Measurements Across Species")
+
+# names(iris_df)
+
+```
+
+
+### Create a Linear Model 
+
+A linear Model can be created and plotted using base packages thusly:
+
+```{r}
+(petal_model <- lm(Petal.Length ~ Petal.Width, data = iris_df))
+
+# Factors are numbers under the hood so they'll create a colour vector
+# my_cols <- display.brewer.pal(3,"Accent")
+my_cols <- wesanderson::wes_palette("Cavalcanti1", 3)
+
+plot(Petal.Length ~ Petal.Width,
+     data = iris_df, col = my_cols[iris_df$Species],
+     pch = c(15,17, 19)[iris_df$Species],
+     main = "Linear Model of Iris Data",
+     xlab = "Petal Width", 
+     ylab = "Petal Length")
+abline(petal_model, col = "Purple")
+
+```
+
+This however is not very efficient, multiple linear models can be greated and plotted using tidy data and facets in `ggplot2`:
+
+
+```{r}
+iris_tidy <- pivot_longer(iris_df, cols = names(iris_df)[3:5])
+(iris_tidy <- iris_tidy[, -1])
+
+```
+
+```{r}
+
+ggplot(data = iris_tidy, aes(y = Sepal.Length, x = value, col = name)) +
+  geom_point() + 
+#  facet_grid(. ~ name, scales = "free_x") +
+  facet_grid(. ~ name) +
+  geom_smooth(method = "lm") +
+  theme_bw() +
+  guides(col = FALSE) +
+  labs(title = "Linear Models for Iris Measurements", y = "Sepal Length", x = "")
+```
+```{r}
+
+mycols <- c("darkorchid1", "limegreen", "slateblue2", "deeppink4")
+mycols <- mycols[c(4,1,2,3)]
+
+
+ggplot(data = iris_tidy, aes(y = Sepal.Length, x = value, col = Species)) +
+  geom_point() + 
+#  facet_grid(. ~ name, scales = "free_x") +
+  facet_grid(. ~ name) +
+  stat_smooth(method = "lm", se = FALSE) +
+  theme_bw() +
+  labs(title = "Linear Models for Iris Measurements", y = "Sepal Length", x = "") +
+#  scale_color_discrete(c("Setosa", "Versicolor", "Virginica")) +
+  stat_smooth(aes(group = 1, col = "All"), method = "lm", se = FALSE) +
+  scale_color_manual(labels= c("All", "Setosa", "Versicolor", "Virginica"),
+                     values = mycols)
+
+
+
+
+```
+
+

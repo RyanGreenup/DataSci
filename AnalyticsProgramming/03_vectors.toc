@@ -1,0 +1,37 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Practical 03}{1}{Doc-Start}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{Preamble}{1}{section*.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{(01) Reading in iris data}{3}{section*.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Clean the Data}{3}{section*.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Negative Values}{4}{section*.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{Remove Negative Values}{4}{section*.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{Show Negative Values}{5}{Item.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Zero Values}{7}{Item.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{View Zero Observations}{8}{section*.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Values that are too Large}{8}{section*.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Mis-Spelling}{9}{section*.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Duplicate Records}{9}{section*.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Missing Values}{10}{section*.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{Should values be removed}{10}{section*.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{How to remove them}{11}{section*.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{(02) Linear Regression}{11}{Item.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Pair wise Plot}{12}{section*.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Create a Linear Model}{12}{section*.6}%

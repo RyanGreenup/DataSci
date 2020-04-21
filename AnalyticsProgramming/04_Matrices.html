@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>(04) Binomial Distribution and Matrices</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <style>
+  /*! normalize.css v2.1.3 | MIT License | git.io/normalize */
+
+  /* ==========================================================================
+   * Taken from [Github](https://raw.githubusercontent.com/gongzhitaao/orgcss/master/src/css/org.css)
+     ========================================================================== */
+
+  /* Fixing the scaling:
+
+  1. comment out the section [[@media screen and (min-width: 600px) {][here]] at about
+  2.   max-width: 70em; is the next issue, it was originally set at only 40, which is too small.
+   + 70 is a better compromise
+
+
+  @import "normalize";
+  @import "htmlize";
+
+  $sans: Helvetica, sans-serif;
+  $serif: Georgia, serif;
+  $monospace: Lucida Console, monospace;
+  $code-size: 80%;
+  $smaller: 90%;
+  $max-width: 1125px; /* iPhone X is 1125x2436, ipads are about 2000 * 3000 */
+
+  body {
+      width: 95%;
+      margin: 2% auto;
+      font-size: 14px;
+      line-height: 1.4em;
+      font-family: $serif;
+      color: #333;
+  }
+
+
+
+  @media screen and (min-width: 600px) {
+      body {
+          font-size: 18px;
+      }
+  }
+
+  @media screen and (min-width: 910px) {
+      body {
+          width: 1100px;
+      }
+  }
+
+  ::selection {
+      background: #D6EDFF;
+  }
+
+  p {
+      margin: 1em auto;
+  }
+
+  ol,ul {
+      margin: 0 auto;
+  }
+
+  dl {
+      margin: 0 auto;
+  }
+
+  .title {
+      text-align: center;
+      margin: 0.8em auto;
+      color: black;
+  }
+
+  .subtitle {
+      text-align: center;
+      font-size: 1.1em;
+      line-height: 1.4;
+      font-weight: bold;
+      margin: 1em auto;
+  }
+
+  .abstract {
+      margin: auto;
+      width: 80%;
+      font-style: italic;
+  }
+
+  .abstract p:last-of-type:before {
+      content: "    ";
+      white-space: pre;
+  }
+
+  .status {
+      font-size: $smaller;
+      margin: 2em auto;
+  }
+
+  [class^="section-number-"] {
+      margin-right: .5em;
+  }
+
+  [id^="orgheadline"] {
+      clear: both;
+  }
+
+  #footnotes {
+      font-size: $smaller;
+  }
+
+  .footpara {
+      display: inline;
+      margin: .2em auto;
+  }
+
+  .footdef {
+      margin-bottom: 1em;
+  }
+
+  .footdef sup {
+      padding-right: .5em;
+  }
+
+  a {
+      color: #527d9a;
+      text-decoration: none;
+  }
+
+  a:hover {
+      color: #003355;
+      border-bottom: 1px dotted;
+  }
+
+  figure {
+      padding: 0px;
+      margin: 1em auto;
+      text-align: center;
+  }
+
+  img {
+      max-width: 100%;
+      vertical-align: middle;
+  }
+
+  .MathJax_Display {
+      margin: 0!important;
+      width: $smaller!important;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+      color: #A5573E;
+      line-height: 1em;
+      font-family: $sans;
+  }
+
+  h1,h2,h3 {
+      line-height: 1.4em;
+  }
+
+  h4,h5,h6 {
+      font-size: 1em;
+  }
+
+  @media screen and (min-width: 600px) {
+      h1 {
+          font-size: 2em;
+      }
+      h2 {
+          font-size: 1.5em;
+      }
+      h3 {
+          font-size: 1.3em;
+      }
+      h1,h2,h3 {
+          line-height: 1.4em;
+      }
+      h4,h5,h6 {
+          font-size: 1.1em;
+      }
+  }
+
+  dt {
+      font-weight: bold;
+  }
+
+  /* table */
+
+  table {
+      margin: 1em auto;
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+      border-collapse: collapse;
+  }
+
+  thead {
+      border-bottom: 2px solid;
+  }
+
+  table td + td, table th + th {
+      border-left: 1px solid gray;
+  }
+
+  table tr {
+      border-top: 1px solid lightgray;
+  }
+
+  td,th {
+      padding: 0.3em 0.6em;
+      vertical-align: middle;
+  }
+
+  caption.t-above {
+      caption-side: top;
+  }
+
+  caption.t-bottom {
+      caption-side: bottom;
+  }
+
+  caption {
+      margin-bottom: 0.3em;
+  }
+
+  figcaption {
+      margin-top: 0.3em;
+  }
+
+  th.org-right {
+      text-align: center;
+  }
+
+  th.org-left {
+      text-align: center;
+  }
+
+  th.org-center {
+      text-align: center;
+  }
+
+  td.org-right {
+      text-align: right;
+  }
+
+  td.org-left {
+      text-align: left;
+  }
+
+  td.org-center {
+      text-align: center;
+  }
+
+  blockquote {
+      margin: 1em 2em;
+      padding-left: 1em;
+      border-left: 3px solid #ccc;
+  }
+
+  kbd {
+      background-color: #f7f7f7;
+      font-size: $code-size;
+      margin: 0 .1em;
+      padding: .1em .6em;
+  }
+
+  .todo {
+      background-color: red;
+      color: white;
+      padding: .1em 0.3em;
+      border-radius: 3px;
+      background-clip: padding-box;
+      font-size: $code-size;
+      font-family: $monospace;
+      line-height: 1;
+  }
+
+  .done {
+      background-color: green;
+      color: white;
+      padding: .1em 0.3em;
+      border-radius: 3px;
+      background-clip: padding-box;
+      font-size: $code-size;
+      font-family: $monospace;
+      line-height: 1;
+  }
+
+  .priority {
+      color: orange;
+      font-family: $monospace;
+  }
+
+  /* Because tag span is set to float.  This is more like a hacking.  Maybe we
+     need a cleaner solution. */
+  #table-of-contents li {
+      clear: both;
+  }
+
+  .tag {
+      font-family: $monospace;
+      font-size: 0.7em;
+      font-weight: normal;
+  }
+
+  .tag span {
+      padding: 0.3em 0.3em;
+      float: right;
+      margin-right: .5em;
+      border: 1px solid #bbb;
+      border-radius: 3px;
+      background-clip: padding-box;
+      color: #333;
+      background-color: #eee;
+      line-height: 1;
+  }
+
+  .timestamp {
+      color: #bebebe;
+      font-size: $smaller;
+  }
+
+  .timestamp-kwd {
+      color: #5f9ea0;
+  }
+
+  .org-right {
+      margin-left: auto;
+      margin-right: 0px;
+      text-align: right;
+  }
+
+  .org-left {
+      margin-left: 0px;
+      margin-right: auto;
+      text-align: left;
+  }
+
+  .org-center {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+  }
+
+  .underline {
+      text-decoration: underline;
+  }
+
+  #postamble p, #preamble p {
+      font-size: $smaller;
+      margin: .2em;
+  }
+
+  p.verse {
+      margin-left: 3%;
+  }
+
+  :not(pre) > code {
+      padding: 2px 5px;
+      margin: auto 1px;
+      border: 1px solid #DDD;
+      border-radius: 3px;
+      background-clip: padding-box;
+      color: #333;
+      font-size: $code-size;
+  }
+
+  .org-src-container {
+      border: 1px solid #ccc;
+      box-shadow: 3px 3px 3px #eee;
+      font-family: $monospace;
+      font-size: $code-size;
+      margin: 1em auto;
+      padding: 0.1em 0.5em;
+      position: relative;
+  }
+
+  .org-src-container>pre {
+      overflow: auto;
+  }
+
+  .org-src-container>pre:before {
+      display: block;
+      position: absolute;
+      background-color: #b3b3b3;
+      top: 0;
+      right: 0;
+      padding: 0 0.5em;
+      border-bottom-left-radius: 8px;
+      border: 0;
+      color: white;
+      font-size: $code-size;
+  }
+
+  /* from http://demo.thi.ng/org-spec/ */
+
+  .org-src-container>pre.src-sh:before {
+      content: 'sh';
+  }
+  .org-src-container>pre.src-bash:before {
+      content: 'bash';
+  }
+  .org-src-container>pre.src-emacs-lisp:before {
+      content: 'Emacs Lisp';
+  }
+  .org-src-container>pre.src-R:before {
+      content: 'R';
+  }
+  .org-src-container>pre.src-org:before {
+      content: 'Org';
+  }
+  .org-src-container>pre.src-cpp:before {
+      content: 'C++';
+  }
+  .org-src-container>pre.src-c:before {
+      content: 'C';
+  }
+  .org-src-container>pre.src-html:before {
+      content: 'HTML'
+  }
+  .org-src-container>pre.src-js:before {
+      content: 'Javascript'
+  }
+  .org-src-container>pre.src-javascript:before {
+      content: 'Javascript'
+  }
+
+  // More languages from http://orgmode.org/worg/org-contrib/babel/languages.html
+
+  .org-src-container>pre.src-abc:before {
+      content: 'ABC';
+  }
+  .org-src-container>pre.src-asymptote:before {
+      content: 'Asymptote';
+  }
+  .org-src-container>pre.src-awk:before {
+      content: 'Awk';
+  }
+  .org-src-container>pre.src-C:before {
+      content: 'C';
+  }
+  .org-src-container>pre.src-calc:before {
+      content: 'Calc';
+  }
+  .org-src-container>pre.src-clojure:before {
+      content: 'Clojure';
+  }
+  .org-src-container>pre.src-comint:before {
+      content: 'comint';
+  }
+  .org-src-container>pre.src-css:before {
+      content: 'CSS';
+  }
+  .org-src-container>pre.src-D:before {
+      content: 'D';
+  }
+  .org-src-container>pre.src-ditaa:before {
+      content: 'Ditaa';
+  }
+  .org-src-container>pre.src-dot:before {
+      content: 'Dot';
+  }
+  .org-src-container>pre.src-ebnf:before {
+      content: 'ebnf';
+  }
+  .org-src-container>pre.src-forth:before {
+      content: 'Forth';
+  }
+  .org-src-container>pre.src-F90:before {
+      content: 'Fortran';
+  }
+  .org-src-container>pre.src-gnuplot:before {
+      content: 'Gnuplot';
+  }
+  .org-src-container>pre.src-haskell:before {
+      content: 'Haskell';
+  }
+  .org-src-container>pre.src-io:before {
+      content: 'Io';
+  }
+  .org-src-container>pre.src-java:before {
+      content: 'Java';
+  }
+  .org-src-container>pre.src-latex:before {
+      content: 'LaTeX';
+  }
+  .org-src-container>pre.src-ledger:before {
+      content: 'Ledger';
+  }
+  .org-src-container>pre.src-ly:before {
+      content: 'Lilypond';
+  }
+  .org-src-container>pre.src-lisp:before {
+      content: 'Lisp';
+  }
+  .org-src-container>pre.src-makefile:before {
+      content: 'Make';
+  }
+  .org-src-container>pre.src-matlab:before {
+      content: 'Matlab';
+  }
+  .org-src-container>pre.src-max:before {
+      content: 'Maxima';
+  }
+  .org-src-container>pre.src-mscgen:before {
+      content: 'Mscgen';
+  }
+  .org-src-container>pre.src-Caml:before {
+      content: 'Objective';
+  }
+  .org-src-container>pre.src-octave:before {
+      content: 'Octave';
+  }
+  .org-src-container>pre.src-org:before {
+      content: 'Org';
+  }
+  .org-src-container>pre.src-perl:before {
+      content: 'Perl';
+  }
+  .org-src-container>pre.src-picolisp:before {
+      content: 'Picolisp';
+  }
+  .org-src-container>pre.src-plantuml:before {
+      content: 'PlantUML';
+  }
+  .org-src-container>pre.src-python:before {
+      content: 'Python';
+  }
+  .org-src-container>pre.src-ruby:before {
+      content: 'Ruby';
+  }
+  .org-src-container>pre.src-sass:before {
+      content: 'Sass';
+  }
+  .org-src-container>pre.src-scala:before {
+      content: 'Scala';
+  }
+  .org-src-container>pre.src-scheme:before {
+      content: 'Scheme';
+  }
+  .org-src-container>pre.src-screen:before {
+      content: 'Screen';
+  }
+  .org-src-container>pre.src-sed:before {
+      content: 'Sed';
+  }
+  .org-src-container>pre.src-shell:before {
+      content: 'shell';
+  }
+  .org-src-container>pre.src-shen:before {
+      content: 'Shen';
+  }
+  .org-src-container>pre.src-sql:before {
+      content: 'SQL';
+  }
+  .org-src-container>pre.src-sqlite:before {
+      content: 'SQLite';
+  }
+  .org-src-container>pre.src-stan:before {
+      content: 'Stan';
+  }
+  .org-src-container>pre.src-vala:before {
+      content: 'Vala';
+  }
+  .org-src-container>pre.src-axiom:before {
+      content: 'Axiom';
+  }
+  .org-src-container>pre.src-browser:before {
+      content: 'HTML';
+  }
+  .org-src-container>pre.src-cypher:before {
+      content: 'Neo4j';
+  }
+  .org-src-container>pre.src-elixir:before {
+      content: 'Elixir';
+  }
+  .org-src-container>pre.src-request:before {
+      content: 'http';
+  }
+  .org-src-container>pre.src-ipython:before {
+      content: 'iPython';
+  }
+  .org-src-container>pre.src-kotlin:before {
+      content: 'Kotlin';
+  }
+  .org-src-container>pre.src-Flavored Erlang  lfe:before {
+      content: 'Lisp';
+  }
+  .org-src-container>pre.src-mongo:before {
+      content: 'MongoDB';
+  }
+  .org-src-container>pre.src-prolog:before {
+      content: 'Prolog';
+  }
+  .org-src-container>pre.src-rec:before {
+      content: 'rec';
+  }
+  .org-src-container>pre.src-ML  sml:before {
+      content: 'Standard';
+  }
+  .org-src-container>pre.src-Translate  translate:before {
+      content: 'Google';
+  }
+  .org-src-container>pre.src-typescript:before {
+      content: 'Typescript';
+  }
+  .org-src-container>pre.src-rust:before {
+      content: 'Rust';
+  }
+
+  .inlinetask {
+      background: #ffffcc;
+      border: 2px solid gray;
+      margin: 10px;
+      padding: 10px;
+  }
+
+  #org-div-home-and-up {
+      font-size: 70%;
+      text-align: right;
+      white-space: nowrap;
+  }
+
+  .linenr {
+      font-size: $smaller;
+  }
+
+  .code-highlighted {
+      background-color: #ffff00;
+  }
+
+  #bibliography {
+      font-size: $smaller;
+  }
+
+  #bibliography table {
+      width: 100%;
+  }
+
+  .creator {
+      display: block;
+  }
+
+  @media screen and (min-width: 600px) {
+      .creator {
+          display: inline;
+          float: right;
+      }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* ==========================================================================
+  The typical Github Style:
+     ========================================================================== */
+
+
+
+
+
+  /**
+   * Correct `block` display not defined in IE 8/9.
+   */
+
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  main,
+  nav,
+  section,
+  summary {
+      display: block;
+  }
+
+  /**
+   * Correct `inline-block` display not defined in IE 8/9.
+   */
+
+  audio,
+  canvas,
+  video {
+      display: inline-block;
+  }
+
+  /**
+   * Prevent modern browsers from displaying `audio` without controls.
+   * Remove excess height in iOS 5 devices.
+   */
+
+  audio:not([controls]) {
+      display: none;
+      height: 0;
+  }
+
+  /**
+   * Address `[hidden]` styling not present in IE 8/9.
+   * Hide the `template` element in IE, Safari, and Firefox < 22.
+   */
+
+  [hidden],
+  template {
+      display: none;
+  }
+
+  /* ==========================================================================
+     Base
+     ========================================================================== */
+
+  /**
+   * 1. Set default font family to sans-serif.
+   * 2. Prevent iOS text size adjust after orientation change, without disabling
+   *    user zoom.
+   */
+
+  html {
+      font-family: sans-serif; /* 1 */
+      -ms-text-size-adjust: 100%; /* 2 */
+      -webkit-text-size-adjust: 100%; /* 2 */
+  }
+
+  /**
+   * Remove default margin.
+   */
+
+  body {
+      margin: 0;
+  }
+
+  /* ==========================================================================
+     Links
+     ========================================================================== */
+
+  /**
+   * Remove the gray background color from active links in IE 10.
+   */
+
+  a {
+      background: transparent;
+  }
+
+  /**
+   * Address `outline` inconsistency between Chrome and other browsers.
+   */
+
+  a:focus {
+      outline: thin dotted;
+  }
+
+  /**
+   * Improve readability when focused and also mouse hovered in all browsers.
+   */
+
+  a:active,
+  a:hover {
+      outline: 0;
+  }
+
+  /* ==========================================================================
+     Typography
+     ========================================================================== */
+
+  /**
+   * Address variable `h1` font-size and margin within `section` and `article`
+   * contexts in Firefox 4+, Safari 5, and Chrome.
+   */
+
+  h1 {
+      font-size: 2em;
+      margin: 0.67em 0;
+  }
+
+  /**
+   * Address styling not present in IE 8/9, Safari 5, and Chrome.
+   */
+
+  abbr[title] {
+      border-bottom: 1px dotted;
+  }
+
+  /**
+   * Address style set to `bolder` in Firefox 4+, Safari 5, and Chrome.
+   */
+
+  b,
+  strong {
+      font-weight: bold;
+  }
+
+  /**
+   * Address styling not present in Safari 5 and Chrome.
+   */
+
+  dfn {
+      font-style: italic;
+  }
+
+  /**
+   * Address differences between Firefox and other browsers.
+   */
+
+  hr {
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+      height: 0;
+  }
+
+  /**
+   * Address styling not present in IE 8/9.
+   */
+
+  mark {
+      background: #ff0;
+      color: #000;
+  }
+
+  /**
+   * Correct font family set oddly in Safari 5 and Chrome.
+   */
+
+  code,
+  kbd,
+  pre,
+  samp {
+      font-family: monospace, serif;
+      font-size: 1em;
+  }
+
+  /**
+   * Improve readability of pre-formatted text in all browsers.
+   */
+
+  pre {
+      white-space: pre-wrap;
+  }
+
+  /**
+   * Set consistent quote types.
+   */
+
+  q {
+      quotes: "\201C" "\201D" "\2018" "\2019";
+  }
+
+  /**
+   * Address inconsistent and variable font size in all browsers.
+   */
+
+  small {
+      font-size: 80%;
+  }
+
+  /**
+   * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+   */
+
+  sub,
+  sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline;
+  }
+
+  sup {
+      top: -0.5em;
+  }
+
+  sub {
+      bottom: -0.25em;
+  }
+
+  /* ==========================================================================
+     Embedded content
+     ========================================================================== */
+
+  /**
+   * Remove border when inside `a` element in IE 8/9.
+   */
+
+  img {
+      border: 0;
+  }
+
+  /**
+   * Correct overflow displayed oddly in IE 9.
+   */
+
+  svg:not(:root) {
+      overflow: hidden;
+  }
+
+  /* ==========================================================================
+     Figures
+     ========================================================================== */
+
+  /**
+   * Address margin not present in IE 8/9 and Safari 5.
+   */
+
+  figure {
+      margin: 0;
+  }
+
+  /* ==========================================================================
+     Forms
+     ========================================================================== */
+
+  /**
+   * Define consistent border, margin, and padding.
+   */
+
+  fieldset {
+      border: 1px solid #c0c0c0;
+      margin: 0 2px;
+      padding: 0.35em 0.625em 0.75em;
+  }
+
+  /**
+   * 1. Correct `color` not being inherited in IE 8/9.
+   * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+   */
+
+  legend {
+      border: 0; /* 1 */
+      padding: 0; /* 2 */
+  }
+
+  /**
+   * 1. Correct font family not being inherited in all browsers.
+   * 2. Correct font size not being inherited in all browsers.
+   * 3. Address margins set differently in Firefox 4+, Safari 5, and Chrome.
+   */
+
+  button,
+  input,
+  select,
+  textarea {
+      font-family: inherit; /* 1 */
+      font-size: 100%; /* 2 */
+      margin: 0; /* 3 */
+  }
+
+  /**
+   * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+   * the UA stylesheet.
+   */
+
+  button,
+  input {
+      line-height: normal;
+  }
+
+  /**
+   * Address inconsistent `text-transform` inheritance for `button` and `select`.
+   * All other form control elements do not inherit `text-transform` values.
+   * Correct `button` style inheritance in Chrome, Safari 5+, and IE 8+.
+   * Correct `select` style inheritance in Firefox 4+ and Opera.
+   */
+
+  button,
+  select {
+      text-transform: none;
+  }
+
+  /**
+   * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+   *    and `video` controls.
+   * 2. Correct inability to style clickable `input` types in iOS.
+   * 3. Improve usability and consistency of cursor style between image-type
+   *    `input` and others.
+   */
+
+  button,
+  html input[type="button"], /* 1 */
+  input[type="reset"],
+  input[type="submit"] {
+      -webkit-appearance: button; /* 2 */
+      cursor: pointer; /* 3 */
+  }
+
+  /**
+   * Re-set default cursor for disabled elements.
+   */
+
+  button[disabled],
+  html input[disabled] {
+      cursor: default;
+  }
+
+  /**
+   * 1. Address box sizing set to `content-box` in IE 8/9/10.
+   * 2. Remove excess padding in IE 8/9/10.
+   */
+
+  input[type="checkbox"],
+  input[type="radio"] {
+      box-sizing: border-box; /* 1 */
+      padding: 0; /* 2 */
+  }
+
+  /**
+   * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+   * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+   *    (include `-moz` to future-proof).
+   */
+
+  input[type="search"] {
+      -webkit-appearance: textfield; /* 1 */
+      -moz-box-sizing: content-box;
+      -webkit-box-sizing: content-box; /* 2 */
+      box-sizing: content-box;
+  }
+
+  /**
+   * Remove inner padding and search cancel button in Safari 5 and Chrome
+   * on OS X.
+   */
+
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration {
+      -webkit-appearance: none;
+  }
+
+  /**
+   * Remove inner padding and border in Firefox 4+.
+   */
+
+  button::-moz-focus-inner,
+  input::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+  }
+
+  /**
+   * 1. Remove default vertical scrollbar in IE 8/9.
+   * 2. Improve readability and alignment in all browsers.
+   */
+
+  textarea {
+      overflow: auto; /* 1 */
+      vertical-align: top; /* 2 */
+  }
+
+  /* ==========================================================================
+     Tables
+     ========================================================================== */
+
+  /**
+   * Remove most spacing between table cells.
+   */
+
+  table {
+      border-collapse: collapse;
+      border-spacing: 0;
+  }
+
+  .go-top {
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+  text-decoration: none;
+  background-color: #E0E0E0;
+  font-size: 12px;
+  padding: 1em;
+  display: inline;
+  }
+
+  /* Github css  max-width: 70em for decent width size*/
+
+  html,body{        margin: auto;
+      padding-right: 1em;
+      padding-left: 1em;
+      max-width: 70em; color:black;}*:not('#mkdbuttons'){margin:0;padding:0}body{font:13.34px helvetica,arial,freesans,clean,sans-serif;-webkit-font-smoothing:subpixel-antialiased;line-height:1.4;padding:3px;background:#fff;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px}p{margin:1em 0}a{color:#4183c4;text-decoration:none}body{background-color:#fff;padding:30px;margin:15px;font-size:14px;line-height:1.6}body>*:first-child{margin-top:0!important}body>*:last-child{margin-bottom:0!important}@media screen{body{box-shadow:0 0 0 1px #cacaca,0 0 0 4px #eee}}h1,h2,h3,h4,h5,h6{margin:20px 0 10px;padding:0;font-weight:bold;-webkit-font-smoothing:subpixel-antialiased;cursor:text}h1{font-size:28px;color:#000}h2{font-size:24px;border-bottom:1px solid #ccc;color:#000}h3{font-size:18px;color:#333}h4{font-size:16px;color:#333}h5{font-size:14px;color:#333}h6{color:#777;font-size:14px}p,blockquote,table,pre{margin:15px 0}ul{padding-left:30px}ol{padding-left:30px}ol li ul:first-of-type{margin-top:0}hr{background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;border:0 none;color:#ccc;height:4px;padding:0}body>h2:first-child{margin-top:0;padding-top:0}body>h1:first-child{margin-top:0;padding-top:0}body>h1:first-child+h2{margin-top:0;padding-top:0}body>h3:first-child,body>h4:first-child,body>h5:first-child,body>h6:first-child{margin-top:0;padding-top:0}a:first-child h1,a:first-child h2,a:first-child h3,a:first-child h4,a:first-child h5,a:first-child h6{margin-top:0;padding-top:0}h1+p,h2+p,h3+p,h4+p,h5+p,h6+p,ul li>:first-child,ol li>:first-child{margin-top:0}dl{padding:0}dl dt{font-size:14px;font-weight:bold;font-style:italic;padding:0;margin:15px 0 5px}dl dt:first-child{padding:0}dl dt>:first-child{margin-top:0}dl dt>:last-child{margin-bottom:0}dl dd{margin:0 0 15px;padding:0 15px}dl dd>:first-child{margin-top:0}dl dd>:last-child{margin-bottom:0}blockquote{border-left:4px solid #DDD;padding:0 15px;color:#777}blockquote>:first-child{margin-top:0}blockquote>:last-child{margin-bottom:0}table{border-collapse:collapse;border-spacing:0;font-size:100%;font:inherit}table th{font-weight:bold;border:1px solid #ccc;padding:6px 13px}table td{border:1px solid #ccc;padding:6px 13px}table tr{border-top:1px solid #ccc;background-color:#fff}table tr:nth-child(2n){background-color:#f8f8f8}img{max-width:100%}code,tt{margin:0 2px;padding:0 5px;white-space:nowrap;border:1px solid #eaeaea;background-color:#f8f8f8;border-radius:3px;font-family:Consolas,'Liberation Mono',Courier,monospace;font-size:12px;color:#333}pre>code{margin:0;padding:0;white-space:pre;border:0;background:transparent}.highlight pre{background-color:#f8f8f8;border:1px solid #ccc;font-size:13px;line-height:19px;overflow:auto;padding:6px 10px;border-radius:3px}pre{background-color:#f8f8f8;border:1px solid #ccc;font-size:13px;line-height:19px;overflow:auto;padding:6px 10px;border-radius:3px}pre code,pre tt{background-color:transparent;border:0}.poetry pre{font-family:Georgia,Garamond,serif!important;font-style:italic;font-size:110%!important;line-height:1.6em;display:block;margin-left:1em}.poetry pre code{font-family:Georgia,Garamond,serif!important;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;hyphens:auto;white-space:pre-wrap}sup,sub,a.footnote{font-size:1.4ex;height:0;line-height:1;vertical-align:super;position:relative}sub{vertical-align:sub;top:-1px}@media print{body{background:#fff}img,pre,blockquote,table,figure{page-break-inside:avoid}body{background:#fff;border:0}code{background-color:#fff;color:#333!important;padding:0 .2em;border:1px solid #dedede}pre{background:#fff}pre code{background-color:white!important;overflow:visible}}@media screen{body.inverted{color:#eee!important;border-color:#555;box-shadow:none}.inverted body,.inverted hr .inverted p,.inverted td,.inverted li,.inverted h1,.inverted h2,.inverted h3,.inverted h4,.inverted h5,.inverted h6,.inverted th,.inverted .math,.inverted caption,.inverted dd,.inverted dt,.inverted blockquote{color:#eee!important;border-color:#555;box-shadow:none}.inverted td,.inverted th{background:#333}.inverted h2{border-color:#555}.inverted hr{border-color:#777;border-width:1px!important}::selection{background:rgba(157,193,200,0.5)}h1::selection{background-color:rgba(45,156,208,0.3)}h2::selection{background-color:rgba(90,182,224,0.3)}h3::selection,h4::selection,h5::selection,h6::selection,li::selection,ol::selection{background-color:rgba(133,201,232,0.3)}code::selection{background-color:rgba(0,0,0,0.7);color:#eee}code span::selection{background-color:rgba(0,0,0,0.7)!important;color:#eee!important}a::selection{background-color:rgba(255,230,102,0.2)}.inverted a::selection{background-color:rgba(255,230,102,0.6)}td::selection,th::selection,caption::selection{background-color:rgba(180,237,95,0.5)}.inverted{background:#0b2531;background:#252a2a}.inverted body{background:#252a2a}.inverted a{color:#acd1d5}}.highlight .c{color:#998;font-style:italic}.highlight .err{color:#a61717;background-color:#e3d2d2}.highlight .k,.highlight .o{font-weight:bold}.highlight .cm{color:#998;font-style:italic}.highlight .cp{color:#999;font-weight:bold}.highlight .c1{color:#998;font-style:italic}.highlight .cs{color:#999;font-weight:bold;font-style:italic}.highlight .gd{color:#000;background-color:#fdd}.highlight .gd .x{color:#000;background-color:#faa}.highlight .ge{font-style:italic}.highlight .gr{color:#a00}.highlight .gh{color:#999}.highlight .gi{color:#000;background-color:#dfd}.highlight .gi .x{color:#000;background-color:#afa}.highlight .go{color:#888}.highlight .gp{color:#555}.highlight .gs{font-weight:bold}.highlight .gu{color:#800080;font-weight:bold}.highlight .gt{color:#a00}.highlight .kc,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr{font-weight:bold}.highlight .kt{color:#458;font-weight:bold}.highlight .m{color:#099}.highlight .s{color:#d14}.highlight .na{color:#008080}.highlight .nb{color:#0086b3}.highlight .nc{color:#458;font-weight:bold}.highlight .no{color:#008080}.highlight .ni{color:#800080}.highlight .ne,.highlight .nf{color:#900;font-weight:bold}.highlight .nn{color:#555}.highlight .nt{color:#000080}.highlight .nv{color:#008080}.highlight .ow{font-weight:bold}.highlight .w{color:#bbb}.highlight .mf,.highlight .mh,.highlight .mi,.highlight .mo{color:#099}.highlight .sb,.highlight .sc,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .si,.highlight .sx{color:#d14}.highlight .sr{color:#009926}.highlight .s1{color:#d14}.highlight .ss{color:#990073}.highlight .bp{color:#999}.highlight .vc,.highlight .vg,.highlight .vi{color:#008080}.highlight .il{color:#099}.highlight .gc{color:#999;background-color:#eaf2f5}.type-csharp .highlight .k,.type-csharp .highlight .kt{color:#00F}.type-csharp .highlight .nf{color:#000;font-weight:normal}.type-csharp .highlight .nc{color:#2b91af}.type-csharp .highlight .nn{color:#000}.type-csharp .highlight .s,.type-csharp .highlight .sc{color:#a31515}
+
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">(04) Binomial Distribution and Matrices</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#practical-04">Practical 04</a>
+<ul>
+<li><a href="#preamble">Preamble</a></li>
+<li><a href="#binomial-distribution-and-viewing-elements-in-a-matrix">(01) Binomial Distribution and Viewing Elements in a Matrix</a>
+<ul>
+<li><a href="#create-binomial-values">Create Binomial Values</a></li>
+<li><a href="#create-a-matrix-of-binomial-values">Create a matrix of Binomial Values</a></li>
+</ul></li>
+<li><a href="#visualise-data-based-on-a-condition">(02) Visualise Data Based on a Condition</a>
+<ul>
+<li><a href="#create-the-conditional-matrix">Create the Conditional Matrix</a></li>
+<li><a href="#plot-the-conditional-matrix">Plot the Conditional Matrix</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="practical-04">Practical 04</h1>
+<h2 id="preamble">Preamble</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">## (01) Clean up the Iris Data</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># Preamble</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">## Install Pacman</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>load.pac &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  </span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="cf">if</span>(<span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)){</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb1-9"><a href="#cb1-9"></a>  }<span class="cf">else</span>{</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  }</span>
+<span id="cb1-13"><a href="#cb1-13"></a>  </span>
+<span id="cb1-14"><a href="#cb1-14"></a>  pacman<span class="op">::</span><span class="kw">p_load</span>(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,</span>
+<span id="cb1-15"><a href="#cb1-15"></a>                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,</span>
+<span id="cb1-16"><a href="#cb1-16"></a>                 swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart)</span>
+<span id="cb1-17"><a href="#cb1-17"></a>  </span>
+<span id="cb1-18"><a href="#cb1-18"></a>}</span>
+<span id="cb1-19"><a href="#cb1-19"></a></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="kw">load.pac</span>()</span></code></pre></div>
+<pre><code>## Loading required package: pacman</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># mise()</span></span></code></pre></div>
+<p>For the project it will be necessary to:</p>
+<ol type="1">
+<li>Generate Random Binomial Distributions</li>
+<li>View elements of a matrix</li>
+<li>Use:
+<ul>
+<li>Loops, and</li>
+<li>Conditional Statements</li>
+</ul></li>
+<li>Visualise Results</li>
+</ol>
+<h2 id="binomial-distribution-and-viewing-elements-in-a-matrix">(01) Binomial Distribution and Viewing Elements in a Matrix</h2>
+<h3 id="create-binomial-values">Create Binomial Values</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>n &lt;-<span class="st"> </span><span class="dv">10</span> <span class="co"># Matrix Size</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>binom_values &lt;-<span class="st"> </span><span class="kw">rbinom</span>(n<span class="op">^</span><span class="dv">2</span>, <span class="dt">size =</span> <span class="dv">20</span>, <span class="dt">prob =</span> <span class="fl">0.45</span>)</span></code></pre></div>
+<h3 id="create-a-matrix-of-binomial-values">Create a matrix of Binomial Values</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>(starting_point &lt;-<span class="st"> </span><span class="kw">matrix</span>(binom_values, <span class="dt">nrow =</span> <span class="dv">10</span>))</span></code></pre></div>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+##  [1,]   10    6    8    9   10   10    8   13    7     8
+##  [2,]   13    5    8   11    7    9    6    8    8    10
+##  [3,]    5    3   10    7    7   12   10    9    9     9
+##  [4,]   11   11    6    8   12    9    8    9    8     9
+##  [5,]    7    7   11    9    7   11   10   11   11     7
+##  [6,]    7    6    6    8    7   11    9    8   12    16
+##  [7,]    9    9    7   11    8   14   10    9    9    10
+##  [8,]    6   11   10   12    7   10   11    5   10     6
+##  [9,]    6    8   10    8   10   12    7    7    8     8
+## [10,]   12    6    9    8   10   12   10   11   10     8</code></pre>
+<h4 id="looping-through-a-matrix">Looping through a matrix</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(starting_point)) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="cf">for</span> (c <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(starting_point)) {</span>
+<span id="cb7-3"><a href="#cb7-3"></a>      <span class="kw">cat</span>(starting_point[r,c])</span>
+<span id="cb7-4"><a href="#cb7-4"></a>  }</span>
+<span id="cb7-5"><a href="#cb7-5"></a> <span class="kw">cat</span>(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6"></a>}</span></code></pre></div>
+<pre><code>## 10689101081378
+## 1358117968810
+## 5310771210999
+## 1111681298989
+## 771197111011117
+## 7668711981216
+## 99711814109910
+## 6111012710115106
+## 6810810127788
+## 1269810121011108</code></pre>
+<h2 id="visualise-data-based-on-a-condition">(02) Visualise Data Based on a Condition</h2>
+<h3 id="create-the-conditional-matrix">Create the Conditional Matrix</h3>
+<p>In order to visualise a matrix based on a condition it is necessary to create a truth matrix, there are two ways to do this, the ordinary way:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>zero &lt;-<span class="st"> </span>starting_point<span class="op">&gt;</span><span class="dv">10</span></span></code></pre></div>
+<p>and with nested <code>for</code> loops, which may be necessary for some certain tasks:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(starting_point)) {</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="cf">for</span> (c <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(starting_point)) {</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    <span class="cf">if</span> (starting_point[r, c] <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span>) {</span>
+<span id="cb10-4"><a href="#cb10-4"></a>      zero[r, c] &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>    }</span>
+<span id="cb10-6"><a href="#cb10-6"></a>  }</span>
+<span id="cb10-7"><a href="#cb10-7"></a>}</span>
+<span id="cb10-8"><a href="#cb10-8"></a>zero</span></code></pre></div>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+##  [1,]    0    1    1    1    0    0    1    1    1     1
+##  [2,]    1    1    1    1    1    1    1    1    1     0
+##  [3,]    1    1    0    1    1    1    0    1    1     1
+##  [4,]    1    1    1    1    1    1    1    1    1     1
+##  [5,]    1    1    1    1    1    1    0    1    1     1
+##  [6,]    1    1    1    1    1    1    1    1    1     1
+##  [7,]    1    1    1    1    1    1    0    1    1     0
+##  [8,]    1    1    0    1    1    0    1    1    0     1
+##  [9,]    1    1    0    1    0    1    1    1    1     1
+## [10,]    1    1    1    1    0    1    0    1    0     1</code></pre>
+<h3 id="plot-the-conditional-matrix">Plot the Conditional Matrix</h3>
+<h4 id="base-plot">Base Plot</h4>
+<p>The base plot involves using <code>par</code> to set graphical parameters to to initialise a blank canvas, rotating the matrix 90 degrees clockwise and then passing that rotated matrix to the <code>image()</code> function:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Create a Plotting Region</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="kw">par</span>(<span class="dt">pty =</span> <span class="st">&quot;s&quot;</span>, <span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>))</span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co"># Rotate matrix 90-degrees clockwise.</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a>rotate &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb12-6"><a href="#cb12-6"></a>    <span class="kw">t</span>(<span class="kw">apply</span>(x, <span class="dv">2</span>, rev))</span>
+<span id="cb12-7"><a href="#cb12-7"></a>}</span>
+<span id="cb12-8"><a href="#cb12-8"></a></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co"># create the image</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="kw">image</span>(<span class="kw">rotate</span>(zero), <span class="dt">col =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">6</span>), <span class="dt">axes =</span> <span class="ot">FALSE</span>, <span class="dt">frame.plot =</span> <span class="ot">TRUE</span>, <span class="dt">main =</span> <span class="st">&quot;Values &gt; 10&quot;</span>)</span></code></pre></div>
+<figure>
+<img src="data:image/png;base64,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1sADnz9M7CzAC7MALxW6X+z1Gg544IEHHvjeBzzwwAMPfO8DHnjggQe+9wEPPPDAA9/7gAceeOCB733AAw888MD3PuCBBx544Hsf8MADDzzwvQ944IEHHvjeBzzwwAMPfO8DHnjggQe+9wEPPPDAA9/7gAceeOCB733AAw888MD3PuCBBx544Hsf8MBnwYcWCx/6euzowCvXC309dnTgleuFvh47OvDK9UJfjx0deOV6oa/Hjg68cr3Q12NHB165XujrsaMDr1wv9PXY0YFXrhf6euzowCvXC309dnTgleuFvh47OvDK9UJfjx0deOV6oa/Hjg68cr3Q12NHB165XujrsaMDr1wv9PXY0YFXrhf6euzowCvXC309dnTgleuFvh47OvDK9UJfjx0deOV6oa/Hjg68cr3Q12NHB165XujrsaMDr1wv9PXY0YFXrhf6euzowCvXC309dnTgleuFvh47OvDK9UJfjx0deOV6oa/Hjg68cr3Q12NHB165XujrsaMDr1wv9PXY0YFXrhf6euzowCvXC309dnTgleuFvh47OvDK9UJfjx0deOV6oa/Hjg68cr3Q12NHB165XujrsaMDr1wv9PXY0YFXrhf6euzowCvXC309dnTgleuFvh47OvDK9UJfjx0deOV6oa/Hjg68cr3Q12NHnwn81uf/1mwfGq0uvR76+PNbZwD/9p+ob+05PgN4sgh404A3DXjTgDcNeNP+C+MsfOKes9WMAAAAAElFTkSuQmCC" alt /><figcaption>plot of chunk unnamed-chunk-7</figcaption>
+</figure>
+<h5 id="rotation">Rotation</h5>
+<p>It is necessary to rotate the matrix 90 degrees clockwise before passing it to the <code>image()</code> function in order for it to line up correctly, this is achieved by reversing the order of the columns (rotating around a horizontal line) and then rotating around the line y=x or <code>#1 = #2</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>vals &lt;-<span class="st"> </span><span class="kw">c</span>()</span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="cf">for</span> (c <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
+<span id="cb13-5"><a href="#cb13-5"></a>        vals &lt;-<span class="st"> </span><span class="kw">c</span>(vals, <span class="kw">paste0</span>(c, <span class="st">&quot;,&quot;</span>, r))</span>
+<span id="cb13-6"><a href="#cb13-6"></a>    }</span>
+<span id="cb13-7"><a href="#cb13-7"></a>}</span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a>(dummy_mat &lt;-<span class="st"> </span><span class="kw">matrix</span>(vals, <span class="dt">nrow =</span> <span class="kw">sqrt</span>(<span class="kw">length</span>(vals))))</span></code></pre></div>
+<pre><code>##      [,1]  [,2]  [,3]  [,4]  [,5] 
+## [1,] &quot;1,1&quot; &quot;1,2&quot; &quot;1,3&quot; &quot;1,4&quot; &quot;1,5&quot;
+## [2,] &quot;2,1&quot; &quot;2,2&quot; &quot;2,3&quot; &quot;2,4&quot; &quot;2,5&quot;
+## [3,] &quot;3,1&quot; &quot;3,2&quot; &quot;3,3&quot; &quot;3,4&quot; &quot;3,5&quot;
+## [4,] &quot;4,1&quot; &quot;4,2&quot; &quot;4,3&quot; &quot;4,4&quot; &quot;4,5&quot;
+## [5,] &quot;5,1&quot; &quot;5,2&quot; &quot;5,3&quot; &quot;5,4&quot; &quot;5,5&quot;</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">rotate</span>(dummy_mat)</span></code></pre></div>
+<pre><code>##      [,1]  [,2]  [,3]  [,4]  [,5] 
+## [1,] &quot;5,1&quot; &quot;4,1&quot; &quot;3,1&quot; &quot;2,1&quot; &quot;1,1&quot;
+## [2,] &quot;5,2&quot; &quot;4,2&quot; &quot;3,2&quot; &quot;2,2&quot; &quot;1,2&quot;
+## [3,] &quot;5,3&quot; &quot;4,3&quot; &quot;3,3&quot; &quot;2,3&quot; &quot;1,3&quot;
+## [4,] &quot;5,4&quot; &quot;4,4&quot; &quot;3,4&quot; &quot;2,4&quot; &quot;1,4&quot;
+## [5,] &quot;5,5&quot; &quot;4,5&quot; &quot;3,5&quot; &quot;2,5&quot; &quot;1,5&quot;</code></pre>
+<p>The image function will allocate values along the cartesian plane:</p>
+<ul>
+<li>from (0, 0) along the <span class="math inline"><em>x</em></span> - axis and then</li>
+<li>from (0, 1) along the <span class="math inline"><em>x</em></span> -axis and then</li>
+<li>from (0, 2) along the <span class="math inline"><em>x</em></span> -axis and so on</li>
+<li>…</li>
+</ul>
+<p>but the values will be read as vertical columns (say the matrix has 5 rows as above):</p>
+<ul>
+<li>from [1,1] to [5, 1]</li>
+<li>from [2,1] to [5, 2]</li>
+<li>from [3,1] to [5, 3]</li>
+<li>…</li>
+</ul>
+<p>This has the effect of the matrix being plotted at a rotation of 90 degrees ACW and hence the input data must be rotated 90 degrees CW.</p>
+<h4 id="using-ggplot2">Using <code>ggplot2</code></h4>
+<p>Generally to make a heatmat in ggplot2, use the following syntax:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">set.seed</span>(<span class="dv">8398</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>x       &lt;-<span class="st"> </span>LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</span>
+<span id="cb17-3"><a href="#cb17-3"></a>y       &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;var&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</span>
+<span id="cb17-4"><a href="#cb17-4"></a>data    &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="st">&quot;x&quot;</span> =<span class="st"> </span>x, <span class="st">&quot;y&quot;</span> =<span class="st"> </span>y)</span>
+<span id="cb17-5"><a href="#cb17-5"></a>data<span class="op">$</span>z  &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb17-6"><a href="#cb17-6"></a>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
+<pre><code>##   x     y z
+## 1 A var 1 1
+## 2 B var 1 1
+## 3 C var 1 2
+## 4 D var 1 1
+## 5 E var 1 1
+## 6 F var 1 2</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span>z)) <span class="op">+</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="st">  </span><span class="kw">geom_tile</span>()</span></code></pre></div>
+<figure>
+<img src="data:image/png;base64,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" alt /><figcaption>plot of chunk unnamed-chunk-9</figcaption>
+</figure>
+<p>The <code>expand.grid</code> function basically just treats <code>x</code> and <code>y</code> as the axis of a data Frame that is then transformed into a <em>longer</em> or <em>tidy</em> format.</p>
+<p>The benefit to using <code>expand.grid</code> is that <code>x</code> and <code>y</code> will always be arranged as they would be on a cartesian plane and then the data is transformed into a tidy format.</p>
+<p>You’ll notice, if you inspect the output of <code>expand.grid</code> that the values are entered into the data frame from ‘bottom-to-top, left-to-right’, hence if:</p>
+<ul>
+<li>the rows of a matrix are considered the <span class="math inline"><em>y</em></span> -axis, and</li>
+<li>the columns the <span class="math inline"><em>x</em></span> -axis</li>
+</ul>
+<p>The values of the matrix would feed into the expand grid row-wise, starting from the bottom moving up, <strong><em>R</em></strong> converts matrices to vectors column-wise from left to right, so it would be necessary to rotate the matrix <a href="https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/">90 degrees clockwise</a>, this is what’s done by the <code>rotate()</code> function.</p>
+<p>When using <code>ggplot2</code> it is necessary to make sure that row and column names are ordered factors otherwise they will be plotted incorectly (i.e as floating points or out of order), So first use the <code>paste()</code> function to create nice column and row names:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Functions to Name the Rows and Columns</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>make_colnames &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb20-3"><a href="#cb20-3"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;col&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat)),</span>
+<span id="cb20-4"><a href="#cb20-4"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;col&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat)),</span>
+<span id="cb20-5"><a href="#cb20-5"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb20-6"><a href="#cb20-6"></a>}</span>
+<span id="cb20-7"><a href="#cb20-7"></a>make_rownames &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb20-8"><a href="#cb20-8"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb20-9"><a href="#cb20-9"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb20-10"><a href="#cb20-10"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb20-11"><a href="#cb20-11"></a>}</span>
+<span id="cb20-12"><a href="#cb20-12"></a></span>
+<span id="cb20-13"><a href="#cb20-13"></a>make_rownames_rev &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb20-14"><a href="#cb20-14"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="kw">nrow</span>(mat)<span class="op">:</span><span class="dv">1</span>),</span>
+<span id="cb20-15"><a href="#cb20-15"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="kw">nrow</span>(mat)<span class="op">:</span><span class="dv">1</span>),</span>
+<span id="cb20-16"><a href="#cb20-16"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb20-17"><a href="#cb20-17"></a>}</span>
+<span id="cb20-18"><a href="#cb20-18"></a></span>
+<span id="cb20-19"><a href="#cb20-19"></a>make_ynames &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb20-20"><a href="#cb20-20"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;y=&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb20-21"><a href="#cb20-21"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;y=&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb20-22"><a href="#cb20-22"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb20-23"><a href="#cb20-23"></a>}</span>
+<span id="cb20-24"><a href="#cb20-24"></a>make_xnames &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb20-25"><a href="#cb20-25"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;x=&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat)),</span>
+<span id="cb20-26"><a href="#cb20-26"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;x=&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb20-27"><a href="#cb20-27"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb20-28"><a href="#cb20-28"></a>}</span>
+<span id="cb20-29"><a href="#cb20-29"></a></span>
+<span id="cb20-30"><a href="#cb20-30"></a></span>
+<span id="cb20-31"><a href="#cb20-31"></a></span>
+<span id="cb20-32"><a href="#cb20-32"></a><span class="kw">rownames</span>(zero) &lt;-<span class="st"> </span><span class="kw">make_rownames</span>(zero)</span>
+<span id="cb20-33"><a href="#cb20-33"></a><span class="kw">colnames</span>(zero) &lt;-<span class="st"> </span><span class="kw">make_colnames</span>(zero)</span></code></pre></div>
+<p>Now plot the matrix using <code>expand.grid()</code></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Create a Cartesian Plane of column names and the rownames backwards</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>    <span class="co"># This function will then convert that table into tidy format.</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a>data &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="st">&quot;x&quot;</span> =<span class="st"> </span><span class="kw">make_colnames</span>(zero), <span class="st">&quot;y&quot;</span> =<span class="st"> </span><span class="kw">make_rownames_rev</span>(zero))</span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co"># Rotate the Matrix 90 degrees clockwise</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>data<span class="op">$</span>z &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rotate</span>(zero))</span>
+<span id="cb21-6"><a href="#cb21-6"></a></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="co"># Print the Plotted Data</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a>zero</span></code></pre></div>
+<pre><code>##        col 1 col 2 col 3 col 4 col 5 col 6 col 7 col 8 col 9 col 10
+## row 1      0     1     1     1     0     0     1     1     1      1
+## row 2      1     1     1     1     1     1     1     1     1      0
+## row 3      1     1     0     1     1     1     0     1     1      1
+## row 4      1     1     1     1     1     1     1     1     1      1
+## row 5      1     1     1     1     1     1     0     1     1      1
+## row 6      1     1     1     1     1     1     1     1     1      1
+## row 7      1     1     1     1     1     1     0     1     1      0
+## row 8      1     1     0     1     1     0     1     1     0      1
+## row 9      1     1     0     1     0     1     1     1     1      1
+## row 10     1     1     1     1     0     1     0     1     0      1</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span>z)) <span class="op">+</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="st">  </span><span class="kw">geom_tile</span>()</span></code></pre></div>
+<figure>
+<img src="data:image/png;base64,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L39Xjx079tZbbz300EPDUa5bxcbGxh//+MfJycki8tBDD02cOHFYy4XD4bKyss8++yw+Pv6BBx4w4Fu6e/fuI0eOiIjf78/Ozl6xYsVwV2xpadm0aVMwGExKSjLmv01TU9PPfvaz1tbWjIyMlStXDmstTecPfkdHx9atW/1+//XXX798+XLdS1+1rpUjer/fX1BQ8N577xlWsaqqyul0lpSUTJs27cCBAwZUrKysXLhwYUlJSVtb2+nTpw2oKCItLS0vvviiYROAn3/++aJFi55++umnn356OFK+m+rqapvNVlhYOGfOnPPnzw93ORFZunSp9tXNmjXLmLn7gwcPOp3O4uLicDhcW1trQMWKiorvfOc7paWljY2Nn3zyybDW6vaDf/jw4YkTJ65bt+7TTz89e/bssJa+qoz4I/qLFy8+++yzIjJt2rRFixZt3brVZDLFxsY++OCDXYfFxsaWlpauW7fOsIozZswYN26cVnqIp/P3s2JOTk5CQkJjY+OlS5fsdrsBFUXk+eefX7p06dB/k/Wz4vnz5z0ez7PPPjtr1qybbrppuMt9+OGHJpNp69atmZmZqampgy7X/4qaM2fOxMTEGFMxKSnpz3/+s9frbWxsNOa/zblz57Kzs0VkxowZtbW1U6ZMGb5a3X7wa2trHQ6HiKSlpdXW1hp89kQEjfgj+t///ve33nprYWFha2treXl5Tk5OYWGhzWarrq7uNjIqKkqXP0v7WTE9PX3cuHFHjx49dOjQvHnzDKiYmpoaFRW1efPmcDhss9kMqHj06NGUlJTrr79+KLUGVHHMmDGzZs2666679u3bd/z48eEu5/f7z507d9dddx05cuSPf/zjoMv1v6Jm9+7dd9xxx1DK9b/i9OnTT58+vXnzZovFMsRrePWz4te+9rW33nrr/PnzLperubl5WGvJ//3Bb2lpGT9+vIiMGzfO7/cPrvRINOKDvqGhYfr06SKyYsWKCxcupKeni0hGRobH44l4xZdffvmdd94pLCwcM2aMARXD4bDVat28efN1113ncrkMqLhnz56amppt27adOHHijTfeMKBidnb2LbfcMn78+Ly8vFOnTg13OZvNtnDhwuTk5BtvvNHtdg+6XP8rikhzc3MgEIiLixtKuf5XfOmll+65556SkpJvfOMb+/fvN6Di4sWL4+Pjd+3aNXny5EF/mYP7wR8zZsyFCxdE5MKFC9fU+ZcjPuhTUlK0+ejnnnvOZrPV1dWJSG1t7RD/7B16xXfffdfv9z/00ENDPLjuf8Vnnnnm5MmTIpKYmBgVNaR/2X5WLC4ufvLJJ1evXj1r1qxbb73VgIovvvjisWPHROTMmTND+ZxEP8tNnz5de+ijjz5KSUkZdLn+VxSR999/f/bs2UOpNaCKly9f1t5iCYVCHR0dBlQ8derU7Nmz16xZ09rampWVNay1upkxY8bHH38sImfOnNF+T1wjzE899VSkexiSKVOm7Ny5c//+/fHx8Xfeeefvfve7Q4cOhUKhJUuWuN1uq9U6efLkzsFVVVU5OTlDvBxNPyu++uqrJ06cePvtt998802r1Tq4icgBVZw4ceIvf/nLd955p62t7c477xzKFWkG9F1tbm4+fvz4DTfcMOhy/a+YmppaVlb29ttvm0ympUuXDnourv/f0j/84Q9/+MMfwuHwnXfeOZRfn/3/lu7evfvmm28e+lVW+llxypQpzz///Ntvv+3z+f7lX/5lKD8d/axos9leeOGFgwcPTp8+/Vvf+taw1tJ0/uBPnDhx3759Bw8eTE5OzsnJGfRXOuLwgSkAUNyIn7oBAPSOoAcAxRH0AKA4gh4AFEfQA4DiCHoAUBxBDwCKI+ihlN/85jd33323iBw5cmT+/PnBYDDSHQGRR9BDKStWrPj888//53/+5/777//v//7voXw8GFDGiL9MMdDN9u3b58yZ85Of/ES7IC0AjuihmqamJrPZ3NDQEOlGgKsFQQ+ldHR0/Ou//utrr7323nvvHTx4MNLtAFcFgh5K2bhx40033TR37txf/OIX9913X2tra6Q7AiKPq1cCgOI4ogcAxRH0AKA4gh4AFEfQA4DiCHoAUBxBDwCKI+gBQHH/HzSsuxBnS2t7AAAAAElFTkSuQmCC" alt /><figcaption>plot of chunk unnamed-chunk-11</figcaption>
+</figure>
+<h5 id="as-a-function">As a Function</h5>
+<p>All together, functions to plot a matrix as a heatmap are:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Rotate matrix 90-degrees clockwise.</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>rotate &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb24-3"><a href="#cb24-3"></a>    <span class="kw">t</span>(<span class="kw">apply</span>(x, <span class="dv">2</span>, rev))</span>
+<span id="cb24-4"><a href="#cb24-4"></a>}</span>
+<span id="cb24-5"><a href="#cb24-5"></a></span>
+<span id="cb24-6"><a href="#cb24-6"></a>rotate_ACW &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb24-7"><a href="#cb24-7"></a>    <span class="kw">t</span>(<span class="kw">apply</span>(x, <span class="dv">1</span>, rev))</span>
+<span id="cb24-8"><a href="#cb24-8"></a>}</span>
+<span id="cb24-9"><a href="#cb24-9"></a>  </span>
+<span id="cb24-10"><a href="#cb24-10"></a></span>
+<span id="cb24-11"><a href="#cb24-11"></a></span>
+<span id="cb24-12"><a href="#cb24-12"></a>  <span class="co"># Create Column Names  </span></span>
+<span id="cb24-13"><a href="#cb24-13"></a>make_colnames &lt;-<span class="st"> </span><span class="cf">function</span>(matrL) {</span>
+<span id="cb24-14"><a href="#cb24-14"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;col&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(matrL)),</span>
+<span id="cb24-15"><a href="#cb24-15"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;col&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(matrL)),</span>
+<span id="cb24-16"><a href="#cb24-16"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb24-17"><a href="#cb24-17"></a>}</span>
+<span id="cb24-18"><a href="#cb24-18"></a></span>
+<span id="cb24-19"><a href="#cb24-19"></a> <span class="co"># Create Row Names</span></span>
+<span id="cb24-20"><a href="#cb24-20"></a>make_rownames &lt;-<span class="st"> </span><span class="cf">function</span>(matrL) {</span>
+<span id="cb24-21"><a href="#cb24-21"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(matrL)),</span>
+<span id="cb24-22"><a href="#cb24-22"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(matrL)),</span>
+<span id="cb24-23"><a href="#cb24-23"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb24-24"><a href="#cb24-24"></a>}</span>
+<span id="cb24-25"><a href="#cb24-25"></a></span>
+<span id="cb24-26"><a href="#cb24-26"></a><span class="co"># Create Row Names with reversed Order</span></span>
+<span id="cb24-27"><a href="#cb24-27"></a>make_rownames &lt;-<span class="st"> </span><span class="cf">function</span>(matrL) {</span>
+<span id="cb24-28"><a href="#cb24-28"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="kw">nrow</span>(matrL)<span class="op">:</span><span class="dv">1</span>),</span>
+<span id="cb24-29"><a href="#cb24-29"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="kw">nrow</span>(matrL)<span class="op">:</span><span class="dv">1</span>),</span>
+<span id="cb24-30"><a href="#cb24-30"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb24-31"><a href="#cb24-31"></a>}</span>
+<span id="cb24-32"><a href="#cb24-32"></a></span>
+<span id="cb24-33"><a href="#cb24-33"></a></span>
+<span id="cb24-34"><a href="#cb24-34"></a>expand.grid_matrix &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb24-35"><a href="#cb24-35"></a>  data &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="st">&quot;x&quot;</span> =<span class="st"> </span><span class="kw">make_colnames</span>(mat), <span class="st">&quot;y&quot;</span> =<span class="st"> </span><span class="kw">make_rownames_rev</span>(mat))</span>
+<span id="cb24-36"><a href="#cb24-36"></a>  data<span class="op">$</span>z &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">rotate</span>(mat))</span>
+<span id="cb24-37"><a href="#cb24-37"></a>  </span>
+<span id="cb24-38"><a href="#cb24-38"></a>  <span class="kw">return</span>(data)</span>
+<span id="cb24-39"><a href="#cb24-39"></a>}</span>
+<span id="cb24-40"><a href="#cb24-40"></a></span>
+<span id="cb24-41"><a href="#cb24-41"></a>(unsquare_test_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">factor</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">36</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="dt">nrow =</span> <span class="dv">9</span>))</span></code></pre></div>
+<pre><code>##       [,1] [,2] [,3] [,4]
+##  [1,] &quot;1&quot;  &quot;1&quot;  &quot;1&quot;  &quot;3&quot; 
+##  [2,] &quot;2&quot;  &quot;1&quot;  &quot;2&quot;  &quot;3&quot; 
+##  [3,] &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;2&quot; 
+##  [4,] &quot;2&quot;  &quot;3&quot;  &quot;1&quot;  &quot;2&quot; 
+##  [5,] &quot;3&quot;  &quot;1&quot;  &quot;1&quot;  &quot;1&quot; 
+##  [6,] &quot;2&quot;  &quot;2&quot;  &quot;3&quot;  &quot;2&quot; 
+##  [7,] &quot;1&quot;  &quot;2&quot;  &quot;2&quot;  &quot;3&quot; 
+##  [8,] &quot;3&quot;  &quot;1&quot;  &quot;2&quot;  &quot;3&quot; 
+##  [9,] &quot;3&quot;  &quot;2&quot;  &quot;2&quot;  &quot;3&quot;</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>data &lt;-<span class="st"> </span><span class="kw">expand.grid_matrix</span>(unsquare_test_matrix)</span>
+<span id="cb26-2"><a href="#cb26-2"></a></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span>z)) <span class="op">+</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="st">  </span><span class="kw">geom_tile</span>()</span></code></pre></div>
+<figure>
+<img src="data:image/png;base64,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" alt /><figcaption>plot of chunk unnamed-chunk-12</figcaption>
+</figure>
+<h5 id="use-data-frames-not-expand.grid">Use Data Frames (not expand.grid())</h5>
+<p>Given that the data is already in the form of a matrix, it may be more convenient (or make the plotting process easier to understand) to work with data frames, in order to do this:</p>
+<ol type="1">
+<li>Reverse the direction of the columns so that columns are numbered from bottom to top (as they would be on a cartesian plane).</li>
+<li>convert the matrix to a dataframe / tibble
+<ul>
+<li>Make sure that any names are ordered factors, otherwise ggplot will rearrange them into alphabetical order.</li>
+</ul></li>
+<li>Transform the data into <code>long</code> format using <code>pivot_longer</code>.</li>
+</ol>
+<p>So first use the <code>paste()</code> function to create nice column and row names:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># Functions to Name the Rows and Columns</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a>make_colnames &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb27-3"><a href="#cb27-3"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;col&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat)),</span>
+<span id="cb27-4"><a href="#cb27-4"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;col&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat)),</span>
+<span id="cb27-5"><a href="#cb27-5"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb27-6"><a href="#cb27-6"></a>}</span>
+<span id="cb27-7"><a href="#cb27-7"></a>make_rownames &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb27-8"><a href="#cb27-8"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb27-9"><a href="#cb27-9"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;row&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb27-10"><a href="#cb27-10"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb27-11"><a href="#cb27-11"></a>}</span>
+<span id="cb27-12"><a href="#cb27-12"></a></span>
+<span id="cb27-13"><a href="#cb27-13"></a>make_ynames &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb27-14"><a href="#cb27-14"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;y=&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb27-15"><a href="#cb27-15"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;y=&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb27-16"><a href="#cb27-16"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb27-17"><a href="#cb27-17"></a>}</span>
+<span id="cb27-18"><a href="#cb27-18"></a>make_xnames &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb27-19"><a href="#cb27-19"></a>                     <span class="kw">factor</span>(<span class="kw">paste</span>(<span class="st">&quot;x=&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mat)),</span>
+<span id="cb27-20"><a href="#cb27-20"></a>                            <span class="dt">levels =</span> <span class="kw">paste</span>(<span class="st">&quot;x=&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mat)),</span>
+<span id="cb27-21"><a href="#cb27-21"></a>                            <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb27-22"><a href="#cb27-22"></a>}</span></code></pre></div>
+<p>Now implement steps 1 to 3; reverse the matrix direction, create a data frame and finally make a tidy data frame:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">set.seed</span>(<span class="dv">9832832</span>)</span>
+<span id="cb28-2"><a href="#cb28-2"></a>zero &lt;-<span class="st"> </span>zero<span class="op">==</span><span class="dv">1</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a></span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="co"># 0. Name the Rows and Columns</span></span>
+<span id="cb28-5"><a href="#cb28-5"></a>  <span class="kw">colnames</span>(zero) &lt;-<span class="st"> </span><span class="kw">make_colnames</span>(zero)</span>
+<span id="cb28-6"><a href="#cb28-6"></a>  <span class="kw">rownames</span>(zero) &lt;-<span class="st"> </span><span class="kw">make_rownames</span>(zero)</span>
+<span id="cb28-7"><a href="#cb28-7"></a>    <span class="co">## Row Names are reversed relative to y-axis values</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a></span>
+<span id="cb28-9"><a href="#cb28-9"></a><span class="co"># 1. Reverse the Columns</span></span>
+<span id="cb28-10"><a href="#cb28-10"></a>  zero_rev_col &lt;-<span class="st"> </span><span class="kw">apply</span>(zero, <span class="dv">2</span>, rev)</span>
+<span id="cb28-11"><a href="#cb28-11"></a></span>
+<span id="cb28-12"><a href="#cb28-12"></a><span class="co"># 2. Create a Data Frame</span></span>
+<span id="cb28-13"><a href="#cb28-13"></a>  z_tb &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(zero_rev_col)</span>
+<span id="cb28-14"><a href="#cb28-14"></a>    <span class="co"># z_tb &lt;- as.data.frame(zero_rev_col) # df is fine</span></span>
+<span id="cb28-15"><a href="#cb28-15"></a>  z_tb &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">r =</span> <span class="kw">rownames</span>(zero_rev_col), z_tb)</span>
+<span id="cb28-16"><a href="#cb28-16"></a>  </span>
+<span id="cb28-17"><a href="#cb28-17"></a>    <span class="co">## Make a Column of Row Names, must be a factor.</span></span>
+<span id="cb28-18"><a href="#cb28-18"></a>      z_tb &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="st">&quot;y&quot;</span> =<span class="st"> </span><span class="kw">make_ynames</span>(zero), z_tb)</span>
+<span id="cb28-19"><a href="#cb28-19"></a>      </span>
+<span id="cb28-20"><a href="#cb28-20"></a><span class="co"># 3. Transform the Data into a long format</span></span>
+<span id="cb28-21"><a href="#cb28-21"></a>z_long &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(z_tb, <span class="dt">cols =</span> <span class="kw">names</span>(z_tb)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],</span>
+<span id="cb28-22"><a href="#cb28-22"></a>                       <span class="dt">names_to =</span> <span class="st">&quot;x&quot;</span>, </span>
+<span id="cb28-23"><a href="#cb28-23"></a>                       <span class="dt">values_to =</span> <span class="st">&quot;z&quot;</span>)</span>
+<span id="cb28-24"><a href="#cb28-24"></a></span>
+<span id="cb28-25"><a href="#cb28-25"></a>  <span class="co">## Super Important that column names are ordered Factors</span></span>
+<span id="cb28-26"><a href="#cb28-26"></a>        <span class="co"># Otherwise ggplot will rearrange</span></span>
+<span id="cb28-27"><a href="#cb28-27"></a>  z_long<span class="op">$</span>x &lt;-<span class="st"> </span><span class="kw">factor</span>(z_long<span class="op">$</span>x, <span class="dt">levels =</span> <span class="kw">unique</span>(z_long<span class="op">$</span>x), <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb28-28"><a href="#cb28-28"></a>    <span class="co"># x-value and column numbers will match </span></span>
+<span id="cb28-29"><a href="#cb28-29"></a></span>
+<span id="cb28-30"><a href="#cb28-30"></a>  </span>
+<span id="cb28-31"><a href="#cb28-31"></a><span class="co"># Print the Matrix</span></span>
+<span id="cb28-32"><a href="#cb28-32"></a>zero</span></code></pre></div>
+<pre><code>##        col 1 col 2 col 3 col 4 col 5 col 6 col 7 col 8 col 9 col 10
+## row 1  FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE   TRUE
+## row 2   TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  FALSE
+## row 3   TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE   TRUE
+## row 4   TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE   TRUE
+## row 5   TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE   TRUE
+## row 6   TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE   TRUE
+## row 7   TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  FALSE
+## row 8   TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE   TRUE
+## row 9   TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE   TRUE
+## row 10  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE   TRUE</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Make The Heatmap</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="kw">ggplot</span>(z_long, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="st">  </span><span class="kw">geom_tile</span>()</span></code></pre></div>
+<figure>
+<img src="data:image/png;base64,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" alt /><figcaption>plot of chunk unnamed-chunk-14</figcaption>
+</figure>
+<h6 id="create-a-function">Create a Function</h6>
+<p>Now that the matrix can be converted into a tidy data frame, we’ll wrap that process into a function (with vim use <code>va{</code> , <code>y</code>, <code>p</code>, <code>va{:s/zero/mat/g&lt;cr&gt;</code>):</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>matrix_as_long_tib &lt;-<span class="st"> </span><span class="cf">function</span>(mat) {</span>
+<span id="cb31-2"><a href="#cb31-2"></a>  </span>
+<span id="cb31-3"><a href="#cb31-3"></a><span class="co"># 0. Name the Rows and Columns</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="kw">colnames</span>(mat) &lt;-<span class="st"> </span><span class="kw">make_colnames</span>(mat)</span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="kw">rownames</span>(mat) &lt;-<span class="st"> </span><span class="kw">make_rownames</span>(mat)</span>
+<span id="cb31-6"><a href="#cb31-6"></a>    <span class="co">## Row Names are reversed relative to y-axis values</span></span>
+<span id="cb31-7"><a href="#cb31-7"></a></span>
+<span id="cb31-8"><a href="#cb31-8"></a><span class="co"># 1. Reverse the Columns</span></span>
+<span id="cb31-9"><a href="#cb31-9"></a>  mat_rev_col &lt;-<span class="st"> </span><span class="kw">apply</span>(mat, <span class="dv">2</span>, rev)</span>
+<span id="cb31-10"><a href="#cb31-10"></a></span>
+<span id="cb31-11"><a href="#cb31-11"></a><span class="co"># 2. Create a Data Frame</span></span>
+<span id="cb31-12"><a href="#cb31-12"></a>  z_tb &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mat_rev_col)</span>
+<span id="cb31-13"><a href="#cb31-13"></a>    <span class="co"># z_tb &lt;- as.data.frame(mat_rev_col) # df is fine</span></span>
+<span id="cb31-14"><a href="#cb31-14"></a>  z_tb &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">r =</span> <span class="kw">rownames</span>(mat_rev_col), z_tb)</span>
+<span id="cb31-15"><a href="#cb31-15"></a>  </span>
+<span id="cb31-16"><a href="#cb31-16"></a>    <span class="co">## Make a Column of Row Names, must be a factor.</span></span>
+<span id="cb31-17"><a href="#cb31-17"></a>      z_tb &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="st">&quot;y&quot;</span> =<span class="st"> </span><span class="kw">make_ynames</span>(mat), z_tb)</span>
+<span id="cb31-18"><a href="#cb31-18"></a>      </span>
+<span id="cb31-19"><a href="#cb31-19"></a><span class="co"># 3. Transform the Data into a long format</span></span>
+<span id="cb31-20"><a href="#cb31-20"></a>z_long &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(z_tb, <span class="dt">cols =</span> <span class="kw">names</span>(z_tb)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)],</span>
+<span id="cb31-21"><a href="#cb31-21"></a>                       <span class="dt">names_to =</span> <span class="st">&quot;x&quot;</span>, </span>
+<span id="cb31-22"><a href="#cb31-22"></a>                       <span class="dt">values_to =</span> <span class="st">&quot;z&quot;</span>)</span>
+<span id="cb31-23"><a href="#cb31-23"></a></span>
+<span id="cb31-24"><a href="#cb31-24"></a>  <span class="co">## Super Important that column names are ordered Factors</span></span>
+<span id="cb31-25"><a href="#cb31-25"></a>        <span class="co"># Otherwise ggplot will rearrange</span></span>
+<span id="cb31-26"><a href="#cb31-26"></a>  z_long<span class="op">$</span>x &lt;-<span class="st"> </span><span class="kw">factor</span>(z_long<span class="op">$</span>x, <span class="dt">levels =</span> <span class="kw">unique</span>(z_long<span class="op">$</span>x), <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb31-27"><a href="#cb31-27"></a>    <span class="co"># x-value and column numbers will match </span></span>
+<span id="cb31-28"><a href="#cb31-28"></a>  </span>
+<span id="cb31-29"><a href="#cb31-29"></a>  <span class="kw">return</span>(z_long)</span>
+<span id="cb31-30"><a href="#cb31-30"></a>}</span>
+<span id="cb31-31"><a href="#cb31-31"></a></span>
+<span id="cb31-32"><a href="#cb31-32"></a>(unsquare_test_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">sample</span>(<span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>), <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">size =</span> <span class="dv">6</span><span class="op">^</span><span class="dv">2</span>), <span class="dt">nrow =</span> <span class="dv">9</span>))</span></code></pre></div>
+<pre><code>##        [,1]  [,2]  [,3]  [,4]
+##  [1,]  TRUE FALSE  TRUE  TRUE
+##  [2,] FALSE FALSE  TRUE  TRUE
+##  [3,] FALSE  TRUE  TRUE  TRUE
+##  [4,]  TRUE FALSE  TRUE FALSE
+##  [5,]  TRUE FALSE FALSE  TRUE
+##  [6,]  TRUE  TRUE  TRUE FALSE
+##  [7,]  TRUE  TRUE  TRUE FALSE
+##  [8,] FALSE  TRUE FALSE  TRUE
+##  [9,] FALSE  TRUE FALSE  TRUE</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># (unsquare_test_matrix &lt;- matrix(sample(c(TRUE, FALSE), replace = TRUE, size = 6^2), nrow = 6))</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="co">#(unsquare_test_matrix &lt;- zero)</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a></span>
+<span id="cb33-4"><a href="#cb33-4"></a></span>
+<span id="cb33-5"><a href="#cb33-5"></a>z_long &lt;-<span class="st"> </span><span class="kw">matrix_as_long_tib</span>(unsquare_test_matrix)</span>
+<span id="cb33-6"><a href="#cb33-6"></a><span class="kw">ggplot</span>(z_long, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">fill =</span> z)) <span class="op">+</span></span>
+<span id="cb33-7"><a href="#cb33-7"></a><span class="st">  </span><span class="kw">geom_tile</span>()</span></code></pre></div>
+<figure>
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAMAAACR9g9NAAACbVBMVEUAv8QKCgoNDQ0QEBAREREUFBQVFRUZGRkaGhobGxscHBwdHR0eHh4gICAhISEiIiIjIyMmJiYnJycoKCgqKiotLS0uLi4wMDAyMjIzMzM0NDQ2NjY3Nzc4ODg7Ozs8PDw9PT0+Pj4/Pz9BQUFCQkJERERFRUVGRkZISEhJSUlKSkpMTExNTU1OTk5QUFBRUVFUVFRVVVVXV1dYWFhbW1tcXFxeXl5gYGBhYWFiYmJjY2NkZGRlZWVoaGhpaWlqampsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn6AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHT09PU1NTV1dXW1tbX19fZ2dnc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4dm34+Pj5+fn6+vr7+/v8yMT8yMX8/Pz9/f3+/v7////4EFTkAAAACXBIWXMAAAsSAAALEgHS3X78AAAPaElEQVR4nO3d+2PVdR3HcbuY2f1imWhXWlFpaWlZpKZdBDfnRFggEkMMUQvEAgUkDUmIESCpyFAjjYupSHLZGNexuNTY529qbOe0M9j18z2v7+d9zvv5/AHHbJ/eez8854yJfC4K5LKLUg9AaQLeacA7DXinjRr+xPGYOk5FfdjoOl2hZ5/qiPqwE2ng21tjau+O+rBR1RZ0Z7eGNt3Z3ZG7BL4v4IEvf8ADX/aAzxbw+cJfJOzfwpRzSwMeeOCBBx544IEHHnjggQe+IgMeeOCBBx544IEHHnjggQe+IgMeeOCBBx544IEHHnjggY+APzrljgXApy0J/JK14b63gE9afvAz20JDR9+bTbvCH5qBT1p+8BtWt09/ff78+ZtDeOqRfbc/HcKjN9yw+0wh5ecI/CAVF39KDn9s+p82Ft4888T99/8lhB3NzQeOFlJ+jsAPUnHxx+TwYWp9Z+ER/4/tYea7ve/jqT5VOX5x98y9xbc67p2xPACftBzh//D8he8DPlX5wa+f1gW8nfjOHfDAAw888MADDzzwwAMPfEUGPPDAAw888MADDzzwwAMPfEUGPPDAAw888MADDzzwwANfHngljrLUftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftEBn63UftElge+4u35ON/BJSwK/ZkVo2gl80vKDL7ma5JU57fX7Q3hzy5bWw4VSA8aW2i+64uKPyuFLriY5cmvdlNMDryZJDRhbar/oklxN8putYcXa3rd4qk9Vjq/x/VeTzG8Jy58FPmk5wvdfTbK//u7pJ4FPWo7ww15NkhowttR+0eUHP/zVJKkBY0vtFx3fuctWar/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/ogM9War/oPMCn3rHJgHca8E4D3mnAOw14pwHvNOCdBrzTgHca8E4D3mnAOw14pwHvNOCdBrzTgHca8E4D3mnAOw14pyWBXz5p0k0LgU9aqkf8vL3AJy0/+JIbKkJ4e0EAPmn5wZfcUBHC7HM3YuR1Q0XqHZssyQ0V4fgvz/2Y1500qXdssvzupCm5oSI8t7LwPp7qU5XjF3f9N1SEX+0GPnE5wie7oSL1jk2WH3y6GypS79hkfOfOacA7DXinAe804J0GvNOAdxrwTgPeacA7DXinAe804J0GvNOAdxrwTgPeacA7DXinAe80K/DKz7Fi/6FSDg58tpRzA294f8q5gTe8P+XcwBven3Ju4A3vTzk38Ib3p5wbeMP7U84NvOH9KecG3vD+lHMDb3h/yrmBN7w/5dzAG96fcm7gDe9POTfwhvennBt4w/tTzg284f0p5wbe8P6UcwNveH/KuYE3vD/l3MAb3p9ybuAN7085d/XBdz/cOLcb+KSDJ4Fv+X3YdN7VJJW6P+XcVQJfcjXJosfm/rnnLzuamw8cLVSp+1POLR28uPhjcviSq0nm3bd/2qshPH7zzXtOF6rU/Snnlg5eXHyuV5M8+krYsLz3LZ7qUw2e42t8/9Ukf10aFm4CPungOcL3X01yZuads7qATzp4jvDDXk1SqftTzl0l8MNfTVKp+1POXSXwgwZ8qsGBz5ZybuAN7085N/CG96ecG3jD+1PODbzh/SnnBt7w/pRzA294f8q5gTe8P+XcwBven3Ju4A3vTzk38Ib3p5wbeMP7U84NvOH9KecG3vD+lHMDb3h/yrmBN7w/5dzAG96fcm7gDe9POTfwhvcnTbkU4A2nXArwhlMuBXjDKZcCvOGUSxkSfvHll3/sU8AnTbmUYR7xXeOXAZ805VKGgf/F7bHuwJcn5VKGhn/iK2eAT5tyKUPCv/bJfdHuwJcn5VKGhP/uJePGjRvkv28FPr+US+GXc4ZTLgV4wymXArzhlEsB3nDKpQBvOOVSgDeccinAG065lCHhL5gC+NxTLgV4wymXArzhlEsB3nDKpSSBb/3+pEn/An7ElEsZK/xLH6ypqWn/2vUhrGro+enZm8ZfNaPvna8NAn9gcPjtTxTfAn64lEsZM/zEnh8OXvXpU33wz9wUwvg3et852CP+I9/54+ni+0puqNjQ9OsNwI+ccilR8AtmTFzdB98y7vmzhXcOBt+15vqP/nxbQbv/hoota1sb/h7CQ9dc81ZXIeXnmICsPCmXUlz86fPohnuqn/qNHU9P7IMPL/z4M5NP9j3/DwIfwuEH3/u+z71w7q2SGyp6Wr88hL3bt7ceKqT8HBOQlSflUoqLPzKGR/yh91z7zQ909cL/81g4XrNsyEf84ms+fPNzZ1/9RO9P+m+oWLItLOr7w+t5qh8u5VJinuof6yG/bmMv/NwHQrjjd0PC/2ht7+/hWdr7k/4bKg7UNcw5C/yIKZcSA391z+vz0ltXfXzChKmdN9R84YenX/rQhAkT1gwCP6CqvKFCmnIp+f06vjpvqJCmXArfuTOccinAG065FOANp1zKkPD/+e95AZ97yqUMCX/B/xL43FMuBXjDKZcCvOGUSwHecMqlAG845VLGCj+x5uIv1jx+Sc2XL9u87mch7Lr2gt+EAXzZUi5l7I/4b+0J234QwrPfK8Cf/y9ogC9byqVEw6/5CfDqlEuJg790wvhL95c81Z//0cCXJeVSYh/xXfc8sO6nIey8jke8LuVSop/qW25580tdoeku4HUplxINv+fKMO+zn//24Qt+EwbwZUu5FH4dbzjlUoA3nHIpwBtOuRTgDadcigf4ik35D9WQ8JkCviwB7zTgnQa804B3GvBOA95pwDsNeKcB7zTgnQa804B3GvBOA95pwDsNeKcB7zTgnQa804B3WhXCb2sCfuSqD76jdjbwI1cd8CVXk4T5W8/B/23Fin3HCqXescmU8MXFH5fDl1xN0rJi/zn4p2pr95wslHrHJlPCFxd/Ug5fcjVJ/bQpN/b9l9U81Q+XEj7H1/j+q0lC2M9r/CiqEvj+q0mAH11VAp/sapKKrTrg011NUrFVB/ygAT9cwDsNeKcB7zTgnQa804B3GvBOA95pwDsNeKcB7zTgnQa804B3GvBOA95pwDsNeKcB7zTgnQa804B3GvBOA95pwDsNeKcB7zTgnQa804B3GvBOA95pwDsNeKcB7zTgnQa804B3GvBOA95pVQffXls3pxv4Eas6+KXNYeYu4EesOuBLbqjYe6K1vg34EasO+JIbKsLJyXd2hjBn/Pg3uwul3rHJlPDFxZ+Rw5fcUNHz+j5vXQiH9uxpay+UescmU8IXF39YDl9yQ8XcHWHx+t738VQ/XEr4HL+467+hYvfkKbNOAz9iVQLPDRVjrTrguaFizFUH/KABP1zAOw14pwHvNOCdBrzTgHca8E4D3mnAOw14pwHvNOCdBrzTgHca8E4D3mnAOw14pwHvNA/wys+xUm2kgwOfLeXcwBven3Ju4A3vTzk38Ib3p5wbeMP7U84NvOH9KecG3vD+lHMDb3h/yrmBN7w/5dzAG96fcm7gDe9POTfwhvennBt4w/tTzg284f0p5wbe8P6UcwNveH/KuYE3vD/l3MAb3p9ybuAN7085N/CG96ecG3jD+1POXX3wHQ11jaeATzp4EvhVT4YlzcAnHTw/+JKrSXa2hZUbQ9i8aNG+44UqdX/KuaWDFxffIYcvvZoktNT1/B+unj793c5Clbo/5dzSwYuL75TDl1xNEpY1He97g6f6VIPn+BrffzXJiwuL7wM+1eA5wvdfTfLQbbW1m4BPOniO8MNeTVKp+1POXSXww19NUqn7U85dJfCDBnyqwYHPlnJu4A3vTzk38Ib3p5wbeMP7U84NvOH9KecG3vD+lHMDb3h/yrmBN7w/5dzAG96fcm7gDe9POTfwhvennBt4w/tTzg284f0p5wbe8P6UcwNveH/KuYE3vD/l3MAb3p9ybuAN7085N/CG96ecG3jD+1PODbzh/SnnBt7w/pRzA294f8q5gTe8P+XcwBven3Ju4A3vTzk38Ib3p5wbeMP7U84NvOH9KecG3vD+lHMDb3h/yrmBN7w/5dzAG96fcm7gDe9POTfwhvennBt4w/tTzg284f0p5wbe8P6UcwNveH/KuYE3vD/l3NUI39gJfNrBk8Afm3Q18IkHzw++5IaKcPYu4BMPnh/8gBsqGs7B33vFFW8U/26l7k85t3Tw4uIH+ZOlywxfekNFH3znkSMH2wpV6v6Uc0sHLy7+kBy+5IaKAnzgqT7d4Dl+cdd/QwXw6QfPEZ4bKiwNnh88N1SYGpzv3GVLOTfwhvennBt4w/tTzg284f0p5wbe8P6UcwNveH/KuYE3vD/l3MAb3p9ybuAN7085N/CG96ecG3jD+1PODbzh/SnnBt7w/pRzA294f8q5gTe8P+XcwBven3Ju4A3vTzk38Ib3p5wbeMP7U84NvOH9Ked2AT+m2rujPmxUtQXd2a2hTXd2d+Quge8LeODLH/DAl73Kgj/cHlPbO1EfNqoO7tad3b77oPDstqgPO5wGPq63v6o7+/A43dndVxzRHT7+Hd3Zow74QQM+Ywdn684+MV13dvf0Tt3hs8v7ah2XGJ6sBrzT1PCrXzj3Y6PkifPc2R0NdY2nVIe319bN6RadHcK2JsHRoy4P+P4/M638Z696MixpVh2+tDnM3CU6O3TUCr/+GTkR/KHGxiWHpzXOOdv7Of7/z0wr/9k728LKjSN/TNzhe0+01reJzg7zt1Yj/IKWsHDBxvDIlr5ntYZywp93dktdx0gfEX34ycl3lnHyAWe3rNhfjfDTen7FMuvd8NxTAviBZy9rOl7Gswce3vP6Pm+d6Oz6aVNuXFO+s8ecCP7hl8OjD24Kv90sgB9w9osLy3jy+YfP3REWrxedHUJVPuJbp96z4NDUGYWXs/LCDzj7odtqazepDt89ecqs06KzqxSerAe804B3GvBOA95pwDsNeKcB7zQn8AuvDy9dVd67PSo8J/Dh6yvHvZ56BlN5gX/r/cLfoVeJeYF/7eJbUo9gKyfwZ67cOq6c/y6n8nMCP/WO8PJlwt8xXXk5gafzA95pwDsNeKcB7zTgnQa804B32v8Airj3AUdsG4oAAAAASUVORK5CYII=" alt /><figcaption>plot of chunk unnamed-chunk-15</figcaption>
+</figure>
+</body>
+</html>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+

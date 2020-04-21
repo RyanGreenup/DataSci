@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+df \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{data.frame}\PYG{p}{(}x \PYG{o}{=} rnorm\PYG{p}{(}\PYG{l+m}{1000}\PYG{p}{,} \PYG{l+m}{2}\PYG{p}{,} \PYG{l+m}{2}\PYG{p}{))}
+
+\PYG{c+c1}{\PYGZsh{} overlay histogram and normal density}
+ggplot\PYG{p}{(}ResDF\PYG{p}{,} aes\PYG{p}{(}x\PYG{o}{=}Error\PYG{p}{))} \PYG{o}{+}
+  geom\PYGZus{}histogram\PYG{p}{(}aes\PYG{p}{(}y \PYG{o}{=} stat\PYG{p}{(}density\PYG{p}{)))} \PYG{o}{+}
+  stat\PYGZus{}function\PYG{p}{(}
+    fun \PYG{o}{=} dnorm\PYG{p}{,}
+    args \PYG{o}{=} \PYG{k+kt}{list}\PYG{p}{(}mean \PYG{o}{=} \PYG{k+kp}{mean}\PYG{p}{(}df\PYG{o}{\PYGZdl{}}x\PYG{p}{),} sd \PYG{o}{=} sd\PYG{p}{(}df\PYG{o}{\PYGZdl{}}x\PYG{p}{)),}
+    lwd \PYG{o}{=} \PYG{l+m}{2}\PYG{p}{,}
+    col \PYG{o}{=} \PYG{l+s}{\PYGZsq{}IndianRed\PYGZsq{}}
+  \PYG{p}{)} \PYG{o}{+}
+  theme\PYGZus{}classic\PYG{p}{()} \PYG{o}{+}
+  labs\PYG{p}{(}title \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Histogram of Residuals\PYGZdq{}}\PYG{p}{,} y \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Density of Observations\PYGZdq{}}\PYG{p}{,} x\PYG{o}{=} \PYG{l+s}{\PYGZdq{}Residuals\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

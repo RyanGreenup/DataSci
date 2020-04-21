@@ -1,0 +1,497 @@
+---
+title: "Exercise 12.3"
+output: 
+  html_notebook: 
+    toc: yes
+---
+
+#Abstract
+The goal here is to create a prediction model for 
+the lead level over the Meuse River region
+
+This prediction model will be graphically portrayed with a:
+
+1. Heatmap
+    i) with base plot
+    ii) wigh `ggplot2` over an actual map
+2. Contour plot
+    i) with base plot
+    ii) With `ggplot2` over an actual map
+3. 3d Surface plot
+    i) with base plot
+    ii) with a dynamic `plotly` surface plot
+
+##Log-Transformation
+The Log transformation is used to make the data
+more normally distributed, it is required because
+it creates predicted values that more closely resemble the
+the observed values.
+##Lead-Levels
+It can be seen that there are pockets of high lead levels on the
+shore of the river at three points.
+
+#Preamble
+##Import Library
+
+The following code will automatically install packages that are 
+not already installed and load them into the library:
+
+```{r}
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(sp, EnvStats, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+               RColorBrewer, parallel, dplyr, plotly, proj4, rgdal)
+```
+
+
+##Create Assignments
+
+Note that  meuse data set is included in the `sp` package and is not a 
+data frame but an `sp` class, which is very similar to a data frame
+
+```{r}
+#Inspect the Data Set
+data(meuse) 
+head(meuse)
+
+#Assignments
+lon <- meuse$x
+lat <- meuse$y
+cd <- meuse$cadmium
+cu <- meuse$copper
+pb <- meuse$lead
+zn <- meuse$zinc
+
+```
+
+
+#Lattitude and Longitude
+* Lattitude is a line that runs east to west that measures how far 
+north of the equatour a location is
+      + Lattitude is assigned to the y-axis
+* Longitude is a line that runs north to south that measures east/west
+     + Longitude is assigned to the x-axis
+
+
+
+#Assign the Co-ordinates
+The *meuse* Data set is an `sp` class objects and requires for its co-ordinates to be set:
+
+```{r}
+rm(meuse); data(meuse)
+coordinates(meuse) = ~x + y
+```
+
+The co-ordinate reference system is in meters north and meters east,
+this is going to be incompatible with the `ggmap` function, so
+it will have to be transformed first.
+
+
+The transformation can be acheived by changing the `proj4string`.
+This is provided in the `?meuse` help page:
+
+
+```{r}
+proj4string(meuse) <- CRS("+init=epsg:28992")
+meuse.ll <- spTransform(meuse, CRS("+init=epsg:4326"))
+
+lon <- meuse.ll@coords[,1]
+lat <- meuse.ll@coords[,2]
+
+
+```
+
+
+#Preliminary Step: Create a krige prediction Model
+In order to create a krige prediction model two things are required:
+
+* Fitted Variogram Model (e.g. an exponential model)
+* A domain values over which to predict values
+
+##Create a variogram Model
+
+
+###Create a Variogram 
+Using an ordinary kriging method without any surface model provided:
+
+```{r}
+
+lead.vg <- variogram(object = lead~1, data = meuse.ll)
+plot(lead.vg)
+head(lead.vg)
+```
+
+
+###Fit an exponential model to that variogram
+
+```{r}
+#This is what would be used for the northing/easting CRS
+lead.vg.fit <- fit.variogram(lead.vg, model = vgm(1, "Sph", 900, 1)) 
+
+#For the new one, this method was suggested on stackexchange:
+# .../226048/r-gstat-warning-singular-model-in-variogram-fit
+lead.vg.fit <- fit.variogram(lead.vg,
+                             model = vgm(psill=max(lead.vg$gamma)*0.9,
+                                         model = "Sph",
+                                         range=max(lead.vg$dist)/2,
+                                         nugget = mean(lead.vg$gamma)/4)) 
+
+
+
+
+
+```
+
+Thus the variogram model needed for the krige prediction has been ascertained
+
+##Create a Grid of Domain values to use as predictor values
+### Create a sequence of incrementally increasing for the X and Y axis
+This will essentially act as the resolution of the overlay,
+Most monitors are about 140 ppi, hence assuming the plot will be a
+9 inch square, about 800 x 800 pixels should look right, but 
+200 x 200 will be the used due to performance.
+
+```{r}
+xgrid       <-  seq(min(lon), max(lon), length.out = 200)
+ygrid       <-  seq(min(lat), max(lat), length.out = 200)
+```
+
+
+###Combine into a domain base
+This domain base however has to be a spatial object, this can be
+acheived by defining co-ordinates in the data frame
+```{r}
+xy.surface  <- expand.grid(lon = xgrid, lat = ygrid)
+coordinates(xy.surface) = ~lon + lat
+proj4string(xy.surface) <- proj4string(meuse.ll)
+head(xy.surface, 3)
+```
+
+##Create the Krige prediction object
+Krige predictions can be more accurate if the data is normally 
+distributed.
+
+Hence the case study used a log transformation on the *Zn* value, this is because
+the *Zn* value was non-normally distributed and the log transformation
+somewhat fixed that.
+
+```{r}
+par(mfcol = (c(1,2)))
+hist(zn, main = "Zinc Value")
+hist(log(zn), main = "Log-Transformation of Zinc Value")
+```
+
+An inspection of the *Pb* values shows that the log-transformation
+may be somewhat more normal, hence it will be used in the analysis.
+
+```{r}
+par(mfcol = (c(1,2)))
+hist(pb, main = "Lead Value")
+hist(log(pb), main = "Log-Transformation of lead Value")
+```
+
+
+
+```{r}
+
+lead.pred <- krige(formula = lead ~1,
+                           locations =  meuse.ll,
+                           newdata = xy.surface,
+                           model= lead.vg.fit.exp)
+
+
+lead.log.pred = krige(log(lead)~1, meuse.ll, xy.surface, model = lead.vg.fit)
+lead.pred = krige(lead~1, meuse.ll, xy.surface, model = lead.vg.fit)
+
+par(mfcol = c(2,2))
+hist(pb, main = "Lead Values",
+     xlab = "Lead (ppm)")
+hist(lead.pred$var1.pred, main = "Prediction using Lead Values",
+     xlab = "Lead (ppm)")
+hist(pb, main = "Lead Values",
+     xlab = "Lead (ppm)")
+hist(exp(lead.log.pred$var1.pred),
+     main = "Prediction using Log Transformation",
+     xlab = "Lead (ppm)")
+
+```
+
+It can be seen that the prediction using the log transformation
+has a shape that (ever so slightly) more closely resembles the distribution of lead values,
+hence it is used:
+
+```{r}
+
+lead.log.pred$var1.pred <- exp(lead.log.pred$var1.pred)
+
+head(lead.log.pred)
+
+```
+
+Now there is a prediction model, if that prediction model is
+extrapolated over our domain (`xy.surface`) the various plots can be
+created
+
+#Part 1: Create a heatmap
+
+In order to create a heatmap, it is first necessary to take
+the `sp` prediction object and make it into pixel data,
+otherwise the heatmap won't look quite right:
+
+```{r}
+class(lead.pred)
+gridded(lead.pred) = TRUE
+class(lead.pred)
+```
+
+
+```{r}
+spplot(lead.pred["var1.pred"],main="Kriging Predictions of lead levels (ppm) in Meuse River")
+```
+
+
+##Create it in ggplot2
+First it is necessary to create a data frame from the `sp` object:
+
+```{r}
+lead.pred.df      <- cbind(lead.pred@coords, lead.pred@data)
+lead.pred.df.tidy <- melt(lead.pred.df)
+head(lead.pred.df)
+
+ggplot() +
+  geom_tile(data = lead.pred.df, aes(lon, lat, fill = var1.pred)) +
+  labs(fill = "Lead (ppm)") # 
+```
+
+
+
+This plot would be easier to read if it had discrete intervals
+rather than a continuous scale:
+
+```{r}
+lead.pred.df$bin <- cut(lead.pred.df$var1.pred,
+                            breaks = 15)
+
+ggplot() +
+  geom_tile(data = lead.pred.df, aes(lon, lat, fill = bin)) +
+  labs(fill = "Lead Levels (ppm)", 
+       title = "Heatmap of Lead levels (ppm)",
+       x = "Longitude",
+       y = "Latitude")
+
+  
+```
+
+###Map overlay
+
+
+
+Now by adjusting the colour scale and opacity, this can be used as an overlay
+for the map from exercise 10.1:
+
+```{r}
+lead.pred.df$bin <- cut(lead.pred.df$var1.pred,
+                            breaks = 9)
+
+#Get a map
+  bbox <- make_bbox(lead.pred.df$lon, lead.pred.df$lat, f = 0.01)
+  map <- get_map(location = bbox, maptype = 'watercolor')
+  #Create the colours
+  cols <- brewer.pal(n = length(levels(lead.pred.df$bin)), name = "Oranges") 
+  #Create the Plot
+  ggmap(ggmap = map) +
+  geom_tile(data = lead.pred.df, aes(lon, lat, fill = bin, alpha = var1.pred))+
+  scale_fill_manual(values = cols) +
+  labs(fill = "Lead Index",
+       x = "Longitude",
+       y = "Lattitude", 
+       title = "Heatmap of Lead Index") + 
+  guides(alpha=FALSE)
+
+    
+```
+
+
+#Part 2: Contour Map
+In order to view the surface plot, contours can also be used.
+
+ Recall from Week 11/Exercise 10, that contour and surface plots
+  work a little differently to ordinary plots.
+  
+  A domain grid of equally spaced $x$ and $y$ values is required and
+  a matrix of $z$ values that can be overlayed onto that domain grid
+  in order to provide the surface values required 
+  to create the surface plot.
+
+
+
+  The method from Lecture 10/Wk. 11 involved predicting over
+  the square domain of `xy.surface`, this won't work here
+  because instead of the `predict` function, the `krige` function
+  was used, hence it is necessary to convert the output from
+  the `krige` function, into the output that would have been 
+  given by the predict function, which is the required
+  $z$ surface matrix.
+  
+  This can be acheived with the `data.matrix` function:
+  
+  
+```{r}
+z_surface_matrix <- data.matrix(lead.pred[1])
+```
+
+##Base Package
+Using base R packages, a contour plot can be created with the `contour`
+function:
+```{r}
+contour(xgrid, ygrid, z_surface_matrix,
+          xlab="-Longitude (degrees West)", ylab="Latitude (degrees North)",
+          main = "contour plot of Krige Prediction",
+          labcex = 0.8)
+  mtext("Krige using a 4th degree polynomial model", cex = 0.5)
+```
+
+##Using ggplot2
+In order to create a contour plot in ggplot 2,
+it will be necessary to use 'tidy' data, which is 
+a table of data such that each column corresponds
+to a variable:
+```{r}
+rownames(z_surface_matrix) <- xgrid
+  colnames(z_surface_matrix) <- ygrid
+  lead.pred.melt <- melt(z_surface_matrix,
+                            varnames = c("Longitude", "Latitude"),
+                            value.name = "Lead_Level")
+  head(lead.pred.melt)
+```
+  Observe that this is another way of getting the
+  data frame that was required in part 1 (`lead.pred.df`),
+  it is included here as another method and for the sake of completion,
+  also it matches the method used in week 10/lecture 11.
+
+
+Now using ggplot2 a contour plot, can be created:
+
+```{r}
+ggplot(data = lead.pred.melt, aes(x = Longitude,
+                                       y = Latitude,
+                                       z = Lead_Level,
+                                       colour = ..level..),
+         size = 0.5) +
+    labs(x = "Longitude", y = 'Latitude',
+         title = 'Lead Levels (ppm)',
+         subtitle = "Chesapeake Bay, Maryland",
+         caption = "Higher index value is better",
+         col = 'Lead Levels (ppm)', size = 'Lead Levels (ppm)') + 
+    geom_contour(lwd = 0.1) +
+  theme_classic()
+```
+
+###Map Overlay
+The advantage to using ggplot2, is the map overlay can be taken advantage of:
+
+
+```{r}
+  map <- get_map(location = bbox, maptype = 'watercolor')
+  
+  ggmap(ggmap = map) +
+    labs(fill = "Lead Levels (ppm)",
+         x = "Longitude",
+         y = "Lattitude", 
+         title = "Heatmap of Lead Levels (ppm)") + 
+    guides(alpha=FALSE) +
+    geom_contour(data = lead.pred.melt, aes(x = Longitude,
+                                               y = Latitude,
+                                               z = Lead_Level),
+                 col = 'grey40',
+                 binwidth = 18,
+                 size = 0.10) +
+    scale_fill_manual(values = cols) 
+```
+
+###Map Overlay with Heatmap
+This can be combined with the heatmap layer:
+
+```{r}
+  ggmap(ggmap = map) +
+    labs(fill = "Lead Levels (ppm",
+         x = "Longitude",
+         y = "Lattitude", 
+         title = "Heatmap of Lead Levels (ppm)",
+         subtitle = "Meuse River") + 
+    guides(alpha=FALSE) +
+    geom_tile(data = lead.pred.df, aes(lon, lat, fill = bin, alpha = var1.pred)) +
+    geom_contour(data = lead.pred.melt, aes(x = Longitude,
+                                               y = Latitude,
+                                               z = Lead_Level),
+                col = 'indianred',
+                binwidth = 19,
+                size = 0.1) +
+    scale_fill_manual(values = cols) 
+```
+
+#Part 3: Surface Plots
+A surface plot allows a three dimensional view of the model
+
+##Base
+In base package, a surface plot can be made:
+```{r}
+persp(xgrid, ygrid, z_surface_matrix,
+        theta = -45, phi = 30, d = 0.5,
+        xlab="-Longitude (degrees West)",
+        ylab="Latitude (degrees North)",
+        zlab="Lead Levels (ppm)", ticktype = "detailed")
+  title(main=paste("Surface Plot of Lead Levels (ppm)", "Loess Smoothing", sep="\n"))   
+```
+
+##Plotly
+Plotly has the advantage of being fully interactive and not as difficult to 
+constrain within a plot/box area:
+```{r}
+p <- plot_ly(x = ygrid, y = xgrid, z = z_surface_matrix) %>%
+    add_surface() %>%
+    layout(
+      title = "Lead Levels over Meuse River",
+      scene = list(
+        xaxis = list(title = "Longitude"),
+        yaxis = list(title = "Latitude"),      #The domain here, do it above
+        zaxis = list(title = "Lead Levels (ppm)")
+      ))
+                                                                  
+  p
+```
+
+
+
+The surface plot re-inforces the fact that the lead levels are seemingly lowest
+within the river with spikes at certain shore locations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

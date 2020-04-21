@@ -1,0 +1,120 @@
+\documentclass[]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+%opening
+\title{Simple Linear Regression}
+\author{Week 1}
+
+\begin{document}
+
+\maketitle
+\section{How to Fit a Line to Data}
+
+Given a plot of data a Linear Regression would be the linear function that minimizes the error between the points.\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Capture}
+	\caption{Differing error between linear functions}
+	\label{fig:diferror}
+\end{figure}\\
+The Linear function would be of the form:
+\begin{equation}
+y=w_0+w_1\times x+\epsilon
+\end{equation}
+The value $\epsilon$ represents the residual, the difference between the observed value and the value predicted by the model: $\epsilon_j=y_j-\hat{y_j}$.\\
+
+\newpage
+
+To work out the linear function that best fits the points we use a concept called the \textit{cost of a line} and it is the summed value of all the error for a line:\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{coa}
+	\caption{Differing error between linear functions}
+	\label{fig:cost}
+\end{figure}\\
+
+The value of the error would be $\epsilon_j$, because $\epsilon$ can be positive or negative we take the square value such that we have positive numbers and sum them.\\
+Thus the \textit{Residual Sum of Squares} (\textbf{\textit{RSS}}) is:\\
+
+
+\begin{align}
+\sum_{i=1}^{n}[(\epsilon_i)^2]=\sum_{i=1}^{n}[(y_j-\hat{y_j})^2]
+\end{align}
+
+and the best fit for the line is defined as the one that minimimises the RSS.
+\newpage
+\section{How to Minimise the RSS}
+\subsection{The Analytical Solution}
+Obviously the RSS will depend on the line chosen to fit the data, the line depends on two variables, the gradient and intersect, $w_0$ and $w_1$:
+
+\begin{align}		
+						 RSS&=\sum_{i=1}^{n}[(\epsilon_i)^2] \notag \\
+						    &=\sum_{i=1}^{n}\big{[}(y_i-\hat{y_i})^2\big{]} \notag \\
+							&=\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1\times x_i\big{)}^2\big{]}
+\end{align}
+Now given that the value $y_i$ is a constant fixed value that is observed and $x_i$ also refers to a fixed value observe that $RSS=f(x,y)$, this RSS value represents a 3-dimensional parabolic curve:\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{3dgraph}
+	\caption{The variation of RSS given various values of $w_0$ and $w_1$}
+	\label{fig:3d}
+\end{figure}\\
+\newpage
+Thus we now know that the minimum RSS value will occur at a stationary point and this can be solved with calculus.
+\paragraph{Example}\ \\
+\begin{align}
+RSS(w)=10-8w+2w^2\\
+\frac{dRSS}{dw}=0-8+4w
+\end{align}
+Let the derivative equal zero then find the value of w where the RSS is a minimum value:
+\begin{align}
+0=-8+4w \notag \\
+4w=8\notag \\
+w=2\notag 
+\end{align}
+A quadratic function (like all convex functions) only has one minimum value and hence the solution is found. ( A convex function is any function that a straight line could only cross twice, e.g. logarithmic is converse but Sine is not)
+\newpage
+\subsection{Least-squares Solution}
+Given that we now know that:\\
+\begin{align}		
+RSS&=\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1\times x_i\big{)}^2\big{]}
+\end{align}
+In order to find an equation that describes the minimum we will first find both the partial derivatives:\\
+\begin{align}
+\frac{\partial RSS}{\partial w_0}&=\frac{\partial}{\partial w_0}[\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1\times x_i\big{)}^2\big{]}] \notag \\
+&=\sum_{i=1}^{n}\big{[}\frac{\partial}{\partial w_0}[\big{(}y_i-w_0-w_1\times x_i\big{)}^2]\big{]}\notag \\
+&=\sum_{i=1}^{n}\big{[}2\times\big{(}y_i-w_0-w_1\times x_i\big{)}^1\times -1\big{]}\notag \\
+&=-2\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1x_i\big{)}^1\big{]} \label{partialw0}
+\end{align}
+
+\begin{align}
+\frac{\partial RSS}{\partial w_1}&=\frac{\partial}{\partial w_1}[\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1\times x_i\big{)}^2\big{]}]\notag \\
+&=\sum_{i=1}^{n}\big{[}\frac{\partial}{\partial w_1}[\big{(}y_i-w_0-w_1\times x_i\big{)}^2]\big{]}\notag \\
+&=\sum_{i=1}^{n}\big{[}2\times \big{(}y_i-w_0-w_1\times x_i\big{)}^1 \times x_i\big{]}\notag \\
+&=2\times\sum_{i=1}^{n}\big{[}x_i \times \big{(}y_i-w_0-w_1x_i \big{)}^1\big{]}\label{partialw1}
+\end{align}
+Now we will let both partial derivatives equal zero, the point at which the RSS is minimized:
+\begin{align}
+0&=\frac{\partial RSS}{\partial w_0}\\
+0&=-2\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1x_i\big{)}^1\big{]}\notag \\
+&=\sum_{i=1}^{n}\big{[}\big{(}y_i-w_0-w_1x_i\big{)}^1\big{]}\notag \\
+&=\sum_{i=1}^{n}[y_i]-\sum_{i=1}^{n}[w_0]+\sum_{i=1}^{n}[w_1x_i]\notag \\
+&=\sum_{i=1}^{n}[y_i]-nw_0+w_1\sum_{i=1}^{n}[x_i]\notag \\
+nw_0&=\sum_{i=1}^{n}[y_i]+w_1\sum_{i=1}^{n}[x_i]\notag \\
+w_0&=\frac{\sum_{i=1}^{n}[y_i]}{n}+\frac{w_1\sum_{i=1}^{n}[x_i]}{n} \label{valw0}
+\end{align}
+{\small Observe that in (\ref{valw0}) the left term is the average value of $y_i$ and the right term is the average value of $x_i$.}
+I can't believe you read this, you're  special, good girl $\heartsuit$
+\begin{align}
+0&=\frac{\partial RSS}{\partial w_1}\\
+&=2\times\sum_{i=1}^{n}\big{[}x_i \times \big{(}y_i-w_0-w_1x_i \big{)}\big{]}\notag \\
+&=2\times\sum_{i=1}^{n}\big{[}x_i \times y_i-w_0x_i +w_1(x_i)^2 \big{]}\notag \\
+&=\sum_{i=1}^{n}[x_iy_i]-\sum_{i=1}^{n}[w_0x_i]-\sum_{i=1}^{n}[w_1(x_i)^2]\notag \\
+w_1\sum_{i=1}^{n}[(x_i)^2]&=\sum_{i=1}^{n}[x_iy_i]-w_0\sum_{i=1}^{n}[x_i] \label{valw1}
+\end{align}
+Thus we now know the value of $w_0$ (\ref{valw0}) and the value of $w_1$ (\ref{valw1}) at the point where the function is has no rate of change in either direction, that is the minimum value of the RSS.\\
+Now we will substitute (\ref{valw0}) into (\ref{valw1}) to get one equation that will find the necessary coefficients
+\section{}
+
+\end{document}

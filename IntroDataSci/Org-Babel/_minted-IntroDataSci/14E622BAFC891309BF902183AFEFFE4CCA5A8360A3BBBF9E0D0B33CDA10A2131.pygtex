@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+advModMultb1.anova \PYG{o}{\PYGZlt{}\PYGZhy{}} anova\PYG{p}{(}advModMultb1\PYG{p}{)}
+TSS\PYGZus{}Multb1 \PYG{o}{\PYGZlt{}\PYGZhy{}} advModMultb1.anova\PYG{o}{\PYGZdl{}}\PYG{l+s+sb}{`Sum Sq`} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} \PYG{k+kp}{sum}\PYG{p}{()}
+RSS\PYGZus{}Multb1 \PYG{o}{\PYGZlt{}\PYGZhy{}} advModMultb1\PYG{o}{\PYGZdl{}}residuals\PYG{o}{\PYGZca{}}\PYG{l+m}{2} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} \PYG{k+kp}{sum}\PYG{p}{()}
+
+\PYG{p}{((}TSS\PYGZus{}Multb1\PYG{o}{\PYGZhy{}} RSS\PYGZus{}Multb1\PYG{p}{)}\PYG{o}{/}\PYG{p}{(}TSS\PYGZus{}Multb1\PYG{p}{))} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} \PYG{k+kp}{signif}\PYG{p}{(}\PYG{l+m}{3}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} percent\PYG{p}{()}   \PYG{c+c1}{\PYGZsh{} Requires `scales` package}
+\end{Verbatim}

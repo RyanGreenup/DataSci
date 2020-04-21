@@ -1,0 +1,529 @@
+---
+title: "03_Practical; Multiple Linear Regression"
+author: "Ryan Greenup 17805315"
+date: "12 March 2019"
+output:
+  html_document:
+    code_folding: hide
+    keep_md: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+  pdf_document: 
+    toc: yes
+always_allow_html: yes
+  ##Shiny can be good but {.tabset} will be more compatible with PDF
+    ##but you can submit HTML in turnitin so it doesn't really matter.
+    
+    ##If a floating toc is used in the document only use {.tabset} on more or less copy/pasted 
+        #sections with different datasets
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+load.pac <- function() {
+  
+  if(require('pacman')){
+    library('pacman')
+  }else{
+    install.packages('pacman')
+    library('pacman')
+  }
+  
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, mise, corrplot, scales)
+  
+}
+
+if (!exists("execFlag")) {
+ load.pac()
+  execFlag <- FALSE
+}
+  
+
+```
+
+# Multiple Linear Regression
+Material of Tue 19 March2019, week 3
+
+
+## Questoin 01 - Multiple Linear Regression
+
+
+### (a) Upload the data “Advertising.csv” and explore it.
+First import the data and investigate it:
+
+```{r}
+adv <- read.csv(file = "Datasets/Advertising.csv", header = TRUE, sep = ",")
+```
+
+```{r}
+head(adv)
+    writeLines("\n")
+    print("***Dimensions***")
+    writeLines("\n")
+dim(adv)
+    writeLines("\n")
+    print("***Summary***")
+    writeLines("\n")
+summary(adv)
+    writeLines("\n")
+    print("***Structure***")
+    writeLines("\n")
+str(adv)
+    writeLines("\n")
+    
+    
+    
+```
+ 
+ Fom this we can tell that there is one output, with 3 input values and 200 Observations.
+
+
+
+### (b) Find the Covariance and Correlation Matrix of Sales, TV, Radio and Newspaper. {.tabset}
+
+#### Base Packages
+```{r}
+pairs(x = adv)
+```
+
+#### corrplot
+
+In order to use `corrplot` first create a correlation matrix using `cor(adv)` then feed that matrix to `corrplot` with the command `corrplot(cor(adv))`
+
+```{r}
+#coriris <- cor(iris[,!(names(iris) == "Species")])
+#corrplot(method = 'ellipse', type = 'lower', corr = coriris)
+
+corMat <- cor(x = adv)
+corrplot(corr = corMat, method = "ellipse", type = "lower")
+```
+<!-- regular html comment --> 
+<!-- use </div> to escape {.tabset} don't use `## `; it will fuck your TOC--> 
+
+
+</div>
+
+From this we can see that there is a significant amount of correlation between Radio and newspaper (moreso even that newspaper and sales), we should consider this variable interaction when decide upon our model
+
+### (c) Construct the multiple linear regression model and find the least square estimates of the model
+A multiple linear regression would give the model:
+
+```{r}
+advModMult <- lm(formula = Sales ~ TV + Radio + Newspaper, data = adv)
+advModMult
+```
+
+This gives that the appropriate linear model is:
+
+$$
+Y_{Sales} = 0.0458 \times \text{TV} + 0.19 \times \text{Radio} - 0.001 \times \text{Newspaper}
+$$
+the fact that Newspaper has a negative coefficient despite being positively correlated with sales is indicative of the weak effect newspaper advertising has on sales as well as the interaction between newspaper and sales.
+
+
+
+from this it can be
+### (d) Test the significance of the parameters and find the resulting model to model Sales in terms of advertising modes, TV, Radio and Newspaper.
+First Summarise the Model:
+
+```{r}
+advModMult %>% summary()
+```
+
+A summary of the model provides that given the hypothesis test:
+$$
+H_0: \enspace \beta_i = 0\\
+H_a: \enspace \beta_i \neq 0 \\
+\qquad \qquad \qquad \qquad \forall i \in \mathbb{N}
+$$
+
+There would be an extremely low probability of incorrectly rejecting the null hypothesis that the given a linear model the coefficients would be zero, hence it is accepted that the coefficients are non-zero except for newspaper advertising.
+
+There is a high probability of incorrectly rejecting the null-hypothesis and hence that should not be rejected and the nespaper advertising should not be seen as significant predictor for sales in this linear model.
+
+It is hence approprate to remove, via backwards selection, Newspaper from the model, which gives:
+
+
+```{r}
+## Calculate Power??
+
+# n <-  length(adv)
+# sigma <-  sd(adv$Newspaper)
+# sem = sigma/sqrt(n)
+# alpha <-  0.05
+# mu0 <- 0
+# q <- qnorm(p = 0.005, mean = mu0, sd = sem);q
+# mu <- q #assumed actual mean value
+# pnorm(q, mean = mu, sd = sem, lower.tail = FALSE)
+
+
+```
+
+```{r}
+advModMultb1 <- lm(formula = Sales ~ TV + Radio, data = adv)
+advModMultb1
+
+advModMultb1.sum <- summary(advModMultb1)
+```
+
+
+$$
+\text{Sales} = 0.045 \times \text{TV} + 0.19 \times \text{Radio} + 2.9211
+$$
+
+All parameters are highly significant and hence the model is deemed adequate, the model explains `r advModMultb1.sum$r.squared %>% round(,2) %>% percent()`  of the variation, this can be found by appending `$r.squared` to the model object.
+
+### (e) Assess the overall accuracy of the model.
+In order to assess the model, consider the anova table and derive the RMSE and $R^2$ values:
+
+```{r}
+advModMultb1.anova <- anova(advModMultb1)
+advModMultb1.anova
+```
+
+From this we can see that that the $F$ statistic is associated with a very low p-value, these are the exact same p-values from the `summary` call.
+
+
+#### RMSE
+The RMSE value is the Root mean square error, it is the standard error of the residuals (recall that the standard error is the standard deviation of a model parameter), so the RMSE is basically the standard deviation of the residuals of the model (as measured along the $y$-axis).
+
+$$
+\text{RMSE} = \sqrt{\frac{\sum{\varepsilon^2}}{n}}
+$$
+```{r}
+rmse <- function(model){
+# (sum(model$residuals**2)/length(model$residuals))**0.5
+sd(advModMultb1$residuals)
+}
+
+rse <- function(model){
+  var(model$residuals)/var(model$residuals - model$fitted.values)
+}
+
+data.frame("RMSE" = rmse(advModMultb1) , "RSE" = rse(advModMultb1) )
+
+
+
+
+```
+
+So the expected error of the model is $\pm$ `r rmse(advModMultb1) %>% signif(2)` units of sale, we could use this to create a confidence interval by multiplying by the corresponding *Student's t-statistic* and saying that we would expect an observed value to lie within $1.96 * \text{S.E}$ of the model 95% of the time (is this correct or is it the expected mean or something because of the Central Limit Theorem?).
+
+
+#### Coefficient of Determination
+The coefficient of determination is `r  advModMultb1.sum$r.squared %>% round(4) %>% percent()`, this can be returned by extracting the value from the object by apending `$r.squared` to the model summary (i.e. use `summary(lm( Y ~ X1 + X2  )))$r.squared`).
+
+The $R^2$ value will be very nearly the same between the initial model and the backwards selected model, however given that the initial model had non-significant predictors it could be considered as over-parameterized, i.e. it violates [Occam's Razor](https://en.wikipedia.org/wiki/Occam%27s_razor).
+
+The coefficient of determination is the ratio of the total variance of the data that is explained by the model, in this case it could be determined by:
+
+$$
+R^2 = \frac{TSS-SSE}{TSS} = \frac{3314.6+1546+0.1}{3315+1545+0.1+556.8} = 89\%
+\ \\
+$$
+
+
+#### Coefficient of Determination from ANOVA
+
+The $R^2$ value is derived from the ANOVA table thusly:
+
+
+```{r}
+advModMultb1.anova <- anova(advModMultb1)
+TSS_Multb1 <- advModMultb1.anova$`Sum Sq` %>% sum()
+RSS_Multb1 <- advModMultb1$residuals^2 %>% sum()
+
+((TSS_Multb1- RSS_Multb1)/(TSS_Multb1)) %>% signif(3) %>% percent()   #Requires `scales` package
+
+```
+
+
+
+![](./Images/AnovaCalc.jpg)
+
+
+
+#### Residual analysis
+When determining the accuracy or performance of amodel, always turn your mind to residual analysis (i.e. how normally are they distributed), this will be performed below.
+
+
+### (f) Calculate the predicted values and residuals
+
+The residuals and fitted values may be returned by extracting them from the model (you could always derive them from first principles but you should use the tools at your disposal, it is quicker, less error prone and makes more readable code)
+
+```{r}
+ResDF <- data.frame("Input" = advModMultb1$fitted.values - advModMultb1$residuals, "Output" = advModMultb1$fitted.values, "Error" = advModMultb1$residuals) 
+ResDF %>% head()
+```
+
+`Predict` will also return fitted values if no `newdata` is specified.
+
+
+### (g) Plot the residuals against the predicted values {.tabset}
+
+#### ggplot
+
+```{r}
+ggplot(data = ResDF, aes(x = Output, y = Error, col = Error )) +
+  geom_point() +
+  theme_bw() +
+  stat_smooth(col = "grey")+
+  stat_smooth(method = "lm", se = 0, ) +
+scale_color_gradient(low = "indianred", high = "royalblue") +
+  labs(y = "Residuals", x = "Predicted Value", title = "Residuals Plotted against Output")
+```
+
+
+#### base
+
+```{r}
+plot(Error ~ Output, data = ResDF, pch = 19, col = "IndianRed", main = "Residuals against Predictions")
+smooth <- loess(formula = Error ~ Output, data = ResDF, span = 0.8)
+predict(smooth) %>% lines(col = "Blue")
+abline(lm(Error ~ Output, data = ResDF), col = "Purple")
+
+```
+
+</div>
+
+From this it can be seen that the residuals are centred around zero, but they are not normally distributed, the model performance appears to fail normality assumptions for values $\in \left( 10, 20 \right)$
+
+
+
+### (h) Plot the histogram of the residuals {.tabset}
+
+#### ggplot
+
+##### Absolute Count
+```{r}
+ggplot(data = ResDF, aes(x = Error, col = Output)) +
+  geom_histogram() +
+  theme_classic() +
+  labs(y = "Absolute Count", x = "Residual Value", title = "Residual Distribution") 
+
+
+```
+
+
+##### Density
+
+
+```{r}
+df <- data.frame(x = rnorm(1000, 2, 2))
+
+# overlay histogram and normal density
+ggplot(ResDF, aes(x=Error)) +
+  geom_histogram(aes(y = stat(density))) +
+  stat_function(
+    fun = dnorm, 
+    args = list(mean = mean(df$x), sd = sd(df$x)), 
+    lwd = 2, 
+    col = 'IndianRed'
+  ) +
+  theme_classic() +
+  labs(title = "Histogram of Residuals", y = "Density of Observations", x= "Residuals")
+```
+
+##### White Noise
+
+We can visualise the residuals as white noise:
+
+###### Our Residuals
+
+```{r}
+# Put some White Noise on the ResDF
+ResDF <- cbind(ResDF, "Wnoise" = rnorm(nrow(ResDF), mean = 0, sd = sd(ResDF$Error)))
+
+
+## Our Residuals
+ggplot(ResDF, aes(x = Input, y = Error, col = Output)) +
+  geom_line() +
+  geom_abline(slope = 0, intercept = 0, lty = "twodash", col = "IndianRed") +
+  theme(legend.position = "none") + 
+  labs(title = "Distribution of Residuals")
+
+## White Noise
+
+ggplot(ResDF, aes(x = Input, y = Wnoise, col = Output)) +
+  geom_line() +
+  geom_abline(slope = 0, intercept = 0, lty = "twodash", col = "IndianRed") +
+  theme(legend.position = "none") + 
+  labs(title = "Distribution of Residuals")
+
+
+
+```
+ 
+ This clearly shows that the Residuals are non-normal.
+
+#### Base
+
+```{r}
+hist(ResDF$Error
+     , breaks = 30,
+     prob=TRUE,
+     lwd=2,
+    main = "Residual Distribution",
+    xlab = "Distance from the Model", border = "purple"
+    ) 
+
+  #Overlay the Normal Dist Curve
+x <- 1:100    #Stupid base package wants some f(x), this is hacky but easier than stuffing around with lines or defining a function
+curve(dnorm(x, mean(ResDF$Error), sd(ResDF$Error)), add=TRUE, col="purple", lwd=2) #Draws the actual density function
+                
+#lines(density(possibleyvals_conf), col='purple', lwd=2) #Draws the observed density function
+lwr_conf <- qnorm(p = 0.05, mean(ResDF$Error), sd(ResDF$Error))
+upr_conf <- qnorm(p = 1-0.05, mean(ResDF$Error), sd(ResDF$Error))
+abline(v=upr_conf, col='pink', lwd=3)  
+abline(v=lwr_conf, col='pink', lwd=3)     
+abline(v=mean(ResDF$Error), lwd=2, lty='dotted')  
+```
+
+
+```{r}
+lwr_conf <- qnorm(p = 0.05, mean(ResDF$Error), sd(ResDF$Error))
+upr_conf <- qnorm(p = 1-0.05, mean(ResDF$Error), sd(ResDF$Error))
+```
+
+
+</div> 
+
+
+It hence appears that the Residuals skewed left, which suggests an upper bound on the residual value, the histogram is sufficiently non-normal to reject the assumption that the residuals are normally distributed
+
+### (i) Comment on the residual plots
+The Residuals can be analised by plotting the model:
+
+```{r}
+plot(advModMultb1)
+```
+
+This is an inappropriate model because the residuals are non-normally distributed.
+
+
+### (j) Use the multivariate model for predictions
+
+```{r}
+newdata =  data.frame("TV" = c(3, 1, 2), "Radio" = c(4, 5, 6))
+Mod_Adv_Mult_b1 <- predict(object = advModMultb1, newdata)
+
+mypreds <- data.frame("Input" = newdata, "Output" =  Mod_Adv_Mult_b1)
+mypreds # Careful with the names, they workout as Input.name in this case.
+```
+
+
+
+
+## Question 02: Non Linear Models: Use Advertising data set
+
+### (a) Add the Interaction Term TV*Radio and test the significance of the interaction term {.tabset}
+
+reconsider the correlationplots:
+
+#### Base
+
+```{r}
+pairs(x = adv)
+
+```
+
+### corrplot
+
+```{r}
+adv[, names(adv)!="Newspaper"] %>% cor() %>% corrplot(method = "ellipse", type = "lower")
+```
+
+
+</div>
+
+From this we can determine that there is no interaction between TV and radio (however previously there was interaction between newspaper and Radio, we should consider that next)
+
+#### Create the MLReg
+
+```{r}
+int_mod_adv <- lm(formula = Sales ~ TV * Radio + TV + Radio, data = adv)
+int_mod_adv
+summary(int_mod_adv)
+```
+
+
+
+
+
+### (b) Give the resulting model after considering this interaction term.
+
+The model will be of the form:
+
+$$
+\text{Sales} = 0.0019 \times \text{TV} \times + \text{Radio} \times  0.002886 + \text{TV} \times \text{Radio} \times 0.001086
+$$
+
+Note that all the terms of the model are significant, hence we deem the model as adequate.
+
+### (c) Construct the Polynomial Regression Model of order 3 and test the model significance
+
+When creating polynomial models there are raw and orthogonal polynomials,
+
+* A raw polynomial will be the the standard System of equations that you get by minimising the RSS
+  - The problem with this is that the values will be correlated with each other
+* An orthogonal polynomial is a transformed but equivalent polynomial
+  - The advantage to this is that the p-value's will be moremeaningful because the coefficients aren't correlated with each other
+  - The disadvantage is that the values are not directly related to our data and are not hence meaningful.
+
+```{r}
+
+# Orthogonal (fixes the correlation between the coefficients))
+
+polymodel_Orth <- lm(Sales ~ poly(x = TV, degree = 3, raw = FALSE), data = adv)
+summary(polymodel_Orth)
+
+
+# Pure/Raw (has the advantage that you can interpret the coefficients, but the coefficients will depend on each other and be hence correlated.)
+
+polymodel <- lm(Sales ~ I(TV*TV*TV) + I(TV*TV) + (TV), data = adv)
+summary(polymodel)    #I is used to inhibit the interpretation of * as relating to the model,
+                            # Instead of representing interaction it represents TV^3
+
+polymodel_Raw<- lm(Sales ~ poly(x = TV, degree = 3, raw = TRUE), data = adv)
+summary(polymodel_Raw)
+
+```
+
+The 3rd degree coefficient is not significant, hence we consider the 2nd degree:
+
+```{r}
+quadmod <- lm(formula = Sales ~ I(TV*TV) + TV, data = adv)
+summary(quadmod)
+```
+The quadratic term is not sufficiently significant so the model is rejected
+
+### (d) Give the resulting selected model
+
+The model selected is the multiple linear regression with the interaction from before:
+
+
+$$
+\text{Sales} = 0.0019 \times \text{TV} \times + \text{Radio} \times  0.002886 + \text{TV} \times \text{Radio} \times 0.001086
+$$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

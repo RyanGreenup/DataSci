@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+layout\PYG{p}{(}\PYG{k+kt}{matrix}\PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}\PYG{l+m}{4}\PYG{p}{,} nrow \PYG{o}{=} \PYG{l+m}{2}\PYG{p}{))}
+plot\PYG{p}{(}lmMod\PYG{p}{)}
+\end{Verbatim}

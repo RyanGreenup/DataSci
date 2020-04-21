@@ -1,0 +1,191 @@
+---
+title: "Housing Prices"
+output: html_notebook
+---
+
+#Preamble
+##Load Packages
+First load the packages, the advantage to the `pacman` package is that it
+will automatically install missing packages:
+
+```{r}
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(xts, ggplot2, rmarkdown, reshape2, ggmap,
+               RColorBrewer, parallel, dplyr, plotly)
+
+```
+##Import Datasets
+Now we need to import the datastets:
+
+```{r}
+house.df <- read.csv(file = "house2018.csv", header = TRUE, sep = ",")
+head(house.df)
+```
+
+#Compare size and Price
+If, on a fundamental level, the value of a property is dependent on its
+size, this can be visualised with a plot:
+
+```{r}
+plot.house <- function() {
+  
+  plot(x = house.df$sqm, y = house.df$price,
+                   type = "p", main = "House Prices",
+                   xlab = "Property size (sqm)", ylab = "Price ($)",
+                   frame.plot = TRUE, axes = TRUE,
+                   col = "Indianred", pch = 16, cex = 2)
+  }
+
+plot.house()
+
+```
+
+##Create a linear model
+A linear regression can be created for this relationship:
+
+```{r}
+nbhd      <- house.df$nbhd
+offers    <- house.df$offers
+sqm       <- house.df$sqm
+brick     <- house.df$brick
+bedrooms  <- house.df$bedrooms
+bathrooms <- house.df$bathrooms
+price     <- house.df$price
+
+house.lm <- lm(price ~ sqm)
+summary(house.lm)
+
+```
+Thus the linear model can be seen to be:
+  $$Price =  7585 \times  Size - 101785$$
+```{r}
+plot.house.lm <- function(lm = TRUE) {
+    plot.house()
+  
+  if(lm == TRUE) {
+    abline(house.lm, col = "royalblue", lwd = 3, lty = 6)
+  }
+}
+
+plot.house.lm(lm = TRUE)
+
+```
+ 
+ 
+Observe that the proportion of total variation explained by the linear model is only $r^2 = 30%$.
+
+The large model residuals in this plot may be attributed as other variables
+being misinterpreted as noise, hence we can use `ggplot2` to visualise the 
+other data and more appropriately consider the bivariate relationship.
+
+```{r}
+ggplot(house.df, aes(x = sqm, y = price, shape = nbhd, label = brick, col = (bathrooms+ bedrooms))) +
+  geom_point(size = 2) +
+  guides(col = guide_legend(title = "Bathrooms + Bedrooms")) +
+  guides(shape = guide_legend(title = "Neighbourhood")) +
+  xlab("Size (sqm)") +
+  ylab("Price $") +
+  ggtitle("House Prices") + 
+  geom_abline(slope = house.lm$coefficients[2],
+              intercept = house.lm$coefficients[1], 
+              lwd = 1, col = "indianred") +
+  theme_classic()
+```
+
+#Multiple Linear Regression
+Given that there are multiple factors influencing the price,
+a multiple linear regression could present a potential model
+for the plot:
+
+```{r}
+house.mlm <- lm(price ~ offers + sqm + bedrooms + bathrooms)
+summary(house.mlm)
+```
+
+Thus a potential multiple linear regression could be:
+$$Price = -174461 -136168 \times Offers + 6698 \times Size + 92571 \times bedrooms + 126113 \times bathrooms$$
+
+#Answers
+##1. Price a 210sqm house
+The prediction for the price of a 210 sqm house would be:
+
+```{r}
+#always use assignments when using the predict() function
+price <- house.df$price
+sqm   <- house.df$sqm
+
+predict(lm(price ~ sqm), data.frame(sqm=210), interval = "prediction", level = 0.95)
+
+```
+
+Using the Multiple Linear Regression would
+
+```{r}
+
+
+
+predict(house.mlm, data.frame(offers = mean(offers), sqm = 210, bedrooms = mean(bedrooms), bathrooms = mean(bathrooms)), interval = "prediction", level = 0.95)
+
+
+```
+
+Thus a 95% prediction interval for the value of a 210 sqm house would be centred around the bivariate model value of $\$1, 042, 669$ and range from:
+$$\$1, 491, 120$ to $\$1, 939, 571$$.
+
+##2. Value of a 15sqm extension
+The modelled price of a property changes
+in direct proportion to the size of the property
+at a rate equivilant to the slope, thus 
+a 15 sqm extension would be valued at:
+
+```{r}
+paste("$", round(house.lm$coefficients[2]) * 15)
+```
+
+
+#Appendix
+Other relationships could also be readily visualised e.g. :
+
+##Plot other variables with `ggplot2`
+####Melt the dataframe
+First the dataframe needs to be made tidy, 
+the *nbhd* column is characters not numbers,
+it could be made numerical using regex
+and dplyr (or a loop) but that is outside the scope of
+this work, the same can be said for the brick column,
+these column will hence be omitted.
+```{r}
+house.melt <- melt(house.df[, -c(1:5)], id = c("price"))
+head(house.melt, 3)
+```
+
+####Make the Plot
+Now the data is tidy we can make the plot:
+
+```{r}
+
+
+ggplot(house.melt, aes(x = price, y = value, col = variable)) +
+  geom_point() +
+  xlab("Price ($)") +
+  ylab("No. of Rooms") +
+  ggtitle("Rooms and Housing Cost") + 
+  theme_bw()
+
+
+```
+
+
+
+
+make a linear regression price~size sqm
+  base plot
+  ggplot2
+make a multiple linear regression
+  plot the regression with ggplot2??

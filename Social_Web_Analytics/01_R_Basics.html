@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Data Structures</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <style>
+  /*! normalize.css v2.1.3 | MIT License | git.io/normalize */
+
+  /* ==========================================================================
+   * Taken from [Github](https://raw.githubusercontent.com/gongzhitaao/orgcss/master/src/css/org.css)
+     ========================================================================== */
+
+  /* Fixing the scaling:
+
+  1. comment out the section [[@media screen and (min-width: 600px) {][here]] at about
+  2.   max-width: 70em; is the next issue, it was originally set at only 40, which is too small.
+   + 70 is a better compromise
+
+
+  @import "normalize";
+  @import "htmlize";
+
+  $sans: Helvetica, sans-serif;
+  $serif: Georgia, serif;
+  $monospace: Lucida Console, monospace;
+  $code-size: 80%;
+  $smaller: 90%;
+  $max-width: 1125px; /* iPhone X is 1125x2436, ipads are about 2000 * 3000 */
+
+  body {
+      width: 95%;
+      margin: 2% auto;
+      font-size: 14px;
+      line-height: 1.4em;
+      font-family: $serif;
+      color: #333;
+  }
+
+
+
+  @media screen and (min-width: 600px) {
+      body {
+          font-size: 18px;
+      }
+  }
+
+  @media screen and (min-width: 910px) {
+      body {
+          width: 1100px;
+      }
+  }
+
+  ::selection {
+      background: #D6EDFF;
+  }
+
+  p {
+      margin: 1em auto;
+  }
+
+  ol,ul {
+      margin: 0 auto;
+  }
+
+  dl {
+      margin: 0 auto;
+  }
+
+  .title {
+      text-align: center;
+      margin: 0.8em auto;
+      color: black;
+  }
+
+  .subtitle {
+      text-align: center;
+      font-size: 1.1em;
+      line-height: 1.4;
+      font-weight: bold;
+      margin: 1em auto;
+  }
+
+  .abstract {
+      margin: auto;
+      width: 80%;
+      font-style: italic;
+  }
+
+  .abstract p:last-of-type:before {
+      content: "    ";
+      white-space: pre;
+  }
+
+  .status {
+      font-size: $smaller;
+      margin: 2em auto;
+  }
+
+  [class^="section-number-"] {
+      margin-right: .5em;
+  }
+
+  [id^="orgheadline"] {
+      clear: both;
+  }
+
+  #footnotes {
+      font-size: $smaller;
+  }
+
+  .footpara {
+      display: inline;
+      margin: .2em auto;
+  }
+
+  .footdef {
+      margin-bottom: 1em;
+  }
+
+  .footdef sup {
+      padding-right: .5em;
+  }
+
+  a {
+      color: #527d9a;
+      text-decoration: none;
+  }
+
+  a:hover {
+      color: #003355;
+      border-bottom: 1px dotted;
+  }
+
+  figure {
+      padding: 0px;
+      margin: 1em auto;
+      text-align: center;
+  }
+
+  img {
+      max-width: 100%;
+      vertical-align: middle;
+  }
+
+  .MathJax_Display {
+      margin: 0!important;
+      width: $smaller!important;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+      color: #A5573E;
+      line-height: 1em;
+      font-family: $sans;
+  }
+
+  h1,h2,h3 {
+      line-height: 1.4em;
+  }
+
+  h4,h5,h6 {
+      font-size: 1em;
+  }
+
+  @media screen and (min-width: 600px) {
+      h1 {
+          font-size: 2em;
+      }
+      h2 {
+          font-size: 1.5em;
+      }
+      h3 {
+          font-size: 1.3em;
+      }
+      h1,h2,h3 {
+          line-height: 1.4em;
+      }
+      h4,h5,h6 {
+          font-size: 1.1em;
+      }
+  }
+
+  dt {
+      font-weight: bold;
+  }
+
+  /* table */
+
+  table {
+      margin: 1em auto;
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+      border-collapse: collapse;
+  }
+
+  thead {
+      border-bottom: 2px solid;
+  }
+
+  table td + td, table th + th {
+      border-left: 1px solid gray;
+  }
+
+  table tr {
+      border-top: 1px solid lightgray;
+  }
+
+  td,th {
+      padding: 0.3em 0.6em;
+      vertical-align: middle;
+  }
+
+  caption.t-above {
+      caption-side: top;
+  }
+
+  caption.t-bottom {
+      caption-side: bottom;
+  }
+
+  caption {
+      margin-bottom: 0.3em;
+  }
+
+  figcaption {
+      margin-top: 0.3em;
+  }
+
+  th.org-right {
+      text-align: center;
+  }
+
+  th.org-left {
+      text-align: center;
+  }
+
+  th.org-center {
+      text-align: center;
+  }
+
+  td.org-right {
+      text-align: right;
+  }
+
+  td.org-left {
+      text-align: left;
+  }
+
+  td.org-center {
+      text-align: center;
+  }
+
+  blockquote {
+      margin: 1em 2em;
+      padding-left: 1em;
+      border-left: 3px solid #ccc;
+  }
+
+  kbd {
+      background-color: #f7f7f7;
+      font-size: $code-size;
+      margin: 0 .1em;
+      padding: .1em .6em;
+  }
+
+  .todo {
+      background-color: red;
+      color: white;
+      padding: .1em 0.3em;
+      border-radius: 3px;
+      background-clip: padding-box;
+      font-size: $code-size;
+      font-family: $monospace;
+      line-height: 1;
+  }
+
+  .done {
+      background-color: green;
+      color: white;
+      padding: .1em 0.3em;
+      border-radius: 3px;
+      background-clip: padding-box;
+      font-size: $code-size;
+      font-family: $monospace;
+      line-height: 1;
+  }
+
+  .priority {
+      color: orange;
+      font-family: $monospace;
+  }
+
+  /* Because tag span is set to float.  This is more like a hacking.  Maybe we
+     need a cleaner solution. */
+  #table-of-contents li {
+      clear: both;
+  }
+
+  .tag {
+      font-family: $monospace;
+      font-size: 0.7em;
+      font-weight: normal;
+  }
+
+  .tag span {
+      padding: 0.3em 0.3em;
+      float: right;
+      margin-right: .5em;
+      border: 1px solid #bbb;
+      border-radius: 3px;
+      background-clip: padding-box;
+      color: #333;
+      background-color: #eee;
+      line-height: 1;
+  }
+
+  .timestamp {
+      color: #bebebe;
+      font-size: $smaller;
+  }
+
+  .timestamp-kwd {
+      color: #5f9ea0;
+  }
+
+  .org-right {
+      margin-left: auto;
+      margin-right: 0px;
+      text-align: right;
+  }
+
+  .org-left {
+      margin-left: 0px;
+      margin-right: auto;
+      text-align: left;
+  }
+
+  .org-center {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+  }
+
+  .underline {
+      text-decoration: underline;
+  }
+
+  #postamble p, #preamble p {
+      font-size: $smaller;
+      margin: .2em;
+  }
+
+  p.verse {
+      margin-left: 3%;
+  }
+
+  :not(pre) > code {
+      padding: 2px 5px;
+      margin: auto 1px;
+      border: 1px solid #DDD;
+      border-radius: 3px;
+      background-clip: padding-box;
+      color: #333;
+      font-size: $code-size;
+  }
+
+  .org-src-container {
+      border: 1px solid #ccc;
+      box-shadow: 3px 3px 3px #eee;
+      font-family: $monospace;
+      font-size: $code-size;
+      margin: 1em auto;
+      padding: 0.1em 0.5em;
+      position: relative;
+  }
+
+  .org-src-container>pre {
+      overflow: auto;
+  }
+
+  .org-src-container>pre:before {
+      display: block;
+      position: absolute;
+      background-color: #b3b3b3;
+      top: 0;
+      right: 0;
+      padding: 0 0.5em;
+      border-bottom-left-radius: 8px;
+      border: 0;
+      color: white;
+      font-size: $code-size;
+  }
+
+  /* from http://demo.thi.ng/org-spec/ */
+
+  .org-src-container>pre.src-sh:before {
+      content: 'sh';
+  }
+  .org-src-container>pre.src-bash:before {
+      content: 'bash';
+  }
+  .org-src-container>pre.src-emacs-lisp:before {
+      content: 'Emacs Lisp';
+  }
+  .org-src-container>pre.src-R:before {
+      content: 'R';
+  }
+  .org-src-container>pre.src-org:before {
+      content: 'Org';
+  }
+  .org-src-container>pre.src-cpp:before {
+      content: 'C++';
+  }
+  .org-src-container>pre.src-c:before {
+      content: 'C';
+  }
+  .org-src-container>pre.src-html:before {
+      content: 'HTML'
+  }
+  .org-src-container>pre.src-js:before {
+      content: 'Javascript'
+  }
+  .org-src-container>pre.src-javascript:before {
+      content: 'Javascript'
+  }
+
+  // More languages from http://orgmode.org/worg/org-contrib/babel/languages.html
+
+  .org-src-container>pre.src-abc:before {
+      content: 'ABC';
+  }
+  .org-src-container>pre.src-asymptote:before {
+      content: 'Asymptote';
+  }
+  .org-src-container>pre.src-awk:before {
+      content: 'Awk';
+  }
+  .org-src-container>pre.src-C:before {
+      content: 'C';
+  }
+  .org-src-container>pre.src-calc:before {
+      content: 'Calc';
+  }
+  .org-src-container>pre.src-clojure:before {
+      content: 'Clojure';
+  }
+  .org-src-container>pre.src-comint:before {
+      content: 'comint';
+  }
+  .org-src-container>pre.src-css:before {
+      content: 'CSS';
+  }
+  .org-src-container>pre.src-D:before {
+      content: 'D';
+  }
+  .org-src-container>pre.src-ditaa:before {
+      content: 'Ditaa';
+  }
+  .org-src-container>pre.src-dot:before {
+      content: 'Dot';
+  }
+  .org-src-container>pre.src-ebnf:before {
+      content: 'ebnf';
+  }
+  .org-src-container>pre.src-forth:before {
+      content: 'Forth';
+  }
+  .org-src-container>pre.src-F90:before {
+      content: 'Fortran';
+  }
+  .org-src-container>pre.src-gnuplot:before {
+      content: 'Gnuplot';
+  }
+  .org-src-container>pre.src-haskell:before {
+      content: 'Haskell';
+  }
+  .org-src-container>pre.src-io:before {
+      content: 'Io';
+  }
+  .org-src-container>pre.src-java:before {
+      content: 'Java';
+  }
+  .org-src-container>pre.src-latex:before {
+      content: 'LaTeX';
+  }
+  .org-src-container>pre.src-ledger:before {
+      content: 'Ledger';
+  }
+  .org-src-container>pre.src-ly:before {
+      content: 'Lilypond';
+  }
+  .org-src-container>pre.src-lisp:before {
+      content: 'Lisp';
+  }
+  .org-src-container>pre.src-makefile:before {
+      content: 'Make';
+  }
+  .org-src-container>pre.src-matlab:before {
+      content: 'Matlab';
+  }
+  .org-src-container>pre.src-max:before {
+      content: 'Maxima';
+  }
+  .org-src-container>pre.src-mscgen:before {
+      content: 'Mscgen';
+  }
+  .org-src-container>pre.src-Caml:before {
+      content: 'Objective';
+  }
+  .org-src-container>pre.src-octave:before {
+      content: 'Octave';
+  }
+  .org-src-container>pre.src-org:before {
+      content: 'Org';
+  }
+  .org-src-container>pre.src-perl:before {
+      content: 'Perl';
+  }
+  .org-src-container>pre.src-picolisp:before {
+      content: 'Picolisp';
+  }
+  .org-src-container>pre.src-plantuml:before {
+      content: 'PlantUML';
+  }
+  .org-src-container>pre.src-python:before {
+      content: 'Python';
+  }
+  .org-src-container>pre.src-ruby:before {
+      content: 'Ruby';
+  }
+  .org-src-container>pre.src-sass:before {
+      content: 'Sass';
+  }
+  .org-src-container>pre.src-scala:before {
+      content: 'Scala';
+  }
+  .org-src-container>pre.src-scheme:before {
+      content: 'Scheme';
+  }
+  .org-src-container>pre.src-screen:before {
+      content: 'Screen';
+  }
+  .org-src-container>pre.src-sed:before {
+      content: 'Sed';
+  }
+  .org-src-container>pre.src-shell:before {
+      content: 'shell';
+  }
+  .org-src-container>pre.src-shen:before {
+      content: 'Shen';
+  }
+  .org-src-container>pre.src-sql:before {
+      content: 'SQL';
+  }
+  .org-src-container>pre.src-sqlite:before {
+      content: 'SQLite';
+  }
+  .org-src-container>pre.src-stan:before {
+      content: 'Stan';
+  }
+  .org-src-container>pre.src-vala:before {
+      content: 'Vala';
+  }
+  .org-src-container>pre.src-axiom:before {
+      content: 'Axiom';
+  }
+  .org-src-container>pre.src-browser:before {
+      content: 'HTML';
+  }
+  .org-src-container>pre.src-cypher:before {
+      content: 'Neo4j';
+  }
+  .org-src-container>pre.src-elixir:before {
+      content: 'Elixir';
+  }
+  .org-src-container>pre.src-request:before {
+      content: 'http';
+  }
+  .org-src-container>pre.src-ipython:before {
+      content: 'iPython';
+  }
+  .org-src-container>pre.src-kotlin:before {
+      content: 'Kotlin';
+  }
+  .org-src-container>pre.src-Flavored Erlang  lfe:before {
+      content: 'Lisp';
+  }
+  .org-src-container>pre.src-mongo:before {
+      content: 'MongoDB';
+  }
+  .org-src-container>pre.src-prolog:before {
+      content: 'Prolog';
+  }
+  .org-src-container>pre.src-rec:before {
+      content: 'rec';
+  }
+  .org-src-container>pre.src-ML  sml:before {
+      content: 'Standard';
+  }
+  .org-src-container>pre.src-Translate  translate:before {
+      content: 'Google';
+  }
+  .org-src-container>pre.src-typescript:before {
+      content: 'Typescript';
+  }
+  .org-src-container>pre.src-rust:before {
+      content: 'Rust';
+  }
+
+  .inlinetask {
+      background: #ffffcc;
+      border: 2px solid gray;
+      margin: 10px;
+      padding: 10px;
+  }
+
+  #org-div-home-and-up {
+      font-size: 70%;
+      text-align: right;
+      white-space: nowrap;
+  }
+
+  .linenr {
+      font-size: $smaller;
+  }
+
+  .code-highlighted {
+      background-color: #ffff00;
+  }
+
+  #bibliography {
+      font-size: $smaller;
+  }
+
+  #bibliography table {
+      width: 100%;
+  }
+
+  .creator {
+      display: block;
+  }
+
+  @media screen and (min-width: 600px) {
+      .creator {
+          display: inline;
+          float: right;
+      }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* ==========================================================================
+  The typical Github Style:
+     ========================================================================== */
+
+
+
+
+
+  /**
+   * Correct `block` display not defined in IE 8/9.
+   */
+
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  main,
+  nav,
+  section,
+  summary {
+      display: block;
+  }
+
+  /**
+   * Correct `inline-block` display not defined in IE 8/9.
+   */
+
+  audio,
+  canvas,
+  video {
+      display: inline-block;
+  }
+
+  /**
+   * Prevent modern browsers from displaying `audio` without controls.
+   * Remove excess height in iOS 5 devices.
+   */
+
+  audio:not([controls]) {
+      display: none;
+      height: 0;
+  }
+
+  /**
+   * Address `[hidden]` styling not present in IE 8/9.
+   * Hide the `template` element in IE, Safari, and Firefox < 22.
+   */
+
+  [hidden],
+  template {
+      display: none;
+  }
+
+  /* ==========================================================================
+     Base
+     ========================================================================== */
+
+  /**
+   * 1. Set default font family to sans-serif.
+   * 2. Prevent iOS text size adjust after orientation change, without disabling
+   *    user zoom.
+   */
+
+  html {
+      font-family: sans-serif; /* 1 */
+      -ms-text-size-adjust: 100%; /* 2 */
+      -webkit-text-size-adjust: 100%; /* 2 */
+  }
+
+  /**
+   * Remove default margin.
+   */
+
+  body {
+      margin: 0;
+  }
+
+  /* ==========================================================================
+     Links
+     ========================================================================== */
+
+  /**
+   * Remove the gray background color from active links in IE 10.
+   */
+
+  a {
+      background: transparent;
+  }
+
+  /**
+   * Address `outline` inconsistency between Chrome and other browsers.
+   */
+
+  a:focus {
+      outline: thin dotted;
+  }
+
+  /**
+   * Improve readability when focused and also mouse hovered in all browsers.
+   */
+
+  a:active,
+  a:hover {
+      outline: 0;
+  }
+
+  /* ==========================================================================
+     Typography
+     ========================================================================== */
+
+  /**
+   * Address variable `h1` font-size and margin within `section` and `article`
+   * contexts in Firefox 4+, Safari 5, and Chrome.
+   */
+
+  h1 {
+      font-size: 2em;
+      margin: 0.67em 0;
+  }
+
+  /**
+   * Address styling not present in IE 8/9, Safari 5, and Chrome.
+   */
+
+  abbr[title] {
+      border-bottom: 1px dotted;
+  }
+
+  /**
+   * Address style set to `bolder` in Firefox 4+, Safari 5, and Chrome.
+   */
+
+  b,
+  strong {
+      font-weight: bold;
+  }
+
+  /**
+   * Address styling not present in Safari 5 and Chrome.
+   */
+
+  dfn {
+      font-style: italic;
+  }
+
+  /**
+   * Address differences between Firefox and other browsers.
+   */
+
+  hr {
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+      height: 0;
+  }
+
+  /**
+   * Address styling not present in IE 8/9.
+   */
+
+  mark {
+      background: #ff0;
+      color: #000;
+  }
+
+  /**
+   * Correct font family set oddly in Safari 5 and Chrome.
+   */
+
+  code,
+  kbd,
+  pre,
+  samp {
+      font-family: monospace, serif;
+      font-size: 1em;
+  }
+
+  /**
+   * Improve readability of pre-formatted text in all browsers.
+   */
+
+  pre {
+      white-space: pre-wrap;
+  }
+
+  /**
+   * Set consistent quote types.
+   */
+
+  q {
+      quotes: "\201C" "\201D" "\2018" "\2019";
+  }
+
+  /**
+   * Address inconsistent and variable font size in all browsers.
+   */
+
+  small {
+      font-size: 80%;
+  }
+
+  /**
+   * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+   */
+
+  sub,
+  sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline;
+  }
+
+  sup {
+      top: -0.5em;
+  }
+
+  sub {
+      bottom: -0.25em;
+  }
+
+  /* ==========================================================================
+     Embedded content
+     ========================================================================== */
+
+  /**
+   * Remove border when inside `a` element in IE 8/9.
+   */
+
+  img {
+      border: 0;
+  }
+
+  /**
+   * Correct overflow displayed oddly in IE 9.
+   */
+
+  svg:not(:root) {
+      overflow: hidden;
+  }
+
+  /* ==========================================================================
+     Figures
+     ========================================================================== */
+
+  /**
+   * Address margin not present in IE 8/9 and Safari 5.
+   */
+
+  figure {
+      margin: 0;
+  }
+
+  /* ==========================================================================
+     Forms
+     ========================================================================== */
+
+  /**
+   * Define consistent border, margin, and padding.
+   */
+
+  fieldset {
+      border: 1px solid #c0c0c0;
+      margin: 0 2px;
+      padding: 0.35em 0.625em 0.75em;
+  }
+
+  /**
+   * 1. Correct `color` not being inherited in IE 8/9.
+   * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+   */
+
+  legend {
+      border: 0; /* 1 */
+      padding: 0; /* 2 */
+  }
+
+  /**
+   * 1. Correct font family not being inherited in all browsers.
+   * 2. Correct font size not being inherited in all browsers.
+   * 3. Address margins set differently in Firefox 4+, Safari 5, and Chrome.
+   */
+
+  button,
+  input,
+  select,
+  textarea {
+      font-family: inherit; /* 1 */
+      font-size: 100%; /* 2 */
+      margin: 0; /* 3 */
+  }
+
+  /**
+   * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+   * the UA stylesheet.
+   */
+
+  button,
+  input {
+      line-height: normal;
+  }
+
+  /**
+   * Address inconsistent `text-transform` inheritance for `button` and `select`.
+   * All other form control elements do not inherit `text-transform` values.
+   * Correct `button` style inheritance in Chrome, Safari 5+, and IE 8+.
+   * Correct `select` style inheritance in Firefox 4+ and Opera.
+   */
+
+  button,
+  select {
+      text-transform: none;
+  }
+
+  /**
+   * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+   *    and `video` controls.
+   * 2. Correct inability to style clickable `input` types in iOS.
+   * 3. Improve usability and consistency of cursor style between image-type
+   *    `input` and others.
+   */
+
+  button,
+  html input[type="button"], /* 1 */
+  input[type="reset"],
+  input[type="submit"] {
+      -webkit-appearance: button; /* 2 */
+      cursor: pointer; /* 3 */
+  }
+
+  /**
+   * Re-set default cursor for disabled elements.
+   */
+
+  button[disabled],
+  html input[disabled] {
+      cursor: default;
+  }
+
+  /**
+   * 1. Address box sizing set to `content-box` in IE 8/9/10.
+   * 2. Remove excess padding in IE 8/9/10.
+   */
+
+  input[type="checkbox"],
+  input[type="radio"] {
+      box-sizing: border-box; /* 1 */
+      padding: 0; /* 2 */
+  }
+
+  /**
+   * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+   * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+   *    (include `-moz` to future-proof).
+   */
+
+  input[type="search"] {
+      -webkit-appearance: textfield; /* 1 */
+      -moz-box-sizing: content-box;
+      -webkit-box-sizing: content-box; /* 2 */
+      box-sizing: content-box;
+  }
+
+  /**
+   * Remove inner padding and search cancel button in Safari 5 and Chrome
+   * on OS X.
+   */
+
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration {
+      -webkit-appearance: none;
+  }
+
+  /**
+   * Remove inner padding and border in Firefox 4+.
+   */
+
+  button::-moz-focus-inner,
+  input::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+  }
+
+  /**
+   * 1. Remove default vertical scrollbar in IE 8/9.
+   * 2. Improve readability and alignment in all browsers.
+   */
+
+  textarea {
+      overflow: auto; /* 1 */
+      vertical-align: top; /* 2 */
+  }
+
+  /* ==========================================================================
+     Tables
+     ========================================================================== */
+
+  /**
+   * Remove most spacing between table cells.
+   */
+
+  table {
+      border-collapse: collapse;
+      border-spacing: 0;
+  }
+
+  .go-top {
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+  text-decoration: none;
+  background-color: #E0E0E0;
+  font-size: 12px;
+  padding: 1em;
+  display: inline;
+  }
+
+  /* Github css  max-width: 70em for decent width size*/
+
+  html,body{        margin: auto;
+      padding-right: 1em;
+      padding-left: 1em;
+      max-width: 70em; color:black;}*:not('#mkdbuttons'){margin:0;padding:0}body{font:13.34px helvetica,arial,freesans,clean,sans-serif;-webkit-font-smoothing:subpixel-antialiased;line-height:1.4;padding:3px;background:#fff;border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px}p{margin:1em 0}a{color:#4183c4;text-decoration:none}body{background-color:#fff;padding:30px;margin:15px;font-size:14px;line-height:1.6}body>*:first-child{margin-top:0!important}body>*:last-child{margin-bottom:0!important}@media screen{body{box-shadow:0 0 0 1px #cacaca,0 0 0 4px #eee}}h1,h2,h3,h4,h5,h6{margin:20px 0 10px;padding:0;font-weight:bold;-webkit-font-smoothing:subpixel-antialiased;cursor:text}h1{font-size:28px;color:#000}h2{font-size:24px;border-bottom:1px solid #ccc;color:#000}h3{font-size:18px;color:#333}h4{font-size:16px;color:#333}h5{font-size:14px;color:#333}h6{color:#777;font-size:14px}p,blockquote,table,pre{margin:15px 0}ul{padding-left:30px}ol{padding-left:30px}ol li ul:first-of-type{margin-top:0}hr{background:transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;border:0 none;color:#ccc;height:4px;padding:0}body>h2:first-child{margin-top:0;padding-top:0}body>h1:first-child{margin-top:0;padding-top:0}body>h1:first-child+h2{margin-top:0;padding-top:0}body>h3:first-child,body>h4:first-child,body>h5:first-child,body>h6:first-child{margin-top:0;padding-top:0}a:first-child h1,a:first-child h2,a:first-child h3,a:first-child h4,a:first-child h5,a:first-child h6{margin-top:0;padding-top:0}h1+p,h2+p,h3+p,h4+p,h5+p,h6+p,ul li>:first-child,ol li>:first-child{margin-top:0}dl{padding:0}dl dt{font-size:14px;font-weight:bold;font-style:italic;padding:0;margin:15px 0 5px}dl dt:first-child{padding:0}dl dt>:first-child{margin-top:0}dl dt>:last-child{margin-bottom:0}dl dd{margin:0 0 15px;padding:0 15px}dl dd>:first-child{margin-top:0}dl dd>:last-child{margin-bottom:0}blockquote{border-left:4px solid #DDD;padding:0 15px;color:#777}blockquote>:first-child{margin-top:0}blockquote>:last-child{margin-bottom:0}table{border-collapse:collapse;border-spacing:0;font-size:100%;font:inherit}table th{font-weight:bold;border:1px solid #ccc;padding:6px 13px}table td{border:1px solid #ccc;padding:6px 13px}table tr{border-top:1px solid #ccc;background-color:#fff}table tr:nth-child(2n){background-color:#f8f8f8}img{max-width:100%}code,tt{margin:0 2px;padding:0 5px;white-space:nowrap;border:1px solid #eaeaea;background-color:#f8f8f8;border-radius:3px;font-family:Consolas,'Liberation Mono',Courier,monospace;font-size:12px;color:#333}pre>code{margin:0;padding:0;white-space:pre;border:0;background:transparent}.highlight pre{background-color:#f8f8f8;border:1px solid #ccc;font-size:13px;line-height:19px;overflow:auto;padding:6px 10px;border-radius:3px}pre{background-color:#f8f8f8;border:1px solid #ccc;font-size:13px;line-height:19px;overflow:auto;padding:6px 10px;border-radius:3px}pre code,pre tt{background-color:transparent;border:0}.poetry pre{font-family:Georgia,Garamond,serif!important;font-style:italic;font-size:110%!important;line-height:1.6em;display:block;margin-left:1em}.poetry pre code{font-family:Georgia,Garamond,serif!important;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;hyphens:auto;white-space:pre-wrap}sup,sub,a.footnote{font-size:1.4ex;height:0;line-height:1;vertical-align:super;position:relative}sub{vertical-align:sub;top:-1px}@media print{body{background:#fff}img,pre,blockquote,table,figure{page-break-inside:avoid}body{background:#fff;border:0}code{background-color:#fff;color:#333!important;padding:0 .2em;border:1px solid #dedede}pre{background:#fff}pre code{background-color:white!important;overflow:visible}}@media screen{body.inverted{color:#eee!important;border-color:#555;box-shadow:none}.inverted body,.inverted hr .inverted p,.inverted td,.inverted li,.inverted h1,.inverted h2,.inverted h3,.inverted h4,.inverted h5,.inverted h6,.inverted th,.inverted .math,.inverted caption,.inverted dd,.inverted dt,.inverted blockquote{color:#eee!important;border-color:#555;box-shadow:none}.inverted td,.inverted th{background:#333}.inverted h2{border-color:#555}.inverted hr{border-color:#777;border-width:1px!important}::selection{background:rgba(157,193,200,0.5)}h1::selection{background-color:rgba(45,156,208,0.3)}h2::selection{background-color:rgba(90,182,224,0.3)}h3::selection,h4::selection,h5::selection,h6::selection,li::selection,ol::selection{background-color:rgba(133,201,232,0.3)}code::selection{background-color:rgba(0,0,0,0.7);color:#eee}code span::selection{background-color:rgba(0,0,0,0.7)!important;color:#eee!important}a::selection{background-color:rgba(255,230,102,0.2)}.inverted a::selection{background-color:rgba(255,230,102,0.6)}td::selection,th::selection,caption::selection{background-color:rgba(180,237,95,0.5)}.inverted{background:#0b2531;background:#252a2a}.inverted body{background:#252a2a}.inverted a{color:#acd1d5}}.highlight .c{color:#998;font-style:italic}.highlight .err{color:#a61717;background-color:#e3d2d2}.highlight .k,.highlight .o{font-weight:bold}.highlight .cm{color:#998;font-style:italic}.highlight .cp{color:#999;font-weight:bold}.highlight .c1{color:#998;font-style:italic}.highlight .cs{color:#999;font-weight:bold;font-style:italic}.highlight .gd{color:#000;background-color:#fdd}.highlight .gd .x{color:#000;background-color:#faa}.highlight .ge{font-style:italic}.highlight .gr{color:#a00}.highlight .gh{color:#999}.highlight .gi{color:#000;background-color:#dfd}.highlight .gi .x{color:#000;background-color:#afa}.highlight .go{color:#888}.highlight .gp{color:#555}.highlight .gs{font-weight:bold}.highlight .gu{color:#800080;font-weight:bold}.highlight .gt{color:#a00}.highlight .kc,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr{font-weight:bold}.highlight .kt{color:#458;font-weight:bold}.highlight .m{color:#099}.highlight .s{color:#d14}.highlight .na{color:#008080}.highlight .nb{color:#0086b3}.highlight .nc{color:#458;font-weight:bold}.highlight .no{color:#008080}.highlight .ni{color:#800080}.highlight .ne,.highlight .nf{color:#900;font-weight:bold}.highlight .nn{color:#555}.highlight .nt{color:#000080}.highlight .nv{color:#008080}.highlight .ow{font-weight:bold}.highlight .w{color:#bbb}.highlight .mf,.highlight .mh,.highlight .mi,.highlight .mo{color:#099}.highlight .sb,.highlight .sc,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .si,.highlight .sx{color:#d14}.highlight .sr{color:#009926}.highlight .s1{color:#d14}.highlight .ss{color:#990073}.highlight .bp{color:#999}.highlight .vc,.highlight .vg,.highlight .vi{color:#008080}.highlight .il{color:#099}.highlight .gc{color:#999;background-color:#eaf2f5}.type-csharp .highlight .k,.type-csharp .highlight .kt{color:#00F}.type-csharp .highlight .nf{color:#000;font-weight:normal}.type-csharp .highlight .nc{color:#2b91af}.type-csharp .highlight .nn{color:#000}.type-csharp .highlight .s,.type-csharp .highlight .sc{color:#a31515}
+
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Data Structures</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#tutorial-1">Tutorial 1</a>
+<ul>
+<li><a href="#preamble">Preamble</a></li>
+<li><a href="#questions">Questions</a></li>
+<li><a href="#introductory-questions">Introductory Questions</a>
+<ul>
+<li><a href="#what-is-meant-by-working-directory-in-rstudio">1. What is meant by Working Directory in RStudio?</a></li>
+<li><a href="#why-is-it-important-to-know-the-working-directory">2. Why is it important to know the working directory?</a></li>
+<li><a href="#how-do-we-set-the-working-directory">3. How do we set the working directory?</a></li>
+<li><a href="#name-some-of-the-frequently-used-data-types-in-r">4. Name some of the frequently used data types in R?</a></li>
+<li><a href="#assignment-characters">5. Assignment Characters</a></li>
+</ul></li>
+<li><a href="#working-with-vectors-and-lists">Working with Vectors and Lists</a>
+<ul>
+<li><a href="#write-an-example-of-a-logical-vector.">6. Write an example of a logical vector.</a></li>
+<li><a href="#write-an-example-of-a-numeric-vector.">7. Write an example of a numeric vector.</a></li>
+<li><a href="#write-an-example-of-a-character-vector.">8. Write an example of a character vector.</a></li>
+<li><a href="#write-an-example-of-an-integer-vector.">9. Write an example of an integer vector.</a></li>
+<li><a href="#convert-the-following-integer-vector-to-character-vector.">10. Convert the following integer vector to character vector.</a></li>
+<li><a href="#convert-the-following-integer-vector-to-logical-vector.">11. Convert the following integer vector to logical vector.</a></li>
+<li><a href="#write-an-example-of-a-list.">12. Write an example of a list.</a></li>
+<li><a href="#add-5-to-each-element-of-the-vector.">13. Add 5 to each element of the vector.</a></li>
+<li><a href="#sort-the-elements-of-the-vector.">14. Sort the elements of the vector.</a></li>
+<li><a href="#get-the-first-three-elements-of-the-vector-sub-setting-vectors.">15. Get the first three elements of the vector (sub-setting vectors).</a></li>
+<li><a href="#get-all-elements-except-3rd.">15. Get all elements except 3rd.</a></li>
+<li><a href="#get-all-elements-except-1st-and-3rd.">16. Get all elements except 1st and 3rd.</a></li>
+<li><a href="#get-all-elements-greater-than-3.">17. Get all elements greater than 3.</a></li>
+<li><a href="#get-all-elements-greater-than-3-but-less-than-7.">18. Get all elements greater than 3 but less than 7.</a></li>
+<li><a href="#get-all-indices-of-elements-greater-than-3-but-less-than-7.">19. Get all indices of elements greater than 3 but less than 7.</a></li>
+<li><a href="#get-all-sum-of-elements-greater-than-3-but-less-than-7.">20. Get all sum of elements greater than 3 but less than 7.</a></li>
+<li><a href="#add-one-to-all-numbers-not-divisible-by-3.">21. Add one to all numbers not divisible by 3.</a></li>
+<li><a href="#replace-those-numbers-not-divisible-by-3-by-na-not-a-number.">21. Replace those numbers not divisible by 3 by NA (Not a number).</a></li>
+<li><a href="#find-the-count-of-numbers-in-the-vector.">22. Find the count of numbers in the vector.</a></li>
+<li><a href="#print-each-number-on-a-new-line">22. Print each number on a new line</a></li>
+<li><a href="#given-the-character-vector-find-its-factors">23. Given the character vector, find its factors</a></li>
+<li><a href="#given-the-character-vector-find-the-structure-of-how-it-is-stored">24. Given the character vector, find the structure of how it is stored</a></li>
+<li><a href="#given-the-character-vector-change-the-annotations-for-the-levels.">26. Given the character vector, change the annotations for the levels.</a></li>
+<li><a href="#forcing-the-levels-to-be-in-a-specific-order.">27. Forcing the levels to be in a specific order.</a></li>
+<li><a href="#given-the-character-vector-find-the-frequency-of-each-level.">28. Given the character vector find the frequency of each level.</a></li>
+</ul></li>
+<li><a href="#using-the-sample-function">Using the Sample Function</a>
+<ul>
+<li><a href="#given-the-character-vector-what-does-the-following-code-do">29. Given the character vector what does the following code do?</a></li>
+</ul></li>
+<li><a href="#working-with-numeric-data">Working with numeric data</a></li>
+<li><a href="#the-data-frame-the-r-equivalent-of-the-spreadsheet"><strong>The Data Frame (The R equivalent of the spreadsheet)</strong></a>
+<ul>
+<li><a href="#given-the-following-data-frame-find-just-the-names-of-the-people.">30. Given the following data frame, find just the names of the people.</a></li>
+<li><a href="#given-the-following-data-frame-get-all-the-details-of-the-1st-and">31. Given the following data frame, get all the details of the 1st and</a></li>
+<li><a href="#given-the-following-data-frame-get-all-the-details-of-the-first-three-persons.">32. Given the following data frame, get all the details of the first three persons.</a></li>
+<li><a href="#given-the-following-data-frame-get-all-the-details-of-those">33. Given the following data frame, get all the details of those</a></li>
+<li><a href="#given-the-following-data-frame-add-another-column-representing-the">34. Given the following data frame, add another column representing the</a></li>
+<li><a href="#given-the-following-data-frame-add-two-more-rows-of-data">34. Given the following data frame, add two more rows of data</a></li>
+<li><a href="#assuming-you-have-file-named-beandata.csv-in-your-working">36. Assuming you have file named “BeanData.csv” in your working</a></li>
+<li><a href="#assuming-you-have-initialized-beans-by-importing-from-an-excel">37. Assuming you have initialized beans by importing from an Excel</a></li>
+<li><a href="#observe-the-first-6-rows-of-data-in-beans.">38. Observe the first 6 rows of data in <em>beans</em>.</a></li>
+<li><a href="#use-the-apply-function-to-find-the-means-of-the-last-three">39. Use the <em>apply</em> function to find the means of the last three</a></li>
+<li><a href="#observe-that-the-beans-data-has-trt-representing-certain-grouping.">40. Observe that the beans data has trt representing certain grouping.</a></li>
+<li><a href="#using-tapply-for-multiple">41. Using <code>tapply</code> for multiple</a></li>
+<li><a href="#custom-functions-can-be-used-with-tapply">44. Custom Functions can be used with <code>tapply()</code></a></li>
+<li><a href="#normalize-a-vector">47. Normalize a Vector</a></li>
+<li><a href="#normalize-a-matrix">48. Normalize a Matrix</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="tutorial-1">Tutorial 1</h1>
+<blockquote>
+<p>Week 1 for Sydney; Week 2 for Western Sydney Material Covered 2020-March-13</p>
+</blockquote>
+<h2 id="preamble">Preamble</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Preamble</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">## Install Pacman</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>load.pac &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="cf">if</span> (<span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)) {</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  }<span class="cf">else</span>{</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb1-9"><a href="#cb1-9"></a>  }</span>
+<span id="cb1-10"><a href="#cb1-10"></a>  pacman<span class="op">::</span><span class="kw">p_load</span>(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,</span>
+<span id="cb1-11"><a href="#cb1-11"></a>                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,</span>
+<span id="cb1-12"><a href="#cb1-12"></a>                 swirl, corrplot, gridExtra, mise, latex2exp)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>}</span>
+<span id="cb1-14"><a href="#cb1-14"></a></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="kw">load.pac</span>()</span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="kw">mise</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">set.seed</span>(<span class="dv">9823</span>)</span></code></pre></div>
+<h2 id="questions">Questions</h2>
+<h2 id="introductory-questions">Introductory Questions</h2>
+<h3 id="what-is-meant-by-working-directory-in-rstudio">1. What is meant by Working Directory in RStudio?</h3>
+<p>The working directory in <strong><em>R</em></strong> is the base directory, it set’s the root/home directory of the script; the practical idea being that resources read to, and written from, the drive relative to the working directory.</p>
+<h3 id="why-is-it-important-to-know-the-working-directory">2. Why is it important to know the working directory?</h3>
+<p>It is important to know the working directory because it is relative to this location that resources will be read from and written to. Generally resources will be manipulated from other software (OS/bash/python etc.) and so a relative working directory is necessary to work with those resources from <strong><em>R</em></strong>.</p>
+<h3 id="how-do-we-set-the-working-directory">3. How do we set the working directory?</h3>
+<p>There’s a few different ways to set the working directory depending on what you want to do.</p>
+<h4 id="default-working-directory">Default Working directory</h4>
+<p>By default the working directory is set (I think) to the home directory <code>~</code> in <code>*nix</code> and to <code>C:/Users/Username</code> in <em>Windows</em>.</p>
+<h4 id="set-working-directory-to-directory">Set Working Directory to Directory</h4>
+<p>A specific directory can be specified by using the following command:</p>
+<pre><code>setwd(&quot;~/Notes/DataSci/Social_Web_Analytics&quot;)</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">print</span>(<span class="st">&quot;hello World&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;hello World&quot;</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># cat(&quot;/014&quot;)</span></span></code></pre></div>
+<h4 id="set-working-directory-to-file-location">Set Working Directory to File Location</h4>
+<h5 id="reading-parent.frame2">Reading <code>parent.frame(2)</code></h5>
+<p>Generally it’s helpful to set the working directory to the location of the script, regardless of whether or not the script is moved, using <strong><em>R</em></strong> this can be acheived thusly:</p>
+<pre><code>this.dir &lt;- dirname(parent.frame(2)$ofile)
+setwd(this.dir)
+rm(this.dir)</code></pre>
+<p>This method has the disadvantage of breaking <strong><em>R</em></strong> <em>Studio</em>’s <code>KnitR</code> (and may interfere with <code>spin</code>) so if you’re going to use that the below method, using <code>rstudioapi</code> is better.</p>
+<h5 id="using-rstudioapi">Using <code>rstudioapi</code></h5>
+<p>When using <a href="https://cran.rstudio.com/web/packages/rstudioapi/index.html"><strong><em>R</em></strong> <em>Studio</em></a> the <a href="https://cran.rstudio.com/web/packages/rstudioapi/index.html">rstudioapi</a> may be leveraged in order to set the working directory, the disadvantage to this though is that <strong><em>R</em></strong> <em>Studio</em> must be installed and loading the <code>api</code> can be slow if the script is supposed to be relatively quick.</p>
+<pre><code>  #Test and install pacman package
+  if (require(&#39;pacman&#39;)) {
+    library(&#39;pacman&#39;)
+  } else{
+    install.packages(&#39;pacman&#39;)
+    library(&#39;pacman&#39;)
+  }
+  
+  #Use Pacman to install other useful packages
+  pacman::p_load(ggplot2, rmarkdown, dplyr, plotly, rstudioapi, installr, reshape2)
+
+  #Use the Rstudio API to get the working directory
+  current_path &lt;- getActiveDocumentContext()$path
+
+  # Set the Working Directory
+  setwd(dirname(current_path)) </code></pre>
+<h5 id="r-markdown">R Markdown</h5>
+<p>If you’re using <strong><em>R</em></strong> <em>Markdown</em> the working directory is just the location of the <code>.rmd</code> file, which is fairly logical for that type of a file.</p>
+<h6 id="html-notebooks-html-document">HTML Notebooks / HTML Document</h6>
+<p>HTML Notebooks are rendered very quickly with a default style automatically upon saving, it’s close to live, but it’s generally not as good as <a href="https://www.google.com/search?client=ubuntu&amp;channel=fs&amp;q=iamcco+preview&amp;ie=utf-8&amp;oe=utf-8"><em>iamcco’s Preview</em></a> or <a href="https://www.zettlr.com/download/linux?pk_campaign=RecurringUsers&amp;pk_source=app&amp;pk_medium=ZettlrUpdater"><em>Zettlr</em></a> or <a href="https://github.com/marktext/marktext"><em>MarkText</em></a>.</p>
+<p>A HTML Document will be knitted and every code block will be evaluated each time, it’s too slow to be practical.</p>
+<h3 id="name-some-of-the-frequently-used-data-types-in-r">4. Name some of the frequently used data types in R?</h3>
+<h4 id="numeric-data"><code>numeric</code> Data</h4>
+<p>This is Numeric Data, it is a floating point number equivalent to <code>float</code> or <code>double</code> in Java.</p>
+<h4 id="character-data"><code>character</code> Data</h4>
+<p>The character data is any type of string data, unlike Java this is no data type for only one character, in <strong><em>R</em></strong> a string and character are both considered to be of the <code>character</code> data type.</p>
+<blockquote>
+<p>Ans: numeric, character, logical, complex, factors, matrices, arrays, and lists</p>
+</blockquote>
+<h3 id="assignment-characters">5. Assignment Characters</h3>
+<p>What is the difference between?</p>
+<pre><code>\&gt; a=2 \#or a \&lt;-2 \#or 2 -\&gt; a</code></pre>
+<p>And</p>
+<pre><code>\&gt; A=3 \# or A \&lt;- 3 \#or 3 -\&gt; A</code></pre>
+<p><strong>Ans: </strong>_R_** is case sensitive: a and A are two different variables and are assigned values 2 and 3 respectively. Assignment operations may be either done using = or &lt;- or -&gt; operators. A variable is an object in r.**</p>
+<p>The <code>&lt;-</code> character is recommended by various style guides, there may also be a slight difference.</p>
+<h2 id="working-with-vectors-and-lists">Working with Vectors and Lists</h2>
+<p>The most basic object is a vector. A vector can only contain objects of the same type (also known as class). BUT: The one exception is a <em>list</em>, which is represented as a vector but can contain objects of different classes</p>
+<h3 id="write-an-example-of-a-logical-vector.">6. Write an example of a logical vector.</h3>
+<p>Try to be aware that any non-zero value tends to be <em>truthy</em></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>logical_vector &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a>(numbers &lt;-<span class="st"> </span>(<span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">90</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)))</span></code></pre></div>
+<pre><code>##  [1] 1 3 0 1 2 1 3 0 3 1 3 1 1 2 3 1 3 0 0 0 0 0 2 1 2 3 1 3 2 2 1 1 3 1 1 1 3 0 1 3 1 2 0 1 2
+## [46] 1 3 0 0 2 3 2 2 2 3 2 3 3 2 0 0 3 3 2 1 1 2 2 3 2 3 2 0 0 1 3 1 0 1 3 2 0 0 2 2 2 1 0 1 1</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>logical_vector &lt;-<span class="st"> </span>numbers <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.logical</span>()</span></code></pre></div>
+<h3 id="write-an-example-of-a-numeric-vector.">7. Write an example of a numeric vector.</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>(x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>, <span class="dv">9</span>, <span class="dv">9</span>))</span></code></pre></div>
+<pre><code>## [1] 1 3 9 9</code></pre>
+<h3 id="write-an-example-of-a-character-vector.">8. Write an example of a character vector.</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>(x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;train&quot;</span>, <span class="st">&quot;furniture&quot;</span>, <span class="st">&quot;tracks&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;train&quot;     &quot;furniture&quot; &quot;tracks&quot;</code></pre>
+<h3 id="write-an-example-of-an-integer-vector.">9. Write an example of an integer vector.</h3>
+<p>It is necessary to specify integers as a vector</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>(integers &lt;-<span class="st"> </span><span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)))</span></code></pre></div>
+<pre><code>## [1] 1 2 3</code></pre>
+<h3 id="convert-the-following-integer-vector-to-character-vector.">10. Convert the following integer vector to character vector.</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="kw">class</span>(x)</span></code></pre></div>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>y &lt;-<span class="st"> </span><span class="kw">as.character</span>(x)</span></code></pre></div>
+<h3 id="convert-the-following-integer-vector-to-logical-vector.">11. Convert the following integer vector to logical vector.</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">-3</span>)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>y &lt;-<span class="st"> </span><span class="kw">as.logical</span>(x)</span></code></pre></div>
+<p><strong>Note 0 is considered as FALSE, non-zero is TRUE.</strong></p>
+<p>Or well rather truthy</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb24-2"><a href="#cb24-2"></a>nums &lt;-<span class="st"> </span>((<span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">9</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>))))</span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="kw">data.frame</span>(<span class="st">&quot;Original Numbers&quot;</span> =<span class="st"> </span>nums, <span class="st">&quot;Using as.logical&quot;</span> =<span class="st"> </span><span class="kw">as.logical</span>(nums))</span></code></pre></div>
+<pre><code>##   Original.Numbers Using.as.logical
+## 1                0            FALSE
+## 2                0            FALSE
+## 3                0            FALSE
+## 4                0            FALSE
+## 5                0            FALSE
+## 6                0            FALSE
+## 7                0            FALSE
+## 8                0            FALSE
+## 9                0            FALSE</code></pre>
+<h3 id="write-an-example-of-a-list.">12. Write an example of a list.</h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>( x &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">3</span>, <span class="st">&quot;a&quot;</span>, <span class="ot">TRUE</span>, <span class="dv">1</span><span class="op">+</span>4i))</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 3
+## 
+## [[2]]
+## [1] &quot;a&quot;
+## 
+## [[3]]
+## [1] TRUE
+## 
+## [[4]]
+## [1] 1+4i</code></pre>
+<ul>
+<li><code>[[]]</code> are used to represent each element of a list.</li>
+<li><code>x[[1]]</code> will be a vector of integer in which the first element will be 3</li>
+<li><code>x[[2]]</code> will be a vector of characters in which the first element will be “a”</li>
+<li><code>x[[3]]</code> will be a vector of logical values in which the first element will be TRUE</li>
+<li><code>x[[4]]</code> will be a vector of complex values in which the first element will be 1+4i</li>
+</ul>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>(x &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;d&quot;</span>)))</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 1 3
+## 
+## [[2]]
+## [1] &quot;a&quot; &quot;d&quot;</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="kw">print</span>(<span class="st">&quot;Hello&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Hello&quot;</code></pre>
+<ul>
+<li><code>X[[1]]</code> will be a vector of integers with values 1, 3. X<code>[[1]][1]</code> will be 1 and <code>x[[1][2]</code> is 3</li>
+<li><code>X[[2]]</code> will be a vector of chars. <code>X[[2]][1]</code> will be “a” and x[[2][2] will be “d”</li>
+<li>R can do many things easily with vectors: mathematical operations, sorting, and sub-setting.
+<ul>
+<li>I’m not sure how to do this with <em>TidyVerse</em> though.</li>
+</ul></li>
+</ul>
+<h3 id="add-5-to-each-element-of-the-vector.">13. Add 5 to each element of the vector.</h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>(vec &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">9</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+<pre><code>## [1] 2 4 3 3 4 3 2 2 3</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>vec <span class="op">+</span><span class="st"> </span><span class="dv">5</span></span></code></pre></div>
+<pre><code>## [1] 7 9 8 8 9 8 7 7 8</code></pre>
+<h3 id="sort-the-elements-of-the-vector.">14. Sort the elements of the vector.</h3>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">6</span>)</span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="kw">sort</span>(y)</span></code></pre></div>
+<pre><code>## [1] 1 5 6</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">sort</span>(y, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] 6 5 1</code></pre>
+<h3 id="get-the-first-three-elements-of-the-vector-sub-setting-vectors.">15. Get the first three elements of the vector (sub-setting vectors).</h3>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>(y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;z&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;a&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>y[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] <span class="co">#returns a vector with values c(&#39;a&#39;, &#39;x&#39;, &#39;y&#39;)</span></span></code></pre></div>
+<pre><code>## [1] &quot;a&quot; &quot;x&quot; &quot;y&quot;</code></pre>
+<h3 id="get-all-elements-except-3rd.">15. Get all elements except 3rd.</h3>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>(y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;z&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;a&quot; &quot;x&quot; &quot;y&quot; &quot;z&quot;</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>y[<span class="op">-</span><span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [1] &quot;a&quot; &quot;x&quot; &quot;z&quot;</code></pre>
+<h3 id="get-all-elements-except-1st-and-3rd.">16. Get all elements except 1st and 3rd.</h3>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;z&quot;</span>)</span>
+<span id="cb48-2"><a href="#cb48-2"></a>y[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</span></code></pre></div>
+<pre><code>## [1] &quot;x&quot; &quot;z&quot;</code></pre>
+<h3 id="get-all-elements-greater-than-3.">17. Get all elements greater than 3.</h3>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb50-2"><a href="#cb50-2"></a>y[y<span class="op">&gt;</span><span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [1] 5 7 6</code></pre>
+<h3 id="get-all-elements-greater-than-3-but-less-than-7.">18. Get all elements greater than 3 but less than 7.</h3>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb52-2"><a href="#cb52-2"></a></span>
+<span id="cb52-3"><a href="#cb52-3"></a>y[<span class="dv">3</span><span class="op">&lt;</span>y <span class="op">&amp;</span><span class="st"> </span>y <span class="op">&lt;</span><span class="st"> </span><span class="dv">7</span>] <span class="co">#returns 5, 6</span></span></code></pre></div>
+<pre><code>## [1] 5 6</code></pre>
+<h3 id="get-all-indices-of-elements-greater-than-3-but-less-than-7.">19. Get all indices of elements greater than 3 but less than 7.</h3>
+<p>Use the function <em>which()</em> that returns a vector of indices.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb54-2"><a href="#cb54-2"></a>y[y<span class="op">&gt;</span><span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [1] 5 7 6</code></pre>
+<p>The <code>which</code> function is really helpful because it returns the index value</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a>y    &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb56-2"><a href="#cb56-2"></a>num5 &lt;-<span class="st"> </span><span class="kw">which</span>(y <span class="op">==</span><span class="st"> </span><span class="dv">5</span>)</span>
+<span id="cb56-3"><a href="#cb56-3"></a></span>
+<span id="cb56-4"><a href="#cb56-4"></a>y[num5]</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p>His example:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="kw">which</span>(y<span class="op">&lt;</span><span class="dv">3</span> <span class="op">&amp;</span><span class="st"> </span>y<span class="op">&lt;</span><span class="dv">7</span>) <span class="co">#returns index 2 and index 5 in vector y</span></span></code></pre></div>
+<pre><code>## [1] 1 4</code></pre>
+<p>It’s really worth nothing that the following operators return all true values:</p>
+<ul>
+<li><code>&amp;</code></li>
+<li><code>|</code></li>
+</ul>
+<p>Wheras the following only returns a single value</p>
+<ul>
+<li><code>&amp;&amp;</code></li>
+<li><code>||</code></li>
+</ul>
+<h3 id="get-all-sum-of-elements-greater-than-3-but-less-than-7.">20. Get all sum of elements greater than 3 but less than 7.</h3>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb60-2"><a href="#cb60-2"></a><span class="kw">sum</span>(y[<span class="kw">which</span>(y<span class="op">&gt;</span><span class="dv">3</span> <span class="op">&amp;</span><span class="st"> </span>y<span class="op">&lt;</span><span class="dv">7</span>)]) <span class="co">#or sum(y[y&gt;3 &amp; y&lt;7\])**</span></span></code></pre></div>
+<pre><code>## [1] 11</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="co"># Returning only a single value</span></span>
+<span id="cb62-2"><a href="#cb62-2"></a><span class="kw">sum</span>(y[<span class="kw">which</span>(y<span class="op">&gt;</span><span class="dv">3</span> <span class="op">&amp;&amp;</span><span class="st"> </span>y<span class="op">&lt;</span><span class="dv">7</span>)]) <span class="co">#or sum(y[y&gt;3 &amp; y&lt;7\])**</span></span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<h3 id="add-one-to-all-numbers-not-divisible-by-3.">21. Add one to all numbers not divisible by 3.</h3>
+<p>If I wanted to add all numbers not divisible by 3 the following code will acheive that</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb64-2"><a href="#cb64-2"></a>y[<span class="kw">which</span>(y<span class="op">%%</span><span class="dv">3</span><span class="op">!=</span><span class="dv">0</span>)] &lt;-<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">%%</span><span class="dv">3</span><span class="op">!=</span><span class="dv">0</span>)]<span class="op">+</span><span class="dv">1</span></span>
+<span id="cb64-3"><a href="#cb64-3"></a>y</span></code></pre></div>
+<pre><code>## [1] 2 6 8 3 6</code></pre>
+<p><code>which(y%%3!=0)</code> returns vector of indices whose y values are not divisible by 3. After the operation y will be 2, 6, 8, 3, 6</p>
+<h3 id="replace-those-numbers-not-divisible-by-3-by-na-not-a-number.">21. Replace those numbers not divisible by 3 by NA (Not a number).</h3>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb66-2"><a href="#cb66-2"></a>y[<span class="kw">which</span>(y<span class="op">%%</span><span class="dv">3</span><span class="op">!=</span><span class="dv">0</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span> <span class="co"># y will be NA NA NA NA 6</span></span>
+<span id="cb66-3"><a href="#cb66-3"></a>y</span></code></pre></div>
+<pre><code>## [1] NA NA NA NA  6</code></pre>
+<h3 id="find-the-count-of-numbers-in-the-vector.">22. Find the count of numbers in the vector.</h3>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="co"># One Line</span></span>
+<span id="cb68-2"><a href="#cb68-2"></a>(y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">length</span>()</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="co"># Two Lines</span></span>
+<span id="cb70-2"><a href="#cb70-2"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb70-3"><a href="#cb70-3"></a>y <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">length</span>()</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<p><strong>Some other useful functions for working with vectors of data are:</strong></p>
+<div class="line-block">Command | Description |<br />
+ <code>sd()</code>| standard deviation |<br />
+ <code>median()</code>| median |<br />
+ <code>max()</code>| maximum |<br />
+ <code>min()</code>| minimum |<br />
+<code>range()</code> | maximum and minimum |<br />
+l<code>ength()</code> | number of elements of a vector |<br />
+<code>cummin()</code> | cumulative min (or max cummax()) |<br />
+ <code>diff()</code> | differences between successive elements of a vector |</div>
+<p>Loops in R.</p>
+<h3 id="print-each-number-on-a-new-line">22. Print each number on a new line</h3>
+<p>Notice that <code>cat</code> does it in the background, it’s a little quicker maybe in a loop :shrug:.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a>y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">6</span>)</span>
+<span id="cb72-2"><a href="#cb72-2"></a></span>
+<span id="cb72-3"><a href="#cb72-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(y)){ <span class="kw">cat</span>(y[i],<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)}</span></code></pre></div>
+<pre><code>## 1 
+## 5 
+## 7 
+## 2 
+## 6</code></pre>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_len</span>(<span class="kw">length</span>(y))) {</span>
+<span id="cb74-2"><a href="#cb74-2"></a></span>
+<span id="cb74-3"><a href="#cb74-3"></a>    <span class="kw">cat</span>(y[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb74-4"><a href="#cb74-4"></a>  }</span></code></pre></div>
+<pre><code>## 1 
+## 5 
+## 7 
+## 2 
+## 6</code></pre>
+<p>Generally however <code>1:length(...)</code> expressions should be avoided, instead use <code>seq_len</code>. An example of why is the <a href="http://www.win-vector.com/blog/2018/02/r-tip-use-seq_len-to-avoid-the-backwards-sequence-bug/">backward sequence</a> problem, e.g. a loop will run twice instead of zero times if you did <code>1:n</code> but <code>n=0</code>.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_len</span>(<span class="kw">length</span>(y))) {</span>
+<span id="cb76-2"><a href="#cb76-2"></a></span>
+<span id="cb76-3"><a href="#cb76-3"></a>    <span class="kw">cat</span>(y[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb76-4"><a href="#cb76-4"></a>  }</span></code></pre></div>
+<pre><code>## 1 
+## 5 
+## 7 
+## 2 
+## 6</code></pre>
+<p>It is also possible to have the index variable take the form of the elements of a list:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(y)) {</span>
+<span id="cb78-2"><a href="#cb78-2"></a> <span class="kw">print</span>(y[i]) </span>
+<span id="cb78-3"><a href="#cb78-3"></a>}</span></code></pre></div>
+<pre><code>## [1] 1
+## [1] 5
+## [1] 7
+## [1] 2
+## [1] 6</code></pre>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(y)){ <span class="kw">cat</span>(y[i],<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)}</span></code></pre></div>
+<pre><code>## 1 
+## 5 
+## 7 
+## 2 
+## 6</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a><span class="cf">for</span>(i <span class="cf">in</span> y){</span>
+<span id="cb82-2"><a href="#cb82-2"></a>  <span class="kw">cat</span>(y)</span>
+<span id="cb82-3"><a href="#cb82-3"></a>}</span></code></pre></div>
+<pre><code>## 1 5 7 2 61 5 7 2 61 5 7 2 61 5 7 2 61 5 7 2 6</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="cf">for</span>(i <span class="cf">in</span> y) {</span>
+<span id="cb84-2"><a href="#cb84-2"></a>    <span class="kw">cat</span>(i, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb84-3"><a href="#cb84-3"></a>}</span></code></pre></div>
+<pre><code>## 1 
+## 5 
+## 7 
+## 2 
+## 6</code></pre>
+<h4 id="while-loops">While Loops</h4>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a>i &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb86-2"><a href="#cb86-2"></a></span>
+<span id="cb86-3"><a href="#cb86-3"></a><span class="cf">while</span>(i <span class="op">&lt;=</span><span class="st"> </span><span class="kw">length</span>(y)) {</span>
+<span id="cb86-4"><a href="#cb86-4"></a>    <span class="kw">cat</span>(y[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb86-5"><a href="#cb86-5"></a>    i &lt;-<span class="st"> </span>i<span class="op">+</span><span class="dv">1</span></span>
+<span id="cb86-6"><a href="#cb86-6"></a>}</span></code></pre></div>
+<pre><code>## 1 
+## 5 
+## 7 
+## 2 
+## 6</code></pre>
+<h4 id="mapping">mapping</h4>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a><span class="kw">library</span>(purrr)</span>
+<span id="cb88-2"><a href="#cb88-2"></a>purrr<span class="op">::</span><span class="kw">map</span>(y, <span class="dt">.f =</span> <span class="op">~</span><span class="st"> </span>.x <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.vector</span>()</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 3
+## 
+## [[2]]
+## [1] 7
+## 
+## [[3]]
+## [1] 9
+## 
+## [[4]]
+## [1] 4
+## 
+## [[5]]
+## [1] 8</code></pre>
+<p>There are generally two types of loops:</p>
+<ul>
+<li><code>for</code> loops are used when the number of repetitions is known
+<ul>
+<li>for every element in this list</li>
+</ul></li>
+<li><code>while</code> loops are used when the number of repetitions is not known
+<ul>
+<li>while this condition is false</li>
+</ul></li>
+<li>There are other other types of loops in <strong><em>R</em></strong>
+<ul>
+<li><code>purr::map()</code> maps the elements of a list to another list and transforms them accordingly, generally this is much faster than using a loop (in <em>Mathematica</em> it was about 10 fold faster generally).</li>
+<li><code>replicate</code> is a base function that runs a function continuously building a vector of the returned value, it runs faster than a loop and is a little like <code>table</code>.
+<ul>
+<li>using a static vector in a <code>for</code> loop is about 7 times faster (and there is no reason not to do it like in a <code>while</code> loop), using the <code>replicate</code> function might stop you from making the static/dynamic mistake but is otherwise just as fast.</li>
+</ul></li>
+<li><code>replicate</code> is a wrapper for <code>sapply</code> which is a wrapper for <code>lapply</code> so might be faster because it is a <code>.Internal</code> function written in <strong><em>C</em></strong>.</li>
+</ul></li>
+</ul>
+<p><strong>Or</strong></p>
+<p><strong>Qualitative Variables</strong></p>
+<p><strong>Qualitative data, or categorical data is stored in R as factors. We can use the function factor() to coerce (convert) a vector to a factor</strong></p>
+<h3 id="given-the-character-vector-find-its-factors">23. Given the character vector, find its factors</h3>
+<p>With factors it is necessary to be mindful to:</p>
+<ol type="1">
+<li>List levels where necessary
+<ul>
+<li>The <code>base::uniquie()</code> command is pretty helpful for this</li>
+</ul></li>
+<li>Order Factors when necessary</li>
+</ol>
+<p>Remember, when dealing with plots and the like it is often necessary to use factors in order to get correct grouping.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1"></a>(grades &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HD&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;CR&quot;</span>, <span class="st">&quot;DI&quot;</span>, <span class="st">&quot;DI&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">class</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1"></a>base<span class="op">::</span><span class="kw">unique</span>(grades)</span></code></pre></div>
+<pre><code>## [1] &quot;HD&quot; &quot;F&quot;  &quot;PA&quot; &quot;CR&quot; &quot;DI&quot;</code></pre>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a>grade_levels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;F&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;CR&quot;</span>, <span class="st">&quot;DI&quot;</span>, <span class="st">&quot;HD&quot;</span>)</span>
+<span id="cb94-2"><a href="#cb94-2"></a>grades &lt;-<span class="st"> </span><span class="kw">factor</span>(grades, <span class="dt">levels =</span> grade_levels, <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb94-3"><a href="#cb94-3"></a>grades</span></code></pre></div>
+<pre><code>## [1] HD F  PA PA CR DI DI
+## Levels: F &lt; PA &lt; CR &lt; DI &lt; HD</code></pre>
+<h3 id="given-the-character-vector-find-the-structure-of-how-it-is-stored">24. Given the character vector, find the structure of how it is stored</h3>
+<p>in r.</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a><span class="kw">str</span>(grades)</span></code></pre></div>
+<pre><code>##  Ord.factor w/ 5 levels &quot;F&quot;&lt;&quot;PA&quot;&lt;&quot;CR&quot;&lt;..: 5 1 2 2 3 4 4</code></pre>
+<p><strong><em>R</em></strong> Stores factors as numbers, it doesn’t seem to matter if it’s ordered or not:</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;HD&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;CR&quot;</span>, <span class="st">&quot;DI&quot;</span>, <span class="st">&quot;DI&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">str</span>()</span></code></pre></div>
+<pre><code>##  Factor w/ 5 levels &quot;CR&quot;,&quot;DI&quot;,&quot;F&quot;,..: 4 3 5 5 1 2 2</code></pre>
+<h3 id="given-the-character-vector-change-the-annotations-for-the-levels.">26. Given the character vector, change the annotations for the levels.</h3>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1"></a><span class="kw">table</span>(grades) <span class="co"># %&gt;% hist()</span></span></code></pre></div>
+<pre><code>## grades
+##  F PA CR DI HD 
+##  1  2  1  2  1</code></pre>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a><span class="kw">levels</span>(grades) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Fail&quot;</span>, <span class="st">&quot;Pass&quot;</span>, <span class="st">&quot;Credit&quot;</span>, <span class="st">&quot;Distinction&quot;</span>, <span class="st">&quot;High Distinction&quot;</span>)</span>
+<span id="cb102-2"><a href="#cb102-2"></a><span class="kw">table</span>(grades)</span></code></pre></div>
+<pre><code>## grades
+##             Fail             Pass           Credit      Distinction High Distinction 
+##                1                2                1                2                1</code></pre>
+<p>Note that <code>levels()</code> function can be used to change the annotations of the levels as well as to get the existing levels.</p>
+<h3 id="forcing-the-levels-to-be-in-a-specific-order.">27. Forcing the levels to be in a specific order.</h3>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1"></a>grades &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HD&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;CR&quot;</span>, <span class="st">&quot;DI&quot;</span>, <span class="st">&quot;DI&quot;</span>)</span>
+<span id="cb104-2"><a href="#cb104-2"></a>grades.o.f &lt;-<span class="st"> </span><span class="kw">factor</span>(grades, <span class="dt">levels=</span> <span class="kw">c</span>(<span class="st">&quot;F&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;CR&quot;</span>, <span class="st">&quot;DI&quot;</span>, <span class="st">&quot;HD&quot;</span>), <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb104-3"><a href="#cb104-3"></a><span class="kw">levels</span>(grades) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Fail&quot;</span>, <span class="st">&quot;Pass&quot;</span>, <span class="st">&quot;Credit&quot;</span>, <span class="st">&quot;Distinction&quot;</span>, <span class="st">&quot;High Distinction&quot;</span>)</span>
+<span id="cb104-4"><a href="#cb104-4"></a>grades.o.f</span></code></pre></div>
+<pre><code>## [1] HD F  PA PA CR DI DI
+## Levels: F &lt; PA &lt; CR &lt; DI &lt; HD</code></pre>
+<p><strong>[1] HD F PA PA CR DI DI</strong></p>
+<p><strong>Levels: F &lt; PA &lt; CR &lt; DI &lt; HD</strong></p>
+<p><strong>Notice that the levels are listed from lowest to highest, and are shown with the “&lt;” indicating the order</strong></p>
+<h3 id="given-the-character-vector-find-the-frequency-of-each-level.">28. Given the character vector find the frequency of each level.</h3>
+<p>&gt; grades &lt;- c(&quot;HD&quot;, &quot;F&quot;, &quot;PA&quot;, &quot;PA&quot;, &quot;CR&quot;, &quot;DI&quot;, &quot;DI&quot;)</p>
+<p><strong>&gt; table(grades)</strong></p>
+<p><strong>grades</strong></p>
+<p><strong>CR DI F HD PA</strong></p>
+<p><strong>1 2 1 1 2</strong></p>
+<p><strong>There is 1 CR, 2 Dis, 1 F, 1 HD and 2 PAs.</strong></p>
+<p><strong>Visualizing Qualitative Variables</strong></p>
+<p>We can use <em>barplot</em> to provide a graphical summary of a factor. However, we need to use <strong>table()</strong> with barplot(), since barplot() requires the values it will plot(its height argument) in a numeric form</p>
+<h2 id="using-the-sample-function">Using the Sample Function</h2>
+<blockquote>
+<p>Refer to pages 14-16 in R book</p>
+</blockquote>
+<p><a href="https://newonlinecourses.science.psu.edu/stat484/sites/onlinecourses.science.psu.edu.stat484/files/filepicker/EssentialR/index.pdf">New Online Courses</a> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<pre><code>https://newonlinecourses.science.psu.edu/stat484/sites/onlinecourses.science.psu.edu.stat484/files/filepicker/EssentialR/index.pdf**](https://newonlinecourses.science.psu.edu/stat484/sites/onlinecourses.science.psu.edu.stat484/files/filepicker/EssentialR/index.pdf</code></pre>
+<p>The function <em>sample()</em> will randomly choose values.</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1"></a>grades &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HD&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;PA&quot;</span>, <span class="st">&quot;CR&quot;</span>, <span class="st">&quot;DI&quot;</span>, <span class="st">&quot;DI&quot;</span>)</span></code></pre></div>
+<h3 id="given-the-character-vector-what-does-the-following-code-do">29. Given the character vector what does the following code do?</h3>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1"></a><span class="co"># This will take a sample of the</span></span>
+<span id="cb108-2"><a href="#cb108-2"></a><span class="kw">sample</span>(<span class="dt">x =</span> grades, <span class="dt">size =</span> <span class="dv">99</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> (<span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>)) ) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">table</span>() <span class="co"># %&gt;% hist()</span></span></code></pre></div>
+<pre><code>## .
+## CR DI  F HD PA 
+## 13 12 10  7 57</code></pre>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1"></a><span class="kw">sample</span>(grades)</span></code></pre></div>
+<pre><code>## [1] &quot;F&quot;  &quot;DI&quot; &quot;CR&quot; &quot;HD&quot; &quot;PA&quot; &quot;DI&quot; &quot;PA&quot;</code></pre>
+<p>It shuffles the grades and returns them. Hence each call to sample may return a different order of grades.</p>
+<h2 id="working-with-numeric-data">Working with numeric data</h2>
+<p>Getting summary of a data set using mean, median, sd, summary and quantile functions. A quantile, or percentile, tells you how much of your data lies below a certain value.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a>textData &lt;-<span class="st"> &quot;10 23 34 17 29 40 56 78 90 67&quot;</span></span>
+<span id="cb112-2"><a href="#cb112-2"></a>data     &lt;-<span class="st"> </span><span class="kw">scan</span>(<span class="dt">text=</span>textData) <span class="co">#parse string data</span></span>
+<span id="cb112-3"><a href="#cb112-3"></a><span class="kw">mean</span>(data)</span></code></pre></div>
+<pre><code>## [1] 44.4</code></pre>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1"></a><span class="kw">var</span>(data)</span></code></pre></div>
+<pre><code>## [1] 734.4889</code></pre>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1"></a><span class="kw">sd</span>(data)</span></code></pre></div>
+<pre><code>## [1] 27.10146</code></pre>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1"></a><span class="kw">median</span>(data)</span></code></pre></div>
+<pre><code>## [1] 37</code></pre>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1"></a><span class="kw">summary</span>(data)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   10.00   24.50   37.00   44.40   64.25   90.00</code></pre>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1"></a><span class="kw">quantile</span>(data, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span></code></pre></div>
+<pre><code>##   25%   75% 
+## 24.50 64.25</code></pre>
+<p><strong>25% of the data is likely to be below 24.5</strong></p>
+<p><strong>75% of the data is likely to be below 64.25</strong></p>
+<p><strong>50% of the data is likely to be between 24.5 and 64.25</strong></p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a><span class="kw">quantile</span>(data, <span class="kw">c</span>(<span class="fl">0.18</span>, <span class="fl">0.36</span>, <span class="fl">0.54</span>, <span class="fl">0.72</span>, <span class="fl">0.9</span>))</span></code></pre></div>
+<pre><code>##   18%   36%   54%   72%   90% 
+## 20.72 30.20 39.16 61.28 79.20</code></pre>
+<p><strong>Notice that the function quantile() can return any desired quantile.</strong></p>
+<h2 id="the-data-frame-the-r-equivalent-of-the-spreadsheet"><strong>The Data Frame (The R equivalent of the spreadsheet)</strong></h2>
+<p>A data frame is a special type of list - it is a list of vectors that have the same length, and whose elements correspond to one another - i.e. the 4th element of each vector correspond. Think of it like a small table in a spreadsheet, with the columns corresponding to each vector, and the rows to each record.</p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a>names&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Chris&quot;</span>, <span class="st">&quot;Sue&quot;</span>, <span class="st">&quot;Ann&quot;</span>, <span class="st">&quot;Pat&quot;</span>)</span>
+<span id="cb126-2"><a href="#cb126-2"></a>ages&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">26</span>, <span class="dv">40</span>)</span>
+<span id="cb126-3"><a href="#cb126-3"></a>heights&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span>)</span>
+<span id="cb126-4"><a href="#cb126-4"></a>isStudent&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">TRUE</span>, <span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb126-5"><a href="#cb126-5"></a>cohort.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(names,ages,heights,isStudent)</span>
+<span id="cb126-6"><a href="#cb126-6"></a>cohort.df</span></code></pre></div>
+<pre><code>##   names ages heights isStudent
+## 1 Chris   20       1      TRUE
+## 2   Sue   30       3     FALSE
+## 3   Ann   26       5      TRUE
+## 4   Pat   40       8      TRUE</code></pre>
+<h3 id="given-the-following-data-frame-find-just-the-names-of-the-people.">30. Given the following data frame, find just the names of the people.</h3>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a>cohort.df<span class="op">$</span>names</span></code></pre></div>
+<pre><code>## [1] Chris Sue   Ann   Pat  
+## Levels: Ann Chris Pat Sue</code></pre>
+<h3 id="given-the-following-data-frame-get-all-the-details-of-the-1st-and">31. Given the following data frame, get all the details of the 1st and</h3>
+<p>3rd person.</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a>cohort.df[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),]</span></code></pre></div>
+<pre><code>##   names ages heights isStudent
+## 1 Chris   20       1      TRUE
+## 3   Ann   26       5      TRUE</code></pre>
+<h3 id="given-the-following-data-frame-get-all-the-details-of-the-first-three-persons.">32. Given the following data frame, get all the details of the first three persons.</h3>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a>cohort.df[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, ]</span></code></pre></div>
+<pre><code>##   names ages heights isStudent
+## 1 Chris   20       1      TRUE
+## 2   Sue   30       3     FALSE
+## 3   Ann   26       5      TRUE</code></pre>
+<h3 id="given-the-following-data-frame-get-all-the-details-of-those">33. Given the following data frame, get all the details of those</h3>
+<p>persons whose age &gt;= 30.</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a>cohort.df[cohort.df<span class="op">$</span>ages <span class="op">&gt;=</span><span class="st"> </span><span class="dv">30</span>,]</span></code></pre></div>
+<pre><code>##   names ages heights isStudent
+## 2   Sue   30       3     FALSE
+## 4   Pat   40       8      TRUE</code></pre>
+<h3 id="given-the-following-data-frame-add-another-column-representing-the">34. Given the following data frame, add another column representing the</h3>
+<p>city of each person</p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a>city &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="dt">length =</span> <span class="kw">nrow</span>(cohort.df))</span>
+<span id="cb136-2"><a href="#cb136-2"></a>city &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Sydney&quot;</span>, <span class="st">&quot;Melbourne&quot;</span>, <span class="st">&quot;Canberra&quot;</span>, <span class="st">&quot;Darwin&quot;</span>)</span>
+<span id="cb136-3"><a href="#cb136-3"></a>cohort.df &lt;-<span class="st"> </span><span class="kw">cbind</span>(cohort.df, city)</span></code></pre></div>
+<h3 id="given-the-following-data-frame-add-two-more-rows-of-data">34. Given the following data frame, add two more rows of data</h3>
+<p>corresponding to two persons. Assume your own data.</p>
+<h4 id="base-packages">Base Packages</h4>
+<p>This is the way to do it, if you stuff around with vectors or lists you will invariably run into errors with factors, create a new data frame with the desired rows and then use <code>rbind</code> to attach that row. It doesn’t matter really when adding columns, just use a vector, because a column will simply be a vector with a single data type anyway.</p>
+<p>Speaking of which, be careful when using <code>df$name</code> notation, in <code>data frame</code>s this will extract a vector, in <code>tibble</code>s this will extract a nX1 <code>tibble</code>.</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1"></a><span class="co"># Use Lists so that the data can be entered row wise</span></span>
+<span id="cb137-2"><a href="#cb137-2"></a>  <span class="co"># Vectors are columns and cannot have different Data classes</span></span>
+<span id="cb137-3"><a href="#cb137-3"></a>row_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;John&quot;</span>, <span class="dv">23</span>, <span class="dv">5</span>, <span class="ot">TRUE</span>, <span class="st">&quot;Darwin&quot;</span>)</span>
+<span id="cb137-4"><a href="#cb137-4"></a><span class="kw">names</span>(row_<span class="dv">1</span>) &lt;-<span class="st"> </span><span class="kw">names</span>(cohort.df)</span>
+<span id="cb137-5"><a href="#cb137-5"></a></span>
+<span id="cb137-6"><a href="#cb137-6"></a>row_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;Tim&quot;</span>, <span class="dv">28</span>, <span class="dv">2</span>, <span class="ot">FALSE</span>, <span class="st">&quot;Perth&quot;</span>)</span>
+<span id="cb137-7"><a href="#cb137-7"></a><span class="kw">names</span>(row_<span class="dv">2</span>) &lt;-<span class="st"> </span><span class="kw">names</span>(cohort.df)</span>
+<span id="cb137-8"><a href="#cb137-8"></a></span>
+<span id="cb137-9"><a href="#cb137-9"></a><span class="co"># Add the newdata to the Data Frame</span></span>
+<span id="cb137-10"><a href="#cb137-10"></a><span class="kw">rbind</span>(cohort.df, row_<span class="dv">1</span>, row_<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##   names ages heights isStudent      city
+## 1 Chris   20       1      TRUE    Sydney
+## 2   Sue   30       3     FALSE Melbourne
+## 3   Ann   26       5      TRUE  Canberra
+## 4   Pat   40       8      TRUE    Darwin
+## 5  John   23       5      TRUE    Darwin
+## 6   Tim   28       2     FALSE     Perth</code></pre>
+<h4 id="tidyverse">TidyVerse</h4>
+<p>One of the advantages to using <code>dplyr::add_row()</code> is that <strong><em>R</em></strong> auto-completion (if you are using <a href="https://github.com/ncm2/ncm2">NCM2</a> and <a href="https://github.com/gaalcaras/ncm-R">NCM-R</a> in neovim) is that it will auto suggest the entry to add and the data type of the entry.</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1"></a>cohort.df &lt;-<span class="st"> </span>cohort.df <span class="op">%&gt;%</span></span>
+<span id="cb139-2"><a href="#cb139-2"></a><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">add_row</span>(<span class="dt">names =</span> <span class="st">&quot;Timmy&quot;</span>,</span>
+<span id="cb139-3"><a href="#cb139-3"></a>           <span class="dt">ages =</span> <span class="dv">23</span>,</span>
+<span id="cb139-4"><a href="#cb139-4"></a>           <span class="dt">heights =</span> <span class="dv">3</span>,</span>
+<span id="cb139-5"><a href="#cb139-5"></a>           <span class="dt">isStudent =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb139-6"><a href="#cb139-6"></a>           <span class="dt">city =</span> <span class="st">&quot;Adelaide&quot;</span>)</span>
+<span id="cb139-7"><a href="#cb139-7"></a>cohort.df</span></code></pre></div>
+<pre><code>##   names ages heights isStudent      city
+## 1 Chris   20       1      TRUE    Sydney
+## 2   Sue   30       3     FALSE Melbourne
+## 3   Ann   26       5      TRUE  Canberra
+## 4   Pat   40       8      TRUE    Darwin
+## 5 Timmy   23       3      TRUE  Adelaide</code></pre>
+<h3 id="assuming-you-have-file-named-beandata.csv-in-your-working">36. Assuming you have file named “BeanData.csv” in your working</h3>
+<p>directory, read the file.</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1"></a><span class="co"># beans \&lt;- read.table(\&quot;BeansData.csv\&quot;,comm=\&quot;\#\&quot;,header=TRUE,sep=\&quot;,\&quot;)</span></span>
+<span id="cb141-2"><a href="#cb141-2"></a>businessData &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.stats.govt.nz/assets/Uploads/Business-price-indexes/Business-price-indexes-December-2019-quarter/Download-data/business-price-indexes-december-2019-quarter-csv.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb141-3"><a href="#cb141-3"></a><span class="kw">str</span>(businessData)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    65748 obs. of  12 variables:
+##  $ Series_reference: Factor w/ 780 levels &quot;CEPQ.S2371&quot;,&quot;CEPQ.S2381&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Period          : num  1996 1997 1997 1997 1997 ...
+##  $ Data_value      : num  899 884 925 932 929 940 956 958 970 1000 ...
+##  $ Status          : Factor w/ 2 levels &quot;FINAL&quot;,&quot;REVISED&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ UNITS           : Factor w/ 2 levels &quot;Index&quot;,&quot;Percent&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Subject         : Factor w/ 4 levels &quot;Capital Goods Price Index - CEP&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Group           : Factor w/ 18 levels &quot;Energy Price Indexes - Base Period December 1996 quarter (=1000)&quot;,..: 15 15 15 15 15 15 15 15 15 15 ...
+##  $ Series_title_1  : Factor w/ 471 levels &quot;Accident and health insurance services&quot;,..: 186 186 186 186 186 186 186 186 186 186 ...
+##  $ Series_title_2  : Factor w/ 3 levels &quot;&quot;,&quot;Percentage change from previous period&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Series_title_3  : logi  NA NA NA NA NA NA ...
+##  $ Series_title_4  : logi  NA NA NA NA NA NA ...
+##  $ Series_title_5  : logi  NA NA NA NA NA NA ...</code></pre>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1"></a><span class="kw">summary</span>(businessData)</span></code></pre></div>
+<pre><code>##          Series_reference     Period       Data_value         Status          UNITS      
+##  PPIQ.SQN800000  :  169   Min.   :1977   Min.   :  -5.8   FINAL  :65732   Index  :64845  
+##  PPIQ.SQN900000  :  169   1st Qu.:2000   1st Qu.: 751.9   REVISED:   16   Percent:  903  
+##  PPIQ.SQU900000  :  169   Median :2008   Median : 974.2                                  
+##  PPIQ.SQN900000PC:  168   Mean   :2007   Mean   : 926.0                                  
+##  PPIQ.SQU900000PC:  168   3rd Qu.:2014   3rd Qu.:1066.0                                  
+##  PPIQ.SQN900000AC:  165   Max.   :2019   Max.   :3512.0                                  
+##  (Other)         :64740                  NA&#39;s   :400                                     
+##                             Subject     
+##  Capital Goods Price Index - CEP: 7562  
+##  Energy Statistics - NRG        : 1219  
+##  Farm Inputs - FPI              :16027  
+##  Producers Price Index - PPI    :40940  
+##                                         
+##                                         
+##                                         
+##                                                                      Group      
+##  Farm expense price index - Expense categories -  (Base Dec 2013 = 1000):16027  
+##  Inputs (ANZSIC06) - NZSIOC level 3, Base: Dec. 2010 quarter (=1000)    : 5621  
+##  Inputs (ANZSIC06) - NZSIOC level 4, Base: Dec. 2010 quarter (=1000)    : 5612  
+##  Outputs (ANZSIC06) - NZSIOC level 4, Base: Dec. 2010 quarter (=1000)   : 5356  
+##  Outputs (ANZSIC06) - NZSIOC level 3, Base: Dec. 2010 quarter (=1000)   : 5253  
+##  Published output commodities, Base Dec 2009                            : 4558  
+##  (Other)                                                                :23321  
+##                                                     Series_title_1 
+##  All Industries                                            : 1004  
+##  Forestry and Logging                                      :  618  
+##  Mining                                                    :  618  
+##  Owner-Occupied Property Operation (National Accounts Only):  618  
+##  Printing                                                  :  618  
+##  Wholesale Trade                                           :  618  
+##  (Other)                                                   :61654  
+##                                           Series_title_2  Series_title_3 Series_title_4
+##                                                  :64845   Mode:logical   Mode:logical  
+##  Percentage change from previous period          :  456   NA&#39;s:65748     NA&#39;s:65748    
+##  Percentage change from same period previous year:  447                                
+##                                                                                        
+##                                                                                        
+##                                                                                        
+##                                                                                        
+##  Series_title_5
+##  Mode:logical  
+##  NA&#39;s:65748    
+##                
+##                
+##                
+##                
+## </code></pre>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1"></a><span class="kw">head</span>(businessData)</span></code></pre></div>
+<pre><code>##   Series_reference  Period Data_value Status UNITS                         Subject
+## 1       CEPQ.S2371 1996.12        899  FINAL Index Capital Goods Price Index - CEP
+## 2       CEPQ.S2371 1997.03        884  FINAL Index Capital Goods Price Index - CEP
+## 3       CEPQ.S2371 1997.06        925  FINAL Index Capital Goods Price Index - CEP
+## 4       CEPQ.S2371 1997.09        932  FINAL Index Capital Goods Price Index - CEP
+## 5       CEPQ.S2371 1997.12        929  FINAL Index Capital Goods Price Index - CEP
+## 6       CEPQ.S2371 1998.03        940  FINAL Index Capital Goods Price Index - CEP
+##                                                                           Group
+## 1 Price Index by Item - Plant, Machinery and Equipment (Base: Sept 1999 = 1000)
+## 2 Price Index by Item - Plant, Machinery and Equipment (Base: Sept 1999 = 1000)
+## 3 Price Index by Item - Plant, Machinery and Equipment (Base: Sept 1999 = 1000)
+## 4 Price Index by Item - Plant, Machinery and Equipment (Base: Sept 1999 = 1000)
+## 5 Price Index by Item - Plant, Machinery and Equipment (Base: Sept 1999 = 1000)
+## 6 Price Index by Item - Plant, Machinery and Equipment (Base: Sept 1999 = 1000)
+##             Series_title_1 Series_title_2 Series_title_3 Series_title_4 Series_title_5
+## 1 Glass and glass products                            NA             NA             NA
+## 2 Glass and glass products                            NA             NA             NA
+## 3 Glass and glass products                            NA             NA             NA
+## 4 Glass and glass products                            NA             NA             NA
+## 5 Glass and glass products                            NA             NA             NA
+## 6 Glass and glass products                            NA             NA             NA</code></pre>
+<h3 id="assuming-you-have-initialized-beans-by-importing-from-an-excel">37. Assuming you have initialized beans by importing from an Excel</h3>
+<p>file, find how many rows &amp; columns of data exists.</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1"></a><span class="kw">dim</span>(businessData)</span></code></pre></div>
+<pre><code>## [1] 65748    12</code></pre>
+<h3 id="observe-the-first-6-rows-of-data-in-beans.">38. Observe the first 6 rows of data in <em>beans</em>.</h3>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1"></a><span class="kw">head</span>(businessData</span></code></pre></div>
+<pre><code>## Error: &lt;text&gt;:2:0: unexpected end of input
+## 1: head(businessData
+##    ^</code></pre>
+<h3 id="use-the-apply-function-to-find-the-means-of-the-last-three">39. Use the <em>apply</em> function to find the means of the last three</h3>
+<p>columns of data in beans.</p>
+<p>First Observe when filtering data that the following are equivalent:</p>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1"></a>businessData[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="kw">c</span>(<span class="st">&quot;Period&quot;</span>, <span class="st">&quot;Data_value&quot;</span>)]</span></code></pre></div>
+<pre><code>##    Period Data_value
+## 1 1996.12        899
+## 2 1997.03        884
+## 3 1997.06        925
+## 4 1997.09        932
+## 5 1997.12        929
+## 6 1998.03        940</code></pre>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1"></a>businessData[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span> ,<span class="kw">names</span>(businessData) <span class="op">==</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Period&quot;</span>, <span class="st">&quot;Data_value&quot;</span>)]</span></code></pre></div>
+<pre><code>## data frame with 0 columns and 6 rows</code></pre>
+<p>In order to take the column mean values:</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a><span class="kw">apply</span>(businessData[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="kw">c</span>(<span class="st">&quot;Period&quot;</span>, <span class="st">&quot;Data_value&quot;</span>)] , <span class="dv">2</span>, mean)</span></code></pre></div>
+<pre><code>##     Period Data_value 
+##  1997.0750   918.1667</code></pre>
+<p><strong>We need to find the mean of all rows of column 6, 7 and 8 (MARGIN=2 refers to columns). So we use the <em>apply</em> function to repeatedly call the <em>mean</em> function. We use na.rm = TRUE to ignore NAs if any in the data while finding the mean.</strong></p>
+<h3 id="observe-that-the-beans-data-has-trt-representing-certain-grouping.">40. Observe that the beans data has trt representing certain grouping.</h3>
+<p>If we are interested in find the mean of rt but grouped based on trt, then we can use tapply.</p>
+<p>The <code>tapply</code> function is useful when <code>apply</code> needs to be used on data that needs to be split up first, it’s like using <code>table</code> and apply together, for instance, consider the mileage of cars:</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1"></a><span class="kw">head</span>(mtcars)</span></code></pre></div>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1"></a><span class="kw">table</span>(mtcars[,<span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;cyl&quot;</span>)]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
+<pre><code>##       cyl
+## mpg    4 6 8
+##   10.4 0 0 2
+##   13.3 0 0 1
+##   14.3 0 0 1
+##   14.7 0 0 1
+##   15   0 0 1
+##   15.2 0 0 2</code></pre>
+<p>If the average mileage for each corresponding cylinder count was desired, it would be possible to do something like <code>table</code> <code>%&gt;%</code> <code>as.matrix</code> <code>%&gt;%</code> <code>apply</code>, however this has already been put into a wrapper with the <code>tapply</code> function:</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a><span class="kw">tapply</span>(mtcars<span class="op">$</span>mpg, <span class="dt">INDEX =</span> mtcars<span class="op">$</span>cyl, <span class="dt">FUN =</span> mean)</span></code></pre></div>
+<pre><code>##        4        6        8 
+## 26.66364 19.74286 15.10000</code></pre>
+<h3 id="using-tapply-for-multiple">41. Using <code>tapply</code> for multiple</h3>
+<p>pot.size and P.lev (That is for: pot.size-4 and P.lev = L; pot.size-4 and P.lev = H; pot.size-8 and P.lev = L; pot.size-8 and P.lev = H; pot.size-12 and P.lev = L; pot.size-12 and P.lev = H; )</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1"></a>mtcars_round &lt;-<span class="st"> </span>mtcars</span>
+<span id="cb163-2"><a href="#cb163-2"></a>mtcars_round<span class="op">$</span>qsec &lt;-<span class="st"> </span><span class="kw">signif</span>(mtcars<span class="op">$</span>qsec, <span class="dv">1</span>)</span>
+<span id="cb163-3"><a href="#cb163-3"></a><span class="kw">head</span>(mtcars_round)</span></code></pre></div>
+<pre><code>##                    mpg cyl disp  hp drat    wt qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620   20  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875   20  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320   20  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215   20  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440   20  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460   20  1  0    3    1</code></pre>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1"></a><span class="kw">table</span>(mtcars_round[,<span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;qsec&quot;</span>)]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
+<pre><code>##       qsec
+## mpg    10 20
+##   10.4  0  2
+##   13.3  0  1
+##   14.3  0  1
+##   14.7  0  1
+##   15    1  0
+##   15.2  0  2</code></pre>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1"></a><span class="kw">table</span>(mtcars_round[,<span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;cyl&quot;</span>)]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
+<pre><code>##       cyl
+## mpg    4 6 8
+##   10.4 0 0 2
+##   13.3 0 0 1
+##   14.3 0 0 1
+##   14.7 0 0 1
+##   15   0 0 1
+##   15.2 0 0 2</code></pre>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1"></a><span class="kw">table</span>(mtcars_round[,<span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;qsec&quot;</span>, <span class="st">&quot;cyl&quot;</span>)])</span></code></pre></div>
+<pre><code>## , , cyl = 4
+## 
+##       qsec
+## mpg    10 20
+##   10.4  0  0
+##   13.3  0  0
+##   14.3  0  0
+##   14.7  0  0
+##   15    0  0
+##   15.2  0  0
+##   15.5  0  0
+##   15.8  0  0
+##   16.4  0  0
+##   17.3  0  0
+##   17.8  0  0
+##   18.1  0  0
+##   18.7  0  0
+##   19.2  0  0
+##   19.7  0  0
+##   21    0  0
+##   21.4  0  1
+##   21.5  0  1
+##   22.8  0  2
+##   24.4  0  1
+##   26    0  1
+##   27.3  0  1
+##   30.4  0  2
+##   32.4  0  1
+##   33.9  0  1
+## 
+## , , cyl = 6
+## 
+##       qsec
+## mpg    10 20
+##   10.4  0  0
+##   13.3  0  0
+##   14.3  0  0
+##   14.7  0  0
+##   15    0  0
+##   15.2  0  0
+##   15.5  0  0
+##   15.8  0  0
+##   16.4  0  0
+##   17.3  0  0
+##   17.8  0  1
+##   18.1  0  1
+##   18.7  0  0
+##   19.2  0  1
+##   19.7  0  1
+##   21    0  2
+##   21.4  0  1
+##   21.5  0  0
+##   22.8  0  0
+##   24.4  0  0
+##   26    0  0
+##   27.3  0  0
+##   30.4  0  0
+##   32.4  0  0
+##   33.9  0  0
+## 
+## , , cyl = 8
+## 
+##       qsec
+## mpg    10 20
+##   10.4  0  2
+##   13.3  0  1
+##   14.3  0  1
+##   14.7  0  1
+##   15    1  0
+##   15.2  0  2
+##   15.5  0  1
+##   15.8  1  0
+##   16.4  0  1
+##   17.3  0  1
+##   17.8  0  0
+##   18.1  0  0
+##   18.7  0  1
+##   19.2  0  1
+##   19.7  0  0
+##   21    0  0
+##   21.4  0  0
+##   21.5  0  0
+##   22.8  0  0
+##   24.4  0  0
+##   26    0  0
+##   27.3  0  0
+##   30.4  0  0
+##   32.4  0  0
+##   33.9  0  0</code></pre>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1"></a><span class="kw">tapply</span>(mtcars<span class="op">$</span>mpg, <span class="dt">INDEX =</span> <span class="kw">list</span>(<span class="kw">signif</span>(mtcars<span class="op">$</span>qsec, <span class="dv">1</span>), mtcars<span class="op">$</span>cyl), mean)</span></code></pre></div>
+<pre><code>##           4        6     8
+## 10       NA       NA 15.40
+## 20 26.66364 19.74286 15.05</code></pre>
+<p><strong>42. The above result is in the form of a table. If we wanted a list instead, we can use the <em>paste</em> function.</strong></p>
+<p>I don’t like this though, it’s basically just flattening the matrix.</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1"></a><span class="kw">tapply</span>(mtcars<span class="op">$</span>mpg, <span class="dt">INDEX =</span> <span class="kw">list</span>(<span class="kw">paste</span>(<span class="kw">signif</span>(mtcars<span class="op">$</span>qsec, <span class="dv">1</span>), mtcars<span class="op">$</span>cyl)), mean)</span></code></pre></div>
+<pre><code>##     10 8     20 4     20 6     20 8 
+## 15.40000 26.66364 19.74286 15.05000</code></pre>
+<p><strong>43.</strong> <strong>Write a function to return the square of a number:</strong></p>
+<p>You can specify a function where the last value is what will be returned:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1"></a>sq_num &lt;-<span class="st"> </span><span class="cf">function</span> (x, <span class="dt">force =</span> <span class="ot">FALSE</span>) {</span>
+<span id="cb175-2"><a href="#cb175-2"></a></span>
+<span id="cb175-3"><a href="#cb175-3"></a>    <span class="cf">if</span> (<span class="kw">is.numeric</span>(x)) {</span>
+<span id="cb175-4"><a href="#cb175-4"></a>     x<span class="op">*</span>x   </span>
+<span id="cb175-5"><a href="#cb175-5"></a>    } <span class="cf">else</span> <span class="cf">if</span> (force) {</span>
+<span id="cb175-6"><a href="#cb175-6"></a>       x<span class="op">*</span>x </span>
+<span id="cb175-7"><a href="#cb175-7"></a>    } <span class="cf">else</span> {</span>
+<span id="cb175-8"><a href="#cb175-8"></a>    <span class="kw">print</span>(<span class="st">&quot;Square Function is only defined for number&quot;</span>)</span>
+<span id="cb175-9"><a href="#cb175-9"></a>    }</span>
+<span id="cb175-10"><a href="#cb175-10"></a></span>
+<span id="cb175-11"><a href="#cb175-11"></a>}</span>
+<span id="cb175-12"><a href="#cb175-12"></a></span>
+<span id="cb175-13"><a href="#cb175-13"></a><span class="kw">sq_num</span>(<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] 9</code></pre>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1"></a><span class="kw">sq_num</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">nrow =</span> <span class="dv">2</span>), <span class="dt">force =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    9
+## [2,]    4   16</code></pre>
+<p>or you can deliberately declare it with <code>return()</code>, just be mindful that if you do need to use return it’s possible that the function could be restructured to be more logical.</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="#cb179-1"></a>sq_num2 &lt;-<span class="st"> </span><span class="cf">function</span> (x) {</span>
+<span id="cb179-2"><a href="#cb179-2"></a>    xs &lt;-<span class="st"> </span>x<span class="op">*</span>x</span>
+<span id="cb179-3"><a href="#cb179-3"></a>    <span class="kw">return</span>(xs)</span>
+<span id="cb179-4"><a href="#cb179-4"></a>}</span></code></pre></div>
+<h3 id="custom-functions-can-be-used-with-tapply">44. Custom Functions can be used with <code>tapply()</code></h3>
+<p>Say we want to pool the sd between different engine classes but decide to see if they’re close first:</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="#cb180-1"></a>my_mean &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb180-2"><a href="#cb180-2"></a>    <span class="kw">sum</span>(x)<span class="op">/</span><span class="kw">length</span>(x<span class="dv">-1</span>) <span class="co"># x-1 because I&#39;m using it with sample std. dev.</span></span>
+<span id="cb180-3"><a href="#cb180-3"></a>}</span>
+<span id="cb180-4"><a href="#cb180-4"></a>my_sd  &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb180-5"><a href="#cb180-5"></a>    xbar &lt;-<span class="st"> </span><span class="kw">my_mean</span>(x)</span>
+<span id="cb180-6"><a href="#cb180-6"></a>    <span class="kw">sqrt</span>(<span class="kw">my_mean</span>((x<span class="op">-</span>xbar)<span class="op">^</span><span class="dv">2</span>))</span>
+<span id="cb180-7"><a href="#cb180-7"></a>}</span>
+<span id="cb180-8"><a href="#cb180-8"></a><span class="kw">tapply</span>(mtcars<span class="op">$</span>mpg, mtcars<span class="op">$</span>cyl, my_sd)</span></code></pre></div>
+<pre><code>##        4        6        8 
+## 4.299952 1.345742 2.466924</code></pre>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1"></a><span class="kw">tapply</span>(mtcars<span class="op">$</span>mpg, mtcars<span class="op">$</span>cyl, sd)</span></code></pre></div>
+<pre><code>##        4        6        8 
+## 4.509828 1.453567 2.560048</code></pre>
+<p>My function’s pretty close, I’m not sure where the difference comes from.</p>
+<ol start="45" type="1">
+<li>How to Perform Matrix Multiplication</li>
+</ol>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1"></a>(A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>), <span class="dt">ncol=</span><span class="dv">2</span>))</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    1    3
+## [2,]    2    4</code></pre>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1"></a>(B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>), <span class="dt">nrow =</span> <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]   10   30
+## [2,]   20   40</code></pre>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1"></a>A<span class="op">*</span>B</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]   10   90
+## [2,]   40  160</code></pre>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1"></a>A <span class="op">%*%</span><span class="st"> </span>B</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]   70  150
+## [2,]  100  220</code></pre>
+<ol start="46" type="1">
+<li>How to Diagonalise a Matrix</li>
+</ol>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1"></a>X&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb192-2"><a href="#cb192-2"></a>(XMat &lt;-<span class="st"> </span><span class="kw">diag</span>(X))</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    2    0
+## [3,]    0    0    3</code></pre>
+<h3 id="normalize-a-vector">47. Normalize a Vector</h3>
+<p>How to normalize a vector. Normalizing a vector is obtaining another unit vector in the same direction.** **To normalize a vector, divide the vector by its magnitude.</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1"></a>vv&lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">10</span>)</span>
+<span id="cb194-2"><a href="#cb194-2"></a>vv.squares &lt;-<span class="st"> </span>vv<span class="op">^</span><span class="dv">2</span></span>
+<span id="cb194-3"><a href="#cb194-3"></a>sum.of.vv.squares &lt;-<span class="st"> </span><span class="kw">sum</span>(vv.squares)</span>
+<span id="cb194-4"><a href="#cb194-4"></a>magnitude.vv&lt;-<span class="kw">sqrt</span>(sum.of.vv.squares)</span>
+<span id="cb194-5"><a href="#cb194-5"></a>norm.vv &lt;-<span class="st"> </span>vv<span class="op">/</span>magnitude.vv</span>
+<span id="cb194-6"><a href="#cb194-6"></a>norm.vv</span></code></pre></div>
+<pre><code>## [1] 0.07254763 0.36273813 0.58038100 0.72547625</code></pre>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1"></a><span class="kw">sqrt</span>(<span class="kw">sum</span>(norm.vv<span class="op">^</span><span class="dv">2</span>)) <span class="co">#verify this should be 1</span></span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<h3 id="normalize-a-matrix">48. Normalize a Matrix</h3>
+<p>How to normalize a matrix. Assume each column in a matrix is considered as a vector</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1"></a>(mx &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">110</span>,<span class="dv">120</span>,<span class="dv">130</span>),<span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]   10   20   30
+## [3,]  110  120  130</code></pre>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1"></a>(norm.mx2 &lt;-<span class="st"> </span>mx <span class="op">%*%</span><span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span><span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">colSums</span>(mx <span class="op">^</span><span class="dv">2</span>)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##       [,1] [,2] [,3]
+## [1,] 0.009 0.02 0.02
+## [2,] 0.091 0.16 0.22
+## [3,] 0.996 0.99 0.97</code></pre>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="#cb202-1"></a><span class="co"># Verify each column sums to 1</span></span>
+<span id="cb202-2"><a href="#cb202-2"></a><span class="kw">sqrt</span>(<span class="kw">colSums</span>(norm.mx2<span class="op">^</span><span class="dv">2</span>)) <span class="co">#verify each column is a unit vector</span></span></code></pre></div>
+<pre><code>## [1] 1 1 1</code></pre>
+<h2 id="references">References</h2>
+<p><a href="https://newonlinecourses.science.psu.edu/stat484/sites/onlinecourses.science.psu.edu.stat484/files/filepicker/EssentialR/index.pdf">New Online Courses</a> <a href="https://online.stat.psu.edu/stat484/node/1/">PennState</a></p>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p>Refer to:<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+</html>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+

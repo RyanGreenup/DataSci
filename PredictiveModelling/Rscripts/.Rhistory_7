@@ -1,0 +1,89 @@
+set_wd <- function() {
+#Install the RStudio API package
+if(require('rstudioapi')){
+library('rstudioapi')
+}else{
+install.packages('rstudioapi')
+library('rstudioapi')
+}
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+set_wd()
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+parallel, dplyr, plotly)
+all.df <- read.csv(file = "practical04b.csv", header = TRUE, sep = ",")
+# Set the Seed ------------------------------------------------------------
+#Such that the code is consistent we will set the seed.
+set.seed(seed = 23)
+head(all.df)
+input <- all.df$input
+output <- all.df$output
+input <- all.df$input
+output <- all.df$output
+model3 <- lm(output ~ I(input^3) + I(input^2) + input)
+input <- all.df$input
+output <- all.df$output
+model1 <- lm(output ~ input)
+model2 <- lm(output ~ I(input^2) + input)
+model3 <- lm(output ~ I(input^3) + I(input^2) + input)
+rss1 <- sum((resid(model1))^2)
+rss1
+rss1 <- sum((resid(model1))^2)
+rss2 <- sum((resid(model2))^2)
+rss3 <- sum((resid(model3))^2)
+min(c(rss1, rss2, rss3))
+rss1
+rss2
+as.dataframe("model1 RSS" = rss1, "model2 RSS" = rss2, "model3 RSS" = rss3)
+data.frame("model1 RSS" = rss1, "model2 RSS" = rss2, "model3 RSS" = rss3)
+min(RSS.df)
+RSS.df <- data.frame("model1 RSS" = rss1,
+"model2 RSS" = rss2,
+"model3 RSS" = rss3)
+min(RSS.df)
+RSS.df
+RSS.df[min(RSS.df)]
+RSS.df[,min(RSS.df)]
+RSS.df[min(RSS.df),]
+subset(RSS.df, x = min(RSS.df))
+subset(RSS.df, RSS.df = min(RSS.df))
+subset(RSS.df, RSS.df[1,] = min(RSS.df))
+RSS.df[1,] = min(RSS.df)
+RSS.df[1,]
+min(RSS.df[1,])
+min(RSS.df[1,])
+name(min(RSS.df[1,]))
+row.names(RSS.df)[(which(RSS.df==min(RSS.df)))]
+row.names(RSS.df)[(which(RSS.df==min(RSS.df[1,])))]
+which(RSS.df==min(RSS.df[1,])
+which(RSS.df==min(RSS.df[1,]))
+RSS.df <- c("model1 RSS" = rss1,
+"model2 RSS" = rss2,
+"model3 RSS" = rss3)
+row.names(RSS.df)[(which(RSS.df==min(RSS.df)))]
+min(RSS.df)
+RSS.df
+RSS.vec[RSS.vec == min(RSS.vec)]
+RSS.vec <- c("model1 RSS" = rss1,
+"model2 RSS" = rss2,
+"model3 RSS" = rss3)
+RSS.vec[RSS.vec == min(RSS.vec)]
+min.mod <- names(RSS.vec[RSS.vec == min(RSS.vec)])
+min.mod
+print(
+paste(
+"The model with the lowest RSS is", min.mod
+)
+)
+source('E:/One Drive/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 4, Loss Functions and Errors/Part B/#Online Quiz/Second Try.R', echo=TRUE)
+source('E:/One Drive/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 4, Loss Functions and Errors/Part B/#Online Quiz/Question on Models.R', echo=TRUE)
+source('E:/One Drive/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 4, Loss Functions and Errors/Part B/#Online Quiz/Question on Models.R', echo=TRUE)

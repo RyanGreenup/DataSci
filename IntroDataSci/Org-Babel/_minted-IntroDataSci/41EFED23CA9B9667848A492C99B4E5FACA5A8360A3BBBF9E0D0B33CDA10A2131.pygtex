@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+plot\PYG{p}{(}formula \PYG{o}{=} Sales \PYG{o}{\PYGZti{}} Radio\PYG{p}{,} data \PYG{o}{=} adv\PYG{p}{,} xlim \PYG{o}{=} pdom\PYG{p}{,}
+     main \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Sales Given Radio Advertising\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

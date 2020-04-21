@@ -1,0 +1,303 @@
+---
+title: "Summarising Data"
+output: html_notebook
+---
+
+# Practical 01
+
+## Preamble
+
+```{r}
+
+## (01) Clean up the Iris Data
+
+# Preamble
+## Install Pacman
+load.pac <- function() {
+  
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra)
+  
+}
+
+load.pac()
+```
+
+
+## (01) Clean up the Iris Data
+So we were supposed to download the Iris Data from vUWS and clean it up in a spreadsheet, I couldn't find it online though so I'm not going to bother.
+
+Instead let's insert some bad data and write a script to detect that bad doata
+
+```{r}
+# Make Unclean Data
+irisBad <- iris
+irisBad[sample(1:nrow(iris), size = 1),1:4] <- c(runif(4)*0.01)
+
+# Clean the Bad Data
+averagerows <- iris[,1:4] %>% apply(1, sum)# 1 is row, 2 is column 
+averagecols <- iris[,1:4] %>% apply(2, mean)# 1 is row, 2 is column 
+sdcols <- iris[,1:4] %>% apply(2, sd)
+
+# Return Row numbers 3 SD from the column mean
+
+badrows <- c()
+for (i in 1:nrow(irisBad)) {
+  for (j in 1:4) {
+   leq <-  irisBad[i,j] < mean(irisBad[,j]) - 3 * sd(irisBad[,j])
+   geq <-  irisBad[i,j] > mean(irisBad[,j]) + 3 * sd(irisBad[,j])
+   if (leq || geq) {
+     badrows <- c(badrows, i)
+   }
+  }
+} 
+badrows
+
+irisBad[badrows,]
+
+
+```
+
+Observe now that each time the script is run the bad data is returned and can be modified or amended.
+
+
+
+## (02) Summarise the Iris Data
+
+The following commands are good for summarising Data
+
+```{r}
+head(iris)
+str(iris)
+summary(iris)
+dim(iris)
+```
+
+## (03) Visualise the Data
+
+### Bar Chart
+
+We could do like an overlapping bar chart:
+
+```{r}
+# Make a Tidy Data Frame
+## Using Melt
+irisTidy <- melt(iris)
+
+## using Tidy Verse
+ ### Rearrange the Data
+irisTidy <- dplyr::select(iris, "Species", names(iris)[1:4])
+ ### use Pivot Longer
+    # The `cols` argumnet is the columns containing relevant values
+     # The remaining column(s) will become additional column
+irisTidy <- tidyr::pivot_longer(data = iris, cols = names(iris[1:4]), names_to = "Measurement")
+irisTidy <- irisTidy %>% dplyr::rename("Distance" = value)
+
+# Call GGPlot2
+ggplot(data = irisTidy, aes(x = Measurement, y = Distance, col = Species, shape = Species)) +
+  geom_col(position = "dodge", fill = "lightyellow", size = 0.5) +
+  theme_classic()
+
+```
+
+### Scatter Plot
+
+A Scatter Plot might be a better choice, but, there are 4 variables, this means that it would be necessary to create $\binom{4}{2} = 6$ plots.
+
+#### Pairs Plot
+
+This can be quickly visualised using the `pairs()` or `corrplot()` function.
+
+```{r}
+layout(matrix(1:2, nrow = 1))
+pairs(iris[1:4], labels = c("Sepal Length", "Sepal Width", "Petal Length", "Petal Width"), )
+cor(iris[1:4]) %>% corrplot(method = "ellipse", type = "upper")
+
+```
+
+If however it was necessary to plot evey scatterplot properly, the most pragmatic way I could imagine to do this would be:
+
+```{r}
+# make a blank list
+p <- list()
+
+# Fill the list with the text to evaluate
+  # The advantage to this is you can think about the numbers to call
+p[[1]] <- paste("ggplot(iris, aes(x =", names(iris)[1:4][1], ", y =", names(iris)[1:4][2], ", col = Species)) + geom_point()")
+p[[2]] <- paste("ggplot(iris, aes(x =", names(iris)[1:4][1], ", y =", names(iris)[1:4][3], ", col = Species)) + geom_point()")
+p[[3]] <- paste("ggplot(iris, aes(x =", names(iris)[1:4][1], ", y =", names(iris)[1:4][4], ", col = Species)) + geom_point()")
+p[[4]] <- paste("ggplot(iris, aes(x =", names(iris)[1:4][2], ", y =", names(iris)[1:4][3], ", col = Species)) + geom_point()")
+p[[5]] <- paste("ggplot(iris, aes(x =", names(iris)[1:4][2], ", y =", names(iris)[1:4][4], ", col = Species)) + geom_point()")
+p[[6]] <- paste("ggplot(iris, aes(x =", names(iris)[1:4][3], ", y =", names(iris)[1:4][4], ", col = Species)) + geom_point()")
+
+# Replace the list with evaluated items
+ 
+for (i in 1:length(p)) {
+p[[i]] <- eval(parse(text = p[[i]])) + geom_point()
+}
+
+# Use Grid Arrange to lay them out
+  # Refer to [this note](~/Notes/MD/Programming/R/Visualisation/Multiple Plots in R.md)
+grid.arrange(grobs = p, layout_matrix = matrix(1:6, nrow = 3))
+
+
+```
+
+
+A better alternative might be using PCA:
+
+```{r}
+# Create the model
+
+PCA.mod.iris <- prcomp(x = iris[,1:4])
+PCADF <- PCA.mod.iris$x %>% as_tibble()
+PCADF$Species <- iris$Species
+
+# Put the predicted groups on the end
+#PCADF$KM2Pred <- groupPred
+
+# Draw the Plot
+ggplot(PCADF, aes(y = PC1, x = PC2, col = Species)) +
+  geom_point() +
+  labs(col = "Predicted\nGroup",
+       caption = "First two Principle Components of Iris Data,\n
+       Ellipses represent 90% Normal confidence levels,
+       ") +
+  stat_ellipse(level = 0.9) +
+  theme_classic() +
+  labs(title = "First Two Principle Components of the Iris Data Set")
+```
+
+this can be interpreted using the biplot:
+
+```{r}
+biplot(PCA.mod.iris, cex = 0.5, scale = 0)
+```
+
+Another way to visualise this is to use tiling like so:
+
+```{r}
+iris %>%
+  pivot_longer(cols = c(Sepal.Length, Sepal.Width, Petal.Width))  %>% 
+  ggplot(aes(x = Petal.Length, y = value, col = Species)) +
+  geom_point() +
+  facet_grid(name ~ ., scales = 'free_y', space = 'free_y', ) +
+  theme_bw() +
+  stat_ellipse(level = 0.99, lty =3, lwd = 0.5)
+```
+
+
+## (04) Starting R
+
+Some basic things in **_R_**
+
+```{r}
+1+1
+```
+```{r}
+sqrt(2)
+```
+```{r}
+print("Hello World!")
+```
+
+
+## (05) Practice with R
+```{r}
+x <- 1
+y <- 2
+z <- x+y
+ls()
+```
+variables can be removed:
+
+```{r}
+rm(x)
+ls()
+```
+
+Help can be accessed by prefixing a function with a `?`:
+
+```{r}
+#?ls
+#help(ls)
+#help.start()
+```
+
+if you want a clean workspace, I recommend using the `mise()` package:
+
+```{r}
+# Mise creates a totally bare well behaved workspace
+   # put this at the top of your script to ensure a standalone script
+library(mise)
+mise()
+
+# alternatively this only clears the console
+cat("/014")
+
+# This removes all objects
+rm(list=ls())
+```
+
+
+
+## (06) Practice with Vectors
+
+first create a sequency of numbers increasing by 5
+```{r}
+x <- seq(0, 200, 5)
+paste0("x is a vector of length ", length(x)) %>% print()
+x
+```
+
+Now plot those numbers using base plots and ggplot
+
+```{r}
+plot(x = 1:length(x),
+     y = x,
+     main = "Plot of a linear Sequence", 
+     xlab = "Index Value", 
+     ylab = "Sequence Value",
+     col = "indianred",
+     cex = 4,
+     pch = 9)
+
+ggplot(data = tibble::enframe(x), aes(x = name, y = value)) +
+  geom_point(size = 2, mapping = aes(col = value) ) +
+  theme_bw() +
+  guides(col = FALSE) +
+  labs(x = "Index", y = "Sequence", title = "Sequence of Values")
+ 
+  
+```
+
+Subsetting data is done by using the suffix `[]`:
+
+```{r}
+# Create Matrices
+mx <- matrix(data = rnorm(50), ncol = 5)
+my <- matrix(data = rnorm(50), ncol = 5)
+mz <- matrix(data = rnorm(50), ncol = 5)
+
+# Subset and Multiply
+mx[1:10, 3:4] * mx[1:10, 3:4]
+# Observe that matrix multiplication is done otherwise
+  # also observe that print can take a rounding argument
+mx[1:10, 3:4] %*% mx[3:4, 1:5] %>% print(2)
+```
+
+
+## (07) self Learning with `swirl`
+
+```{r}
+library(swirl)
+```
+

@@ -1,0 +1,48 @@
+---
+title: "Final Exam"
+date: 2018-June-4
+tags: [Notebooks/Predictive Modelling]
+author: "Ryan Greenup (1780 5315)"
+# output:
+#   rmarkdown::html_document:
+#     theme: lumen
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+    #Possible themes are cayman, tactile, architect, leonids, hpstr
+---
+
+
+
+#Preamble
+##Clear Latent Variables
+First clear latent variables that could be leftover from past work
+```{r}
+rm(list = ls())
+```
+##Load Packages
+Now load all the necessary packages:
+```{r}
+
+if(require('pacman')){
+    library('pacman')
+  }else{
+    install.packages('pacman')
+    library('pacman')
+  }
+  
+  pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer, colorspace, prettydoc, glmnet)
+  
+```
+
+##Set Working Directory
+It is not necessary to set the working directory because this is a markdown file, the working directory is automatically set to the location of file
+
+##Load the data
+the data can be loaded using a relative file path, because the working directory is automatically set to
+the file location
+```{r}
+
+```
+

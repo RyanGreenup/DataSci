@@ -1,0 +1,512 @@
+mod.make <- function(xtrain, xtest, ytrain, ytest, k){
+knn.mod  <- knn.reg(train = xtrain, test = xtest, y = ytrain, k = k)
+knn.pred <- knn.mod$pred
+MSE.knn  <- sqrt(sum((knn.pred - ytest)^2)/nrow(xtest)) #Calculate the MSE from Test Data
+return(list("Model" = knn.mod, "Predictions" = knn.pred, "MSE" = MSE.knn))
+}
+knn.list[[3]] <- mod.make(x.train, x.test, y.train, y.test, 3)
+knn.list[[3]]
+knn.list <- list()
+for (i in 1:20) {
+knn.list[[i]] <- mod.make(x.train. x.test, y.train, y.test, k = i)
+}
+knn.list <- list()
+for (i in 1:20) {
+knn.list[[i]] <- mod.make(x.train. x.test, y.train, y.test, k = i)
+}
+i <- 4
+knn.list[[i]] <- mod.make(x.train. x.test, y.train, y.test, k = i)
+knn.list[[3]] <- mod.make(x.train. x.test, y.train, y.test, k = 3)
+knn.list
+knn.list[[3]]
+knn.list <- list()
+for (i in 1:20) {
+knn.list[i] <- mod.make(x.train. x.test, y.train, y.test, k = i)
+}
+knn.list[3] <- mod.make(x.train. x.test, y.train, y.test, k = 3)
+knn.list <- list()
+for (i in 1:20) {
+knn.list[[i]] <- mod.make(x.train, x.test, y.train, y.test, k = i)
+}
+summary(knn.list)
+knn.list[[3]]
+knn.list[[3]]$MSE
+length(knn.list)
+MSE.vec <- vector(length = length(knn.list))
+MSE.vec
+for (i in 1:length(knn.list)) {
+MSE.vec[i] <- knn.list[[i]]$MSE
+}
+MSE.vec
+##Use this to decide on the best K-value
+k.best <- which.min(MSE.vec)
+print(paste("The best k-value is", k.best))
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+##Now we'll use a loop to create a bunch of models
+k.n <- 20
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+# Make a KNN with the best K-value ----------------------------------------
+mod.make(x.train, x.test, y.train, y.test, k = k.best)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+##Use another loop to compile the MSE Values
+MSE.vec <- vector(length = length(knn.list))
+for (i in 1:length(knn.list)) {
+MSE.vec[i] <- knn.list[[i]]$MSE
+}
+knn.list[[3]]
+y.val
+nrow(y.val)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+MSE.knn  <- sqrt(sum((knn.pred - y.train)^2)/nrow(x.train)) #Calculate the MSE from Test Data
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+x.train-x.val
+x.train
+x.train=x.val
+# Preamble ----------------------------------------------------------------
+##Clear latent variables
+rm(list = ls())
+##Set working directory and load packages
+setwd.loadpac <- function() {
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(glmnet, ggmap, plotly, EnvStats, FNN, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer)
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+setwd.loadpac()
+# Set the Seed ------------------------------------------------------------
+#everything changes far too much without setting the seed
+set.seed(seed = 31415)
+# Load Dataset ------------------------------------------------------------
+all.df <- read.csv(file = "CommViolPredUnnormalizedData.csv", header = TRUE, sep = ",")
+# Clean Data --------------------------------------------------------------
+##This can also be done with sapply
+#    as.data.frame(sapply(all.df, function(x) ifelse(is.na(x), median(x, na.rm = TRUE), x)))
+##Using a for loop
+for (i in 1:ncol(all.df)) {
+if(sum(is.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+if(sum(is.na(all.df[,i]))){
+print(paste("Could be an error on column no. ", "i"))
+}
+}else(
+print(paste("skip row no.", i))
+)
+}
+# Standardise the Data ----------------------------------------------------
+#We only have to standardise the data for the sake of the
+#Lasoo Regression
+##Subset the Data
+allStd.df <- subset(x = all.df, select = A1:A124)
+##Standardise the data
+allStd.df <- scale(allStd.df) #This coerces the data into a matrix
+# Create Matrix Input/Output Assignments ----------------------------------
+x.all <- as.matrix(allStd.df)
+y.all <- subset(x = all.df, select = B2)
+y.all <- as.matrix(y.all)
+# Create a Training and Test Split ----------------------------------------
+n      <- nrow(all.df) #Number of Observations
+idvals <- sample(n)    #Random shuffle of the numbers from 1:60
+nTrain <- 0.7*n
+nVal   <- 0.15*n
+nTest  <- nrow(all.df) - nTrain - nVal
+x.train <- x.all[idvals[1:nTrain],]
+y.train <- y.all[idvals[1:nTrain],]
+x.val   <- x.all[idvals[(nTrain+1):(nTrain+nVal)],]
+y.val   <- y.all[idvals[(nTrain+1):(nTrain+nVal)],]
+x.test  <- x.all[idvals[(nTrain+nVal+1):n],]
+y.test  <- y.all[idvals[(nTrain+nVal+1):n],]
+# Preamble ----------------------------------------------------------------
+##Clear latent variables
+rm(list = ls())
+x.train==x.val
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+x.train==x.val
+x.train
+x.val
+x.val
+x.test
+x.val
+x.test
+x.train
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+##Use another loop to compile the MSE Values
+MSE.train.vec <- vector(length = length(knn.list))
+MSE.val.vec <- vector(length = length(knn.list))
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+##Use another loop to compile the MSE Values
+MSE.train.vec <- vector(length = length(knn.list))
+MSE.val.vec <- vector(length = length(knn.list))
+for (i in 1:length(knn.list)) {
+MSE.train.vec[i] <- knn.list[[i]]$MSE
+MSE.val.vec[i] <- knn.list[[i]]$MSE
+}
+as.data.frame(k = 1:k.n, TrainingError = MSE.train.vec, ValError = MSE.val.vec)
+data.frame(k = (1:k.n), TrainingError = MSE.train.vec, ValError = MSE.val.vec)
+error.df <-  data.frame(k = (1:k.n), TrainingError = MSE.train.vec, ValError = MSE.val.vec)
+plot(x = error.df$k, y = ValError)
+plot(x = error.df$k, y = error.df$ValError)
+MSE.val.vec
+MSE.train.vec
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+error.df <-  data.frame(k = (1:k.n), TrainingError = MSE.train.vec, ValError = MSE.val.vec)
+plot(x = error.df$k, y = error.df$ValError)
+MSE.val.vec
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+error.df <-  data.frame(k = (1:k.n), TrainingError = MSE.train.vec, ValError = MSE.val.vec)
+plot(x = error.df$k, y = error.df$ValError)
+MSE.val.vec
+MSE.train.vec
+lines(x = error.df$k, y = error.df$TrainingError)
+plot(x = error.df$k, y = error.df$ValError, type = 'l')
+lines(x = error.df$k, y = error.df$TrainingError)
+plot(x = error.df$k, y = error.df$ValError, type = 'l')
+lines(x = error.df$k, y = error.df$TrainingError)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+error.df <-  data.frame(k = (1:k.n), TrainingError = MSE.train.vec, ValError = MSE.val.vec)
+plot(x = error.df$k, y = error.df$ValError, type = 'b', lty = l)
+plot(x = error.df$k, y = error.df$ValError, type = 'b', lty = 'l')
+plot(x = error.df$k, y = error.df$ValError, type = 'b', lty = '1')
+lines(x = error.df$k, y = error.df$TrainingError, col = "red")
+plot(x = error.df$k, y = error.df$ValError, type = 'b', lty = '1')
+plot(x = error.df$k, y = error.df$ValError, type = 'b', lty = 1)
+lines(x = error.df$k, y = error.df$TrainingError, col = "red")
+MSE.train.vec-MSE.val.vec
+knn.mod  <- knn.reg(train = x.train, test = x.test, y = y.train, k = 3)
+knn.pred <- knn.mod$pred
+MSE.knn  <- sqrt(sum((knn.pred - y.val)^2)/nrow(x.val)) #Calculate the MSE from Test Data
+length(knn.pred)
+length(y.val)
+length(y.train)
+knn.pred-y.train
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB.R', echo=TRUE)
+round(0.7*n)
+mod.make <- function(k){
+knn.mod   <- knn.reg(train = x.train, test = x.test, y = y.train, k = k)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/Nval)
+MSE.train <- sqrt(sum((knn.pred - y.train)^2)/Ntrain)
+}
+mod.make <- function(k){
+knn.mod   <- knn.reg(train = x.train, test = x.test, y = y.train, k = k)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/Nval)
+MSE.train <- sqrt(sum((knn.pred - y.train)^2)/Ntrain)
+return(list("Model" = knn.mod, "PredictedValues" = knn.pred, "ValidationError" = MSE.val, "TrainingError" = MSE.train))
+}
+mod.make(2)
+mod.make(2)
+mod.make <- function(k){
+knn.mod   <- knn.reg(train = x.train, test = x.test, y = y.train, k = k)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/nval)
+MSE.train <- sqrt(sum((knn.pred - y.train)^2)/ntrain)
+return(list("Model" = knn.mod, "PredictedValues" = knn.pred, "ValidationError" = MSE.val, "TrainingError" = MSE.train))
+}
+mod.make(2)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+knn.mod   <- knn.reg(train = x.train, test = x.test, y = y.train, k = 3)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/nVal)
+length(knn.pred)
+length(y.val)
+knn.mod   <- knn.reg(train = x.train, test = x.val, y = y.train, k = 3)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/nVal)
+knn.mod   <- knn.reg(train = x.train, test = x.val, y = y.train, k = k)
+mod.make.trainvalidate <- function(k){
+knn.mod   <- knn.reg(train = x.train, test = x.val, y = y.train, k = k)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/nVal)
+# MSE.train <- sqrt(sum((knn.pred - y.train)^2)/nTrain)
+return(list("Model" = knn.mod, "PredictedValues" = knn.pred, "ValidationError" = MSE.val, "TrainingError" = MSE.train))
+}
+mod.make(2)
+mod.make.trainvalidate <- function(k){
+knn.mod   <- knn.reg(train = x.train, test = x.val, y = y.train, k = k)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/nVal)
+# MSE.train <- sqrt(sum((knn.pred - y.train)^2)/nTrain)
+return(list("Model" = knn.mod, "PredictedValues" = knn.pred, "ValidationError" = MSE.val, "TrainingError" = MSE.train))
+}
+mod.make(2)
+knn.mod   <- knn.reg(train = x.train, test = x.val, y = y.train, k = 3)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/nVal)
+mod.make.trainvalidate <- function(k){
+knn.mod   <- knn.reg(train = x.train, test = x.val, y = y.train, k = k)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/nVal)
+# MSE.train <- sqrt(sum((knn.pred - y.train)^2)/nTrain)
+# return(list("Model" = knn.mod, "PredictedValues" = knn.pred, "ValidationError" = MSE.val, "TrainingError" = MSE.train))
+}
+mod.make(2)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+mod.make.trainvalidate(2)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+mod.make.trainvalidate <- function(k){
+knn.mod   <- knn.reg(train = x.train, test = x.val, y = y.train, k = k)
+knn.pred  <- knn.mod$pred
+MSE.val   <- sqrt(sum((knn.pred - y.val)^2)/nVal)
+return(list("Model" = knn.mod, "PredictedValues" = knn.pred, "ValidationError" = MSE.val))
+#If I had time, it could be worth comparing the validation and
+#Training Error but, I simply don't have the time to
+#figure that out now, the validation should rise for an overparameterised
+#model, even if it happens a little after the vertex
+}
+mod.make.trainvalidate(2)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+##Use this to decide on the best K-value
+k.best <- which.min(MSE.val.vec)
+print(paste("The best k-value is", k.best))
+###Visualise this in a plot
+error.df <-  data.frame(k = (1:k.n), TrainingError = MSE.train.vec, ValError = MSE.val.vec)
+plot(x = error.df$k, y = error.df$ValError, type = 'b', lty = 1)
+lines(x = error.df$k, y = error.df$TrainingError, col = "red")
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_curve()
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_smooth()
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line()
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line()
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_smooth(se = FALSE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line(col = "indianred", lwd = 2) +
+geom_point(size = 3, col "blue")
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line(col = "indianred", lwd = 2) +
+geom_point()
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line(col = "indianred", lwd = 2) +
+geom_point(size = 3)
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line(col = "indianred", lwd = 2) +
+geom_point(size = 3, col = "royalblue")
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line(col = "indianred", lwd = 2) +
+geom_point(size = 6, col = "royalblue", alpha = 0.4)
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line(col = "indianred", lwd = 2) +
+geom_point(size = 6, col = "royalblue", alpha = 0.4) +
+labs(x = "K-Value", y = "Validation Error")
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line(col = "indianred", lwd = 2) +
+geom_point(size = 6, col = "royalblue", alpha = 0.4) +
+labs(x = "K-Value", y = "Validation Error", Main = "Model Error")
+ggplot(error.df, aes(x = k, y = ValError)) +
+geom_line(col = "indianred", lwd = 2) +
+geom_point(size = 6, col = "royalblue", alpha = 0.4) +
+labs(x = "K-Value", y = "Validation Error", title = "Model Error")
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+plot(x = error.df$k, y = error.df$ValError, type = 'b', lty = 1)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+diff(MSE.val.vec)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+plot(1:nVal, y.val, pch = 16, col = "black", xlab = "Index", ylab = "MSE")
+plot(1:nVal, y.val, pch = 16, col = "black", xlab = "Index", ylab = "MSE")
+points(1:nVal, knn.pred, pch = 1, col = "red")
+pre1 <- knn.list[[1]]
+pre1
+pre1 <- knn.list[[1]]$PredictedValues
+points(1:nVal, pre1, pch = 1, col = "red")
+pre1 <- knn.list[[k.best]]$PredictedValues
+plot(1:nVal, y.val, pch = 16, col = "black", xlab = "Index", ylab = "MSE")
+points(1:nVal, pre1, pch = 1, col = "red")
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+points(1:nVal, pred, pch = 1, col = "red")
+plot(1:nVal, y.val, pch = 16, col = "black", xlab = "Index", ylab = "MSE")
+plot(1:nVal, y.val, pch = 16, col = "black", xlab = "Index", ylab = "MSE", lty = 'l')
+plot(1:nVal, y.val, pch = 16, col = "black", xlab = "Index", ylab = "MSE", lty = 1, type = 'b')
+lines(1:nVal, pred, pch = 1, col = "red")
+plot(1:nVal, y.val, pch = 16, col = "black", xlab = "Index", ylab = "Observed Value", lty = 1)
+pred <- knn.list[[1]]$PredictedValues
+points(1:nVal, pred, pch = 1, col = "red")
+plot(1:nVal, y.val, pch = 16, col = "black", xlab = "Index", ylab = "Observed Value", lty = 1)
+pred <- knn.list[[k.best]]$PredictedValues
+points(1:nVal, pred, pch = 1, col = "red")
+##Use ggplot2
+assess.df <- data.frame(Index = 1:nTest, Observed = y.test, Modelled = pred)
+##Use ggplot2
+assess.df <- data.frame(Index = 1:nTest, Observed = y.test, Modelled = knn.pred)
+#Base Plot
+plot(Observed ~ Index, data = assess.df, pch = 16, col = "Purple", xlab = "Index", ylab = "Observed Values")
+#Base Plot
+plot(Observed ~ Index, data = assess.df, pch = 16, col = "Purple", xlab = "Index", ylab = "Observed Values")
+points(Modelled ~ Index, data = assess.df, pch = 1, col = "red")
+# Plot the Predictions ----------------------------------------------------
+##Create a dataframe of values
+assess.df <- data.frame(Index = 1:nTest, Observed = y.test, Modelled = knn.pred, Loss = abs(y.test-knn.pred))
+#Base Plot
+plot(Observed ~ Index, data = assess.df, pch = 16, col = "Purple", xlab = "Index", ylab = "Observed Values")
+points(Modelled ~ Index, data = assess.df, pch = 1, col = "red")
+##Use ggplot2
+ggplot(asses.df, aes(x = Index, y = Observed)) +
+geom_point() +
+geom_point(aes(x = Index, y = Modelled))
+##Use ggplot2
+ggplot(assess.df, aes(x = Index, y = Observed)) +
+geom_point() +
+geom_point(aes(x = Index, y = Modelled))
+##Use ggplot2
+assess.df.melt <- melt(data = assess.df, id.vars = "Index")
+assess.df.melt
+head(assess.df.melt)
+ggplot(assess.df, aes(x = Index, y = value, col = variable)) +
+geom_point() +
+##Use ggplot2
+assess.df.melt <- melt(data = assess.df, id.vars = "Index")
+ggplot(assess.df.melt, aes(x = Index, y = value, col = variable)) +
+geom_point() +
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point() +
+ggplot(assess.df.melt, aes(x = Index, y ))
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point() +
+ggplot(assess.df.melt, aes(x = Index, y = value, col = variable )) +
+geom_point()
+assess.df.melt
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point() +
+ggplot(assess.df.melt, aes(x = Index, y = value, col = variable )) +
+geom_point()
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point() +
+ggplot(data = assess.df.melt, aes(x = Index, y = value, col = variable )) +
+geom_point()
+names(assess.df.melt)
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point() +
+ggplot(data = assess.df.melt, aes(x = Index, y = value)) +
+geom_point()
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point() +
+ggplot(data = assess.df.melt, aes(x = Index, y = variable)) +
+geom_point()
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point() +
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point() +
+ggplot(assess.df.melt, aes(x = Index, y = Value, col = Variable)) +
+geom_point()
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+# Plot the Predictions ----------------------------------------------------
+##Create a dataframe of values
+assess.df <- data.frame(Index = 1:nTest, Observed = y.test, Modelled = knn.pred, Loss = abs(y.test-knn.pred))
+assess.df <- assess.df[1:60,]
+#Base Plot
+plot(Observed ~ Index, data = assess.df, pch = 16, col = "Purple", xlab = "Index", ylab = "Observed Values")
+points(Modelled ~ Index, data = assess.df, pch = 1, col = "red")
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+#Subset to make it readable
+assess.df <- assess.df[sample(30),]
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+assess.df[sample(30),]
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+assess.df
+assess.df[sample(6),]
+#Subset to make it readable
+assess.df <- assess.df[runif(n = 6, min = 1, max = nrow(assess.df)),]
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/PartB Model Validation/KNNB - Copy.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 12/perceptron.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 12/Jamie/week 12 prac with errors.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 12/Jamie/week 12 prac with errors.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 12/perceptron.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 12/perceptron.R', echo=TRUE)
+## Code from last year
+trainx <- data.frame(x1=c(0,0,1,1),x2=c(0,1,0,1))
+trainy <- data.frame(y=c(0,0,0,1))
+w <- data.frame(w0=-30,w1=20,w2=20)
+pred <- data.frame(y=0,yhat=0)
+step <- 1
+alpha <- 0.1
+small <- 0.001
+repeat {
+for (j in 1:nrow(trainx)) {
+perceptron <- sum(w[step,]*trainx[j,])>0
+pred[step,] <- c(trainy[j,1], as.integer(perceptron))
+for(i in 1:3) {
+w[step+1,i] <- w[step,i]+alpha*(pred$y[step]-pred$yhat[step])*trainx[j,i]
+}
+step <- step+1
+}
+myerror <- 0
+for(j in (step-nrow(trainx)):(step-1)) {
+myerror <- myerror + abs(pred$y[j]-pred$yhat[j]) / nrow(trainx)
+}
+if (myerror < small) {break}
+}
+repeat {
+for (j in 1:nrow(trainx)) {
+perceptron <- sum(w[step,] * trainx[j,]) > 0
+pred[step,] <- c(trainy[j,1],  as.integer(perceptron) )
+for (i in 1:3) {
+w[step+1,i] <- w[step,i] + alpha * (pred$y[step] - pred$yhat[step]) * trainx[j,i]
+}
+step <- step + 1
+}
+myerror <- 0
+for (j in (step-nrow(trainx)):(step-1)) {
+myerror <- myerror + abs(pred$y[j] - pred$yhat[j]) / nrow(trainx)
+print(paste(j, myerror))
+}
+if (myerror < small) { break }
+}
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 12/Percceptron-Mine.R', echo=TRUE)
+g <- function(x1, x2) {
+return (-30+20x1+20x2)
+}
+g <- function(x1, x2) {
+return (-30+20x1+20x2)
+}
+g <- function(xo, xt) {
+return (-30+20x1+20x2)
+}
+g <- function(x1, x2){
+return (-30+20x1+20x2)
+}
+g <- function(x1,x2){
+}
+g <- function(x1, x2){
+return (-30+20*x1+20*x2)
+}
+plot(g,-10,10)
+plot(g,-10,10)

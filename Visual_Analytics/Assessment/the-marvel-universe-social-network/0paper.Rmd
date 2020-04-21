@@ -1,0 +1,861 @@
+---
+title: "The Marvel Universe as a Social Network"
+csl: /home/ryan/Zotero/styles/nature.csl
+bibliography: /home/ryan/Dropbox/Studies/Papers/references.bib
+output: 
+  html_document: 
+    toc: yes
+---
+
+
+
+```{r, echo = FALSE, include=FALSE}
+library(tidyverse)
+library(plotly)
+library(igraph)
+library(reshape2)
+library(mise)
+mise()
+options(warn=-1)
+```
+
+
+# Introduction
+
+In 2002 R. Alberich, J. Miro-Julia and F. Rossello investigated the relationship between characters in the Marvel Universe and compared this relational data to actual social networks [@alberich2002], the data set has been meed made available through *Kaggle* which will allow for further investigation [@zotero-400].
+
+## Inspect the data
+
+The data is provided in two formats, a list of characters and comic books in which they appear as well as a list of edges like so:
+
+```{r}
+h_net <- read.csv(file = "./hero-network.csv")
+h_net[sample(1:5000, 4, 0),]; print(paste(nrow(h_net), "Observations"))
+h_com <- read.csv(file = "./edges.csv")
+h_com[sample(1:5000, 4, 0),]; print(paste(nrow(h_com), "Observations"))
+```
+
+
+## Data Cleaning
+
+Before anything can be done with the data, it is necessary to clean it, the weight ascribed to an edge will be the number of interactions between any two characters, this is because it represents a measure of the strength of the relationship between two characters.
+
+The easiest way to acheive this is to create an adjacency matrix where the value of each cell is the weight of the edge and then melt that adjacency matrix into a long-format table:
+
+```{r}
+# Create Adjacency Matrix -------------------------------------------------
+make_adj <- function(mat){
+ig_adj <- get.adjacency(graph.edgelist(as.matrix(mat), directed=FALSE))
+as.matrix(ig_adj)
+}
+
+# Plot Matrix -------------------------------------------------------------
+
+# Rotate matrix 90-degrees clockwise.
+rotate <- function(x) {
+    t(apply(x, 2, rev))
+}
+
+# create the image
+plot_mat <- function(mat){
+image(rotate(mat), col = c(3, 6), axes = FALSE, frame.plot = TRUE, main = "Values > 10")
+}
+
+data_adj <- make_adj(h_net)
+if(!((colnames(data_adj)==rownames(data_adj)) %>% mean())) print("The Adjacency Matrix is not symmetrical about i=j")
+mean_social <- apply(data_adj, 1, mean)
+data <- melt(data_adj)
+data <- cbind(data, mean_social)
+data <- data[data$value > 0,]
+data <- data[order(-data$mean_social),] # This is the wrong order, I should use mean level
+names(data) <- c("Source", "Target", "Value", "Mean_Social")
+data_all <- data
+head(data_all)
+```
+
+### Sample the Data
+
+One of the issues with this data set however is that there is simply too much data to visualise effecively (or frankly to compute in any reasonable time frane in a scripting language) and so instead the data will be subset:
+
+```{r}
+dsamp_social <- function(n, seed) {
+index <- sample(1:nrow(data), size = n, replace = FALSE)
+data_all[index,]
+}
+
+data <- dsamp_social(1500, 309320932932)
+```
+
+
+## Relational Investigation
+
+Primarily this dataset is relational without direction or heirarchy and so the most appropriate method to visualise it would be with a graph depicting the inter-relation of characters via edges and vertices.
+
+### 2D Network Graph
+
+A 2d Network Graph describing the inter-relations of vertices and edges can be built using the `igraph` library:
+
+```{r}
+Edges <- data
+G <- igraph::graph_from_data_frame(d = Edges, directed = FALSE)
+   laytg <- igraph::layout.auto(G)
+   colnames(laytg) <- c("xval", "yval")
+   laytg <- as_tibble(laytg)
+   laytg$node <- vertex_attr(G)[[1]]
+   laytg %>% head()
+```
+
+With the vertices described it is necessary to build the lines by creating a data frame of the starting and Ending points of edges:
+
+```{r}
+ne <- nrow(Edges)
+   ys <- xe <- ye <- xs <- vector(length = ne)
+   for (i in seq_len(ne)) {
+     xs[i] <- laytg$xval[laytg$node==Edges$Source[i]]
+     ys[i] <- laytg$yval[laytg$node==Edges$Source[i]]
+     xe[i] <- laytg$xval[laytg$node==Edges$Target[i]]
+     ye[i] <- laytg$yval[laytg$node==Edges$Target[i]]
+   }
+  
+   EdgeNames <- paste0("From:", Edges$Source, "To:", Edges$Target) 
+   starts    <- data.frame("xval" = xs, "yval" = ys, edgeid = EdgeNames) # TODO Make a factor
+   ends      <- data.frame("xval" = xe, "yval" = ye, edgeid = EdgeNames)
+   Edges_val <- as_tibble(rbind(starts,ends))
+   # Edges_val %>% tail()
+```
+
+Using `ggplot2` the vertices can be plotted as points and the
+edges as lines, it is important to specify that the group the lines belong to
+are the names of the edges (`edgeid` values) because otherwise all the lines
+will be connected, this may be acceptable for a graph where all vertices are
+connected by edges, but for this data it is quite possible that two characters will
+never interact (for example the *Avengers* might not interact with the *X-men*
+or the Gods of the Aesir and Vanir might not interact with the *Fantastic Four* etc.), 
+such a graph is known as a **_disconnected_** *graph* [@weisstein].
+
+
+```{r}
+  p <-  ggplot(rbind(starts,ends), aes(x = xval, y = yval)) +
+        geom_line(aes(group = edgeid)) +
+        geom_point(data = laytg, aes(x = xval, y = yval, col = node), size = 2) +
+        theme_classic()
+  ggplotly(p)
+```
+
+Unfourtunately this method produces a lot of islands and the interactions are difficult to understand because of the edge overlaps, so instead of taking a sample, perhaps it would be better instead to choose from the characters that have the highest absolute cross overs (i.e. the weight of the edge).
+
+```{r}
+data_all <- data_all[order(-data_all$Value),] # This is the wrong order, I should use mean level
+data <- data_all[1:300,]
+```
+
+And so recreating the graph:
+
+```{r}
+Edges <- data
+gg_network_graph <- function() {
+G <- igraph::graph_from_data_frame(d = Edges, directed = FALSE)
+   laytg <- igraph::layout.auto(G)
+   colnames(laytg) <- c("xval", "yval")
+   laytg <- as_tibble(laytg)
+   laytg$node <- vertex_attr(G)[[1]]
+   laytg %>% head()
+   
+   
+ne <- nrow(Edges)
+   ys <- xe <- ye <- xs <- vector(length = ne)
+   for (i in seq_len(ne)) {
+     xs[i] <- laytg$xval[laytg$node==Edges$Source[i]]
+     ys[i] <- laytg$yval[laytg$node==Edges$Source[i]]
+     xe[i] <- laytg$xval[laytg$node==Edges$Target[i]]
+     ye[i] <- laytg$yval[laytg$node==Edges$Target[i]]
+   }
+  
+   EdgeNames <- paste0("From:", Edges$Source, "To:", Edges$Target) 
+   starts    <- data.frame("xval" = xs, "yval" = ys, edgeid = EdgeNames) # TODO Make a factor
+   ends      <- data.frame("xval" = xe, "yval" = ye, edgeid = EdgeNames)
+   Edges_val <- as_tibble(rbind(starts,ends))
+   # Edges_val %>% tail()
+   
+   
+  p <-  ggplot(rbind(starts,ends), aes(x = xval, y = yval)) +
+        geom_line(aes(group = edgeid), size = 0.1, lty = 3) +
+        geom_point(data = laytg, aes(x = xval, y = yval, col = node), size = 2.5) +
+        labs(x = "", y = "") +
+        theme_classic() +
+        theme(axis.line = element_blank(),  # https://stackoverflow.com/a/6542792/12843551
+              axis.text.y=element_blank(),axis.ticks=element_blank(),
+              axis.text.x=element_blank())
+  return(p)
+}
+
+ggplotly(gg_network_graph())
+
+```
+
+Although this method of sampling the data is less of a fair sample (biasing selection for characters that often interact such as the *X-Men*, *Fantastic Four* and *Avengers*) it does provide for an effective way to observe the most frequent form of interaction between any two characters as opposed to trying to see every interaction between all characters through a random sample; for this reason this form of sampling is more appropriate for making a visualisation of the relationships between characters and will be used henceforth.
+
+#### Visualisation Techniques
+
+For this plot 300 edges were chosen because the interactive nature of the plot is such that the overlap of edges can be made arbitrarily small by zooming sufficiently far in, given that there are distinct islands this is necessary in order to visualise the data and hence more data points may as well be visualised (Select an area with the mouse to zoom in and right click to zoom out).
+
+It was necessary to balance the need to zoom in with the size of the vertices/points because the points will respond to a mouse hover by returning the name of the node.
+
+Genereally only a small amount of colours can be used to distinguish variables in a plot, however in this case the variables are going to be considered relative to other local vertices and so multiple colours can be an effective way to distinguish nodes in relative proximity to one another.
+
+Although the legend is quite long and not useful on it's own, in conjunction with the capacity to adjust the range of the plot by zooming and the fact that the legend can be scrolled it becomes an effective way to compare multiple plots that are in close proximity to each other as a reference second to the mouse-hover dialog.
+
+
+#### Very Large Sample
+
+A much larger sample can be used to get an understanding of how often the seperate disconnected 'islands' of characters might become connected by another character taken into the snapshot:
+
+```{r}
+Edges <- data_all[1:999,]
+ggplotly(gg_network_graph())
+
+```
+
+Although such a large graph is inherently difficult to interpret for clusters close to one another it is useful for observing broader relations in conjuction with the zooming, panning and using the mouse-hover feature.
+
+#### Smaller Sample
+
+A graph destined for physical print will be more appropriately constructed if the scope is restricted to a smaller number of characters and annotations are added to the vertices such that the audience can come to understand the potential connections between the characters (as opposed to a broad overview that can be adjusted in digital media):
+
+```{r}
+gg_network_graph_print <- function() {
+G <- igraph::graph_from_data_frame(d = Edges, directed = FALSE)
+   laytg <- igraph::layout.auto(G)
+   colnames(laytg) <- c("xval", "yval")
+   laytg <- as_tibble(laytg)
+   laytg$node <- vertex_attr(G)[[1]]
+   laytg %>% head()
+   
+   
+ne <- nrow(Edges)
+   ys <- xe <- ye <- xs <- vector(length = ne)
+   for (i in seq_len(ne)) {
+     xs[i] <- laytg$xval[laytg$node==Edges$Source[i]]
+     ys[i] <- laytg$yval[laytg$node==Edges$Source[i]]
+     xe[i] <- laytg$xval[laytg$node==Edges$Target[i]]
+     ye[i] <- laytg$yval[laytg$node==Edges$Target[i]]
+   }
+  
+   EdgeNames <- paste0("From:", Edges$Source, "To:", Edges$Target) 
+   starts    <- data.frame("xval" = xs, "yval" = ys, edgeid = EdgeNames) # TODO Make a factor
+   ends      <- data.frame("xval" = xe, "yval" = ye, edgeid = EdgeNames)
+   Edges_val <- as_tibble(rbind(starts,ends))
+   # Edges_val %>% tail()
+   
+   
+  p <-  ggplot(rbind(starts,ends), aes(x = xval, y = yval)) +
+        geom_line(aes(group = edgeid), size = 0.6, lty = 3) +
+        geom_point(data = laytg, aes(x = xval, y = yval, col = node), size = 2.5) +
+        geom_label(data = laytg, aes(x = xval, y = yval, label = node), size = 1.5, nudge_x = 0.3, nudge_y = 0.8, ) +
+        labs(x = "", y = "") +
+        guides(col = FALSE) +
+        theme_classic() +
+        theme(axis.line = element_blank(),  # https://stackoverflow.com/a/6542792/12843551
+              axis.text.y=element_blank(),axis.ticks=element_blank(),
+              axis.text.x=element_blank())
+  return(p)
+}
+
+
+Edges <- data_all[1:40,]
+gg_network_graph_print()
+
+```
+
+### 3D Network Graph
+
+Although a 2D graph can provide a better seperation of nodes the capacity to visualise more elements by way of a third dimension can provide a deeper understanding of the connections between the data.
+
+In order to create a 3d graph the [*Plotly*](https://plotly.com/) graphing library may be used, this is built on the [D3JS](https://d3js.org/) library and geared towards data science and AI.
+
+
+#### Smaller Sample
+
+##### Build the Graph
+
+First Subset the Data and greate an `igraph` object:
+
+```{r}
+Edges <- data_all[1:300,]
+
+# Get the number of nodes and edges
+nodes <- factor(c(as.character(data$Source), as.character(data$Target)))
+nodes <- nodes[!duplicated(nodes)]
+nn <- length(nodes)
+ne <- nrow(data)
+
+# Build the Graph
+G <- igraph::graph_from_data_frame(Edges, directed = FALSE)
+
+```
+
+##### Layout the Nodes
+From the constructed `igraph` object a layout of nodes in 3 dimensions may be produced:
+
+```{r}
+# Get the node positions set by the layout for 3D graphs (I like Kamada Kawai)
+layt <- as.data.frame(igraph::layout.kamada.kawai(G, dim = 3))
+names(layt) <- c("xval", "yval", "zval")
+layt$label <- vertex_attr(G)[[1]]
+
+# Get the X Co-ordinates of the Nodes
+   xn <- layt[,1] # X co-ordinate of nodes
+   yn <- layt[,2]
+   zn <- layt[,3]
+```
+
+##### Replace the Edges with the Node Values
+
+The corresponding endpoints for the edges can be taken from the listed nodes:
+
+```{r}
+   Zs <- Ys <- Xs <- Ze <- Ye <- Xe <- vector(length = ne)
+   for (i in seq_len(ne)) {
+     Xs[i] <- layt$xval[layt$label==Edges$Source[i]]
+     Ys[i] <- layt$yval[layt$label==Edges$Source[i]]
+     Zs[i] <- layt$zval[layt$label==Edges$Source[i]]
+     Xe[i] <- layt$xval[layt$label==Edges$Target[i]]
+     Ye[i] <- layt$yval[layt$label==Edges$Target[i]]
+     Ze[i] <- layt$zval[layt$label==Edges$Target[i]]
+   }
+   
+   starts    <- data.frame("xval" = Xs, "yval" = Ys, "zval" = Zs, edgenum = 1:ne) # TODO Make a factor
+   ends      <- data.frame("xval" = Xe, "yval" = Ye, "zval" = Ze, edgenum = 1:ne)
+   Edges_val <- as_tibble(rbind(starts,ends))
+   # Edges_val
+```
+
+##### Create the Plotly Elements
+
+###### Create the Points Vertices
+
+The points can then be built with plotly:
+```{r}
+ponts <- plot_ly(x = layt[,1],
+                 y = layt[,2],
+                 z = layt[,3],
+                # marker = list(size = 9),
+                 text = layt$label,
+                 color = layt$label,
+                # text = 0:(nn-1),
+                type = "scatter3d",
+                mode = "markers")
+```
+
+###### Create the Lines (Edges)
+
+Building the edges is a little tricker, the *Plotly* libray doesn't support grouping line elements and so each edge must be produced as a seperate plot and then combined as submodules (if the graph was assured to be completely connected then the endpoints could simply be provided and all connected):
+
+```{r, echo = FALSE, results = FALSE, quietly = TRUE, warning=FALSE, message=FALSE}
+line_plots <- list()   # Does not support groups so you must create a seperate line plot so it doesn't just join everything
+
+for (i in 1:ne) {                # the idea is to create a different sub plot for every line.
+line_plots[i] <- plot_ly(
+    x = c(starts$xval[i], ends$xval[i]),
+    y = c(starts$yval[i], ends$yval[i]),
+    z = c(starts$zval[i], ends$zval[i]),
+    mode = 'lines',
+    type = "scatter3d",
+    showlegend = FALSE) # You don't want each edge to be labelled, only the nodes
+}
+lines_grouped <- subplot(line_plots)
+
+```
+
+###### Remove Axis Elements
+
+The axis Elements are not desirable a network graph:
+
+```{r}
+# Pull out background.
+noback <- list(showticks = FALSE,
+               showgrid = FALSE,
+               showaxis = FALSE,
+               gridcolor = "white",
+               showline=FALSE,
+               zeroline=FALSE,
+               showticklabels=FALSE, title='')
+
+
+# lines <- lines %>% layout(scene = list(xaxis=noback,yaxis=noback,zaxis=noback))
+lines_grouped <- lines_grouped %>% layout(scene = list(xaxis=noback,yaxis=noback,zaxis=noback))
+ponts <- ponts %>% layout(scene = list(xaxis=noback,yaxis=noback,zaxis=noback)) # you need to do this for points to get rid of x,y,z labels
+```
+
+###### Put it all Together
+
+All the points can now be combined to create the network graph:
+
+* Hold Right-Mouse button to pan
+* Hold Left-Mouse button to rotate orbitally
+* Scroll in order to zoom in/out.
+
+```r
+ subplot(lines_grouped, ponts)
+```
+
+```{r, warning=FALSE, quietly = TRUE, echo = FALSE}
+suppressWarnings(subplot(lines_grouped, ponts)) %>% suppressMessages()
+```
+
+Although the points are very large, after zooming in to a degree that the edges do not overalap too much, the size of the nodes is sufficiently large to respond to a mouse hover yet not too large to obstruct from the sahpe of the graph and so such a size was settled on.
+
+
+
+#### Large Sample
+
+This can be repeated for a much larger sample in order to get a more immersive (although less clear) visualisation of the data, this can be useful for observing large patterns but less useful for identifying individual relations:
+
+
+```{r, warning=FALSE, quietly = TRUE, echo = FALSE, message=FALSE}
+data <- data_all[1:1500,] # previously 1000
+
+# Get the number of nodes and edges
+nodes <- factor(c(as.character(data$Source), as.character(data$Target)))
+nodes <- nodes[!duplicated(nodes)]
+nn <- length(nodes)
+ne <- nrow(data)
+
+# Build the Graph
+Edges <- data
+G <- igraph::graph_from_data_frame(Edges, directed = FALSE)
+
+# Get the node positions set by the lKamada-Kawai layout for 3D graphs 
+layt <- as.data.frame(igraph::layout.kamada.kawai(G, dim = 3))
+names(layt) <- c("xval", "yval", "zval")
+layt$label <- vertex_attr(G)[[1]]
+head(layt)
+   
+## The order is not preserved
+(factor(vertex_attr(G)[[1]])==factor(nodes)) %>% mean()
+
+
+#   layt <- igraph::layout.auto(G, dim = 3)
+   
+   # Set data for the Plotly plot of the graph:
+   
+   xn <- layt[,1] # X co-ordinate of nodes
+   yn <- layt[,2]
+   zn <- layt[,3]
+   
+   Zs <- Ys <- Xs <- Ze <- Ye <- Xe <- vector(length = ne)
+   for (i in seq_len(ne)) {
+     Xs[i] <- layt$xval[layt$label==Edges$Source[i]]
+     Ys[i] <- layt$yval[layt$label==Edges$Source[i]]
+     Zs[i] <- layt$zval[layt$label==Edges$Source[i]]
+     Xe[i] <- layt$xval[layt$label==Edges$Target[i]]
+     Ye[i] <- layt$yval[layt$label==Edges$Target[i]]
+     Ze[i] <- layt$zval[layt$label==Edges$Target[i]]
+   }
+   
+   starts    <- data.frame("xval" = Xs, "yval" = Ys, "zval" = Zs, edgenum = 1:ne) # TODO Make a factor
+   ends      <- data.frame("xval" = Xe, "yval" = Ye, "zval" = Ze, edgenum = 1:ne)
+   Edges_val <- as_tibble(rbind(starts,ends))
+   
+   
+   
+   # Start Building the Plotly
+   
+   # Plotly
+ponts <- plot_ly(x = layt[,1],
+                 y = layt[,2],
+                 z = layt[,3],
+                 text = layt$label,
+                 color = layt$label,
+                 marker = list(size = 5),
+                # text = 0:(nn-1),
+                type = "scatter3d",
+                mode = "markers")
+
+
+
+line_plots <- list()   # Does not support groups so you must create a seperate line plot so it doesn't just join everything
+for (i in 1:ne) {                # the idea is to create a different sub plot for every line.
+line_plots[i] <- plot_ly(
+    x = c(starts$xval[i], ends$xval[i]),
+    y = c(starts$yval[i], ends$yval[i]),
+    z = c(starts$zval[i], ends$zval[i]),
+    type="scatter3d",
+    mode = 'lines',
+    showlegend = FALSE) # You don't want each edge to be labelled, only the nodes
+}
+lines_grouped <- subplot(line_plots)
+
+# https://plotly.com/python/v3/3d-network-graph/
+
+# Pull out background.
+noback <- list(showticks = FALSE,
+               showgrid = FALSE,
+               showaxis = FALSE,
+               gridcolor = "white",
+               showline=FALSE,
+               zeroline=FALSE,
+               showticklabels=FALSE, title='')
+
+
+lines_grouped <- lines_grouped %>% layout(scene = list(xaxis=noback,yaxis=noback,zaxis=noback))
+ponts <- ponts %>% layout(scene = list(xaxis=noback,yaxis=noback,zaxis=noback)) # you need to do this for points to get rid of x,y,z labels
+
+# subplot(ponts, lines)
+ subplot(lines_grouped, ponts) %>% suppressWarnings() %>% suppressMessages()
+   
+```
+
+Although the large vertex size does obstruct the fuzzy shape created by the edges, they were elected for as a compromise for the benefit of the mouse-hover annotations that allow a character to be tied to a node.
+
+This graph has too many nodes to show relations between individuals but can be useful to show relations between clusters, for example the Gods of the Aesir/Vanir appear as a distinct cluster linked by Thor and and Captain American can be seen to be a very central character that acts as the main tie between much of the universe.
+
+### Results
+
+The relational network graphs show generally that the Marvel Characters tend to form there own clusters, as more characters are added (in order of the number of cross overs that character has had generally), these clusters become more and more connected through different characters.
+
+The large network graph shows two very interesting features, primarily that certain characters such the Gods are a cluster quite far from most other characters, representing the fact that Gods don't interact with humans often in the comics. Secondly it shows that characters such as *Iront Man*, *Captain America* and *Thor* are very central to all other characters, having many cross-overs generally with a wide-diversity of characters, demonstrating that these core-characters represent a central binding tool to tie the diverse  stories together into one universe.
+
+
+## Heirarchical Investigation
+
+Another way to visualise this extremely large data set is to impose upon it, some degree of artificial Heirarchical structure.
+
+If the character with the highest amount of cross overs between the most amount of characters is taken as the root and the characters closest connections mapped and those subsequent connections mapped similarly, a heirarchical data set from the *most socially diverse* character can be built. Although this does seem artificial it allows a view from the centre of the *Marvel Universe* (with respect to cross-over interaction) out to all other characters.
+
+### Sunbirst
+
+A sunbirst diagram could be used to visualise this heirarchy and can be built by first subsetting the data:
+
+```{r}
+c <- 1  # Index of Most Social Character
+# Choose the root value
+  ## Because this will descend by number of cross overs, I will choose the individual with the most crossovers (including doubles)
+socialability <- apply(data_adj, 2, sum)
+(socialability <- socialability[order(-socialability)]) %>% head()
+top <- names(socialability)[which(socialability == max(socialability))]; i <- 1
+top <- names(socialability)[c]
+
+sd <- data_adj[1:500,1:500]
+# Build a Data Frame and set up the root value
+bfdf   <- data.frame(parents = "", labels = top, values = max(sd)+1) # reset to 1 later, it's easier than reordering
+
+
+##### Loop
+
+while (i <= nrow(bfdf)) {
+  ## Identify matches
+  matches <- sd[,top] # Extract column of interest
+  matches <- matches[matches>0] #Only consider characters that have met
+  matches <- matches[!(names(matches) %in% bfdf$labels)] #Remove Characters already used
+  
+  (matches <- matches[order(-matches)]) %>% head() # Arrange the matches
+  
+  ## Apend the value to the data frame
+  bfrow  <- data.frame(parents = rep(top, length(matches)), labels = names(matches), values = matches)
+  (bfdf <- rbind(bfdf, bfrow)) %>% head()
+  
+  ## Remove Duplicates in df (failsafe)
+  # n <- which(duplicated(bfdf$labels))
+  # bfdf <- bfdf[-n,]
+  
+  ## Set the next top value
+  i <- i+1
+  top <- bfdf$labels[i]
+  while (is.na(top) && i <= nrow(bfdf)) {
+    i <- i+1
+    top <- bfdf$labels[i]
+  }
+ # print(i/nrow(bfdf))
+  
+  ## Inspect Parents
+  # unique(bfdf$parents) %>% print()
+}
+
+bfdf$values[1] <- 1
+## Test plotting
+(fig <- plot_ly( labels  = bfdf$labels, parents = bfdf$parents, values  = bfdf$values, type = 'sunburst' ))
+
+```
+
+Unfourtunately the characters are very difficult to discern around the circumference of the circle, using a treemap instead it may be possible to visualise more connections, repeating the same structure for the subsequent most social character provides:
+
+### TreeMap
+
+#### Spider-Man
+
+
+```{r, warning=FALSE, quietly = TRUE, echo = FALSE}
+c <- 2  # Index of Most Social Character
+# Choose the root value
+  ## Because this will descend by number of cross overs, I will choose the individual with the most crossovers (including doubles)
+socialability <- apply(data_adj, 2, sum)
+(socialability <- socialability[order(-socialability)]) %>% head()
+top <- names(socialability)[which(socialability == max(socialability))]; i <- 1
+top <- names(socialability)[c]
+
+sd <- data_adj[1:600,1:600]
+# Build a Data Frame and set up the root value
+bfdf   <- data.frame(parents = "", labels = top, values = max(sd)+1) # reset to 1 later, it's easier than reordering
+
+
+##### Loop
+
+while (i <= nrow(bfdf)) {
+  ## Identify matches
+  matches <- sd[,top] # Extract column of interest
+  matches <- matches[matches>0] #Only consider characters that have met
+  matches <- matches[!(names(matches) %in% bfdf$labels)] #Remove Characters already used
+  
+  (matches <- matches[order(-matches)]) %>% head() # Arrange the matches
+  
+  ## Apend the value to the data frame
+  bfrow  <- data.frame(parents = rep(top, length(matches)), labels = names(matches), values = matches)
+  (bfdf <- rbind(bfdf, bfrow)) %>% head()
+  
+  ## Remove Duplicates in df (failsafe)
+  # n <- which(duplicated(bfdf$labels))
+  # bfdf <- bfdf[-n,]
+  
+  ## Set the next top value
+  i <- i+1
+  top <- bfdf$labels[i]
+  while (is.na(top) && i <= nrow(bfdf)) {
+    i <- i+1
+    top <- bfdf$labels[i]
+  }
+#  print(i/nrow(bfdf))
+  
+  ## Inspect Parents
+  # unique(bfdf$parents) %>% print()
+}
+
+bfdf$values[1] <- 1
+## Test plotting
+(fig <- plot_ly( labels  = bfdf$labels, parents = bfdf$parents, values  = bfdf$values, type = "treemap" ))
+
+```
+
+#### Character 2
+
+
+```{r, warning=FALSE, quietly = TRUE, echo = FALSE}
+c <- 4  # Index of Most Social Character
+# Choose the root value
+  ## Because this will descend by number of cross overs, I will choose the individual with the most crossovers (including doubles)
+socialability <- apply(data_adj, 2, sum)
+(socialability <- socialability[order(-socialability)]) %>% head()
+top <- names(socialability)[which(socialability == max(socialability))]; i <- 1
+top <- names(socialability)[c]
+
+sd <- data_adj[1:500,1:500]
+# Build a Data Frame and set up the root value
+bfdf   <- data.frame(parents = "", labels = top, values = max(sd)+1) # reset to 1 later, it's easier than reordering
+
+
+##### Loop
+
+while (i <= nrow(bfdf)) {
+  ## Identify matches
+  matches <- sd[,top] # Extract column of interest
+  matches <- matches[matches>0] #Only consider characters that have met
+  matches <- matches[!(names(matches) %in% bfdf$labels)] #Remove Characters already used
+  
+  (matches <- matches[order(-matches)]) %>% head() # Arrange the matches
+  
+  ## Apend the value to the data frame
+  bfrow  <- data.frame(parents = rep(top, length(matches)), labels = names(matches), values = matches)
+  (bfdf <- rbind(bfdf, bfrow)) %>% head()
+  
+  ## Remove Duplicates in df (failsafe)
+  # n <- which(duplicated(bfdf$labels))
+  # bfdf <- bfdf[-n,]
+  
+  ## Set the next top value
+  i <- i+1
+  top <- bfdf$labels[i]
+  while (is.na(top) && i <= nrow(bfdf)) {
+    i <- i+1
+    top <- bfdf$labels[i]
+  }
+#  print(i/nrow(bfdf))
+  
+  ## Inspect Parents
+  # unique(bfdf$parents) %>% print()
+}
+
+bfdf$values[1] <- 1
+## Test plotting
+(fig <- plot_ly( labels  = bfdf$labels, parents = bfdf$parents, values  = bfdf$values, type = "treemap" ))
+
+```
+
+### Results
+
+Despite sampling the characters for interconnectivity, the characters appear to show a very low *degree of seperation* indicating that for the most part, the *Marvel Universe* is very inter connected (as opposed to the *DC Comics* universe which is fragmented by different imprints of comics targeted towards different demographics, this fragmentation is something that the publisher has been trying to overcome [@2017]).
+
+### Tree
+
+For print media, a more appropriate representation of heirarchical data would be a graph in the form of a tree, as opposed to ring chart, because a ring chart or treemap will be too small to readily visualise and the rigid structure of a tree will be easy to interpret without any interactive aids on a page for which the scale cannot be adgusted.
+
+#### Build the Heirarchical Data Set
+
+As before the process here will be to choose a character that has the highest number of inter-relations and then match the next 2-8 edges that have the highest weight (total number of interactions), this can be repeated for a depth of 2-8, however there is a limit as the number of iterations the loop will perform is $\sum^l_{k=0} \left[ n^k \right]$, moreover because the edges can still interact in this algorithm (a property that I found to be desirable) the structure of the tree may become somewhat distorted (e.g. the top node being pushed down). 
+
+This distortion may make the tree somewhat misleading by moving nodes between levels but is an acceptable compromise given that it provides an  effective way to illustrate the interconnected-ness of characters as opposed to a purely linear descent.
+
+
+
+```{r}
+# load(file = "./hero_adjacency.Rdata")
+# data <- hero_adj
+data <- data_adj
+most_social <- apply(data, 2, mean)
+most_social <- most_social[order(-most_social)]
+
+
+treedf <- data.frame()
+n <- 2 # number of children # I really liked 2
+l <- 5 # number of levels   # I liked 3 (actually n=3, l = 5 was good too)
+en <- sum(n^(1:l)) #number of edges for corresponding level number
+
+(top <- names(most_social)[1])
+matches <- data[top,]
+data <- data[-which(rownames(data)==top), -which(rownames(data)==top)]
+matches <- matches[matches>0]
+matches <- matches[order(-matches)]
+matchdf <- data.frame(parent = rep(top,n ), labels = names(matches)[1:n], values = matches[1:n])
+treedf <- rbind(treedf,matchdf)
+
+for (i in 1:en) {
+  #  i <- 1
+  top <- treedf$labels[i]
+  matches <- data[top,]    # This for which filter sometimes returns null and I don't know why
+  #  data <- data[-which(rownames(data)==top), -which(rownames(data)==top)]
+  matches <- matches[matches>0]
+  matches <- matches[matches != top] # This is a simpler fix because R is slow
+  matches <- matches[order(-matches)]
+  if (length(matches)<n) {
+    matchdf <- data.frame(parent = rep(top,length(matches)), labels = names(matches)[1:length(matches)], values = matches[1:length(matches)])
+  } else if(length(matches)==0) {
+    print("No matches for this iterance")
+  } else {
+    matchdf <- data.frame(parent = rep(top,n ), labels = names(matches)[1:n], values = matches[1:n])
+  }
+  treedf <- rbind(treedf,matchdf)
+#  print(i/en)
+  #  i <- i+1
+}
+top <- treedf$labels[2]
+matches <- data[top,]
+matches <- matches[matches>0]
+matches <- matches[order(-matches)]
+matchdf <- data.frame(parent = rep(top,n ), labels = names(matches)[1:n], values = matches[1:n])
+treedf <- rbind(treedf,matchdf)
+
+```
+
+#### Build the Graph
+
+The tree graph, as before can be constructed by using the `igraph` library: 
+
+```{r}
+Edges <- treedf
+names(Edges) <- c("Source", "Target", "Value")
+
+
+#{
+
+# GGPlot (# Because of the way that I made the graph, the nodes come from the edges, hence, every node must be connected.)
+G <- igraph::graph_from_data_frame(d = Edges, directed = FALSE)
+laytg <- igraph::layout_as_tree(G, root = 1)
+colnames(laytg) <- c("xval", "yval")
+laytg <- as_tibble(laytg)
+laytg$node <- vertex_attr(G)[[1]]
+
+
+ne <- nrow(Edges)
+ys <- xe <- ye <- xs <- vector(length = ne)
+for (i in seq_len(length(xs))) {
+  xs[i] <- laytg$xval[laytg$node==Edges$Source[i]]
+  ys[i] <- laytg$yval[laytg$node==Edges$Source[i]]
+  xe[i] <- laytg$xval[laytg$node==Edges$Target[i]]
+  ye[i] <- laytg$yval[laytg$node==Edges$Target[i]]
+}
+
+starts    <- data.frame("xval" = xs, "yval" = ys, edgenum = 1:ne) # TODO Make a factor
+ends      <- data.frame("xval" = xe, "yval" = ye, edgenum = 1:ne)
+Edges_val <- as_tibble(rbind(starts,ends))
+
+```
+
+#### Plot the Graph 
+And finally the plot can be constructed by using `ggplot` to plot the nodes and map the lines relative to the edge group:
+
+```{r}
+library(ggrepel)
+p <-  ggplot(rbind(starts,ends), aes(x = xval, y = yval)) +
+  geom_line(aes(group = edgenum), lty = 3, col = "darkgrey", size = 0.3) +
+  geom_point(data = laytg, aes(x = xval, y = yval, col = node), size = 4) +
+  labs(x = "", y = "") +
+  geom_label_repel(data = laytg, aes(x = xval, y = yval, label = node, col = node), size = 1.5, nudge_x = 0, nudge_y = 0) +
+  guides(col = FALSE) +
+  theme_classic() +
+  theme(axis.line = element_blank(),  # https://stackoverflow.com/a/6542792/12843551
+    axis.text.y=element_blank(),axis.ticks=element_blank(),
+    axis.text.x=element_blank())
+ p
+```
+
+
+
+
+#### Effectiveness of Tree Graph
+
+This visualisation is less descriptive than the ring chart or treemaps but it is easier to interpret because of the clear spacing, and smaller number of visual elements. Compared to the preceeding 2D/3D graphs this hierarchical chart may appear at first a little misleading, because connections between characters are only shown for a characters strongest relationship that hasn't already been made for a preceeding character (from the perspective of the initial charater/node, i.e. *Captain America*), the clear starting point of the tree is also only true from the perspective of the initial character.
+
+Nonetheless, this is an effective visualisation because the initial character is a character with the highest number of mean connections and this can show a heirarchical layout of the universe from the most inter-related characters to the outskirts of isolated characters.
+
+
+
+## Discussion
+
+### Details of Techniques
+The techniques used to build the visualisations have been included in code dialog boxes and explained previously, but the the reason these partucluar methods were chosen is because:
+
+* Relational data can be readily visualised as a network graph
+* Analysing the data to observe heirarchical relations can be insighful
+* Sunburst and treemap visualisations help explain these relations relative to the total number of character interactions (the weight) and relative to other characters.
+
+### Advantages and Disadvantages of Utilised Methods
+
+These methods are good because they allow much of the data to be visualised in a very raw form, however with so much data the plots can be resource intensive to generate and manimpulate and also hard to interpret. 
+
+#### Other methods in literature
+
+A potential improvement could be categorising nodes as subsets of a parent node (e.g. joining all the *X-men*, Norse Gods and all the *Avengers* together) or simply doing a type of proximitly clustering merely for want of visualisation (although this would compromise the capacity to interpret the labels of the nodes, it would be easier than manually clustering observations).
+
+Some force directed methods that allow the force to be interacted with show more information by allowing the user to interact with the nodes and edges, this provides a 'sense' of the force which corresponds to the weight of the edge (in this case the number of interactions between characters). Such a technique provides another method to express the dimension of weight; this provides a potential improvement to the methods utilised, unforutunately this isn't a method that can be readily implemented in the *Plotly* graphing library and would require a different approach.
+
+#### Can They be used for large sets of relational data
+
+The 3D Network graph can be used to visualise moderately sized data, up to about 1,500 edges, this is because it's interactive and it can scale to still be useful (depending on the data set of course). Unfourtunately however it is very resource intensive for many edges owing to the way the library draws lins and a more appropriate limit might be closer to 500 Edges. Data sets larger than that simply cannot be visualised by a nework graph because they become too visually unwieldly and resource intensvie to be practically visualised and a type of reduction technique would need to be implemented.
+
+If the graph is printed there is a very hard limit to what can be practically visualised, perhaps around 50 nodes depending on the size of the printout and structure of the edge-node relationships, a limit beyond which it is not feasible to interpret a visualisation.
+
+#### Analysis Results
+
+Analysis results were discussed below each plot, but generally the visualisation allows for observations like the relative isolation of the *Fantastic Four*; as well as the way that the Norse gods of the Aesir and Vanir hover above the rest of the *Marvel* characters almost as if they were Gods of another realm looking over *Midgard*.
+
+#### Literature Review
+
+ In the original paper it was found that there were slight distinctions between real social networks and this social network, this isn't suprising given observations such as the isolation of certain character sets and different publishing imprints.
+ 
+ Other methods to visualise large relational data sets involve large overvies of *force-directed organic layouts* such as this one by [Cambridge-Intelligence](https://cambridge-intelligence.com/cosmos-db-nobel-prizes/) [@barnett], unfourtunately the *Plotly* graphing library doesn't scale well for large data sets and so this method wasn't implemented, it could have been an option to this visualisation in ggplot2.
+
+## Conclusion
+
+The inter-relations of marvel characters creates a very interesting set of relations that can be effectively visualised using techniques such as network graphs, 3D netowrk graphs, treemaps, sunburst diagrams and tree graphs.
+
+## References
+

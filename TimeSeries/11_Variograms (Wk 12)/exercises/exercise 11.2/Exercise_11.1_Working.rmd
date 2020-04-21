@@ -1,0 +1,95 @@
+---
+title: "Exercise 11.2"
+output: 
+  html_document: 
+    toc: yes
+  html_notebook: 
+    highlight: tango
+    theme: journal
+  pdf_document: 
+    toc: yes
+  word_document: 
+    toc: yes
+---
+
+# Preamble
+## Import Library
+
+The following code will automatically install packages that are 
+not already installed and load them into the library:
+
+```{r}
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(sp, EnvStats, gstat, ggplot2, rmarkdown)
+```
+
+## Create Assignments
+
+Note that  Benthic.df is included in the *EnvStats* package and is not a 
+data frame but an *sp* class, which is very similar to a data frame
+
+```{r}
+#Assignments
+benthic <- Benthic.df
+lat <- benthic$Latitude
+lon <- benthic$Longitude
+```
+
+#Inspect the Data Set
+
+```{r}
+head(benthic, 3)
+```
+
+#Asign Co-ordinates
+The benthic data set is not a mere data frame, it is an `sp` object,
+which is very similar to a data frame.
+It is necessary to set the co-ordinates of this object though:
+```{r}
+coordinates(benthic) = ~Longitude + Latitude
+```
+
+#Create a Directional variogram
+A variogram is a description of the structure of spacial data,
+first this needs to be created before anything can 
+be plotted or modelled:
+
+
+Because a directional variogram is still of the class `variogramModel`, 
+it is not possible (to the best of my knowledge) to use `ggplot2`
+in order to plot it.
+
+The `alpha` option allows a vector of directional degrees to be specified, in this case, 22.5, 67.5, 112.5 and 157.5.
+
+```{r}
+benthic.dvg <- variogram(Index ~ 1,
+                         data=benthic, alpha=c(22.5, 67.5, 112.5, 157.5))
+benthic.dvg.fit <- vgm(1,"Sph", 0.5,1,anis=c(30,0.4))
+plot(benthic.dvg, benthic.dvg.fit,
+     main="Figure 11.5  Directional variograms for Benthic Index")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

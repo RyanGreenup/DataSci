@@ -1,0 +1,140 @@
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, ggplot2, rmarkdown, reshape2, ggmap,
+RColorBrewer, parallel, dplyr, plotly)
+house.df <- read.csv(file = "house2018.csv", header = TRUE, sep = ",")
+head(house.df)
+plot.house <- function() {
+plot(x = house.df$sqm, y = house.df$price,
+type = "p", main = "House Prices",
+xlab = "Property size (sqm)", ylab = "Price ($)",
+frame.plot = TRUE, axes = TRUE,
+col = "Indianred", pch = 16, cex = 2)
+}
+plot.house()
+nbhd      <- house.df$nbhd
+offers    <- house.df$offers
+sqm       <- house.df$sqm
+brick     <- house.df$brick
+bedrooms  <- house.df$bedrooms
+bathrooms <- house.df$bathrooms
+price     <- house.df$price
+house.lm <- lm(price ~ sqm)
+summary(house.lm)
+plot.house.lm <- function(lm = TRUE) {
+plot.house()
+if(lm == TRUE) {
+abline(house.lm, col = "royalblue", lwd = 3, lty = 6)
+}
+}
+plot.house.lm(lm = TRUE)
+ggplot(house.df, aes(x = sqm, y = price, shape = nbhd, label = brick, col = (bathrooms+ bedrooms))) +
+geom_point(size = 2) +
+guides(col = guide_legend(title = "Bathrooms + Bedrooms")) +
+guides(shape = guide_legend(title = "Neighbourhood")) +
+xlab("Size (sqm)") +
+ylab("Price $") +
+ggtitle("House Prices") +
+geom_abline(slope = house.lm$coefficients[2],
+intercept = house.lm$coefficients[1],
+lwd = 1, col = "indianred") +
+theme_classic()
+house.mlm <- lm(price ~ offers + sqm + bedrooms + bathrooms)
+summary(house.mlm)
+#always use assignments when using the predict() function
+price <- house.df$price
+sqm   <- house.df$sqm
+predict(lm(price ~ sqm), data.frame(sqm=210), interval = "prediction", level = 0.95)
+predict(house.mlm, data.frame(offers = mean(offers), sqm = 210, bedrooms = mean(bedrooms), bathrooms = mean(bathrooms)), interval = "prediction", level = 0.95)
+paste("$", round(house.lm$coefficients[2]) * 15)
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, ggplot2, rmarkdown, reshape2, ggmap,
+RColorBrewer, parallel, dplyr, plotly)
+house.df <- read.csv(file = "house2018.csv", header = TRUE, sep = ",")
+head(house.df)
+plot.house <- function() {
+plot(x = house.df$sqm, y = house.df$price,
+type = "p", main = "House Prices",
+xlab = "Property size (sqm)", ylab = "Price ($)",
+frame.plot = TRUE, axes = TRUE,
+col = "Indianred", pch = 16, cex = 2)
+}
+plot.house()
+nbhd      <- house.df$nbhd
+offers    <- house.df$offers
+sqm       <- house.df$sqm
+brick     <- house.df$brick
+bedrooms  <- house.df$bedrooms
+bathrooms <- house.df$bathrooms
+price     <- house.df$price
+house.lm <- lm(price ~ sqm)
+summary(house.lm)
+plot.house.lm <- function(lm = TRUE) {
+plot.house()
+if(lm == TRUE) {
+abline(house.lm, col = "royalblue", lwd = 3, lty = 6)
+}
+}
+plot.house.lm(lm = TRUE)
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, ggplot2, rmarkdown, reshape2, ggmap,
+RColorBrewer, parallel, dplyr, plotly)
+house.df <- read.csv(file = "house2018.csv", header = TRUE, sep = ",")
+head(house.df)
+plot.house <- function() {
+plot(x = house.df$sqm, y = house.df$price,
+type = "p", main = "House Prices",
+xlab = "Property size (sqm)", ylab = "Price ($)",
+frame.plot = TRUE, axes = TRUE,
+col = "Indianred", pch = 16, cex = 2)
+}
+plot.house()
+nbhd      <- house.df$nbhd
+offers    <- house.df$offers
+sqm       <- house.df$sqm
+brick     <- house.df$brick
+bedrooms  <- house.df$bedrooms
+bathrooms <- house.df$bathrooms
+price     <- house.df$price
+house.lm <- lm(price ~ sqm)
+summary(house.lm)
+plot.house.lm <- function(lm = TRUE) {
+plot.house()
+if(lm == TRUE) {
+abline(house.lm, col = "royalblue", lwd = 3, lty = 6)
+}
+}
+plot.house.lm(lm = TRUE)
+ggplot(house.df, aes(x = sqm, y = price, shape = nbhd, label = brick, col = (bathrooms+ bedrooms))) +
+geom_point(size = 2) +
+guides(col = guide_legend(title = "Bathrooms + Bedrooms")) +
+guides(shape = guide_legend(title = "Neighbourhood")) +
+xlab("Size (sqm)") +
+ylab("Price $") +
+ggtitle("House Prices") +
+geom_abline(slope = house.lm$coefficients[2],
+intercept = house.lm$coefficients[1],
+lwd = 1, col = "indianred") +
+theme_classic()
+house.mlm <- lm(price ~ offers + sqm + bedrooms + bathrooms)
+summary(house.mlm)
+#always use assignments when using the predict() function
+price <- house.df$price
+sqm   <- house.df$sqm
+predict(lm(price ~ sqm), data.frame(sqm=210), interval = "prediction", level = 0.95)
+predict(house.mlm, data.frame(offers = mean(offers), sqm = 210, bedrooms = mean(bedrooms), bathrooms = mean(bathrooms)), interval = "prediction", level = 0.95)
+paste("$", round(house.lm$coefficients[2]) * 15)

@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+ResDF \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{data.frame}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Input\PYGZdq{}} \PYG{o}{=} advModMultb1\PYG{o}{\PYGZdl{}}fitted.values \PYG{o}{\PYGZhy{}} advModMultb1\PYG{o}{\PYGZdl{}}residuals\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Output\PYGZdq{}} \PYG{o}{=} advModMultb1\PYG{o}{\PYGZdl{}}fitted.values\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Error\PYGZdq{}} \PYG{o}{=} advModMultb1\PYG{o}{\PYGZdl{}}residuals\PYG{p}{)}
+ResDF \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} \PYG{k+kp}{head}\PYG{p}{()}
+\end{Verbatim}

@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+ggplot\PYG{p}{(}data \PYG{o}{=} ResDF\PYG{p}{,} aes\PYG{p}{(}x \PYG{o}{=} Error\PYG{p}{,} col \PYG{o}{=} Output\PYG{p}{))} \PYG{o}{+}
+  geom\PYGZus{}histogram\PYG{p}{()} \PYG{o}{+}
+  theme\PYGZus{}classic\PYG{p}{()} \PYG{o}{+}
+  labs\PYG{p}{(}y \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Absolute Count\PYGZdq{}}\PYG{p}{,} x \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Residual Value\PYGZdq{}}\PYG{p}{,} title \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Residual Distribution\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

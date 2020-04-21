@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Pure/Raw (has the advantage that you can interpret the coefficients, but the coefficients will depend on each other and be hence correlated.)}
+
+polymodel \PYG{o}{\PYGZlt{}\PYGZhy{}} lm\PYG{p}{(}Sales \PYG{o}{\PYGZti{}} \PYG{k+kp}{I}\PYG{p}{(}TV\PYG{o}{*}TV\PYG{o}{*}TV\PYG{p}{)} \PYG{o}{+} \PYG{k+kp}{I}\PYG{p}{(}TV\PYG{o}{*}TV\PYG{p}{)} \PYG{o}{+} \PYG{p}{(}TV\PYG{p}{),} data \PYG{o}{=} adv\PYG{p}{)}
+\PYG{k+kp}{summary}\PYG{p}{(}polymodel\PYG{p}{)}    \PYG{c+c1}{\PYGZsh{} I is used to inhibit the interpretation of * as relating to the model,}
+\end{Verbatim}

@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/392481/0775907d86724682bef6c77070a054c4
+bundleId: https://api.rpubs.com/api/v1/document/392481/0775907d86724682bef6c77070a054c4
+url: http://rpubs.com/PracSol/392481
+when: 1527592433.84677

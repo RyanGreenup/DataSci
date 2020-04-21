@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} coriris \PYGZlt{}\PYGZhy{} cor(iris[,!(names(iris) == \PYGZdq{}Species\PYGZdq{})])}
+\PYG{c+c1}{\PYGZsh{} corrplot(method = \PYGZsq{}ellipse\PYGZsq{}, type = \PYGZsq{}lower\PYGZsq{}, corr = coriris)}
+
+corMat \PYG{o}{\PYGZlt{}\PYGZhy{}} cor\PYG{p}{(}x \PYG{o}{=} adv\PYG{p}{)}
+corrplot\PYG{p}{(}corr \PYG{o}{=} corMat\PYG{p}{,} method \PYG{o}{=} \PYG{l+s}{\PYGZdq{}ellipse\PYGZdq{}}\PYG{p}{,} type \PYG{o}{=} \PYG{l+s}{\PYGZdq{}lower\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

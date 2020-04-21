@@ -1,0 +1,784 @@
+---
+title: "05_Practical; Cross-Validation"
+author: "Ryan Greenup 17805315"
+date: "23 August 2019"
+output:
+  html_document:
+    code_folding: hide
+    keep_md: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: no
+  pdf_document: 
+    toc: yes
+always_allow_html: yes
+  ##Shiny can be good but {.tabset} will be more compatible with PDF
+    ##but you can submit HTML in turnitin so it doesn't really matter.
+    
+ ##It is rare that you will want to use a floating toc with {.tabset}
+    ##If a floating toc is used in the document only use {.tabset} on more or less copy/pasted 
+        #sections with different datasets
+    ##Otherwise use {.tabsets} instead of TOC or TOC instead of {.tabsets}, one or the other though.
+---
+
+<!--  https://github.com/rstudio/rmarkdown/issues/1453#issuecomment-425327570 How to use echo       --> 
+
+```{r setup, include=FALSE, include = FALSE, results = "hide", eval = TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(scales, ggplot2, rmarkdown, shiny, ISLR, class, BiocManager, corrplot, plotly, tidyverse, latex2exp, stringr, reshape2, cowplot, ggpubr, rstudioapi, wesanderson, RColorBrewer, colorspace, gridExtra, grid, car, boot, colourpicker)
+  #Mass isn't available for R 3.5...
+
+set.seed(1) # Set the seed such that we might have
+```
+
+# (Wk 5) Resampling Methods, Cross Validation and Bootstrapping
+Material of Tue 2 April 2019, week 5
+
+## Cross Validation
+
+### (b) Fit a polynomial Regression
+
+#### Plot the Data {.tabset}
+##### base
+
+First Visualise the data
+
+```{r}
+plot(mpg ~ horsepower, data = Auto,
+     pch = (15:25)[as.numeric(Auto$cylinders)],
+     xlab = "Horsepower",
+     ylab= "Mileage",
+      main = "Mileage given horsepower")
+```
+
+
+##### ggplot2
+
+
+
+
+
+
+First Visualise the data
+```{r}
+ggplot(data = Auto, aes(y = mpg, x = horsepower, col = year, shape = as.factor(cylinders))) +
+  geom_point() +
+  theme_bw()+
+  labs(x = "Horsepower", y = "Mileage", title = "Fuel Efficiency given Horsepower")
+```
+
+</div>
+
+
+#### Conjecture a Model {.tabset}
+
+Looking at the data we may find that the appropriate model is some non-linear function, given that we would expect $\frac{\Delta S}{\Delta E} \propto \frac{\Delta E}{\Delta t}, \quad \exists \bar{v}$ the appropriate model would be a hyperbola, however we will also try a quadratic function and compare the performance.
+
+In a case like this it would be more appropriate to visualise the linearised data and then try and impute the correct corresponding model.
+
+the `boot` package works with `glm` not `lm` so that needs to be used instead. If the `family` parameter of `glm` is not specified, the model produced will be a linear regression, it is also necessary in this case to use `poly` instead of `I()` (think changing heads in mathematica) so we can use a loop to change the degree of the polynomial later.
+
+##### Hyperbola
+
+
+```{r}
+ggplot(data = Auto, aes(y = mpg, x = I((horsepower)^-1), col = year, shape = as.factor(cylinders))) +
+  geom_point() +
+  theme_bw()+
+  labs(x = TeX("$\\frac{1}{Horsepower}$"), y = "Mileage", title = "Hyperbolic Model")
+```
+
+
+##### Parabola
+
+```{r}
+ggplot(data = Auto, aes(y = mpg, x = I((horsepower)^2), col = year, shape = as.factor(cylinders))) +
+  geom_point() +
+  theme_bw()+
+  labs(x = TeX("Horsepower$^2$"), y = "Mileage", title = "Hyperbolic Model")
+```
+
+</div> 
+
+##### Create the Models
+
+These models suggest that the correct model is hyperbolic, although the plot appears to violate the assumption of homoskedasticity, this could however be explained by the cylinder count (denoted by shapes). Create both the models and plot them:
+
+```{r, res}
+mpg_mod_quad <- glm(formula = mpg ~ I(horsepower^2) + horsepower, data = Auto)
+summary(mpg_mod_quad)$coefficients %>% round(1)
+
+mpg_mod_hyp <- glm(formula = mpg ~ I(horsepower^-1), data = Auto)
+summary(mpg_mod_hyp)$coefficients %>% round(1)
+```
+
+#### Visualise the Model {.tabset}
+
+##### Base
+Now we overlay the model:
+
+
+```{r}
+
+# Plot the model
+plot(mpg ~ horsepower, data = Auto,
+     pch = (15:25)[as.numeric(Auto$cylinders)],
+     xlab = "Horsepower",
+     ylab= "Mileage",
+      main = "Mileage given horsepower")
+
+# Generate input data
+newdata <- data.frame("horsepower" = seq(from = min(Auto$horsepower), to = max(Auto$horsepower), length.out = 1000))
+newdata <- data.frame("horsepower" = seq(from = 40, to = 300, by = 1))
+
+# Generate Predictions
+predictionsquad <- predict(object = mpg_mod_quad, newdata = newdata)
+predictionsdfquad <- data.frame("mpg" = predictionsquad, "horsepower" = newdata)
+
+# Generate Predictions
+predictionsquad <- predict(object = mpg_mod_quad, newdata = newdata)
+predictionsdfquad <- data.frame("mpg" = predictionsquad, "horsepower" = newdata)
+
+
+predictionshyp <- predict(object = mpg_mod_hyp, newdata = newdata)
+predictionsdfhyp <- data.frame("mpg" = predictionshyp, "horsepower" = newdata)
+
+# Overlay the Lines
+lines(x = predictionsdfhyp$horsepower, y = predictionsdfhyp$mpg, col = "RoyalBlue", lwd = 3)
+lines(x = predictionsdfquad$horsepower, y = predictionsdfquad$mpg, col = "IndianRed", lwd = 3)
+```
+
+
+##### ggplot2
+
+Specifying legends for different models requires using `scale_color_discrete` [^rbpubsdoc] or using scale_colour_manual and setting the colour inside `stat_smooth` to a string constant referenced inside `scale_color_manual`[^aosmith16]
+
+[^aosmith16]: [Ariel Mundoon, Creating legends when aesthetics are constants in ggplot2](https://aosmith.rbind.io/2018/07/19/manual-legends-ggplot2/)
+
+[^rbpubsdoc]: [Data Visualization with ggplot2 (Part 2) by William Surles](https://rstudio-pubs-static.s3.amazonaws.com/295930_27a91f861d5a4aad89b35ea757e8eedd.html#%E2%80%93_sum)
+
+
+
+```{r}
+ggplot(data = Auto, aes(y = mpg, x = horsepower)) +
+  geom_point(aes(shape = as.factor(cylinders))) + # Specify the shape here so that the model isn't seperated by cylinders
+  theme_bw()+
+  labs(x = "Horsepower", y = "Mileage", title = "Fuel Efficiency given Horsepower") +
+  stat_smooth(method = 'lm', formula = y ~ poly(x,2, raw = TRUE), aes(col = "Quadratic"), se = F) +
+  stat_smooth(method = 'lm', formula = y ~ I(1/x), aes(col = "Hyperbole"), se = F) +
+     scale_color_manual(name = "Model fit",
+                        breaks = c("Hyperbole", "Quadratic"),
+                        values = c("Hyperbole" = "RoyalBlue", "Quadratic" = "IndianRed"))
+```
+
+### (c) Use a validation set to select the best model
+
+#### Seperate the Data
+In order to use a validation set it is necessary to first randomly split the data into training and validation sets:
+
+```{r}
+Auto.train.index <- sample(nrow(Auto), size = nrow(Auto)/1.9) #don't set 2
+  # If they are different sizes and theres an error in predict it is more likely
+  # to be picked up if the validation set is a different size
+Auto.train.df <- Auto[Auto.train.index, ]
+Auto.val.df <- Auto[-Auto.train.index,]
+```
+
+
+#### Fit the Models
+Now that the data has been seperated fit the models to the training data, observe that we need to `poly` instead of `I()` because later on we will wrap this in a loop and will need to specify a variable degree value (in this example degree is analogous to model flexibility).
+
+```{r}
+# There are two different ways to specify the training data, they both seem fine to me
+
+## Quadratic
+Auto.train.lmq <- glm(mpg ~ poly(horsepower, degree = 2, raw = TRUE), data = Auto, subset = Auto.train.index)
+Auto.train.lmq <- glm(mpg ~ poly(horsepower, degree = 2, raw = TRUE), data = Auto.train.df)
+
+## Hyperbolic 
+Auto.train.lmh <- glm(mpg ~ I((horsepower)^-1), data = Auto.train.df)
+
+## Cubic
+Auto.train.lmc <- glm(mpg ~ I((horsepower)^3), data = Auto.train.df)
+
+# Create a list of models by order of degree, -1, 2, 3
+Auto.models <- list(Auto.train.lmh, Auto.train.lmq, Auto.train.lmc)
+
+```
+
+##### Create a list
+
+Later on we are going to want to grab these models, put them in a `list` to make life easy, use a `list` not a vector because:
+
+1. It works with `lapply` and `sapply`
+2. It makes more logical sense to put objects in a list and values in a vector
+
+```{r}
+# Create a list of models by order of degree, -1, 2, 3
+Auto.models <- list(Auto.train.lmh, Auto.train.lmq, Auto.train.lmc)
+```
+
+
+#### Determine the error
+
+
+In order to connect points accross factors, it is necessary to tell `ggplot` to treat the seperate values as one group by specifying `aes(group = DataSet)` inside the initial mapping [^Peter], it will also be necessary to **g**enerate **levels** for the model names by using `gl` so that the order is respected by `ggplot` (I've presumed that a hyperbola is less flexible than a quadratic in this case because the limits have been tied to $0/\infty$ unlike the paraola).
+
+[^Peter]: [Connecting Points in `ggplot2`](https://stackoverflow.com/a/8617377/10593632)
+
+##### Create the list of models
+
+It is necessary to specify the order of the models so 
+
+```{r}
+# Create the list of models, it is necessary to specify order because
+  # so that we can use a line plot
+    # A hyperbola has only one point of inflection, a parabola two and a cubic three, this is a good measurement of flexibility
+# Create a Data Frame
+
+
+
+ModelType <- c("Hyperbolic", "Quadratic", "Cubic")
+ModelType <- gl(n = 3, length = 3, ordered = TRUE, labels = c("Hyperbolic", "Quadratic", "Cubic"), k = 1)
+ 
+Auto.train.Loss <- data.frame("ModelType" = ModelType, "Training" = rep(NA, length.out = 3), "Validation" = rep(NA, length.out = 3))
+
+
+
+Auto.train.Loss <- data.frame(ModelType, "Training" = rep(NA, length.out = 3), "Validation" = rep(NA, length.out = 3))
+
+
+#Create an Error Function
+trainingrmse <- function(model){
+  sqrt(mean((Auto.train.df$mpg - predict(model))^2))
+}
+
+
+validationrmse <- function(model){
+  preds <- predict(object = model, Auto.val.df )
+  sqrt(mean((Auto.val.df$mpg - preds)^2))
+}
+
+# Assign the values
+Auto.train.Loss$Training <- sapply(Auto.models, trainingrmse)
+Auto.train.Loss$Validation <- sapply(Auto.models, validationrmse)
+
+
+# Convert from Wide to long, melt is outdated use tidry::gather() and tidyr::spread()
+  # Maybe I should try making them tibbles?
+Auto.train.Loss.tidy <- 
+Auto.train.Loss %>% 
+  gather(Training, Validation, key = "DataSet", value = "RMSE" )
+
+#I used to do this like so, but this is deprecated for tidyverse
+  #melt(data = Auto.train.Loss, id.vars = "ModelType", measure.vars = c("Training", "Validation"))
+
+
+ggplot(Auto.train.Loss.tidy, aes(x = ModelType, y = RMSE, col = DataSet, fill = DataSet, group = DataSet)) +
+  geom_line() +
+  geom_point(size = 4) +
+  theme_classic() +
+  labs(title = "Model Error", x = "Model Type By Flexibility", y = "Average Error (mpg)")
+
+  
+```
+
+The unduly high performance of the quadratic model on the training data may be indiciative of high model bias, in conjustion with the very slightly higher validation error, the appropriate model would be the hyperbolic model.
+
+This could however be because the hyperbola was specified to the model such that $x \rightarrow 0 \implies y \rightarrow \infty$ whereas the parabola was given more flexibility, however a parabola cannot have this as a fundamental property so this is perhaps more evidence to support the hyperbolic model.
+
+### (d) Compare different Seeds {.tabset}
+
+Different seed values create different models and error plots, although, they all have a similar characteristic:
+
+#### Seed as 5
+
+```{r}
+
+validationplot <- function(seed){
+
+set.seed(seed) # Set the seed such that we might have
+
+Auto.train.index <- sample(nrow(Auto), size = nrow(Auto)/1.9) #don't set 2
+  # If they are different sizes and theres an error in predict it is more likely
+  # to be picked up if the validation set is a different size
+Auto.train.df <- Auto[Auto.train.index, ]
+Auto.val.df <- Auto[-Auto.train.index,]
+
+
+## Quadratic
+Auto.train.lmq <- glm(mpg ~ poly(horsepower, degree = 2, raw = TRUE), data = Auto.train.df)
+
+## Hyperbolic 
+Auto.train.lmh <- glm(mpg ~ I((horsepower)^-1), data = Auto.train.df)
+
+## Cubic
+Auto.train.lmc <- glm(mpg ~ I((horsepower)^3), data = Auto.train.df)
+
+# Create a list of models by order of degree, -1, 2, 3
+Auto.models <- list(Auto.train.lmh, Auto.train.lmq, Auto.train.lmc)
+
+# Create the list of models, it is necessary to specify order because
+  # so that we can use a line plot
+    # A hyperbola has only one point of inflection, a parabola two and a cubic three, this is a good measurement of flexibility
+# Create a Data Frame
+
+
+
+ModelType <- c("Hyperbolic", "Quadratic", "Cubic")
+ModelType <- gl(n = 3, length = 3, ordered = TRUE, labels = c("Hyperbolic", "Quadratic", "Cubic"), k = 1)
+ 
+Auto.train.Loss <- data.frame("ModelType" = ModelType, "Training" = rep(NA, length.out = 3), "Validation" = rep(NA, length.out = 3))
+
+
+
+Auto.train.Loss <- data.frame(ModelType, "Training" = rep(NA, length.out = 3), "Validation" = rep(NA, length.out = 3))
+
+
+#Create an Error Function
+trainingrmse <- function(model){
+  sqrt(mean((Auto.train.df$mpg - predict(model))^2))
+}
+
+
+validationrmse <- function(model){
+  preds <- predict(object = model, Auto.val.df )
+  sqrt(mean((Auto.val.df$mpg - preds)^2))
+}
+
+# Assign the values
+Auto.train.Loss$Training <- sapply(Auto.models, trainingrmse)
+Auto.train.Loss$Validation <- sapply(Auto.models, validationrmse)
+
+
+# Convert from Wide to long, melt is outdated use tidry::gather() and tidyr::spread()
+  # Maybe I should try making them tibbles?
+Auto.train.Loss.tidy <- 
+Auto.train.Loss %>% 
+  gather(Training, Validation, key = "DataSet", value = "RMSE" )
+
+#I used to do this like so, but this is deprecated for tidyverse
+  #melt(data = Auto.train.Loss, id.vars = "ModelType", measure.vars = c("Training", "Validation"))
+
+
+p <- ggplot(Auto.train.Loss.tidy, aes(x = ModelType, y = RMSE, col = DataSet, fill = DataSet, group = DataSet)) +
+  geom_line() +
+  geom_point(size = 4) +
+  theme_classic() +
+  labs(title = "Model Error", x = "Model Type By Flexibility", y = "Average Error (mpg)")
+
+
+return(list(Auto.train.Loss.tidy, p))
+
+}
+
+validationplot(5)
+
+```
+
+
+#### Seed as 8
+
+
+
+```{r}
+
+validationplot(8)
+```
+
+#### Many Seeds {.tabset}
+
+
+There are  392 different observations in `Auto` and hence $^{392}C_{^{392} / _2} \approx 40 \enspace \textsf{quadrillion}$ different possible validation splits, we could demostrate a many of those in order to understand how variable these observations actually are:
+
+
+This following clearly shows that the quadratic model performs significantly better on the validation data than the Cubic and marginally better than the hyperbolic.
+
+```{r}
+
+gensplits <- function(n){
+## This dynamic method is slow, instead you should staitcally allocate to a data frame.
+
+#Set a vectory to grow
+valplots <- cbind(validationplot(1)[[1]], "seed" = as.factor(1)) # Dynamic bad
+
+# Fill it with a loop
+for (i in 1:10) {
+valplots <- rbind(valplots,cbind(validationplot(i)[[1]], "seed" = as.factor(i)))
+}
+
+# Now pull out the training data plots, theyll make this look like a mess
+## Base
+valplots <- valplots[valplots$DataSet == "Validation",]
+valplots <- valplots[,c(1, 3, 4)]
+return(valplots)
+}
+
+
+
+
+# In case you want to plot multiple lines at once, you should specify `group=variableWhichDefinesLines'
+
+splot <- ggplot(gensplits(10), aes(x = ModelType, y = RMSE, col = seed, group = seed)) +
+  geom_line() +
+  geom_point(size = 3) +
+  theme_classic() +
+  labs(title = "Model Error", x = "Model Type By Flexibility", y = "Average Error (mpg)")
+
+
+
+
+```
+
+##### Scatterplot
+
+```{r}
+splot
+```
+
+##### BoxPlot
+
+What's powerful about this is that we can do many many splits and use that to determine which is the best model, Although at this stage we might as well have just used **Leave One Out CV**
+
+```{r}
+ggplot(gensplits(10000), aes(x = ModelType, y = RMSE, col = ModelType)) +
+  geom_boxplot() +
+  theme_classic() +
+  labs(title = "Model Error", x = "Model Type By Flexibility", y = "Average Error (mpg)")
+```
+
+
+
+
+### (e) What are the disadvantages
+
+The disadvantages to using a straight data split are:
+
+* The validation errors are sensitive to the split taken
+* The validation errors will often be overestimated because there is less data for the model to be fit to 
+  - That is to say, when the model is actually used it will be made with all the data so it will perform better
+
+### (f) Use the LOOCV method for the above model {.tabset}
+
+
+#### Write a program from first principles
+
+```{r}
+# Create a Function to Perform Leave One Out CV
+
+LeaveOneOut <- function(formula, data){
+  MSE <- 0 #Empty Value to build during Loop
+  for (i in 1:nrow(data)) {
+    data_LO <- data[-i,]  # This is Left Out Value
+    model   <- lm(formula, data = data_LO)  #Build the Model
+    pred    <- predict(object = model, newdata = data[i,]) #This is the modelled value
+    D_MSE   <- (1/nrow(data))*((pred - data$mpg[i])^2) # This is the change in MSE
+    MSE     <- MSE + D_MSE #This is the MSE
+  }
+  return(data.frame("RSS" = nrow(data)*MSE, "MSE" = MSE, "RMSE" = sqrt(MSE))) #Return Errors
+}
+
+# Feed a list to the function with sapply
+
+mymods <- list(
+  "HyperBolic" = mpg ~ I(1/horsepower),
+  "Linear"     = mpg ~ I(horsepower),
+  "Quadratic"  = mpg ~ I(horsepower^2) + horsepower,
+  "Cubic"      = mpg ~ poly(x = horsepower, degree = 3, raw = TRUE)
+  )
+
+
+# So when mapping with sapply, use a function to make the parameter constant
+    # (In mathematica you would use a pure function with #)
+
+LOOCV_Error <- sapply(X = mymods,
+                     FUN = function(x){
+                       LeaveOneOut(x, data = Auto)
+                       }
+                 )
+
+```
+
+##### Plot the Data
+```{r}
+LOOCV_Error2 <- gl(n = ncol(LOOCV_Error), k = 4, length = ncol(LOOCV_Error), labels = c("Hyperbolic", "Linear", "Quadratic", "Cubic"), ordered = TRUE)
+
+ LOOCV_Error_tidy <-as.data.frame( LOOCV_Error[3, ])
+ LOOCV_Error_tidy <- gather(data = LOOCV_Error_tidy, key = ModelType, value = Error)
+ 
+LOOCV_Error_tidy$ModelType <- factor(x = c("Hyperbolic", "Linear", "Quadratic", "Cubic"),
+                                       levels = c("Hyperbolic", "Linear", "Quadratic", "Cubic"),
+                                       labels = c("Hyperbolic", "Linear", "Quadratic", "Cubic"),
+                                       ordered = TRUE, nmax = 4
+                                       )
+  
+  
+  
+ ggplot(LOOCV_Error_tidy, aes(x = ModelType, y = Error, group = 1)) + 
+   geom_line()
+
+```
+
+
+#### Use the `boot` library.
+
+So let's consider polynomial models and take flexiility as a positive function of degree
+
+```{r}
+# Consider how many models?
+n <- 6
+
+# Create an empty vector
+    #Static Vector executes way quikcer
+errors_LOO <- rep(0, n)
+
+# Fill the vector with polynomials
+  # use glm not lm because the `boot` package only works with
+for (i in 1:n) {
+CrValLOOMod <- model <- glm(mpg ~ poly(x = horsepower, degree = i, raw = TRUE), data = Auto)
+# Not specifying k sets default as n-1 LeaveOneOut
+errors_LOO[i] <- cv.glm(data = Auto, glmfit = CrValLOOMod)$delta[1] 
+}
+
+errors_LOO_df <- data.frame("Degree" = as.factor(1:n), " Error_MSE" = errors_LOO)
+names(errors_LOO_df) <- c("Degree", "Error_MSE")
+
+
+```
+
+##### Plot the Errors
+
+```{r}
+
+ggplot(errors_LOO_df, aes(x = Degree, y = Error_MSE, group = 1)) +
+  geom_line(col = "orchid") +
+  geom_point(col = "Purple") +
+  theme_classic() +
+  labs(x = "Degree", y = "Error", title = "Validation Error")
+
+```
+
+This Clearly demonstrates that the any model more flexible than a 2nd degree polynomial will overfit the data and result in too much model variance.
+
+### Use $k$-fold Cross Validation Method for the same model
+
+```{r}
+# How many polynomials to consider
+n <- 6
+
+# Create an empty vector
+kfold_Error <- rep(NA, n)
+
+# Use a loop to generate the errors
+
+for (i in 1:6) {
+  kfoldmod <- glm(mpg ~ poly(x = horsepower, degree = i, raw = TRUE), data = Auto)
+  kfold_Error[i] <- cv.glm(data = Auto, glmfit = kfoldmod, K = 10)$delta[1] 
+    # The second returned value is the analytic solution that only works for polynomials
+      # regardless it still determines the actual value so we'll use whatever
+}
+
+kfold_Error_df <- data.frame("Degree" = as.factor(1:n), "Error" = kfold_Error)
+
+
+
+
+
+
+
+
+```
+
+
+#### Plot the Errors
+
+```{r}
+cols <- brewer.pal(3, name = "Set2")
+ggplot(kfold_Error_df, aes(x = Degree, y = Error, group = 1)) +
+  geom_line(col = cols[1]) +
+  geom_point(col = cols[2]) +
+  theme_bw() +
+  labs(x = "Degree", y = "Error", title = "Cross Validation Error")
+```
+
+
+
+This again suggests that the appropriate model, given considerations of bias and variance, is the second degree polynomial.
+
+
+### (h) Conclusion
+The appropriate model, given $k$-**fold** CV, **Leave One Out** CV and a validation split is a second degree polynomial.
+
+Other models should be considered as as overparameterised because they do not perform significantly better on validation data, these models would tend towards high variance rather than bias.
+
+
+
+
+
+## Boot Strapping
+
+
+### (a) Generate 20 random numbers
+
+We will roll a dice 12-sided dice 20 times in order to get the values
+
+```{r}
+results <- rnorm(20, mean = 140, sd = 10)
+    
+```
+
+### (b) Determine the mean value
+
+The mean value is `r round(mean(results), 2)` calculated by using the `mean()` function
+
+### (c) Generate 1000 bootstrap samples using the above dataset {.tabset}
+
+#### Using the `boot` packages
+Using the `boot` package requires setting up a function that represents the statistic of interest with variables `data` and `index`,
+then the bootstrap can be called using that function to specify the statistic of concern.
+```{r}
+myfun <- function(data, index) mean(data[index])
+
+boot(data = results, R = 1000, statistic = myfun)
+```
+
+
+#### Function from First Principles
+
+```{r}
+
+n <- 10000
+dynlist <- list()
+
+samples <- rep(NA, 20)
+
+for (j in 1:n) {
+  for (i in 1:length(results)) {
+    samples[i] <- results[round(runif(1, min = 1, max = length(results)))]
+  }
+  dynlist[[j]] <- samples
+}
+
+# Now that we have a list of samples, we may take the observed parameters in the samples drawn from the samples
+
+for (i in 1:length(dynlist)) {
+ dynlist[["meanvals"]][i] <- mean(dynlist[[i]])
+ dynlist[["medvals"]][i]  <- median(dynlist[[i]])
+ dynlist[["sdvals"]][i]    <- sd(dynlist[[i]])
+}
+
+# Now that we have taken the samples, average those and we have the values
+
+ dynlist[["mean"]]  <- mean(dynlist[["meanvals"]]) %>% print()
+ dynlist[["mode"]]  <- mean(dynlist[["medvals"]]) %>% print()
+ dynlist[["sd"]]    <- mean(dynlist[["sdvals"]]) %>% print()
+
+ 
+ ggplot(data = as_tibble(dynlist[["meanvals"]]), aes(x = value)) +
+   geom_histogram(col = "Purple", fill = "LightBlue") + 
+   theme_bw() +
+   labs(x = "Mean Value", y = "Occurence Count in Resampling", title = "Distribution of Resampled Means")
+ 
+
+```
+
+
+This sampling distribution very accurately predicts the actual mean value of 140 and provides a range of plus/minus 10, which is 1 sd, so this is a fairly good way to get the mean value.
+
+
+
+
+
+
+
+
+
+
+
+<details>
+  <summary>Toggle answer</summary>
+  ***How to Fold Things***
+  ```{r cars}
+  summary(cars)
+  ```
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

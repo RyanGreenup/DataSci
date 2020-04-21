@@ -1,0 +1,159 @@
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+runApp('C:/Users/DryDa/Desktop/test.R')
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 1/Practical/0. Stardate/stardate.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 1/Practical/0. Stardate/stardate.R', echo=TRUE)
+##Load the dataset
+star.df <- read.csv(file = "stardate.csv", header = TRUE, sep = ",")
+# Create Assignments ------------------------------------------------------
+head(star.df)
+date     <- star.df$date
+stardate <- star.df$stardate
+star.lm <- lm(stardate ~ date)
+# Plot the Data and Model -------------------------------------------------
+plot(x = date, y = stardate,
+xlab = "Date",
+ylab = "Stardate",
+main = "Stardates")
+abline(star.lm)
+abline(star.lm, col = "Indianred", lty = 6)
+abline(star.lm, col = "Indianred", lty = 6, cex = 3)
+# Plot the Data and Model -------------------------------------------------
+plot(x = date, y = stardate,
+xlab = "Date",
+ylab = "Stardate",
+main = "Stardates",
+pch = 20,
+col = "royalblue", cex = 2)
+abline(star.lm, col = "Indianred", lty = 6, cex = 3)
+abline(star.lm, col = "Indianred", lty = 6, cex = 4)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 1/Practical/0. Stardate/stardate.R', echo=TRUE)
+# Predict a new value -----------------------------------------------------
+predict(object = star.lm, data.frame(date = 2356.14))
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 1/Practical/0. Stardate/stardate.R', echo=TRUE)
+source('E:/One Drive/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 1/Practical/1. Housing Problem/R Script/HousingProblem Script.R', echo=TRUE)
+#Create the plot
+diamonds
+source('~/.active-rstudio-document', echo=TRUE)
+#Create the plot
+ggplot(data = diamonds, aes(x = x, y = y))
+#Create the plot
+ggplot(data = diamonds, aes(x = clarity, y = price))
+ggplot(data = diamonds, aes(x = clarity, y = price)) +
+geom_point()
+ggplot(data = diamonds, aes(x = clarity, y = price)) +
+geom_point()
+ggplot(data = diamonds, aes(x = clarity, y = price)) +
+geom_point()
+ggplot(data = diamonds, aes(x = clarity, y = price))+
+geom_point()
+ggplot(data = diamonds, aes(x = x, y = y)) +
+geom_point()
+ggplot(data = diamonds, aes(x = depth, y = price))+
+geom_point()
+ggplot(data = diamonds, aes(x = cut, y = price))+
+geom_point()
+ggplot(data = diamonds, aes(x = cut, y = price))+
+boxplot()
+ggplot(data = diamonds, aes(x = cut, y = price))+
+boxplot(x = cut)
+ggplot(data = diamonds, aes(x = cut, y = price))+
+geom_point(alpha = 0.1)
+ggplot(data = diamonds, aes(x = cut, y = price))+
+geom_point(alpha = 0.01)
+ggplot(data = diamonds, aes(x = cut, y = price))+
+boxplot()
+ggplot(data = diamonds, aes(x = cut, y = price))+
+boxplot(x = price)
+ggplot(data = diamonds, aes(x = cut, y = price))+
+boxplot(x = diamonds$price)
+diamonds
+ggplot(data = diamonds, aes(x = table, y = price))+
+geom_point()
+ggplot(data = diamonds, aes(x = table, y = price))+
+geom_jitter()
+ggplot(data = diamonds, aes(x = table, y = price, col = cut))+
+geom_jitter(height = 3, width = 3)
+ggplot(data = diamonds, aes(x = table, y = price, col = cut))+
+geom_tile(height = 3, width = 3)
+ggplot(data = diamonds, aes(x = table, y = price, col = cut))+
+geom_hex(height = 3, width = 3)
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3)
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($)) +
+guides(fill = "Cut Quality")
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($)) +
+guides(fill = "Cut Quality")
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($)) +
+guides(fill = guide_legend("Cut Quality"))
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($)) +
+guides(fill = guide_legend(title = "Cut Quality"))
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($)) +
+guides(fill=guide_legend(title="New Legend Title"))
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($)) +
+guides(fill=guide_legend(title="New Legend Title"))
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($)) +
+scale_fill_discrete(name = "New Legend Title")
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($)) +
+scale_fill_discrete(name = "New Legend Title")
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab(Table) +
+ylab(Price ($))
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab("Table") +
+ylab("Price ($)")
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab("Table") +
+ylab("Price ($)") +
+guides(fill=guide_legend(title="New Legend Title"))
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex(height = 3, width = 3) +
+xlab("Table") +
+ylab("Price ($)") +
+guides(fill=guide_legend(title="Cut Quality")) +
+ggtitle("Diamond Pricing") +
+theme_classic
+ggplot(data = diamonds, aes(x = table, y = price, fill = cut))+
+geom_hex() +
+xlab("Table") +
+ylab("Price ($)") +
+guides(fill=guide_legend(title="Cut Quality")) +
+ggtitle("Diamond Pricing") +
+theme_classic()
+source('~/.active-rstudio-document', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 2, Gradient Descent/Temperature Linear Model/Batch_Gradient_Descent.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 2, Gradient Descent/Temperature Linear Model/Script.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 2, Gradient Descent/Temperature Linear Model/Script.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 2, Gradient Descent/Temperature Linear Model/Script.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/University of Western Sydney/Units/2018/Autumn/Predictive Modelling (301034)/Weekly Material/Week 2, Gradient Descent/Temperature Linear Model/Batch_Gradient_Descent.R', echo=TRUE)

@@ -1,0 +1,512 @@
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 10/Practical/Lasso.R', echo=TRUE)
+arrange(LassoPredictors, by.group = 1)
+arrange(as.data.frame(LassoPredictors), by.group = 1)
+as.data.frame(LassoPredictors)
+arrange(as.data.frame(LassoPredictors), by.group = LassoPredictors)
+LassoPredictors <- lasso.mod.coef[lasso.mod.coef[,1] > 0,]
+class(LassoPredictors)
+sort(LassoPredictors)
+LassoPredictors <- lasso.mod.coef[lasso.mod.coef[,1] > 0,]
+paste("The Predictors for the Best Lasso Model are",
+paste("",names(LassoPredictors),sep="", collapse=", "))
+LassoPredictors <- sort(LassoPredictors)
+LassoPredictors
+paste("The Predictors for the Best Lasso Model are",
+paste("",names(LassoPredictors),sep="", collapse=", "))
+paste("The Predictors for the Best Lasso Model, in order of significance, are:",
+paste("",names(LassoPredictors),sep="", collapse=", "))
+paste("The Predictors for the Best Lasso Model, in order of significance, are:",
+paste("",names(LassoPredictors[-1]),sep="", collapse=", "))
+rm(list = ls())
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer, colorspace,
+prettydoc, glmnet)
+all.df <- read.csv(file = "deathrate.csv", header = TRUE, sep = ",")
+all.df.feat <- all.df[,-1]
+MeanCol.vec <- sapply(all.df.feat, mean)
+SDCol.vec <- sapply(all.df.feat, sd)
+#Create data frames for the standard feature data
+allSTD.df.feat  <- all.df.feat
+for (i in 1:ncol(allSTD.df.feat)){
+x   <- all.df.feat[,i]
+mu  <- MeanCol.vec[i]
+sig <- SDCol.vec[i]
+allSTD.df.feat[,i] <- (x-mu)/sig
+}
+#Combine to create Std DataFrames
+allSTD.df <- cbind(I = all.df$I, allSTD.df.feat)
+allSTD.df <- arrange(.data = allSTD.df, by.group = I)
+##Write The Standardised data to a CSV
+write.csv(x = allSTD.df, file = "deathrateSTD.csv", row.names = FALSE)
+x <- as.matrix(allSTD.df[,!(names(all.df) %in% c("I", "B"))])
+y <- as.matrix(allSTD.df[,(names(all.df) %in% c("B"))])
+ridge.mod <- cv.glmnet(x, y, family = "gaussian", alpha = 0)
+lasso.mod <- cv.glmnet(x, y, family = "gaussian", alpha = 1)
+lambda.min.ridge <- ridge.mod$lambda.min
+lambda.min.lasso <- lasso.mod$lambda.min
+pred.ridgeSTD <- predict(ridge.mod, newx = x, s = lambda.min.ridge)
+pred.lassoSTD <- predict(lasso.mod, newx = x, s = lambda.min.lasso)
+pred.ridge <-  pred.ridgeSTD*SDCol.vec["B"] + MeanCol.vec["B"]
+pred.lasso<-  pred.lassoSTD*SDCol.vec["B"] + MeanCol.vec["B"]
+#Base Plot
+plot(x = all.df$I, y = all.df$B, lty = 1, type = "b",
+ylab = "Predicted Death Rate",
+xlab = "Observation Number",
+main = "Observed and Predicted Death Rate")
+lines(x = all.df$I, y = pred.lasso, col = "red")
+lasso.mod.coef <- coefficients(lasso.mod)
+lasso.mod.coef
+LassoPredictors <- lasso.mod.coef[lasso.mod.coef[,1] > 0,]
+LassoPredictors <- sort(LassoPredictors)
+paste("The Predictors for the Best Lasso Model, in order of significance, are:",
+paste("",names(LassoPredictors[-1]),sep="", collapse=", "))
+LassoPredictors
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 10/Practical/Lasso.R', echo=TRUE)
+# Load Dataset ------------------------------------------------------------
+all.df <- read.csv(file = "CommViolPredUnnormalizedData.csv", header = TRUE, sep = ",")
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+head(all.df)
+NA2mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
+NA2mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
+replace(all2.df, TRUE, lapply(DF, NA2mean))
+replace(DF = all2.df, TRUE, lapply(DF, NA2mean))
+replace(DF, TRUE, lapply(DF, NA2mean))
+DF <- all.df
+replace(DF, TRUE, lapply(DF, NA2mean))
+DF
+is.na(DF)
+NAtoMean <- function(x){
+replace(x = x, list = is.na(x), values = median(x, na.rm = TRUE))
+}
+?apply
+# Load Dataset ------------------------------------------------------------
+all.df <- read.csv(file = "CommViolPredUnnormalizedData.csv", header = TRUE, sep = ",")
+NAtoMean <- function(x){
+replace(x = x, list = is.na(x), values = median(x, na.rm = TRUE))
+}
+sapply(X = all.df, FUN = NAtoMean())
+sapply(X = all.df, FUN = NAtoMean(all.df))
+NAtoMean(all.df)
+NAtoMean(all.df[,1])
+all.df[,1]
+NAtoMean(all.df[,2])
+all.df[,2]
+all.df
+NAtoMean(all.df[,112])
+NAtoMean(all.df[,102:112])
+head(all.df)
+sapply(X = all.df, FUN = NAtoMean(all.df[,119:122]))
+sapply(X = all.df, FUN = NAtoMean(all.df[,119:122]))
+replace(x = all.df, list = TRUE, values = lapply(all.df, Na2mean))
+# Load Dataset ------------------------------------------------------------
+all.df <- read.csv(file = "CommViolPredUnnormalizedData.csv", header = TRUE, sep = ",")
+replace(x = all.df, list = TRUE, values = lapply(all.df, Na2Mean))
+NAtoMean <- function(x){
+replace(x = x, list = is.na(x), values = median(x, na.rm = TRUE))
+}
+replace(x = all.df, list = TRUE, values = lapply(all.df, Na2Mean))
+replace(x = all.df, list = TRUE, values = lapply(all.df, NatoMean))
+replace(x = all.df, list = TRUE, values = lapply(all.df, NatoMean))
+NAtoMean <- function(x){
+replace(x = x, list = is.na(x), values = median(x, na.rm = TRUE))
+}
+replace(x = all.df, list = TRUE, values = lapply(all.df, NatoMean))
+NAtoMean <- function(x){
+replace(x = x, list = is.na(x), values = median(x, na.rm = TRUE))
+}
+replace(x = all.df, list = TRUE, values = lapply(all.df, NatoMean))
+replace(x = all.df, list = TRUE, values = lapply(all.df, NAtoMean))
+NAtoMean <- function(x){
+x[is.na(x)] <- mean(x, na.rm = TRUE)
+}
+sapply(all.df, NatoMean)
+NAtoMean <- function(x){
+x[is.na(x)] <- mean(x, na.rm = TRUE)
+}
+sapply(all.df, NatoMean)
+sapply(all.df, NAtoMean)
+all.df[,119]
+all.df[,119] %>% as.numeric()
+all.df[,119] %>% is.numeric()
+# Load Dataset ------------------------------------------------------------
+all.df <- read.csv(file = "CommViolPredUnnormalizedData.csv", header = TRUE, sep = ",")
+NAtoMean <- function(x){
+if[is.numeric(x)]{
+x[is.na(x)] <- mean(x, na.rm = TRUE)
+}
+}
+NAtoMean <- function(x){
+if(is.numeric(x)){
+x[is.na(x)] <- mean(x, na.rm = TRUE)
+}
+}
+sapply(all.df, NAtoMean)
+all.df
+sapply(all.df, NAtoMean)
+class(sapply(all.df, NAtoMean))
+?apply
+as.data.frame(sapply(all.df, NAtoMean))
+(sapply(all.df, NAtoMean))
+vapply(all.df, NAtoMean)
+sapply(X = all.df, FUN = NAtoMean)
+vapply(X = all.df, FUN = NAtoMean)
+lapply(X = all.df, FUN = NAtoMean)
+sapply(X = all.df, FUN = NAtoMean)
+sapply(X = all.df, FUN = NAtoMean) %>% as.data.frame()
+sapply(X = all.df, FUN = NAtoMean)
+apply(X = all.df, FUN = NAtoMean)
+apply(X = all.df, FUN = NAtoMean, MARGIN = 2)
+lapply(all.df, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x))
+class(lapply(all.df, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x)))
+class(sapply(all.df, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x)))
+class(sapply(all.df, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x)))
+(sapply(all.df, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x)))
+as.data.frame(sapply(all.df, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x)))
+# Clean Data --------------------------------------------------------------
+##This can also be done with sapply
+as.data.frame(sapply(all.df, function(x) ifelse(is.na(x), median(x, na.rm = TRUE), x)))
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+all.df$I1
+all.df$I1[is.na(all.df$I1)]
+[is.na(all.df$I1)]
+[is.na(all.df$I1)
+is.na(all.df$I1)
+is.na(all.df$I1) %>% sum()
+for (i in 1:ncol(all.df)) {
+if(as.numeric(all.df[,i])){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}
+}
+for (i in 1:ncol(all.df)) {
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}
+for (i in 1:ncol(all.df)) {
+if(as.numeric(all.df[,i])){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}
+}
+for (i in 1:ncol(all.df)) {
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+if(as.numeric(all.df[,i])){
+}
+}
+is.numeric(all.df[,1])
+for (i in 1:ncol(all.df)) {
+if(as.numeric(all.df[,i])){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}else(
+print(paste("skip row no.", i))
+)
+}
+for (i in 3:ncol(all.df)) {
+for (i in 3:ncol(all.df)) {
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}
+for (i in 3:ncol(all.df)) {
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}
+for (i in 3:ncol(all.df)) {
+if(sum(as.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}else(
+print(paste("skip row no.", i))
+)
+}
+for (i in 1:ncol(all.df)) {
+if(sum(as.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}else(
+print(paste("skip row no.", i))
+)
+}
+is.numeric(all.df[,1])
+i <- 1
+if(sum(as.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}else(
+print(paste("skip row no.", i))
+)
+i <- 3
+if(sum(as.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}else(
+print(paste("skip row no.", i))
+)
+i <- 1
+if(sum(as.numeric(all.df[,i]))){
+print("error")
+}else(
+print(paste("skip row no.", i))
+)
+as.numeric(all.df[,i]
+as.numeric(all.df[,i])
+as.numeric(all.df[,i]))
+as.numeric(all.df[,i])
+as.numeric(all.df[,i])
+sum(as.numeric(all.df[,i]))
+all.df[,i]
+for (i in 1:ncol(all.df)) {
+if(sum(is.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+}else(
+print(paste("skip row no.", i))
+)
+}
+is.na(all.df)
+sum(is.na(all.df))
+!sum(is.na(all.df))
+if(sum(is.na(all.df))){
+print("Could be an error here")
+}
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+?scale()
+##Subset the Data
+allStd.df <- all.df[!(names(all.df) %in% c("Name", "Cabin", "Ticket"))]
+##Find the mean and sd from the Training Data
+TrainMeanCol.vec <- sapply(X = allStd.df, FUN = mean)
+##Subset the Data
+allStd.df <- all.df[!(names(all.df) %in% c("Name", "Cabin", "Ticket"))]
+##Find the mean and sd from the Training Data
+TrainMeanCol.vec <- sapply(X = allStd.df, FUN = mean)
+##Subset the Data
+allStd.df <- all.df
+##Find the mean and sd from the Training Data
+TrainMeanCol.vec <- sapply(X = allStd.df, FUN = mean)
+all.df[,"A1":"A124"]
+names(all.df)
+##Subset the Data
+allStd.df <- subset(x = all.df, select = A1:A124)
+head(allSTD.df)
+head(allStd.df)
+names(allStd.df)
+##Find the mean and sd from the Training Data
+TrainMeanCol.vec <- sapply(X = allStd.df, FUN = mean)
+TrainSDCol.vec <- sapply(X = allStd.df, FUN = sd)
+##Subset the Data
+allStd.df <- subset(x = all.df, select = A1:A124)
+##Find the mean and sd from the Training Data
+TrainMeanCol.vec <- sapply(X = allStd.df, FUN = mean)
+TrainSDCol.vec <- sapply(X = allStd.df, FUN = sd)
+##Execute the Loop
+for(j in 1:ncol(allStd.df)){
+x <- allStd.df[,j]          #Testing value
+mu <- TrainMeanCol.vec[j]  #Training value
+sig <- TrainSDCol.vec[j]   #Training value
+allStd.df[,j] <- (x-mu)/sig
+}
+allStd.df2 <- allStd.df
+allStd.df2 <- scale(x = allStd.df)
+allStd.df == allStd.df2
+head(allStd.df2)
+head(allStd.df)
+head(allStd.df2[,1:8])
+head(allStd.df[,1:8])
+head(allStd.df2[,1:8]) == head(allStd.df[,1:8])
+round(allStd.df, 2) == round(allStd.df2, 2)
+!sum(round(allStd.df, 2) == round(allStd.df2, 2))
+!!sum(round(allStd.df, 2) == round(allStd.df2, 2))
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+##Subset the Data
+allStd.df <- subset(x = all.df, select = A1:A124)
+##Standardise the data
+allStd.df <- scale(allStd.df)
+class(allStd.df)
+# Preamble ----------------------------------------------------------------
+##Clear latent variables
+rm(list = ls())
+##Set working directory and load packages
+setwd.loadpac <- function() {
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer)
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+setwd.loadpac()
+# Load Dataset ------------------------------------------------------------
+all.df <- read.csv(file = "CommViolPredUnnormalizedData.csv", header = TRUE, sep = ",")
+# Clean Data --------------------------------------------------------------
+##This can also be done with sapply
+#    as.data.frame(sapply(all.df, function(x) ifelse(is.na(x), median(x, na.rm = TRUE), x)))
+##Using a for loop
+for (i in 1:ncol(all.df)) {
+if(sum(is.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+if(sum(is.na(all.df[,i]))){
+print(paste("Could be an error on column no. ", "i"))
+}
+}else(
+print(paste("skip row no.", i))
+)
+}
+# Standardise the Data ----------------------------------------------------
+##Subset the Data
+allStd.df <- subset(x = all.df, select = A1:A124)
+class(allStd.df)
+head(allStd.df)
+# Create Matrix Input/Output Assignments ----------------------------------
+x.all <- as.matrix(allStd.df)
+# Create Matrix Input/Output Assignments ----------------------------------
+x.all <- as.matrix(allStd.df)
+y.all <- subset(x = all.df, select = B2)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+all.df
+n <- nrow(all.df)
+test.n <- 200
+train.n <- n-test.n
+n       <- nrow(all.df)
+test.n  <- 200
+train.n <- n-test.n
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+n==test.n+train.n
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+n
+train.n
+# Preamble ----------------------------------------------------------------
+##Clear latent variables
+rm(list = ls())
+setwd.loadpac <- function() {
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer)
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+setwd.loadpac()
+##Using a for loop
+for (i in 1:ncol(all.df)) {
+if(sum(is.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+if(sum(is.na(all.df[,i]))){
+print(paste("Could be an error on column no. ", "i"))
+}
+}else(
+print(paste("skip row no.", i))
+)
+}
+##Subset the Data
+allStd.df <- subset(x = all.df, select = A1:A124)
+##Standardise the data
+allStd.df <- scale(allStd.df) #This coerces the data into a matrix
+# Load Dataset ------------------------------------------------------------
+all.df <- read.csv(file = "CommViolPredUnnormalizedData.csv", header = TRUE, sep = ",")
+# Create Matrix Input/Output Assignments ----------------------------------
+x.all <- as.matrix(allStd.df)
+y.all <- subset(x = all.df, select = B2)
+y.all <- as.matrix(y.all)
+n       <- nrow(all.df)
+n
+test.n  <- 200
+train.n <- n-test.n
+n
+train.n
+test.n
+train.n+test.n
+train.n+1
+x.test <- x.all[train.n+1:n,]
+n
+x.all[train.n+1:n,]
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+x.all[train.n+1:n,]
+train.n
+n
+x.all[2015:2215,]
+x.test <- x.all[(train.n+1:n),]
+x.test <- x.all[((train.n+1):n),]
+x.test <- y.all[((train.n+1):n),]
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+knn.mod <- knn.reg(train = x.train, test = x.test, y = y.train, k = 3)
+knn.pred <- knn.mod$pred
+# Create a KNN Model ------------------------------------------------------
+library(FNN)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/Practical/KNN.R', echo=TRUE)
+lasso.mod <- cv.glmnet(x = x.train, y = y.train, alpha = 1)
+lasso.pred <- predict(object = lasso.mod, newx = x.test, s = 'lambda.min' )
+allStd.df$s.x
+# Preamble ----------------------------------------------------------------
+##Clear latent variables
+rm(list = ls())
+##Set working directory and load packages
+setwd.loadpac <- function() {
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(glmnet, ggmap, plotly, EnvStats, FNN, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer)
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+setwd.loadpac()
+# Load Dataset ------------------------------------------------------------
+all.df <- read.csv(file = "CommViolPredUnnormalizedData.csv", header = TRUE, sep = ",")
+# Clean Data --------------------------------------------------------------
+##This can also be done with sapply
+#    as.data.frame(sapply(all.df, function(x) ifelse(is.na(x), median(x, na.rm = TRUE), x)))
+##Using a for loop
+for (i in 1:ncol(all.df)) {
+if(sum(is.numeric(all.df[,i]))){
+all.df[is.na(all.df[,i]), i] <- median(all.df[,i], na.rm = TRUE)
+if(sum(is.na(all.df[,i]))){
+print(paste("Could be an error on column no. ", "i"))
+}
+}else(
+print(paste("skip row no.", i))
+)
+}
+# Standardise the Data ----------------------------------------------------
+##Subset the Data
+allStd.df <- subset(x = all.df, select = A1:A124)
+##Standardise the data
+allStd.df <- scale(allStd.df) #This coerces the data into a matrix
+# Create Matrix Input/Output Assignments ----------------------------------
+x.all <- as.matrix(allStd.df)
+y.all <- subset(x = all.df, select = B2)
+y.all <- as.matrix(y.all)
+# Create a Training and Test Split ----------------------------------------
+# The data is already random so there's no need to shuffle it
+n       <- nrow(all.df)
+test.n  <- 200
+train.n <- n-test.n
+n
+train.n
+train.n+test.n
+x.train <- x.all[1:train.n, ]
+y.train <- y.all[1:train.n, ]
+x.test <- x.all[((train.n+1):n),]
+y.test <- y.all[((train.n+1):n),]
+# Create a KNN Model ------------------------------------------------------
+library(FNN)
+knn.mod  <- knn.reg(train = x.train, test = x.test, y = y.train, k = 3)
+knn.pred <- knn.mod$pred
+MSE.knn  <- sqrt(sum((knn.pred - y.test)^2)/test.n) #Calculate the MSE from Test Data
+# Create a Lasso Regression Model -----------------------------------------
+library(glmnet)
+lasso.mod  <- cv.glmnet(x = x.train, y = y.train, alpha = 1)
+lasso.pred <- predict(object = lasso.mod, newx = x.test, s = 'lambda.min' )
+MSE.lasso  <- sqrt(sum((lasso.pred - y.test)^2)/test.n) #Calculate the MSE from Test Data
+allStd.df$s.x
+attributes(allStd.df)
+allStd.df$B2
+head(all.df)

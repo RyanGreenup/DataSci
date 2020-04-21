@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+advModMultb1 \PYG{o}{\PYGZlt{}\PYGZhy{}} lm\PYG{p}{(}formula \PYG{o}{=} Sales \PYG{o}{\PYGZti{}} TV \PYG{o}{+} Radio\PYG{p}{,} data \PYG{o}{=} adv\PYG{p}{)}
+advModMultb1
+\end{Verbatim}

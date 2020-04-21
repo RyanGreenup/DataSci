@@ -1,0 +1,164 @@
+---
+title: "1_Practical; Data Exploration"
+author: "Ryan Greeuup 17805315"
+date: "1 August 2019"
+output:
+  html_document:
+    code_folding: hide
+    keep_md: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+  pdf_document:
+    keep_tex: yes
+    toc: yes
+always_allow_html: yes
+---
+\fontsize{12}{22}
+\fontfamily{cmss}
+\selectfont
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(ggplot2, rmarkdown, shiny, ISLR, class, BiocManager, corrplot, plotly)
+  #Mass isn't available for R 3.5...
+```
+
+
+# 1_Exercises (Wk 1 - Introduction to Data Science) 
+## Exercises (Part 1) {.tabset}
+For `iris`, `heart` and `groceries` data sets:
+
+1. Explore the variables
+2. List the variables and classify as quantitative or qualitative
+3. Provide a Research Question and identify a target variable
+4. Identify whether or not this would exemplify supervised or unsupervised learning.
+
+### `iris` Data Set
+```{r, collapse=TRUE}
+iris <- read.csv(file = "Datasets/iris.csv", header = TRUE, sep = ",")
+```
+#### (1) Explore the varibles
+In order to explore the variables use `str()`, `summary()` and `head()`
+```{r, collapse=FALSE}
+head(iris,4)
+str(iris)
+summary(iris)
+
+```
+
+#### (2) List the Variables
+In this case the variables are:
+
+|Variable Name | Type of Data | Measurement |
+|--------------|--------------|-------------|
+| Type, (presumably species)         | Categorical  | The type of flower (i.e. species)|
+| PW, (petal width) | Quantitative | Linear Distance|
+| SW, (sepal width) | Quantitative | Linear Distance|
+| PL, (petal length) | Quantitative | Linear Distance|
+| SL, (sepal length) | Quantitative | Linear Distance|
+
+#### (3) provide a research Question
+A possible research question could be:
+
+* Can plant species be the Sepal Length and Petal Width.
+
+#### (4) Is this Supervised or Unsupervised Learning
+This research question would be an example of **supervised learning** because the plant species are known and the model can be trained using already-known output values.
+
+### `heart` dataset
+
+```{r}
+heart <- read.csv(file = "Datasets/heart.csv", header = TRUE, sep = ",")
+```
+#### (1) Explore the varibles
+In order to explore the variables use `str()`, `summary()` and `head()`
+```{r}
+head(heart,4)
+str(heart)
+summary(heart)
+
+```
+
+#### (2) List the Variables
+In this case the variables are:
+
+|Variable Name | Type of Data | Measurement |
+|--------------|--------------|-------------|
+| X  | Categorical ($\mathbb{N}$) | presumably observation number |
+| Age  | Quantitative | The age of the individual|
+| Sex  | Categorical| The individuals gender |
+| Chestpain  |  Categorical | A classification of the type of chest pain |
+| RestBP  | Quantitative | A measurement of Sys. Blood Pressure at rest |
+| Chol   | Quantitative| Cholestrol levels |
+| Fbs   | Categorical | An indicator of whether or not Fasting Blood Sugar is above a threshold|
+| RestECG  | Categorical | An indicator of the type ECG result  |
+| MaxHR  | Quantitative | A measurement of the maximum Heart Rate|
+| ExAng  | Categorical | An indicator of whether or not this individual suffered exercise induced angina|
+| oldpeak  | quantitative |A measurement of ECG change induced by exercise |
+| slope  | categorical | An indicator of the slope of the ST segment of an ECG graph |
+| Ca  | categorical (because it exists in $(\mathbb{N})$| An indicator of how many of the three major blood vessels are revealed by fluroscopy |
+| AHD  |  categorical | An indicator of whether or not the individual suffered  Atherosclerotic Heart Disease |
+
+#### (3) provide a research Question
+A possible research question could be:
+
+* does MaxHR predict  Atherosclerotic Heart Disease independent of age?
+
+#### (4) Is this Supervised or Unsupervised Learning
+This research question would be an example of **supervised learning** because the incidence of AHD are known and the model can be trained using already-known output values.
+
+
+### `groceries` dataset
+
+```{r}
+groceries <- read.csv(file = "Datasets/groceries.csv", header = TRUE, sep = ",")
+```
+#### (1) Explore the varibles
+In order to explore the variables use `str()`, `summary()` and `head()`
+```{r}
+head(groceries[,1:5], 4)
+  #Restrict the columns of groceries to fit on the page
+str(groceries[,1:5])
+summary(groceries[,1:5])
+
+```
+
+#### (2) List the Variables
+It is necessary to see whether or not the input value is 1/0 or a number, we can check this by doing:
+
+```{r}
+if(sum(groceries>1)==0){
+  print("The values are Boolean")
+} else{
+  print("The values could be categorical or continuous")
+}
+```
+
+In this case the variables are:
+
+|Variable Name | Type of Data | Measurement |
+|--------------|--------------|-------------|
+| food item  | categorical | whether or not the item needs to be purchased|
+
+The subsequent observations (rows) could represent the need for groceries at each week.
+
+#### (3) provide a research Question
+A possible research question could be:
+
+* Are certain food items more common at during holiday periods,
+    + so for example is consumption of processed meats more common, this could be a public health enquiry.
+
+##### (4) Is this Supervised or Unsupervised Learning
+This research question would be an example of **unsupervised learning** because the pattern of food consumption is not known and the algorithm must 'learn' what the patterns are.
+
+

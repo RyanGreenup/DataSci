@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+tcritval \PYG{o}{\PYGZlt{}\PYGZhy{}} qt\PYG{p}{(}p \PYG{o}{=} \PYG{l+m}{0.05}\PYG{p}{,}df \PYG{o}{=}\PYG{k+kp}{nrow}\PYG{p}{(}adv\PYG{p}{)}\PYG{l+m}{\PYGZhy{}2} \PYG{p}{)}
+tcritval \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} \PYG{k+kp}{signif}\PYG{p}{(}\PYG{l+m}{2}\PYG{p}{)}
+\end{Verbatim}

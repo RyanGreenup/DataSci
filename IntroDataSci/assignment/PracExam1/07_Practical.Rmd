@@ -1,0 +1,75 @@
+---
+title: "1_Practical"
+author: "Ryan Greenup 17805315"
+date: "12 March 2019"
+output:
+  html_document:
+    code_folding: hide
+    keep_md: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+  pdf_document: 
+    toc: yes
+always_allow_html: yes
+  ##Shiny can be good but {.tabset} will be more compatible with PDF
+    ##but you can submit HTML in turnitin so it doesn't really matter.
+    
+ ##It is rare that you will want to use a floating toc with {.tabset}
+    ##If a floating toc is used in the document only use {.tabset} on more or less copy/pasted 
+        #sections with different datasets
+    ##Otherwise use {.tabsets} instead of TOC or TOC instead of {.tabsets}, one or the other though.
+---
+
+
+```{r setup, include=FALSE, include = FALSE, results = "hide", eval = TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+
+
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(caret, scales, ggplot2, rmarkdown, shiny, ISLR, class, BiocManager, corrplot, plotly, tidyverse, latex2exp, stringr, reshape2, cowplot, ggpubr, rstudioapi, wesanderson, RColorBrewer, colorspace, gridExtra, grid, car, boot, colourpicker, tree, ggtree, mise, rpart, rpart.plot, knitr, MASS, magrittr)
+  #Mass isn't available for R 3.5...
+
+set.seed(2655087) # Set the seed such that we might have reproducable results
+
+# Wipe all the damn variables to prevent mistakes
+mise()
+
+
+
+kabstr <- function(df){
+  
+data.frame(variable = names(df),
+           class = sapply(df, typeof),
+           first_values = sapply(df, function(x) paste0(head(x),  collapse = ", ")),
+           row.names = NULL) %>% 
+  kable()
+  
+} # Pretty Structure Print
+
+```
+
+# (Wk n) Introduction to Data Science
+Material of Tue 16 April 2019, week 7
+
+## Heading 1
+
+### Sub Heading 1
+
+## Heading 2
+
+### Sub Heading 1
+
+## Heading 3
+
+### Sub Heading 1
+

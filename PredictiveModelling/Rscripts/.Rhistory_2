@@ -1,0 +1,512 @@
+#to prevent from introducing data leakage.
+## Load the Data Set ----------------------------------------------------
+test.df <- read.csv(titanictest.csv, TRUE, ",")
+## Clean the Test Set using Training Medians ----------------------------
+## Standardise the Test Set using Training Medians ----------------------
+# Preamble ----------------------------------------------------------------
+##Load Packages
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+parallel, dplyr, plotly)
+##Set Working Directory
+set_wd <- function() {
+#Install the RStudio API package
+if(require('rstudioapi')){
+library('rstudioapi')
+}else{
+install.packages('rstudioapi')
+library('rstudioapi')
+}
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+set_wd()
+##Load Dataset
+train.df <- read.csv("titanictrain.csv", TRUE, ",")
+# Clean Data --------------------------------------------------------------
+head(train.df)
+#What needs to be done:
+# ------------------------------------------
+#Replace Male/Female
+#Replace NAs in Age column with Median
+#Replace Embark point with the most common one (isn't that just the median?)
+#Replace Embark point with numeric values
+#Replace Male/Female values with numeric values
+train.df$Sex <- as.numeric(train.df$Sex)
+#Replace Nas in Age Column with Median Value
+train.df$Age[is.na(train.df$Age)] <- median(train.df$Age, na.rm = TRUE)
+#Make Embark point numeric and replace with most common value
+#You've gotta add the most common value in first because
+#Otherwise there are four levels not three
+## replace empty (unknown) embarkation point with most frequent one
+most_embarked <- levels(train.df$Embarked)[which.max(tabulate(train.df$Embarked))]
+train.df$Embarked[train.df$Embarked == ""] <- most_embarked
+# replace C, Q & S with numeric values
+train.df$Embarked <- as.numeric(factor(train.df$Embarked))
+# Standardise Data --------------------------------------------------------
+# If columns have different scales the penalty terms may be biased/unfair, hence
+# before performing ridge regression it is necessary to scale all columns to
+# have unit variance
+# This is done with the familiar z=(obs. - mean)/std. dev
+head(train.df)
+trainStd.df <- train.df[!(names(train.df) == c("Name", "Cabin", "Ticket"))]
+trainStd.df$Embarked <- as.numeric(trainStd.df$Embarked)
+head(trainStd.df)
+for(j in 1:ncol(trainStd.df)){
+x <- trainStd.df[,j]
+mu <- mean(trainStd.df[,j])
+sig <- sd(trainStd.df[,j])
+trainStd.df[,j] <- (x-mu)/sig
+}
+head(trainStd.df)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+#Replace Male/Female values with numeric values
+test.df$Sex <- as.numeric(train.df$Sex)
+#Replace Nas in Age Column with Median Value
+test.df$Age[is.na(test.df$Age)] <- median(train.df$Age, na.rm = TRUE)
+#Replace Male/Female values with numeric values
+test.df$Sex <- as.numeric(test.df$Sex)
+testStd.df <- train.df[!(names(train.df) == c("Name", "Cabin", "Ticket"))]
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+testStd.df <- train.df[!(names(train.df) == c("Name", "Cabin", "Ticket"))]
+testStd.df <- test.df[!(names(test.df) == c("Name", "Cabin", "Ticket"))]
+testStd.df$Embarked <- as.numeric(testStd.df$Embarked)
+head(testStd.df)
+testStd.df <- test.df[!(names(test.df) == c("Name", "Cabin", "Ticket"))]
+testStd.df <- test.df[,!(names(test.df) == c("Name", "Cabin", "Ticket"))]
+!(names(test.df) == c("Name", "Cabin", "Ticket"))
+!(names(test.df) == c("Name", "Cabin", "Ticket"))
+names(test.df)
+names(test.df) == c("Name", "Cabin", "Ticket")
+names(test.df)
+c("Name", "Cabin", "Ticket")
+names(test.df) == "Name" | "Cabin" | "Ticket")
+names(test.df) == ("Name" | "Cabin" | "Ticket")
+names(test.df) == c("Name", "Cabin", "Ticket")
+(names(train.df) == c("Name", "Cabin", "Ticket"))
+trainStd.df <- train.df[!(names(train.df) == c("Name", "Cabin", "Ticket"))]
+testStd.df <- test.df[!(names(test.df) == c("Name", "Cabin", "Ticket"))]
+testStd.df <- test.df[!(names(test.df) == c("Name", "Cabin", "Ticket"))]
+trainStd.df <- train.df[!(names(train.df) == c("Name", "Cabin", "Ticket"))]
+head(test.df)
+head(train.df)
+head(test.df)
+kkk
+names(train.df)
+names(test.df)
+!(names(train.df) %in% c("Name", "Cabin", "Ticket"))
+testStd.df <- test.df[!(names(test.df) %in% c("Name", "Cabin", "Ticket"))]
+trainStd.df <- train.df[!(names(train.df) %in% c("Name", "Cabin", "Ticket"))]
+names(train.df)
+names(test.df)
+testStd.df <- test.df[!(names(test.df) %in% c("Name", "Cabin", "Ticket"))]
+testStd.df$Embarked <- as.numeric(testStd.df$Embarked)
+head(testStd.df)
+for(j in 1:ncol(testStd.df)){
+x <- testStd.df[,j]          #Testing value
+mu <- mean(trainStd.df[,j])  #Training value
+sig <- sd(trainStd.df[,j])   #Training value
+testStd.df[,j] <- (x-mu)/sig
+}
+head(testStd.df)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+View(testStdfin.df)
+View(testStdfin.df)
+is.na(testStd.df)
+mean(tabulate(is.na(testStd.df)))
+mean(tabulateas.numeric((is.na(testStd.df))))
+mean(tabulate(as.numeric((is.na(testStd.df))))
+mean(tabulate(as.numeric((is.na(testStd.df))))
+mean(tabulate(as.numeric((is.na(testStd.df)))))
+as.numeric((is.na(testStd.df)))
+tabulate(as.numeric((is.na(testStd.df))))
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+testStdfin.df <- cbind(test.df[(names(test.df) %in% c("Name", "Cabin", "Ticket"))], test.df)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+testStdfin.df <- cbind(test.df[(names(test.df) %in% c("Name", "Cabin", "Ticket"))], testStd.df)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+testStdfin.df <- testStdfin.df[,c(4,5,6,1,7,8,9,10,2,11,3,12)]
+names(testStdfin.df)
+names(test.df)
+names(train.df)
+names(testStdfin.df)
+names(test.df)
+names(testStdfin.df)
+names(test.df)
+names(testStdfin.df)
+names(test.df)
+testStdfin.df <- cbind(test.df[(names(test.df) %in% c("Name", "Cabin", "Ticket"))], testStd.df)
+testStdfin.df <- testStdfin.df[,c(4,5,1,6,7,8,9,2,10,3,11)]
+names(testStdfin.df)
+names(test.df)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+write.csv(x = testStdfin.df, file = "TitanictestSTD.csv")
+# Preamble ----------------------------------------------------------------
+##Load Packages
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+parallel, dplyr, plotly)
+##Set Working Directory
+set_wd <- function() {
+#Install the RStudio API package
+if(require('rstudioapi')){
+library('rstudioapi')
+}else{
+install.packages('rstudioapi')
+library('rstudioapi')
+}
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+set_wd()
+##Load Dataset
+train.df <- read.csv("titanictrain.csv", TRUE, ",")
+# Clean Data --------------------------------------------------------------
+head(train.df)
+#Replace Male/Female values with numeric values
+train.df$Sex <- as.numeric(train.df$Sex)
+#Replace Nas in Age Column with Median Value
+train.df$Age[is.na(train.df$Age)] <- median(train.df$Age, na.rm = TRUE)
+## replace empty (unknown) embarkation point with most frequent one
+most_embarked <- levels(train.df$Embarked)[which.max(tabulate(train.df$Embarked))]
+train.df$Embarked[train.df$Embarked == ""] <- most_embarked
+# replace C, Q & S with numeric values
+train.df$Embarked <- as.numeric(factor(train.df$Embarked))
+head(train.df)
+trainStd.df <- train.df[!(names(train.df) %in% c("Name", "Cabin", "Ticket"))]
+trainStd.df$Embarked <- as.numeric(trainStd.df$Embarked)
+head(trainStd.df)
+for(j in 1:ncol(trainStd.df)){
+x <- trainStd.df[,j]
+mu <- mean(trainStd.df[,j])
+sig <- sd(trainStd.df[,j])
+trainStd.df[,j] <- (x-mu)/sig
+}
+head(trainStd.df)
+trainStdfin.df <- cbind(train.df[(names(train.df) %in% c("Name", "Cabin", "Ticket"))], trainStd.df)
+trainStdfin.df <- trainStdfin.df[,c(4,5,6,1,7,8,9,10,2,11,3,12)]
+write.csv(x = trainStdfin.df, file = "TitanictrainSTD.csv")
+## Load the Data Set ----------------------------------------------------
+test.df <- read.csv("titanictest.csv", TRUE, ",")
+#Replace Male/Female values with numeric values
+test.df$Sex <- as.numeric(test.df$Sex)
+#Replace Nas in Test Data Age Column with Median Values from Training Data
+test.df$Age[is.na(test.df$Age)] <- median(train.df$Age, na.rm = TRUE)
+## replace empty points of embarkment in the test data with most frequent
+#one from the training data
+most_embarked <- levels(train.df$Embarked)[which.max(tabulate(train.df$Embarked))]
+test.df$Embarked[test.df$Embarked == ""] <- most_embarked
+test.df$Embarked[test.df$Embarked == ""]
+test.df$Embarked[test.df$Embarked == ""] <- most_embarked
+most_embarked
+## replace empty (unknown) embarkation point with most frequent one
+most_embarked <- levels(train.df$Embarked)[which.max(tabulate(train.df$Embarked))]
+# Preamble ----------------------------------------------------------------
+##Load Packages
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+parallel, dplyr, plotly)
+##Set Working Directory
+set_wd <- function() {
+#Install the RStudio API package
+if(require('rstudioapi')){
+library('rstudioapi')
+}else{
+install.packages('rstudioapi')
+library('rstudioapi')
+}
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+set_wd()
+##Load Dataset
+train.df <- read.csv("titanictrain.csv", TRUE, ",")
+# Clean Data --------------------------------------------------------------
+head(train.df)
+#Replace Male/Female values with numeric values
+train.df$Sex <- as.numeric(train.df$Sex)
+#Replace Nas in Age Column with Median Value
+train.df$Age[is.na(train.df$Age)] <- median(train.df$Age, na.rm = TRUE)
+## replace empty (unknown) embarkation point with most frequent one
+most_embarked <- levels(train.df$Embarked)[which.max(tabulate(train.df$Embarked))]
+train.df$Embarked[train.df$Embarked == ""] <- most_embarked
+most_embarked
+## replace empty (unknown) embarkation point with most frequent one
+most_embarked <- levels(train.df$Embarked)[which.max(tabulate(train.df$Embarked))]
+train.df$Embarked[train.df$Embarked == ""] <- most_embarked
+# replace C, Q & S with numeric values
+train.df$Embarked <- as.numeric(factor(train.df$Embarked))
+head(train.df)
+trainStd.df <- train.df[!(names(train.df) %in% c("Name", "Cabin", "Ticket"))]
+trainStd.df$Embarked <- as.numeric(trainStd.df$Embarked)
+head(trainStd.df)
+for(j in 1:ncol(trainStd.df)){
+x <- trainStd.df[,j]
+mu <- mean(trainStd.df[,j])
+sig <- sd(trainStd.df[,j])
+trainStd.df[,j] <- (x-mu)/sig
+}
+head(trainStd.df)
+trainStdfin.df <- cbind(train.df[(names(train.df) %in% c("Name", "Cabin", "Ticket"))], trainStd.df)
+trainStdfin.df <- trainStdfin.df[,c(4,5,6,1,7,8,9,10,2,11,3,12)]
+write.csv(x = trainStdfin.df, file = "TitanictrainSTD.csv")
+## Load the Data Set ----------------------------------------------------
+test.df <- read.csv("titanictest.csv", TRUE, ",")
+#Replace Male/Female values with numeric values
+test.df$Sex <- as.numeric(test.df$Sex)
+#Replace Nas in Test Data Age Column with Median Values from Training Data
+test.df$Age[is.na(test.df$Age)] <- median(train.df$Age, na.rm = TRUE)
+## replace empty points of embarkment in the test data with most frequent
+#one from the training data
+most_embarked <- levels(train.df$Embarked)[which.max(tabulate(train.df$Embarked))]
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/2. Ridge Regression/RidgeRegressionTitanic.R', echo=TRUE)
+head(train.df)
+head(trainStd.df)
+head(trainStd.df[,names(trainStd.df) %in% "Survived"])
+head(trainStd.df[,!names(trainStd.df) %in% "Survived"])
+head(trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin"])
+head(trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")])
+y <- trainStd.df[,names(trainStd.df) %in% c("Survived")])
+x <- trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+x <- as.matrix(x)
+y <- trainStd.df[,names(trainStd.df) %in% c("Survived")]
+x
+head(x)
+y <- trainStd.df[,names(trainStd.df) %in% c("Survived")]
+# Fit a GLM Model ---------------------------------------------------------
+##For this glmnet will need to be loaded as a package
+library(glmnet)
+# Preamble ----------------------------------------------------------------
+##Load Packages
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+parallel, dplyr, plotly, glmnet)
+# Fit a GLM Model ---------------------------------------------------------
+##For this glmnet will need to be loaded as a package
+library(glmnet)
+mod <- glmnet(x = x, y = y, family = "binomial", alpha = 0)
+summary(mod)
+##Apply Prediction to Test Set
+x <- trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+x <- as.matrix(x)
+##Create Matrix Subsets
+x.train <- trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+x.train <- as.matrix(x)
+y.train <- trainStd.df[,names(trainStd.df) %in% c("Survived")]
+y.train <- as.matrix(y)
+##Fit the Model
+mod <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0, lambda = 1)
+mod <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0)
+# Fit a GLM Model ---------------------------------------------------------
+##For this glmnet will need to be loaded as a package
+library(glmnet)
+##Create Matrix Subsets
+x.train <- trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+x.train <- as.matrix(x)
+y.train <- as.matrix(y)
+x.test <- testStd.df[,!names(testStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+y.train <- trainStd.df[,names(trainStd.df) %in% c("Survived")]
+y.test <- testStd.df[,names(trainStd.df) %in% c("Survived")]
+y.test <- as.matrix(y)
+x.test <- as.matrix(x)
+##Fit the Model
+mod <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0, lambda = 1)
+mod <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0)
+summary(mod)
+##Apply Prediction to Test Set
+##Apply Prediction to Test Set
+predict(object = mod, newx = x.test, type = 'response')
+##Fit the Model
+mod <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0, lambda = 1)
+##Apply Prediction to Test Set
+predict(object = mod, newx = x.test, type = 'response')
+##Fit the Model
+mod <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0, lambda = 1)
+mod.mult <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0)
+summary(mod)
+##Apply Prediction to Test Set
+predict(object = mod, newx = x.test, type = 'response')
+##Apply Prediction to Test Set
+prob <- predict(object = mod, newx = x.test, type = 'response')
+prob.mult <- predict(object = mod.mult, newx = x.test, type = 'response')
+prob.mult <- predict(object = mod.mult, newx = x.test, type = 'response')
+View(mod.mult)
+View(mod.mult)
+View(prob.mult)
+View(prob.mult)
+##Compute correct predictions on Training Set
+prob.train <- predict(object = mod, newx = x.train, type = 'response')
+###Decide on a probability trheshold
+thresh <- 0.5
+#so we could use a ROC curve to decide on a better performing
+#probability threshold
+pred.train <- ifelse(test = prob.train<thresh,yes = 0, no = 1 )
+pred.train
+mean(pred.train)
+#so we could use a ROC curve to decide on a better performing
+#probability threshold
+###Create Predictions
+pred.train <- ifelse(test = prob.train<thresh,yes = 0, no = 1 )
+y.test
+y.test <- testStd.df[,names(testStd.df) %in% c("Survived")]
+y.test
+y.train == pred.train
+sum(y.train == pred.train)
+pred.train
+y.train
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/1. Data Clean/8TitanicClean.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/2. Ridge Regression/RidgeRegressionTitanic.R', echo=TRUE)
+# Preamble ----------------------------------------------------------------
+##Load Packages
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+parallel, dplyr, plotly, glmnet)
+# Preamble ----------------------------------------------------------------
+##Load Packages
+if(require('pacman')){
+library('pacman')
+}else{
+install.packages('pacman')
+library('pacman')
+}
+pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+parallel, dplyr, plotly, glmnet)
+##Set Working Directory
+set_wd <- function() {
+#Install the RStudio API package
+if(require('rstudioapi')){
+library('rstudioapi')
+}else{
+install.packages('rstudioapi')
+library('rstudioapi')
+}
+#Use the Rstudio API to get the working directory
+current_path <- getActiveDocumentContext()$path
+setwd(dirname(current_path ))
+print( getwd() )
+}
+set_wd()
+##Load Dataset
+trainStd.df <- read.csv("titanictrainSTD.csv", TRUE, ",")
+testStd.df <- read.csv("titanictestSTD.csv", TRUE, ",")
+# Fit a GLM Model ---------------------------------------------------------
+##For this glmnet will need to be loaded as a package
+library(glmnet)
+##Create Matrix Subsets
+x.train <- trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+x.train <- as.matrix(x)
+y.train <- trainStd.df[,names(trainStd.df) %in% c("Survived")]
+##Create Matrix Subsets
+x.train <- trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+x.train <- as.matrix(x)
+##Create Matrix Subsets
+x.train <- trainStd.df[,!names(trainStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+x.train <- as.matrix(x.train)
+y.train <- trainStd.df[,names(trainStd.df) %in% c("Survived")]
+y.train <- as.matrix(y.train)
+x.test <- testStd.df[,!names(testStd.df) %in% c("Survived", "Name", "Ticket", "Cabin")]
+x.test <- as.matrix(x.test)
+##Fit the Model
+mod <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0, lambda = 1)
+mod.mult <- glmnet(x = x.train, y = y.train, family = "binomial", alpha = 0)
+##Apply Prediction to Test Set
+prob <- predict(object = mod, newx = x.test, type = 'response')
+prob.mult <- predict(object = mod.mult, newx = x.test, type = 'response')
+##Compute correct predictions on Training Set
+prob.train <- predict(object = mod, newx = x.train, type = 'response')
+###Decide on a probability trheshold
+thresh <- 0.5
+#so we could use a ROC curve to decide on a better performing
+#probability threshold
+###Create Predictions
+pred.train <- ifelse(test = prob.train<thresh,yes = 0, no = 1 )
+sum(y.train == pred.train)
+sum(y.train !== pred.train)
+sum(y.train != pred.train)
+pred.train.mult <- ifelse(test = prob.train.mult<thresh,yes = 0, no = 1 )
+##Compute correct predictions on Training Set
+prob.train <- predict(object = mod, newx = x.train, type = 'response')
+prob.train.mult <- predict(object = mod.mult, newx = x.train, type = 'response')
+###Decide on a probability trheshold
+thresh <- 0.5
+#so we could use a ROC curve to decide on a better performing
+#probability threshold
+###Create Predictions
+pred.train <- ifelse(test = prob.train<thresh,yes = 0, no = 1 )
+pred.train.mult <- ifelse(test = prob.train.mult<thresh,yes = 0, no = 1 )
+sum(y.train != pred.train)
+sum(y.train != pred.train.mult)
+pred.train.mult
+perf.vec <- vector(length = length(pred.train))
+perf.vec
+perf.vec <- vector(length = length(pred.train))
+for (i in 1:ncol(pred.train)) {
+perf.vec[i] <- sum(y.train != pred.train.mult[,i])
+}
+perf.vec[which.max(perf.vec[i])]
+perf.vec[which.min(perf.vec[i])]
+perf.vec
+i <- 1
+sum(y.train != pred.train.mult[,i])
+i <- 2
+sum(y.train != pred.train.mult[,i])
+i <- 3
+sum(y.train != pred.train.mult[,i])
+i <- 30
+sum(y.train != pred.train.mult[,i])
+pred.train.mult[,30] == pred.train.mult[40]
+pred.train.mult[,30] == pred.train.mult[400]
+prob.train.mult[,30] == prob.train.mult[400]
+pred.train.mult <- prob.train.mult
+pred.train.mult <- prob.train.mult
+for (i in 1:ncol(prob.train.mult)) {
+pred.train.mult[,i] <- ifelse(test = prob.train.mult<thresh,yes = 0, no = 1 )
+}
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/2. Ridge Regression/RidgeRegressionTitanic.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 8/Practical/2. Ridge Regression/RidgeRegressionTitanic.R', echo=TRUE)
+no.error <- sum(y.train != pred.train)
+rate.error <- mean(y.train != pred.train)
+paste("This model misclassified", no.error, "/", nrow(pred.train), "which is an error rate of", round(rate.error*100), "%")
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/crime.R', echo=TRUE)
+source('C:/Users/DryDa/OneDrive - Western Sydney University/Education/UWS/Units/2018/Autumn/PredMod/Weekly Material/Week 11/crime.R', echo=TRUE)
+lasso

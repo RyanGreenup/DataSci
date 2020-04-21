@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+lwr\PYGZus{}conf \PYG{o}{\PYGZlt{}\PYGZhy{}} qnorm\PYG{p}{(}p \PYG{o}{=} \PYG{l+m}{0.05}\PYG{p}{,} \PYG{k+kp}{mean}\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{),} sd\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{))}
+upr\PYGZus{}conf \PYG{o}{\PYGZlt{}\PYGZhy{}} qnorm\PYG{p}{(}p \PYG{o}{=} \PYG{l+m}{1\PYGZhy{}0.05}\PYG{p}{,} \PYG{k+kp}{mean}\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{),} sd\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{))}
+\end{Verbatim}

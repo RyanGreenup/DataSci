@@ -1,0 +1,426 @@
+---
+title: "01 Randomness (Pi Digits)"
+tags: [Notebooks/Thinking About Data]
+output: html_notebook
+---
+
+
+# (01) Randomness
+
+## Preamble
+
+```{R}
+load.pac <- function() {
+  
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr)
+  
+}
+
+load.pac()
+ 
+```
+
+```{r setup, include=FALSE}
+library(reticulate)
+use_python("/usr//bin/python3")
+```
+
+
+
+## (1) Compute tables of $\pi$ digits
+First it is necessary to have some digits of pi, we'll just take a dataset:
+
+```{r}
+pi_Dig <- UsingR::pi2000[-1]
+write.csv(pi_Dig, file = "./piDigits.csv", quote = FALSE, row.names = FALSE)
+pi_Tibble <- tibble::enframe(piDig)
+tibble::remove_rownames(pi_Tibble)
+pi_Tibble <- pi_Tibble$value
+head(pi_Tibble)
+```
+### using the `Rmpfr` package
+
+An alternative is to use the Rmpfr package deals with handling numbers of arbitrary precision, this requires the `GMP C` library to be installed, so the package will be something like `libbmp-dev` and should be in the repos for `apt` or `pacman -S` or whatever:
+
+```{bash}
+apt list libgmp3-dev
+apt list libgmp
+apt list libmpfr-dev
+
+
+apt list libgmp3-dev libgmp libmpfr-dev
+
+```
+
+
+Rather than specifying significant figures the package works with bits of precision, so for example a base 10 number like 8 can be represented with 3 bits of information because $2^3=8$.
+
+if 1000 decimal places were required, the number of bits would be the number of binary values necessary to represent that same value:
+
+$$\begin{aligned}
+2^{\textsf{bits}} &= 10^{\textsf{digits}} \\
+\iff \textsf{bits} &= \textsf{digits} \times \log_{2}{}{\left(  10\right) }\\
+\end{aligned}$$
+
+
+```{r}
+library(Rmpfr)
+diglength <- 2000 
+
+precision <- diglength*log2(10)
+precision <- ceiling(precision)
+piVal <- Rmpfr::Const("pi", precision)
+print(Rmpfr::Const("pi", 12*log2(10)))
+```
+
+In order to extract the value use `substring()` in order to create substrings of the values. 
+
+```{r}
+piVal      <- format(piVal)
+pi_Digits  <- substring(text = piVal, first = 1:diglength, last = 1:diglength)[3:diglength] #%>% as.numeric()
+pi_Digits  <- substring(text = piVal, first = 1:diglength, last = 1:diglength)[3:diglength] %>% as.integer()
+pi_Digits <- as.vector(pi_Digits)
+#pi_Digits <- factor(pi_Digits, levels = 0:9, ordered = TRUE)
+```
+
+A histogram of which may be generated:
+
+```{r}
+table(pi_Digits)
+table(pi_Digits) %>% barplot
+```
+
+
+The problem with a histogram is that it will combine The first two frequencies in a way that is incorrect in this context, it only seems to do it with the pi digits though for some reason
+
+```{r}
+hist(pi_Digits, breaks = seq(from = 0, to = 9, by = 1)) %>% summary()
+axis(side = 1, at = seq(0, 9, 1), labels = seq(0, 9, 1))
+axis(2,pos = -9)
+
+
+random_Uniform <- runif(2000, 0, 9)
+hist(random_Uniform)
+axis(side = 1, at = seq(0, 9, 1), labels = seq(0, 9, 1))
+axis(2,pos = -9)
+```
+
+A better alternative is to use ggplot2
+
+```{r}
+pi_DigitsDF <- tibble::enframe(pi_Digits)
+
+HistPlot <- function (DataFrame, heading) {
+ggplot(data = DataFrame, aes(x = value, fill = value)) +
+#       geom_histogram(binwidth = 1, fill = "lightblue", col = "red") +
+       geom_histogram(bins = 10, fill = "lightblue", col = "red") +
+       theme_classic() +
+       scale_x_continuous(breaks = seq(0, 10, 1)) +
+       labs(x = "Decimal Value", y = "Frequency",
+	    title = heading)
+    
+}
+
+HistPlot(pi_DigitsDF, "Distribution of Digits of Pi" )
+```
+
+
+
+
+### Using Power Series
+
+Using integration by parts, it can be shown that:
+
+$$\begin{aligned}
+\int^{b}_{0} \frac{1}{1+ x^2}  \mathrm{d}x&= \arctan\left( b \right) \enspace : \quad b \in\left( \mathbb{R}^+\cap 0 \right)  \\
+ \implies  \int^{1}_{0} \frac{1}{1+ x^2}  \mathrm{d}x&= \arctan\left( 1 \right) \\
+ \implies  \int^{1}_{0} \frac{1}{1+ x^2}  \mathrm{d}x&= \arctan\left( 1 \right) \\
+\end{aligned}$$
+Transforming into a a power series with some other magic:
+
+$$\begin{aligned}
+\implies  \pi &= 4 \times \sum^\infty_{n=0}\left[ \frac{\left( - 1 \right) ^k}{2k+ 1}   \right] 
+\end{aligned}$$
+
+The problem with this is that the convergence is too slow to be useful:
+
+$$\begin{aligned}
+\frac{1}{2k+ 1} \leq 10^{100}  \implies  k\geq 10^{100} \times \frac{1}{2} - 1
+\end{aligned}$$
+
+presuming 1 sum per cycle at 5 GHz this would take well in excess of the age of the universe.
+There are ways to speed it up but it's all well outside scope
+
+
+
+
+
+## (4) Evaluate Distribution of pi Digits
+
+In order to evaluate whether or not the digits of pi appear uniformally distriuted first consider the first 50 digits:
+
+### First 50 Digits of pi
+
+```{r}
+count <- table(pi_Digits[1:50])
+rss   <- (table(pi_Digits[1:50])-50/10)^2
+
+piDigErrorDF        <- data.frame(0:9, as.vector(count), as.vector(rss))
+names(piDigErrorDF) <- c("value", "Count", "SquareError")
+
+print(piDigErrorDF)
+SSE <- sum(piDigErrorDF$SquareError)
+
+print(paste("The Sum of Squared Errors is", SSE))
+HistPlot(pi_DigitsDF[1:50,], "Distribution of first 50 Digits of Pi")
+```
+
+### First 200 Digits of Pi
+
+```{r}
+count <- table(pi_Digits[1:200])
+rss   <- (table(pi_Digits[1:200])-200/10)^2
+
+piDigErrorDF        <- data.frame(0:9, as.vector(count), as.vector(rss))
+names(piDigErrorDF) <- c("value", "Count", "SquareError")
+
+print(piDigErrorDF)
+SSE <- sum(piDigErrorDF$SquareError)
+
+print(paste("The Sum of Squared Errors is", SSE))
+HistPlot(pi_DigitsDF[1:200,], "Distribution of first 200 Digits of Pi")
+```
+
+### First 500 Digits of Pi
+
+```{r}
+count <- table(pi_Digits[1:500])
+rss   <- (table(pi_Digits[1:500])-500/10)^2
+
+piDigErrorDF        <- data.frame(0:9, as.vector(count), as.vector(rss))
+names(piDigErrorDF) <- c("value", "Count", "SquareError")
+
+print(piDigErrorDF)
+SSE <- sum(piDigErrorDF$SquareError)
+
+print(paste("The Sum of Squared Errors is", SSE))
+HistPlot(pi_DigitsDF[1:500,], "Distribution of first 500 Digits of Pi")
+```
+
+
+### Random Sample of pi Digits
+
+In **_R_** sampling something with repetition is referred to replacing, so to count or sample something with repetition specify `replace = TRUE`.
+ Recall the counting Formulas:
+
+ | selection | ordered | unordered |
+ | --- | --- | --- |
+ | With Repetition | $n^m$ | $\binom{m+n-1}{n}$ |
+ | Without Repetition | $n_{(m)}$ | $\binom{n}{m}$ |
+ 
+ Where:
+ 
+ * $\binom{n}{m} =\frac{m_(k)}{k!}=\frac{m!}{k!(m-k)!}$
+ * $n_{(m)}=\frac{n!}{(n-m)!}$
+ * $n! = n \times (n-1) \times (n-2) \times 2 \times 1$
+
+In order to randomly sample the digits of Pi:
+
+```{r}
+index <- sample(1:diglength, size = 200)
+print(table(pi_Digits[index]))
+HistPlot(pi_DigitsDF[index,], "Distribution of first 50 Digits of Pi")
+```
+
+This can be repeated multiple times:
+
+```{r}
+library(gridExtra)
+library(tidyverse)
+
+PlotList <- list()
+for (i in 1:6) {
+index <- sample(1:diglength, size = 200)
+PlotList[[i]] <- HistPlot(pi_DigitsDF[index,],
+			  paste("Distribution of a random sample of \n 200 Digits of Pi from the first", diglength))
+}
+
+# arrangeGrob(grobs = PlotList, layout_matrix = matrix(1:6, nrow = 3))
+grid.arrange(grobs = PlotList, layout_matrix = matrix(1:6, nrow = 3))
+
+```
+
+
+## (5) Uniformally Distributed Values
+
+### 50 Digits
+
+```{r}
+x <- runif(50, 0, 9) %>% round()
+x <- sample(0:9, replace = TRUE, size = 50)
+xDF <- tibble::enframe(x)
+
+count <- table(x[1:50])
+rss   <- (table(x[1:50])-50/10)^2
+
+ErrorDF        <- data.frame(0:9, as.vector(count), as.vector(rss))
+names(ErrorDF) <- c("value", "Count", "SquareError")
+
+print(piDigErrorDF)
+SSE <- sum(piDigErrorDF$SquareError)
+
+print(paste("The Sum of Squared Errors is", SSE))
+HistPlot(xDF[1:50,], "Distribution of a uniform random sample of 50 digits")
+```
+
+### 200 Digits
+
+
+```{r}
+x <- runif(200, 0, 9) %>% round()
+x <- sample(0:9, replace = TRUE, size = 200)
+xDF <- tibble::enframe(x)
+
+count <- table(x[1:200])
+rss   <- (table(x[1:200])-200/10)^2
+
+ErrorDF        <- data.frame(0:9, as.vector(count), as.vector(rss))
+names(ErrorDF) <- c("value", "Count", "SquareError")
+
+print(piDigErrorDF)
+SSE <- sum(piDigErrorDF$SquareError)
+
+print(paste("The Sum of Squared Errors is", SSE))
+HistPlot(xDF[1:200,], "Distribution of a uniform random sample of 200 digits")
+```
+
+### 500 Digits
+
+
+```{r}
+x <- runif(500, 0, 9) %>% round()
+x <- sample(0:9, replace = TRUE, size = 500)
+xDF <- tibble::enframe(x)
+
+count <- table(x[1:500])
+rss   <- (table(x[1:500])-500/10)^2
+
+ErrorDF        <- data.frame(0:9, as.vector(count), as.vector(rss))
+names(ErrorDF) <- c("value", "Count", "SquareError")
+
+print(piDigErrorDF)
+SSE <- sum(piDigErrorDF$SquareError)
+
+print(paste("The Sum of Squared Errors is", SSE))
+HistPlot(xDF[1:500,], "Distribution of a uniform random sample of 500 digits")
+```
+
+
+## (6) Repeat for multiple larger digits
+I did 50, 200 and 500 for all of them.
+
+## (7) Pairs of Digits
+Let's consider pairs of digits and their distribution:
+
+```{r}
+library(Rmpfr)
+diglength <- 2000*2*10
+
+precision <- diglength*log2(10)
+precision <- ceiling(precision)
+piVal <- Rmpfr::Const("pi", precision)
+print(Rmpfr::Const("pi", 12*log2(10)))
+```
+
+In order to extract the value use `substring()` in order to create substrings of the values. 
+
+```{r}
+piVal      <- format(piVal); class(piVal)
+pi_Digits  <- substring(text = piVal, first = seq(from = 1, to = diglength, by = 2), last = seq(from = 2, to = (diglength-1), by = 2))[3:(diglength/2)-1] %>% as.numeric()
+pi_Digits  <- as.vector(pi_Digits)
+#pi_Digits <- factor(pi_Digits, levels = 0:9, ordered = TRUE)
+```
+
+A histogram of which may be generated:
+
+```{r}
+table(pi_Digits)
+table(pi_Digits) %>% barplot
+```
+
+
+A better alternative is to use ggplot2, count the bins carefully, 00 is it's own bin and so we would expect 99+1 bins overall
+
+```{r}
+pi_DigitsDF <- tibble::enframe(pi_Digits)
+
+HistPlot <- function (DataFrame, heading) {
+ggplot(data = DataFrame, aes(x = value, fill = value)) +
+#       geom_histogram(binwidth = 1, fill = "lightblue", col = "red") +
+       geom_histogram(bins = 100, fill = "lightblue", col = "red") +
+       theme_classic() +
+       scale_x_continuous(breaks = seq(0, 10, 1)) +
+       labs(x = "Decimal Value", y = "Frequency",
+	    title = heading)
+    
+}
+
+HistPlot(pi_DigitsDF, "Distribution of Digits of Pi" )
+```
+
+This distribution looks mostly uniform, let's push it by doing a significantly larger analysis of pi:
+
+```{r}
+library(Rmpfr)
+diglength <- 2000*2*10*10
+
+precision <- diglength*log2(10)
+precision <- ceiling(precision)
+piVal <- Rmpfr::Const("pi", precision)
+print(Rmpfr::Const("pi", 12*log2(10)))
+```
+
+In order to extract the value use `substring()` in order to create substrings of the values. 
+
+```{r}
+piVal      <- format(piVal); class(piVal)
+pi_Digits  <- substring(text = piVal, first = seq(from = 1, to = diglength, by = 2), last = seq(from = 2, to = (diglength-1), by = 2))[3:(diglength/2)-1] %>% as.numeric()
+pi_Digits  <- as.vector(pi_Digits)
+#pi_Digits <- factor(pi_Digits, levels = 0:9, ordered = TRUE)
+```
+
+A histogram of which may be generated:
+
+```{r}
+table(pi_Digits)
+table(pi_Digits) %>% barplot
+```
+
+
+A better alternative is to use ggplot2, count the bins carefully, 00 is it's own bin and so we would expect 99+1 bins overall
+
+```{r}
+pi_DigitsDF <- tibble::enframe(pi_Digits)
+
+HistPlot <- function (DataFrame, heading) {
+ggplot(data = DataFrame, aes(x = value, fill = value)) +
+#       geom_histogram(binwidth = 1, fill = "lightblue", col = "red") +
+       geom_histogram(bins = 100, fill = "lightblue", col = "red") +
+       theme_classic() +
+       scale_x_continuous(breaks = seq(0, 10, 1)) +
+       labs(x = "Decimal Value", y = "Frequency",
+	    title = heading)
+    
+}
+
+HistPlot(pi_DigitsDF, "Distribution of Digits of Pi" )
+```
+

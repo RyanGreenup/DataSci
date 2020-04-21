@@ -1,0 +1,239 @@
+---
+title: "Polynomial Logistic Regression (Part B)"
+output:
+  pdf_document: default
+  html_document:
+    keep_md: yes
+always_allow_html: yes
+---
+
+#Preamble
+First load the packages and the dataset:
+
+##Packages
+```{r}
+
+if(require('pacman')){
+    library('pacman')
+  }else{
+    install.packages('pacman')
+    library('pacman')
+  }
+  
+  pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, tidyverse, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer, colorspace)
+  
+
+```
+
+##Dataset
+```{r}
+
+# Load Dataset ------------------------------------------------------------
+
+all.df <- read.csv(file = "practical06b.csv", TRUE, ",")
+#all.df <- read.csv(file = file.choose(), TRUE, ",")
+
+
+# Convert the Output to a categorical varialbe (factor) -------------------
+all.df$y <- as.factor(all.df$y)
+head(all.df)
+
+
+
+
+```
+
+#Plot the Data
+Where possible it can be really useful to visualise data
+##Base plot
+Owing to the need to colour the variables, it can be more difficult to use a 
+base plot in this case:
+
+```{r}
+PlotCol.vec <- rainbow_hcl(2)
+
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+     xlab = "Predictor 1",
+     ylab = "Predictor 2",
+     main = "Categorised Variables" )
+```
+
+##Prettier ggplot2
+A better looking plot can be created in ggplot2:
+
+```{r}
+
+# Plot the Data -----------------------------------------------------------
+  ##Outcome by colour
+col.plot <- ggplot(all.df, aes(y = x2, x = x1, col = y)) +
+  geom_point() + 
+  theme_classic() +
+  labs(x = "Predictor 1", y = "Predictor 2",
+       title = "Discrete Outcome From Predictor Values",
+       col = "Output")
+
+col.plot
+
+```
+
+
+#Create a Logistic Regression Model
+##Discussion of Model Form
+So the plot suggests that our data follows a circular function:
+$$x^2 + y^2 = r^2$$
+More accurately though, this follows a 3d *infinite parabaloid,
+where the vertex represents 0 and higher, broader values 
+correspond to 1.
+
+An infinite parabaloid can be of either form:
+
+1. $y = x^2_1 + x^2_2$
+2. $y = x_1 + x_2 + x^2_1 + x^2_2$
+
+Observe:
+
+```{r, echo = FALSE}
+res   <- 20
+xgrid <- seq(min(all.df$x1), max(all.df$x1), length.out = res)
+ygrid <- seq(min(all.df$x2), max(all.df$x2), length.out = res)
+
+inf.para.z1 <- xgrid^2 + ygrid^2
+
+x <- xgrid[1]
+y <- ygrid[1]
+z <- inf.para.z1
+zgrid <- as.data.frame(matrix(nrow = res, ncol = res))
+row.names(zgrid) <- signif(ygrid, 2)
+names(zgrid) <- signif(xgrid, 2)
+
+for (j in 1:res) {
+  
+  for (i in 1:res) {
+    
+    x <- xgrid[i]
+    y <- ygrid[j]
+    zgrid[j,i] <- x^2+y^2
+    
+    parab.twoterm.z <- zgrid
+    
+    zgrid[j,i] <- x^2+y^2 + x + y
+  
+    parab.fourterm.z <- zgrid
+    
+  }
+  
+}
+
+
+plot_ly(z = ~ as.matrix(parab.twoterm.z)) %>% add_surface()
+plot_ly(z = ~ as.matrix(parab.fourterm.z)) %>% add_surface()
+```
+
+##Create the Model
+In this case we will create a model using the second form:
+
+```{r}
+log.mod <- glm(y ~ x1 + I(x1^2) + x2 + I(x2^2), family = "binomial", data = all.df)
+```
+
+#Model paramaeters
+The model parameters can be returned thusly:
+```{r}
+log.mod$coefficients
+```
+
+hence the model, describes the probability of the
+output variable being observed as a function of
+$x_1$ and $x_2$ thusly:
+
+$$P(y) = 28X^2_1 + 29x^2_2 + 2.7x_1 -0.83x_2$$
+
+#Plot the Model
+
+##Predicted Point Probabilities
+
+```{r}
+
+  ##Plot the modelled point probabilities
+all.df2 <- data.frame(all.df, pred = predict(log.mod, type = 'response'))
+pred.plotly <- plot_ly(all.df2, x = ~x1, y = ~x2, z = ~pred, color = ~y, colors = c('#BF382A', '#0C4B8E')) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = 'Predictor 1'),
+                      yaxis = list(title = 'Predictor 2'),
+                      zaxis = list(title = 'Outcome')))
+
+pred.plotly
+```
+#Plot the decision boundary
+##Solve the boundary function
+
+if the model can be repressented by the function:
+$$y = w_0 + x_1w_1 + x^2_1w_2 + x_2w_3 + x^2_2w_4$$
+
+Then by way of algebra (namely completing-the-square):
+
+1. $w_4 \neq 0 \implies x_2 = \pm\frac{\sqrt{w^2_3-4w_4(w_2x_1^2+w_1x_1+w_0-y)}+w_3}{2w_4}$
+2. $w_4 = 0 \implies x_2 = -\frac{w_2x_1^2+w_1x_1+w_0-y}{w_3}$
+
+but for some reason that hasn't yet been made clear to me,
+the decision boundary can be represented by the equation:
+
+$$x_2 = \pm \sqrt{\frac{w_2w_4}{2} - \frac{w_0}{w4} - \frac{w_1x_1}{w_4} - \frac{w_3x^2_1}{w_4}}$$
+##Plot the boundary
+###Create the boundary data frame
+
+```{r, warning = FALSE}
+#X-Axis
+x1 <- seq(min(all.df$x1), max(all.df$x2), length.out = 1000)
+fit <- log.mod
+
+
+#Coefficients
+w0 <- fit$coefficients[1]
+w1 <- fit$coefficients[2]
+w2 <- fit$coefficients[3]
+w3 <- fit$coefficients[4]
+w4 <- fit$coefficients[5]
+
+#Y-Axis
+x2a <- sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+x2b <- -sqrt( w2/2*w4 - w0/w4 - w1/w4*x1 - w3/w4*(x1^2))
+
+#Dataframe
+mod.df <- data.frame(x = x1, yp = x2a, yn = x2b)
+
+
+```
+
+###Base Plot
+Using base packages the 
+```{r}
+
+cols.vec <- rainbow_hcl(3)
+
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+     xlab = "Predictor 1",
+     ylab = "Predictor 2",
+     main = "Categorised Variables" )
+
+
+
+points(mod.df$x, mod.df$yp, type="l", col = cols.vec[3], lwd = 3)
+points(mod.df$x, mod.df$yn, type="l", col = cols.vec[3], lwd = 3)
+```
+###ggplot2
+
+
+```{r}
+col.plot <- ggplot(all.df) +
+  geom_point(data = all.df, aes(y = x2, x = x1, col = y)) + 
+  theme_classic() +
+  labs(x = "Predictor 1", y = "Predictor 2",
+       title = "Discrete Outcome From Predictor Values",
+       col = "Output") +
+  geom_line(data = mod.df, aes(x = x1, y = x2a), col = "purple", lwd = 2) +
+  geom_line(data = mod.df, aes(x = x1, y = x2b), col = "purple", lwd = 2)
+
+col.plot
+```
+

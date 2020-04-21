@@ -1,0 +1,9 @@
+Batch yield and purity
+Description:	The percentage yield from a batch reactor, and the purity of the feedstock.
+Data source:	Simulated data
+Data shape:	241 rows and 2 columns
+Usage restrictions:	None
+Contact person:	Kevin Dunn
+Contact details:	datasets@connectmv.com
+Added here on:	09 January 2011 8:48
+Last updated:	09 January 2011 8:48

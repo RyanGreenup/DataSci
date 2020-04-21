@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+adv \PYG{o}{\PYGZlt{}\PYGZhy{}} read.csv\PYG{p}{(}file \PYG{o}{=} \PYG{l+s}{\PYGZdq{}../.././data/83/4c42c3\PYGZhy{}8dd8\PYGZhy{}4fef\PYGZhy{}b402\PYGZhy{}7e341764d5e9/Advertising.csv\PYGZdq{}}\PYG{p}{,} header \PYG{o}{=} \PYG{k+kc}{TRUE}\PYG{p}{,} sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

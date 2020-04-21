@@ -1,0 +1,70 @@
+\documentclass[]{article}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+%opening
+\title{Simple Linear Regression}
+\author{Week 1}
+
+\begin{document}
+
+\maketitle
+\section{How to Fit a Line to Data}
+
+Given a plot of data a Linear Regression would be the linear function that minimizes the error between the points.\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Capture}
+	\caption{Differing error between linear functions}
+	\label{fig:diferror}
+\end{figure}\\
+The Linear function would be of the form:
+\begin{equation}
+y=w_0+w_1\times x_1+\epsilon
+\end{equation}
+The value $\epsilon$ represents the residual, the difference between the observed value and the value predicted by the model: $\epsilon_j=y_j-\hat{y_j}$.\\
+
+\newpage
+
+To work out the linear function that best fits the points we use a concept called the \textit{cost of a line} and it is the summed value of all the error for a line:\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{coa}
+	\caption{Differing error between linear functions}
+	\label{fig:cost}
+\end{figure}\\
+
+The value of the error would be $\epsilon_j$, because $\epsilon$ can be positive or negative we take the square value such that we have positive numbers and sum them.\\
+Thus the \textit{Residual Sum of Squares} (\textbf{\textit{RSS}}) is:\\
+
+
+\begin{align}
+\sum_{i=1}^{n}[(\epsilon_i)^2]=\sum_{i=1}^{n}[(y_j-\hat{y_j})^2]
+\end{align}
+
+and the best fit for the line is defined as the one that minimimises the RSS.
+\newpage
+\section{How to Minimise the RSS}
+\subsection{The Analytical Solution}
+Obviously the RSS will depend on the line chosen to fit the data, the line depends on two variables, the gradient and intersect, $w_0$ and $w_1$:
+
+\begin{align}
+\sum_{i=1}^{n}[(\epsilon_i)]&=\sum_{i=1}^{n}\big{[}(y_i-\hat{y_i})\big{]}\\
+							&=\sum_{i=1}^{n}\big{[}\big{(}y_i-\small{(}w_0+w_1\times x_1\small{)}\big{)}\big{]}
+\end{align}
+Now given that the value $y_i$ is a constant fixed value that is observed and $x_1$ also refers to a fixed value, this RSS value represents a 3-dimensional parabolic curve:\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{3dgraph}
+	\caption{The variation of RSS given various values of $w_0$ and $w_1$}
+	\label{fig:3d}
+\end{figure}\\
+\newpage
+Thus we now know that the minimum RSS value will occur at a stationary point and this can be solved with calculus.
+
+
+A convex function is a function where a straight line cannot intersect more than twice, a parabola is a convex function. A convex function can only have one minimum.
+
+\section{}
+
+\end{document}

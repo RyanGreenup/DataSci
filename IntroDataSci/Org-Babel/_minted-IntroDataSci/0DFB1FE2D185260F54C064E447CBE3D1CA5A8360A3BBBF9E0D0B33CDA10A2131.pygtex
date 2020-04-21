@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Load Packages}
+\PYG{k+kr}{if}\PYG{p}{(}\PYG{k+kn}{require}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}pacman\PYGZsq{}}\PYG{p}{))\PYGZob{}}
+  \PYG{k+kn}{library}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}pacman\PYGZsq{}}\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}\PYG{k+kp}{else}\PYG{p}{\PYGZob{}}
+  install.packages\PYG{p}{(}\PYG{l+s}{\PYGZsq{}pacman\PYGZsq{}}\PYG{p}{)}
+  \PYG{k+kn}{library}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}pacman\PYGZsq{}}\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+pacman\PYG{o}{::}p\PYGZus{}load\PYG{p}{(}caret\PYG{p}{,} scales\PYG{p}{,} ggplot2\PYG{p}{,} rmarkdown\PYG{p}{,} shiny\PYG{p}{,} ISLR\PYG{p}{,} \PYG{k+kp}{class}\PYG{p}{,} BiocManager\PYG{p}{,}
+               corrplot\PYG{p}{,} plotly\PYG{p}{,} tidyverse\PYG{p}{,} latex2exp\PYG{p}{,} stringr\PYG{p}{,} reshape2\PYG{p}{,} cowplot\PYG{p}{,} ggpubr\PYG{p}{,}
+               rstudioapi\PYG{p}{,} wesanderson\PYG{p}{,} RColorBrewer\PYG{p}{,} colorspace\PYG{p}{,} gridExtra\PYG{p}{,} grid\PYG{p}{,} car\PYG{p}{,}
+               boot\PYG{p}{,} colourpicker\PYG{p}{,} tree\PYG{p}{,} ggtree\PYG{p}{,} mise\PYG{p}{,} rpart\PYG{p}{,} rpart.plot\PYG{p}{,} knitr\PYG{p}{,} MASS\PYG{p}{,}
+               magrittr\PYG{p}{,} EnvStats\PYG{p}{,}tidyverse\PYG{p}{,}tidyr\PYG{p}{,}devtools\PYG{p}{,} bookdown\PYG{p}{,} leaps\PYG{p}{,} car\PYG{p}{,} clipr\PYG{p}{,}
+               tikzDevice\PYG{p}{,} e1071\PYG{p}{)}
+
+
+
+mise\PYG{p}{()}
+\PYG{k+kp}{set.seed}\PYG{p}{(}\PYG{l+m}{0932}\PYG{p}{)}
+\end{Verbatim}

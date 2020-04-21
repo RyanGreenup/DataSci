@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+# Prefix `./` doesn't work
+    # ./ThinkingAboutData/01_Quizz_Chi.html
+
+# ThinkingAboutData/01_Quizz_Chi.html
+# ThinkingAboutData/01_Quizz_Chi.html
+# ThinkingAboutData/01_Quizz_Chi.md
+# ThinkingAboutData/01_Quizz_Chi.pdf
+# ThinkingAboutData/01_Quizz_Chi.Rmd
+
+
+

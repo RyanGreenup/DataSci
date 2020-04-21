@@ -1,0 +1,351 @@
+---
+title: "Final Exam"
+author: "Ryan Greenup 1780515"
+date: "24/10/2019"
+output:
+  html_document: 
+    keep_md: yes
+    toc: yes
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    toc: yes
+header-includes:
+- \input{/home/ryan/Dropbox/profiles/Template/LaTeX/texnotePreamble.sty}
+- \renewcommand*\familydefault{\sfdefault}
+- \usepackage{listings}
+---
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Load Packages
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(caret, scales, ggplot2, rmarkdown, shiny, ISLR, class, BiocManager,
+               corrplot, plotly, tidyverse, latex2exp, stringr, reshape2, cowplot, ggpubr,
+               rstudioapi, wesanderson, RColorBrewer, colorspace, gridExtra, grid, car,
+               boot, colourpicker, tree, ggtree, mise, rpart, rpart.plot, knitr, MASS,
+               magrittr, EnvStats,tidyverse,tidyr,devtools, bookdown, leaps, car, clipr,
+               tikzDevice, e1071, ggbiplot, base, xtable)
+#install.packages("ggbiplot")
+
+mise()
+set.seed(23)
+
+knitTable <- function(table){
+if(isTRUE(getOption('knitr.in.progress'))){
+  kable(table)
+} else {
+  table
+  }
+}
+
+
+
+```
+
+## Import the DataSets
+
+```{r}
+envDF <- read.csv(file = "./dataset/Envdata(2).csv", header = TRUE, sep = ",") 
+knitTable(head(envDF))
+
+admDF <- read.csv(file = "./dataset/Admission(3).csv", header = TRUE, sep = ",")
+admDF %>% head() %>% knitTable()
+```
+
+
+
+
+# Question 1
+
+ 
+This Question uses the data set “Envdata”. The data represents the pollution conditions and maximum wind speed together with the prevalence of Asthma (present or absent of Asthma) associate with several patients in Victoria State. 
+
+
+## Sub Question A
+
+
+**a. Use K Means Clustering method and identify two clusters with K=2.**
+
+
+Now in order to perform $k$-menas clustering with $K=2$ use the `kmeans` function; Be mindful to remove the response variable and the primary key:
+
+```{r}
+envFeat <- subset(envDF, select = -c(patient_id, asthma))
+km.out <- kmeans(envFeat, 2, nstart = 20)
+```
+
+The assignments of the 50 observatoins are contained in `$cluster` and a summary of the clustering model is given by:
+
+```{r}
+km.out
+#km.out$cluster
+km2in <- km.out$tot.withinss
+km2bet <- km.out$betweenss
+```
+## Sub Question B
+
+b. In order to visually display the two clusters obtained in part a, plot the first two principal components and colour according to the k-means classes. 
+. Compare results obtained in parts “a and b” with parts “d and e” and justify most suitable number of clusters for this data set using total within cluster variation and total between cluster variation. 
+
+### First Perform PCA in order to reduce the dimensions of the clustering:
+
+In order to visualise this we will plot the first two principal components, by default we will choose to scale variables:
+
+```{r}
+pcaEnvMod <- prcomp(envFeat, scale = TRUE)
+pcaEnvMod
+```
+
+
+This can be plotted:
+
+
+```{r}
+
+# Create the Data Frame
+EnvDF <- data.frame(
+  envFeat,
+  "PredGroup" = km.out$cluster
+) %>% as_tibble()
+
+
+# Create the PCA Model
+pcaEnvMod <- prcomp(envFeat, scale = TRUE)
+
+## create a DF of PCA Data
+pcaDF <- data.frame(pcaEnvMod$x) %>% as_tibble()
+pcaDF$group <-  factor(km.out$cluster)
+
+# Plot the PCA Reduction
+ggplot(pcaDF, aes(x = PC1, y=PC2, col = group)) +
+  geom_point(size = 4) +
+  labs(col = "Predicted\nGroup",
+       title = "Clustering visualised using PCA",
+       caption = "Circles represent a 90% Confidence Interval from the mean ") +
+  theme_classic() +
+    stat_ellipse(type = 'norm', level = 0.9, lty = 2) 
+  
+  
+  # PC11C <- sum(km.out$centers[1,]* pcaEnvMod$rotation[,1])
+  # PC21C <- sum(km.out$centers[2,]* pcaEnvMod$rotation[,1])
+  # PC12C <- sum(km.out$centers[1,]* pcaEnvMod$rotation[,2])
+  # PC22C <- sum(km.out$centers[2,]* pcaEnvMod$rotation[,2])
+```
+
+
+
+
+
+
+## Sub Question C
+
+c. Construct the misclassification table and misclassification rate and discuss the accuracy of predicting presence of Asthma.  
+
+```{r}
+
+# Now create the confusion Matrix
+  # This package prevents making mistakes
+#  conf.mat <-   caret::confusionMatrix(data = factor(km.out$cluster), reference = factor(envDF$asthma))
+    # We don't know which cluster is truth though...
+
+  # This could otherwise be created by using, always go prediction, reference as a standard
+  k2ConfMat <- table("ClusterPred" = km.out$cluster, "Obsered" = envDF$asthma)
+ k2ConfMat
+ 
+(k2ConfMat[1,1] +k2ConfMat[2,2])/(sum(k2ConfMat))
+ 1-(k2ConfMat[1,1] +k2ConfMat[2,2])/(sum(k2ConfMat)) 
+ 
+  conf.mat <-   caret::confusionMatrix(data = factor(!as.logical(km.out$cluster-1)), reference = factor(envDF$asthma))
+  conf.mat$table
+ 
+```
+
+It isn't at first possible to determine the *True Positive*, *False Negative* or misclassificatoin rates because we don't necessarily know which cluster is indicative of asthma (although for a reasonably well performing model we take an educated guess), in this case most of the asthma cases co-incide with cluster 1 and so claster 1 will be taken as indicative of asthma.
+
+The misclassification rate may be hence be calculated by taking the greater diagonal sum and dividing it by the total (presuming that the model performs better than mere chance). in this case the missclassification rate is 54%:
+
+$$
+\text{M}_c = \frac{39+ 19}{47+ 39+ 19+ 3}
+$$
+
+
+
+## Sub Question D
+
+**d. Alternatively use K Means Clustering method to identify three clusters using K=3.** 
+
+In order to perform $k$-means to create 3 clusters the code mearly needs to be amended for this purpose:
+
+Now in order to perform $k$-menas clustering with $K=2$ use the `kmeans` function; Be mindful to remove the response variable and the primary key:
+
+```{r}
+envFeat <- subset(envDF, select = -c(patient_id, asthma))
+km.out <- kmeans(envFeat, 3, nstart = 20)
+```
+
+The assignments of the 50 observatoins are contained in `$cluster` and a summary of the clustering model is given by:
+
+```{r}
+km.out
+
+#km.out$cluster
+km3in  <- km.out$tot.withinss
+km3bet <- km.out$betweenss
+```
+
+
+## Sub Question E
+
+**e. In order to visually display the three clusters obtained in part d, plot the first two principal components and colour according to the k-means classes.**
+
+Again merely ammending the above code to reflect three clusters:
+
+```{r}
+pcaEnvMod <- prcomp(envFeat, scale = TRUE)
+pcaEnvMod
+```
+
+
+This can be plotted:
+
+
+```{r}
+
+# Create the Data Frame
+EnvDF <- data.frame(
+  envFeat,
+  "PredGroup" = km.out$cluster
+) %>% as_tibble()
+
+
+# Create the PCA Model
+pcaEnvMod <- prcomp(envFeat, scale = TRUE)
+
+## create a DF of PCA Data
+pcaDF <- data.frame(pcaEnvMod$x) %>% as_tibble()
+pcaDF$group <-  factor(km.out$cluster)
+
+# Plot the PCA Reduction
+ggplot(pcaDF, aes(x = PC1, y=PC2, col = group)) +
+  geom_point(size = 4) +
+  labs(col = "Predicted\nGroup",
+       title = "Clustering visualised using PCA",
+       caption = "Circles represent a 90% Confidence Interval from the mean ") +
+  theme_classic() +
+    stat_ellipse(type = 'norm', level = 0.9, lty = 2) 
+
+  km2in
+  km3in
+  
+  km2bet
+  km3bet
+```
+
+Although in this case it isn't necessarily clear what the 3rd category may be, perhaps at risk of developing asthma, an investigation into the biplot of the PC's may allow further interpretation.
+
+## Sub Question F
+
+**f. Compare results obtained in parts “a and b” with parts “d and e” and justify most suitable number of clusters for this data set using total within cluster variation and total between cluster variation.**
+
+* Within Cluster Variation
+ + The within cluster variation corresponding to a 2-cluster model is: 22, 810
+ + The within cluster variation corresponding to a 3-cluster model is: 17, 573
+* Between Cluster Variation
+ + The between cluster variation corresponding to a 2-cluster model is: 14, 784
+ + The between cluster variation corresponding to a 3-cluster model is: 20, 021
+
+The 3-cluster model reduces the squared error from 22K to 17K and increases the between cluster variation from 20k to 14k, this is good evidence to suggest that there may indeed be 3 distinct groups rather than 2 and hence a 3 cluster model is chosen rather than 2.
+
+# Question 2
+** This Question uses the data set “Envdata” used in Question 1**
+
+### Sub-Question 1
+**a. Calculate the mean and the variance for each variable and discuss if scaling is necessary and justify your findings.**
+
+Looking at the mean values and variance:
+
+```{r}
+
+desc.stats <- data.frame(
+Mean = apply(envFeat, 2, mean), # 1 is rows, 2 is cols p. 401 ISL TB
+Variance = apply(envFeat, 2, var) # 1 is rows, 2 is cols p. 401 ISL TB
+)
+desc.stats$variable <- row.names(desc.stats)
+
+descStatsTidy <- pivot_longer(desc.stats, cols = c(Mean, Variance), names_to = "Statistic", values_to = "Value")
+
+ggplot(descStatsTidy, aes(x = variable, y = Value, fill = Statistic)) +
+  geom_col(position = "dodge") +
+  theme_classic() +
+  labs(title = "Descriptive Stats")
+```
+
+It can Clearly be seen that the variance for particulate matter `ppm10` is extremely large and hence we will choose to scale the data.
+
+
+
+    b. Apply scaling and derive the principal components. (R code and output)
+
+    c. Give the Scree Plot and give the percentage variation captured by each principal component.
+
+    d. Select the number of principal components most suitable to represent the dataset and justify your answer.
+
+    e. Derive and give the principal component loading vectors for the given dataset and explain the results/output.
+
+# Question 3
+
+
+
+
+
+$$
+\begin{align}
+\text{H}_0: \enspace \beta = 0 \enspace \text{The Slope Parameter is not significantly different from 0} \\
+\text{H}_a: \enspace \beta \neq 0 \enspace \text{The Slope Parameter \textbf{is} significantly different from 0} 
+\end{align}
+$$
+
+
+# Use Pandoc to Create PDF
+
+```{bash, echo=FALSE, results = 'hide'}
+#name=$(echo $1 |cut -f 1 -d '.')
+#nameout=$name
+
+# Do this twice because it makes the md after converting it to Tex.
+
+ # pandoc --toc --listings -s FinalExam.md -o FinalExam.tex && pdflatex -interaction=nonstopmode FinalExam.tex
+ # xdg-open FinalExam.pdf & disown
+
+# Execute every second time.
+#if [ $flag = true ] ; then
+#     pandoc --toc --listings -s FinalExam.md -o FinalExam.tex && pdflatex -interaction=nonstopmode FinalExam.tex
+#  xdg-open FinalExam.pdf & disown
+#fi
+#flag = !flag
+
+
+# Do this twice because it makes the md after converting it to Tex.
+if test `find "FinalExam.md" -mmin -0.4`
+then
+    echo new enough
+pandoc --toc --listings -s FinalExam.md -o FinalExam.tex && pdflatex -interaction=nonstopmode FinalExam.tex
+xdg-open FinalExam.pdf & disown
+fi
+```
+
+
+
+
+
+

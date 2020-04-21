@@ -1,0 +1,765 @@
+---
+title: "Final Exam"
+author: "Ryan Greenup 1780515"
+date: "24/10/2019"
+output:
+  html_document: 
+    keep_md: yes
+    toc: yes
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    toc: yes
+header-includes:
+- \input{/home/ryan/Dropbox/profiles/Template/LaTeX/texnotePreamble.sty}
+#- \renewcommand*\familyWine Quality{\sfWine Quality}
+- \usepackage{listings}
+---
+
+# Preamble
+In order to load the packages etc use the following code:
+
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+# Load Packages
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(caret, scales, ggplot2, rmarkdown, shiny, ISLR, class, BiocManager,
+               corrplot, plotly, tidyverse, latex2exp, stringr, reshape2, cowplot, ggpubr,
+               rstudioapi, wesanderson, RColorBrewer, colorspace, gridExtra, grid, car,
+               boot, colourpicker, tree, ggtree, mise, rpart, rpart.plot, knitr, MASS,
+               magrittr, EnvStats,tidyverse,tidyr,devtools, bookdown, leaps, car, clipr,
+               tikzDevice, e1071, ggbiplot, base)
+#install.packages("ggbiplot")
+
+mise()
+set.seed(23)
+
+
+knitTable <- function(table){
+if(isTRUE(getOption('knitr.in.progress'))){
+  kable(table)
+} else {
+  table
+  }
+}
+
+```
+
+
+# Import the DataSet
+In order to import the dataset:
+
+```{r}
+glassDF <- read.csv(file = "./dataset/glass(1).csv")
+wineDF <- read.csv(file = "./dataset/Wine_Quality(3).csv")
+winedf <- read.csv(file = "./dataset/Wine_Quality(3).csv")
+
+knitTable(head(winedf))
+knitTable(head(glassDF))
+```
+
+
+# Question 1
+
+
+**This Question uses the data set “glass.csv”. The data represents the weight percent in corresponding oxides and refractive index together with the type of glass (window glasses and non-window glasses).**
+
+## Sub Question A
+**Calculate the mean and the variance for each appropriate variable and discuss if scaling is necessary and justify your findings.**
+The mean and variance can be calculated by using `apply`:
+
+```{r}
+desc.stats <- data.frame(
+Mean = apply(glassDF, 2, mean), # 1 is rows, 2 is cols p. 401 ISL TB
+Variance = apply(glassDF, 2, var) # 1 is rows, 2 is cols p. 401 ISL TB
+)
+desc.stats$variable <- row.names(desc.stats)
+
+descStatsTidy <- pivot_longer(desc.stats, cols = c(Mean, Variance), names_to = "Statistic", values_to = "Value")
+
+ggplot(descStatsTidy, aes(x = variable, y = Value, fill = Statistic)) +
+  geom_col(position = "dodge") +
+  theme_classic() +
+  labs(title = "Descriptive Stats")
+
+```
+
+This clearly indicates that the silicon mean value is extremely high for this reason sensible/useful results will only come from first scaling the data.
+
+## Sub Question B
+**Apply scaling and derive the principal components. R code and output should be clearly stated.**
+The type of glass may be more appropriately interpreted as a response variable, moreover it is non-continuous and for this reason it will be removed from the data frame before applying PCA:
+
+```{r}
+
+glassFeat <- subset(glassDF, select = -c(Type))
+
+pcaMod <- prcomp(glassFeat, scale = TRUE)
+pcaMod
+```
+
+
+## Sub Question C
+
+**c. Explain the percentage variation captured by each principal component. Use and give relevant R output and support your findings.**
+
+### Plot of Proportion of Variance
+
+The amount of variance explained by each component can be explained by using a scree plot:
+
+```{r}
+
+pcaVar <- pcaMod$sdev^2
+pcaVarpr <- pcaVar/sum(pcaVar)
+pcaVarpr <- enframe(pcaVarpr)
+# pcaVarpr <-  dplyr::rename(pcaVarpr,
+#                            "Principal.Component" = name,
+#                            "Proportion.Variance" = value
+#                            )
+
+names(pcaVarpr) <- c("Principal.Component", "Proportion.Variance") # This gives a warning
+
+for (i in 1:nrow(pcaVarpr)) {
+  pcaVarpr[["Principal.Component"]][i] <- paste("PC", i)
+}
+
+
+
+ggplot(data = pcaVarpr, aes( x = Principal.Component, y = Proportion.Variance, group = 1)) +
+  geom_point(size = 3, alpha = 0.7, col = "RoyalBlue")  +
+  geom_line(col = "IndianRed") +
+  labs(x = "Principal Component", y = "Proportion of Variance", title = "Variance Explained by PC") +
+  theme_classic2() +
+  geom_vline(xintercept = 6, col = "purple", lty = 2)
+
+print(pcaVarpr, digits = 1)
+```
+
+### Table Of Proportion of Variance
+
+A table of the proportion of variance values corresponding to each principal component can be returned by printing the created dataframe:
+
+```{r}
+pcaVarpr %>%  knitTable()
+```
+
+### Base Scree Plot
+
+The scree plot could also be produced by using:
+
+```{r}
+screeplot(pcaMod)
+```
+
+### Summary of PCA Model
+```{r}
+summary(pcaMod)
+```
+
+
+## Sub Question D
+
+**Write the first two principal components in terms of the original variables in the given dataset.**
+The first two principal components may be expressed as a linear combination.
+
+### Consider the rotation matrix
+
+```{r}
+print(pcaMod$rotation, digits = 2)
+names(glassDF)
+
+
+print(pcaMod$rotation[,1], digits = 2)
+print(glassDF[1,], digits = 2)
+
+
+print(pcaMod$rotation[,2], digits = 2)
+```
+
+### Express the Linear Combination
+
+In terms of the dot product the first principal components may be expressed as $Z_1$ and $Z_2$ respectively, defined such that:
+
+$$
+\begin{align}
+&\textbf{PC1:} \\
+Z_{1} &= \begin{bmatrix} \text{Ri}_i & \text{Na}&  \text{Mg}_i & \text{Al}_i  & \text{Si}_i  & \text{K}_i  & \text{Ca}_i  & \text{Ba}_i  & \text{Fe}_i  \end{bmatrix} \cdot \begin{bmatrix} -0.54 \\  0.28 \\ -0.11 \\  0.42 \\ 0.22 \\ 0.21 \\ -0.49 \\ 0.25 \\ -0.20  \end{bmatrix} \\
+\ \\
+\ \\
+
+&\textbf{PC2:} \\
+Z_{2} &= \begin{bmatrix} \text{Ri}_i & \text{Na}&  \text{Mg}_i & \text{Al}_i  & \text{Si}_i  & \text{K}_i  & \text{Ca}_i  & \text{Ba}_i  & \text{Fe}_i  \end{bmatrix} \cdot \begin{bmatrix}  0.294 \\  0.255 \\ -0.597  \\ 0.292 \\-0.149  \\-0.154 \\  0.355 \\  0.480 \\-0.067  \end{bmatrix} \\
+\end{align}
+$$
+
+## Sub Question E
+**Using Biplot, explain the association between original variables in the dataset.**
+
+The Biplot may be produced thusly:
+
+```{r}
+biplot(pcaMod, scale = 0, cex = 0.75)
+```
+
+From the bi plot it appears that Ba proides a high positive amout of the contribution to PC2,  Mg contributes a very strong negative contribution to PC2. Ri and Ca provide equally to PC1 and PC2 in a negative and positive sense respectively. Ai and Na provide an equally positive contribution to both PC's. K and Si provide an equal amount of contribution to both PC1 and PC2, positively and negatively respectively.
+
+It appears from the biplot that observation 96 and 95 have a high level of Ca and Ri while 196 and 152 have high Na, Ba and Al.
+
+# Question 2
+**This Question uses the data set “glass.csv” used in Question 1**
+
+
+
+## Sub Question A
+**Use K Means Clustering method and identify two clusters with K=2.**
+
+Now in order to perform $k$-means clustering with $K=2$ use the `kmeans` function; Be mindful to remove the response variable and the primary key:
+
+```{r}
+km.out <- kmeans(glassFeat, 2, nstart = 20)
+```
+
+The assignments of the 50 observatoins are contained in `$cluster` and a summary of the clustering model is given by:
+
+```{r}
+km.out
+#km.out$cluster
+km2in <- km.out$tot.withinss
+km2bet <- km.out$betweenss
+```
+
+
+## Sub Question B
+**b. In order to visually display the two clusters obtained in part a, plot the first two principal components obtained in question 1 and colour according to the k-means classes.** 
+
+```{r}
+
+## create a DF of PCA Data
+pcaDF <- data.frame(pcaMod$x) %>% as_tibble()
+pcaDF$group <-  factor(km.out$cluster)
+
+# Plot the PCA Reduction
+ggplot(pcaDF, aes(x = PC1, y=PC2, col = group)) +
+  geom_point(size = 4) +
+  labs(col = "Predicted\nGroup",
+       title = "Clustering visualised using PCA",
+       caption = "Circles represent a 90% Confidence Interval from the mean ") +
+  theme_classic() +
+    stat_ellipse(type = 'norm', level = 0.9, lty = 2) 
+  
+  
+  # PC11C <- sum(km.out$centers[1,]* pcaEnvMod$rotation[,1])
+  # PC21C <- sum(km.out$centers[2,]* pcaEnvMod$rotation[,1])
+  # PC12C <- sum(km.out$centers[1,]* pcaEnvMod$rotation[,2])
+  # PC22C <- sum(km.out$centers[2,]* pcaEnvMod$rotation[,2])
+```
+
+
+
+## Sub Question C
+**c. Construct the misclassification table and calculate the misclassification rate. Discuss the accuracy of classifying window and non-window glasses when using k-means clustering.**  
+
+```{r}
+
+# Now create the confusion Matrix
+  # This package prevents making mistakes
+#  conf.mat <-   caret::confusionMatrix(data = factor(km.out$cluster), reference = factor(envDF$asthma))
+    # We don't know which cluster is truth though...
+
+  # This could otherwise be created by using, always go prediction, reference as a standard
+  k2ConfMat <- table("ClusterPred" = (km.out$cluster-1), "Obsered" = glassDF$Type)
+ k2ConfMat
+ 
+(k2ConfMat[1,1] +k2ConfMat[2,2])/(sum(k2ConfMat))
+ 1-(k2ConfMat[1,1] +k2ConfMat[2,2])/(sum(k2ConfMat)) 
+ 
+  conf.mat <-   caret::confusionMatrix(data = factor(as.numeric(!as.logical(km.out$cluster-1))), reference = factor(as.numeric(as.logical(glassDF$Type))))
+  conf.mat$table
+ 
+```
+
+The first matrix mismatches classification, using logicals this can be fixed and is shown in the second confusion matrix above.
+
+Presuming that the clustering model performs better (as opposed to worse!) than chance, the prediction 1 matches with the class 1 and hence the misclassification rate may be determined by performing:
+
+$$
+\text{M}_c = \frac{12+ 11}{12+ 140+ 39+ 11} = 0.11
+$$
+
+This shows that the misclassification rate is 0.11 which is fairly accurate. The clusters show good results in correctly clustering type 1 glass. the performance is slightly worse for type 0 glass however this could be because there are less observations.
+
+## Sub Question D
+**d.Alternatively perform Hierarchical Clustering on glass dataset. [Consider Euclidean distance as the dissimilarity measure and the closest distance between two clusters as the maximum distance between them]**
+
+### Creating the Model
+The maximum distance refers to the complete linkage function.
+
+now begin by clustering the observations using complete linkage using the `hclust()` function and specifying the metod as `method = 'complete'`.
+
+By Wine Quality `dist(x)` uses *Euclidean* distance and hence that will be used as the parameter for `hclust`.
+
+```{r}
+hc.comp <- hclust(dist(glassFeat), method = 'complete')
+summary(hc.comp)
+hc.comp
+```
+
+
+
+## Sub Question E
+**e. Display the dendrogram and cut it at a height that results in two distinct clusters.**
+
+### Plot the Dendogram
+
+```{r}
+plot(hc.comp, main = "Dendogram using Complete Linkage", sub="", xlab = "")
+```
+
+### Cut the Tree
+In order to return a vector with the assignment of observations with two categories the `cutree` function can be used:
+
+```{r}
+cutree(hc.comp, k = 2)
+```
+
+## Sub Question F
+**f. In order to visually display the two clusters obtained in part e, plot the first two principal components obtained in question 1 and colour according to the cluster profiles in part e.**
+
+```{r}
+
+# Create the predicted classes by using cutree
+EucDist2Pred <- cutree(hc.comp, k = 2)
+
+
+# Create the Data Frame
+hcDF <- data.frame(
+  glassFeat,
+  "PredGroup" = EucDist2Pred
+) %>% as_tibble()
+
+
+
+## create a DF of PCA Data
+pcaDF <- data.frame(pcaMod$x) %>% as_tibble()
+pcaDF$group <- factor(cutree(hc.comp, 2)-1)
+
+# Plot the PCA Reduction
+ggplot(pcaDF, aes(x = PC1, y=PC2, col = group)) +
+  geom_point(size = 4) +
+  labs(col = "Predicted\nGroup",
+       title = "PCA With Hierarchical Clustering Predictions",
+       caption = "Circles represent a 90% Confidence Interval from the mean ") +
+  theme_classic() +
+    stat_ellipse(type = 'norm', level = 0.9, lty = 2)
+```
+
+
+## Sub Question G
+
+**g. Construct the misclassification table and calculate the misclassification rate. Discuss the accuracy of classifying window and non-window glasses when using hierarchical clustering**
+
+```{r}
+
+# Now create the confusion Matrix
+  # This package prevents making mistakes
+#  conf.mat <-   caret::confusionMatrix(data = factor(km.out$cluster), reference = factor(envDF$asthma))
+    # We don't know which cluster is truth though...
+
+  # This could otherwise be created by using, always go prediction, reference as a standard
+  k2ConfMat <- table("ClusterPred" = (EucDist2Pred-1), "Obsered" = glassDF$Type)
+ k2ConfMat
+ 
+(k2ConfMat[1,1] +k2ConfMat[2,2])/(sum(k2ConfMat))
+ 1-(k2ConfMat[1,1] +k2ConfMat[2,2])/(sum(k2ConfMat)) 
+ 
+  conf.mat <-   caret::confusionMatrix(data = factor(as.numeric(!as.logical(EucDist2Pred-1))), reference = factor(as.numeric(as.logical(glassDF$Type))))
+  conf.mat$table
+
+```
+
+The first matrix mismatches classification, using logicals this can be fixed and is shown in the second confusion matrix above.
+
+Presuming that the clustering model performs better (as opposed to worse!) than chance, the prediction 1 matches with the class 1 and hence the misclassification rate may be determined by performing:
+
+$$
+\text{M}_c = \frac{7+47}{7+ 47+ 144+ 4} = 0.27
+$$
+
+This shows that the misclassification rate is 0.11 which is fairly accurate. The clusters show good results in correctly clustering type 1 glass. the performance is slightly worse for type 0 glass however this could be because there are less observations.
+
+## Sub Question H
+
+**h. Compare results obtained in parts “b and c” with parts “f and g” and justify most appropriate clustering method to classify the dataset as window glasses and non-window glasses.**
+
+```{r}
+km.out$betweenss
+km.out$tot.withinss
+
+summary(hc.comp)
+
+```
+
+
+Here we have the luxury of being able to outright consider the misclassification rate, in this context the misclassification rate is lowest for the clustering and so that would be the appropriate technique to employ.
+
+the between squared error is for the the clustering is 512 and the total within squared error is 806. comparing this to the heirarchical clustering would be interesting if it was easy to have an analogous value returned.
+
+
+# Question 3
+Wine should have 261 observations
+
+
+## Sub Question A
+**a. Identify and state the Quantitative and Qualitative variables in the given dataset.**
+
+```{r}
+knitTable(head(wineDF))
+str(wineDF)
+summary(wineDF)
+dim(wineDF)
+```
+The Wine data is 261 observations of 11 continous predictive variables and one categorical response variable.
+
+
+## Sub Question B
+**b. Construct the box plot for Volatile Acidity, Alcohol, Residual Sugar, Sulphates and pH on the target variable “WineQuality” and interpret your findings.** 
+
+
+
+```{r}
+volplot <- ggplot(data = winedf, aes(x = WineQuality, y = VolatileAcidity, fill = WineQuality)) +
+  geom_boxplot() + 
+  labs(x = TeX("Wine Quality $(Y)$"), y = TeX("Volatile Acidity $(X_2)$"), title = "Wine Quality given Account Balance") +
+  theme_classic2() + 
+  guides(fill = FALSE) +
+  scale_fill_brewer(palette = "Pastel1")
+
+
+alcplot <- ggplot(data = winedf, aes(x = WineQuality, y = Alcohol, fill = WineQuality)) +
+  geom_boxplot() + 
+  labs(x = TeX("Wine Quality $(Y)$"), y = TeX("Alcohol $(X_11)$"), title = "Wine Quality given Account Balance") +
+  theme_classic2() + 
+  guides(fill = FALSE) +
+  scale_fill_brewer(palette = "Pastel1")
+
+
+rsugplot <- ggplot(data = winedf, aes(x = WineQuality, y = ResidualSugar, fill = WineQuality)) +
+  geom_boxplot() + 
+  labs(x = TeX("Wine Quality $(Y)$"), y = TeX("Residual Sugar $(X_4)$"), title = "Wine Quality given Account Balance") +
+  theme_classic2() + 
+  guides(fill = FALSE) +
+  scale_fill_brewer(palette = "Pastel1")
+
+
+sulphplot <- ggplot(data = winedf, aes(x = WineQuality, y = Sulphates, fill = WineQuality)) +
+  geom_boxplot() + 
+  labs(x = TeX("Wine Quality $(Y)$"), y = TeX("Sulphats$(X_10)$"), title = "Wine Quality given Account Balance") +
+  theme_classic2() + 
+  guides(fill = FALSE) +
+  scale_fill_brewer(palette = "Pastel1")
+
+phplot <- ggplot(data = winedf, aes(x = WineQuality, y = Sulphates, fill = WineQuality)) +
+  geom_boxplot() + 
+  labs(x = TeX("Wine Quality $(Y)$"), y = TeX("PH  $(X_8)$"), title = "Wine Quality given Account Balance") +
+  theme_classic2() + 
+  guides(fill = FALSE) +
+  scale_fill_brewer(palette = "Pastel1")
+
+grid.arrange(volplot, alcplot, rsugplot, sulphplot, phplot,  nrow = 3)
+```
+
+
+This clearly shows that  having lower acidity, sulphates, residual sugar is indicative of a better wine, while having a higher alcohol content is indicative of a good wine. It isn't clear if ph is indicative of lower or higher.
+
+None of these differences are outright statiscially signicant however, they are mere trends.
+
+
+## Sub Question C
+**c. Build a logistic regression model to classify the “WineQuality” in terms of Volatile acidity, Alcohol and Residual Sugar. (No need to prove the significance of the model)**
+
+
+
+
+In order to create a logistic model use the `glm` function which is a *generalised linear model* function, because this is just an exponentiated linear function.
+
+* Choose `family = binomial`
+  - categorical variables are not normally distributed because they are not continuous, a binomial distribution is the corresponding distribution for discrete data
+* Choose `link = logit`
+  - Use `probit` for when the seperation of data is distinct, it performs slightly better.
+  - the term *logit* is another word for *log odds*:
+      - $\log{\left(\frac{\text{P}\left(X\right)}{1 - \text{P}\left(X\right)}\right)}$
+
+
+
+
+
+```{r}
+winedf$WineQuality <- factor(winedf$WineQuality)
+
+ModDef <- glm(formula = WineQuality ~ VolatileAcidity + Alcohol + ResidualSugar , family = binomial(link = "logit"), data = winedf)
+contrasts(winedf$WineQuality)
+
+```
+
+The `contrasts` shows that the dummy variables for wine quality have been encoded such that low is 1 and high is 0, this is a better way to do it because it means we do not need to manipulate the data in order to model it, however before creating the model we have factorised the data just to be sure it behaves well.
+
+### Summarise and Inspect the Model
+
+```{r}
+ModDef
+ModDef %>% summary()
+```
+
+this model indicates that the appropriate model is of the form:
+
+$$
+p \left( X \right)= \frac{e^{\beta_0 +  \beta_1 X_1+  \cdots \beta_p Xp}}{1 + e^{\beta_0 +  \beta_1 X_1+  \cdots \beta_p Xp} }
+$$
+by putting in the predicted values we have:
+
+$$
+p \left( X \right)= \frac{e^{9.33 +  6.5 \cdot \text{V.Acid}   -1.09 \cdot \text{Alc}  -0.10 \cdot \text{RSug}}}{1 + e^{9.33 +  6.5 \cdot \text{V.Acid}   -1.09 \cdot \text{Alc}  -0.10 \cdot \text{RSug}}}
+$$
+
+
+## Sub Question D
+**d. Build a logistic regression model to classify the “WineQuality” in terms of Volatile acidity, Alcohol, Residual Sugar, Sulphates and pH.**
+
+
+```{r}
+ModDef2 <- glm(formula = WineQuality ~ VolatileAcidity + Alcohol + ResidualSugar + Sulphates + PH, family = binomial(link = "logit"), data = winedf)
+contrasts(winedf$WineQuality)
+
+```
+
+The `contrasts` again shows that the dummy variables for wine quality have been encoded such that low is 1 and high is 0, this is a better way to do it because it means we do not need to manipulate the data in order to model it. 
+
+
+### Summarise and Inspect the Model
+
+```{r}
+ModDef2
+ModDef2 %>% summary()
+```
+
+## Sub Question E
+**e. Considering the significance of the parameter estimates, select and state the best model out of the models obtained in part c and d to classify the quality of wine. Clearly, explain your answer with proper justification.**
+
+### Significance
+From the summary above it can be seen that Sulphates and PH are non-significant predictor values, with high $p$-values of 0.174 and 0.58 respectively
+
+
+### Residual Deviance
+The deviance of the residuals does not improve between the models despite the added precictors, further evidence to reject the model for fear of over fitting (bias/variance) trade off.
+
+### AIC
+The second model uses more parameters without improving the AIC value, further evidence to reject the model.
+
+### ANOVA
+```{r}
+anova(ModDef, ModDef2)
+```
+
+This indicates that the second model is the superior model
+
+
+
+## Sub Question F
+
+**f. Write down the equation to calculate the probability of getting low wine quality for a given set of predictors using part e.**
+
+The probability of getting low wine quality can be predicted, using the model from e by using the following formula:
+
+$$
+p \left( X \right)= \frac{e^{10.26 +  6.83 \cdot \text{V.Acid}   -1.1 \cdot \text{Alc}  -0.105 \cdot \text{RSug} + 1.7 \cdot \text{Sulph} -0.55 \cdot \text{PH} }}{1 + e^{10.26 +  6.83 \cdot \text{V.Acid}   -1.1 \cdot \text{Alc}  -0.105 \cdot \text{RSug} + 1.7 \cdot \text{Sulph} -0.55 \cdot \text{PH} }}
+$$
+## Sub Question G
+**g. Classify the observations with probability > 0.6 as “low” and “high” otherwise. Hence, calculate the misclassification matrix and misclassification rate and comment on your results.**
+
+### Classify Values
+
+In order to move from the probability to the decision the threshold would have to be specified:
+
+```{r}
+#attach(winedf)
+winedf2 <- subset(winedf, select = c(WineQuality , VolatileAcidity, Alcohol, ResidualSugar, Sulphates, PH))
+
+
+threshold <- 0.6
+ModelPreds <- cbind(winedf, "Probability" = ModDef$fitted.values)
+ModelPreds <- cbind(winedf2, "Probability" = ModDef$fitted.values)
+ModelPreds$prediction <- rep_len(x ="High", length.out = nrow(ModelPreds))
+ModelPreds$prediction[ModelPreds$Probability > threshold] <- "Low"
+ModelPreds$prediction <- as.factor(ModelPreds$prediction)
+#ModelPreds <- ModelPreds[,c(2,6,7,3,4,5)]
+ModelPreds <- subset(ModelPreds, select = c(WineQuality, prediction , VolatileAcidity, Alcohol, ResidualSugar, Sulphates, PH))
+head(ModelPreds)
+knitTable(ModelPreds[1:6,])
+
+
+#Alternative approach
+#threshold <- 0.5
+#Predictions <- ifelse(ModelPreds$Probability < threshold, 0, 1)
+#ModelPreds <- cbind(ModelPreds, "Prediction" = Predictions)
+```
+
+This shows that for the first few points that the prediction accuracy isn't that great (or that possibly I have it backwards in my code). It could be possible that a ROC curve could be used to improve the performance of the model by tuning the threshold value.
+
+### Create the Misclassification matrix
+
+
+```{r}
+#ifelse(ModelPreds$prediction == "no", ModelPreds$prediction <- "Low", ModelPreds$prediction <- "High" )
+#ModelPreds$prediction <- factor(ModelPreds$prediction)
+
+conf.mat <- table(ModelPreds$prediction, ModelPreds$WineQuality, dnn = c("Predicted", "Observed"))
+print(conf.mat)
+
+# It can be a little difficult to determine which one is the prediction using table
+  #if you don't get the order of prediction then observation right, so
+    # you can also use `confusionMatrix` from the `caret` package to triple check.
+
+
+conf.mat2 <- confusionMatrix(ModelPreds$prediction, ModelPreds$WineQuality)
+print(conf.mat2)
+
+```
+
+this Misclassification Matrix may be caluculated by Using:
+
+$$
+\text{M}_c = \frac{ 62 + 7 }{171 + 62+ 7 + 21} = 0.2644
+$$
+
+
+
+The misclassification rate is 0.2644 which is reasonably low which indicates this is a good model, it is possible that this model is however overfit.
+
+
+The $p$-value is highly significant.
+
+
+## Sub Question H
+**h. Calculate four other measures such as True Positive Rate, False Positive Rate, True Negative Rate and False Negative Rate that can be used to assess the accuracy of the model.**
+
+
+
+The true positive rate is the number of positives that are true divided by the number of positives observed
+$$
+\begin{align}
+\textbf{TruePosRate} \text{ is } \textit{Sensitivity} = \frac{\textsf{# of True Positives}}{\textsf{# of True Positives + # of False Negatives}} \\
+\ \\
+\textbf{FalsePosRate} \text{ is } \left( 1-\textit{Sensitivity} \right) = \frac{\textsf{# of False Positives}}{\textsf{# of False Positive + # of True True Negative}}
+\end{align}
+$$
+
+
+
+$$
+\begin{align}
+\textit{Sensitivity} \text{ is } \textbf{TruePosRate}\\
+\textit{Specificity} \text{ is } \textbf{TrueNegRate}
+\end{align}
+$$
+
+A ROC Curve is the TruePosRate (i.e. the Sensitivity) on the $y$-axis against the FalsePosRate (i.e. 1-Sensitivity) on the x-axis, this could be used to improve the model.
+
+### False Negative Rate
+
+The false negative rate is the number of negative observations incorrectly classified
+
+```{r}
+conf.mat
+fnr <- 40/(228+105)   #fnr = fn/pos
+fnr
+```
+
+
+
+### True Negative Rate
+
+```{r}
+conf.mat
+tnr <- 40/(9627+40)   #fnr = tn/neg
+tnr
+```
+
+### True Positive Rate
+
+```{r}
+conf.mat
+tpr <- 105/(228+105)   #tpr= tp/p
+tnr
+```
+
+This is defined:
+
+$$
+\text{TruePos} = \frac{105}{105+40}=0.72
+$$
+
+
+### False Positive Rate
+
+```{r}
+conf.mat
+fpr <- 228/(9627+40)    #fpr=fp/n
+fpr
+```
+
+### Sensitivity
+```{r}
+sens <- 228/(228+9627)
+sens
+```
+
+
+## Sub Question I
+**Mention another supervised learning method that can be used to solve the given problem.**  
+Linear Discriminant Analysis is another technique to perform supervised classification, it is the preferred method when there are more than two output classes .
+
+
+# Use Pandoc to Create PDF
+
+```
+pandoc --toc --listings -s FinalExam.md -o FinalExam.tex && pdflatex -interaction=nonstopmode FinalExam.tex
+xdg-open FinalExam.pdf & disown
+```
+
+```{bash, echo=FALSE}
+#name=$(echo $1 |cut -f 1 -d '.')
+#nameout=$name
+
+# Do this twice because it makes the md after converting it to Tex.
+if test `find "FinalExam.md" -mmin -0.4`
+then
+    echo new enough
+pandoc --toc --listings -s FinalExam.md -o FinalExam.tex && pdflatex -interaction=nonstopmode FinalExam.tex
+xdg-open FinalExam.pdf & disown
+fi
+
+
+```
+
+
+
+$$
+\begin{align}
+\text{H}_0: \enspace \beta = 0 \enspace \text{The Slope Parameter is not significantly different from 0} \\
+\text{H}_a: \enspace \beta \neq 0 \enspace \text{The Slope Parameter \textbf{is} significantly different from 0} 
+\end{align}
+$$
+
+
+
+
+
+
+

@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+hist\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error
+     \PYG{p}{,} breaks \PYG{o}{=} \PYG{l+m}{30}\PYG{p}{,}
+     prob\PYG{o}{=}\PYG{k+kc}{TRUE}\PYG{p}{,}
+     lwd\PYG{o}{=}\PYG{l+m}{2}\PYG{p}{,}
+    main \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Residual Distribution\PYGZdq{}}\PYG{p}{,}
+    xlab \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Distance from the Model\PYGZdq{}}\PYG{p}{,} border \PYG{o}{=} \PYG{l+s}{\PYGZdq{}purple\PYGZdq{}}
+    \PYG{p}{)}
+
+  \PYG{c+c1}{\PYGZsh{} Overlay the Normal Dist Curve}
+x \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}\PYG{o}{:}\PYG{l+m}{100}    \PYG{c+c1}{\PYGZsh{} Stupid base package wants some f(x), this is hacky but easier than stuffing around with lines or defining a function}
+curve\PYG{p}{(}dnorm\PYG{p}{(}x\PYG{p}{,} \PYG{k+kp}{mean}\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{),} sd\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{)),} add\PYG{o}{=}\PYG{k+kc}{TRUE}\PYG{p}{,} col\PYG{o}{=}\PYG{l+s}{\PYGZdq{}purple\PYGZdq{}}\PYG{p}{,} lwd\PYG{o}{=}\PYG{l+m}{2}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{} Draws the actual density function}
+
+\PYG{c+c1}{\PYGZsh{} lines(density(possibleyvals\PYGZus{}conf), col=\PYGZsq{}purple\PYGZsq{}, lwd=2) \PYGZsh{} Draws the observed density function}
+lwr\PYGZus{}conf \PYG{o}{\PYGZlt{}\PYGZhy{}} qnorm\PYG{p}{(}p \PYG{o}{=} \PYG{l+m}{0.05}\PYG{p}{,} \PYG{k+kp}{mean}\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{),} sd\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{))}
+upr\PYGZus{}conf \PYG{o}{\PYGZlt{}\PYGZhy{}} qnorm\PYG{p}{(}p \PYG{o}{=} \PYG{l+m}{1\PYGZhy{}0.05}\PYG{p}{,} \PYG{k+kp}{mean}\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{),} sd\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{))}
+abline\PYG{p}{(}v\PYG{o}{=}upr\PYGZus{}conf\PYG{p}{,} col\PYG{o}{=}\PYG{l+s}{\PYGZsq{}pink\PYGZsq{}}\PYG{p}{,} lwd\PYG{o}{=}\PYG{l+m}{3}\PYG{p}{)}
+abline\PYG{p}{(}v\PYG{o}{=}lwr\PYGZus{}conf\PYG{p}{,} col\PYG{o}{=}\PYG{l+s}{\PYGZsq{}pink\PYGZsq{}}\PYG{p}{,} lwd\PYG{o}{=}\PYG{l+m}{3}\PYG{p}{)}
+abline\PYG{p}{(}v\PYG{o}{=}\PYG{k+kp}{mean}\PYG{p}{(}ResDF\PYG{o}{\PYGZdl{}}Error\PYG{p}{),} lwd\PYG{o}{=}\PYG{l+m}{2}\PYG{p}{,} lty\PYG{o}{=}\PYG{l+s}{\PYGZsq{}dotted\PYGZsq{}}\PYG{p}{)}
+\end{Verbatim}

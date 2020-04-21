@@ -1,0 +1,306 @@
+---
+title: "Logistic Regression Part A"
+author: "Ryan Greenup"
+date: "28 May 2018"
+output:
+  html_document:
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Preamble
+## Load the Packages
+First load in the packages that will be required:
+
+```{r}
+if(require('pacman')){
+    library('pacman')
+  }else{
+    install.packages('pacman')
+    library('pacman')
+  }
+  
+  pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer, colorspace)
+  
+```
+
+##Load in the Dataset
+Load the data set.
+
+```{r}
+
+# Load Dataset ------------------------------------------------------------
+
+all.df <- read.csv(file = "practical06a.csv", TRUE, ",")
+#all.df <- read.csv(file = file.choose(), TRUE, ",")
+
+
+# Convert the Output to a categorical varialbe (factor) -------------------
+all.df$y <- as.factor(all.df$y)
+head(all.df)
+
+
+
+```
+
+#Plot the Data
+Where possible it can be really useful to visualise data
+##Base plot
+Owing to the need to colour the variables, it can be more difficult to use a 
+base plot in this case:
+
+```{r}
+PlotCol.vec <- rainbow_hcl(2)
+
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+     xlab = "Predictor 1",
+     ylab = "Predictor 2",
+     main = "Categorised Variables" )
+```
+
+##Prettier ggplot2
+A better looking plot can be created in ggplot2:
+
+```{r}
+
+# Plot the Data -----------------------------------------------------------
+  ##Outcome by colour
+col.plot <- ggplot(all.df, aes(y = x2, x = x1, col = y)) +
+  geom_point() + 
+  theme_classic() +
+  labs(x = "Predictor 1", y = "Predictor 2",
+       title = "Discrete Outcome From Predictor Values",
+       col = "Output")
+
+col.plot
+
+```
+
+###Side by side plot
+The predictors predict the output, like so:
+
+```{r}
+  ##Side by Side
+outvx1.plot <- ggplot(all.df, aes(y = y, x = x1, col = y)) +
+  geom_point() + 
+  theme_classic() +
+  labs(x = "Predictor 1", y = "Outcome",
+       title = "Discrete Outcome From Predictor Values")
+
+outvx2.plot <- ggplot(all.df, aes(y = y, x = x2, col = y)) +
+  geom_point() + 
+  theme_classic() +
+  labs(x = "Predictor 2", y = "Outcome",
+       title = "Discrete Outcome From Predictor Values") 
+
+
+ggarrange(outvx1.plot, outvx2.plot)
+
+```
+
+
+#Create a Logistic Regression Model
+##Convert the discrete output variable to a factor
+In machine learning discrete variables are known as categorical variables and 
+the dependent variable of a model is known as the output variable.
+
+It is necessary before fitting a logistic regression model to ensure that
+the class of the output variable is as a `factor`, not `numeric` or `integer` 
+because the model may perform suboptimally.
+
+*for the sake of plotting, consider adding another column to the data frame
+such that the output variable is contained both as an integer and a factor 
+within the data frame, it can be useful when arguing with plots.*
+```{r}
+
+# Convert the Output to a categorical varialbe (factor) -------------------
+all.df$y <- as.factor(all.df$y)
+head(all.df)
+```
+
+##Create the Regression Model
+a logistic regression can be modelled thusly using the glm function like so:
+
+```{r}
+log.mod <- glm(y ~ x1 + x2,
+               data   = all.df,
+               family = "binomial")
+```
+
+The family parameter specifies the type of model being built because the `glm()` 
+function can be used to build many different types of regression, in this 
+case `family = "binomial"` tells R to perform a logistic regression
+
+###Model Coefficients
+The model coefficients can be returned thusly:
+```{r}
+
+log.mod$coefficients
+
+```
+
+Thus the model is:
+
+$$\frac{1}{1+e^{-(-33 +0.44x_1+1.2x_2)}}$$
+
+###Making Predictions
+By default the probabilities returned are the 'log-odds' values, 
+the predicted probabilites can be returned by specifying the 
+`type = response` parameter within the `predict()` function.
+
+#Plot the Decision Boundary
+The decision boundary, as a straight line, can be sourced from the model:
+##Solve for the Line
+In this case we have to make the intercept and slope relative to
+the `x2` coefficient being represented on the *y-axis*
+
+```{r}
+ ##The decision boundary, is the line:
+intercept <- (-1)*log.mod$coefficients["(Intercept)"]/log.mod$coefficients["x2"]
+slope     <- (-1)*log.mod$coefficients["x1"]/log.mod$coefficients["x2"]
+
+
+```
+
+
+##Base Plot
+Using base packages the decision boundary can be plotted
+
+```{r}
+
+PlotCol.vec <- rainbow_hcl(3)
+
+plot(x2 ~ x1, col = PlotCol.vec[c(y)], data = all.df, cex = 2,
+     xlab = "Predictor 1",
+     ylab = "Predictor 2",
+     main = "Categorised Variables" )
+abline(intercept, slope, col = PlotCol.vec[3])
+
+```
+
+##ggplot2
+Using ggplot2 the decision boundary can be plotted:
+```{r}
+
+ col.plot +
+   geom_abline(intercept = intercept, slope = slope, lwd = 1, col = "purple")
+```
+
+
+#Probability predictions
+The probability of the features indicating a positive output
+can be viewed thusly:
+
+```{r}
+all.df$prob <- predict(log.mod, type = 'response')
+head(all.df, 8)
+```
+
+
+#Model Visualisation
+There are many ways to visualise the probability model trained by the data.
+
+##Side-On
+From a side on view the model would look like this:
+
+```{r, echo = FALSE}
+
+  xgrid       <-  seq(min(all.df$x1), max(all.df$x1), length.out = 100)
+  ygrid       <-  seq(min(all.df$x2), max(all.df$x2), length.out = 100)
+  
+  xy.surface  <- expand.grid(x1 = xgrid, x2 = ygrid)
+  
+  mod.pred  <- expand.grid(x1 = xgrid, x2 = ygrid)
+mod.pred$pred <- predict(log.mod, newdata = xy.surface, type = "response")
+
+head(mod.pred)
+ 
+all.df3 <- all.df
+all.df3$y <- as.numeric(all.df3$y)-1
+head(all.df3)
+
+ggplot(all.df3, aes(x = x1)) +
+  geom_point(data = all.df3, aes( x = x1, y = y, col = y), size = 8) +
+  guides(col = FALSE) +
+  geom_point(data = mod.pred, aes(y = pred, x = x2), col = "Purple", alpha = 0.2) +
+  labs(title ="Modelled Probability Relative to Second Predictor", x = "First Predictor", y = "Probability of outcome (and/or Observation)")
+
+
+```
+
+##3d Modelled Probability
+The modelled probability of each observation exhibiting the output can be
+visualised as a 3d plot:
+
+```{r, echo = FALSE}
+
+  ##Plot the modelled point probabilities
+all.df2 <- data.frame(all.df, pred = predict(log.mod, type = 'response'))
+pred.plotly <- plot_ly(all.df2, x = ~x1, y = ~x2, z = ~pred, color = ~y, colors = c('#BF382A', '#0C4B8E')) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = 'Predictor 1'),
+                      yaxis = list(title = 'Predictor 2'),
+                      zaxis = list(title = 'Outcome')))
+
+pred.plotly
+
+```
+
+
+##3d Surface Plot
+
+A plot of the model as a 3d probability surface can also be visualised:
+
+###Base Graphics
+
+```{r, echo = FALSE}
+
+  ##Plot the Model surface
+  
+  xgrid       <-  seq(min(all.df$x1), max(all.df$x1), length.out = 100)
+  ygrid       <-  seq(min(all.df$x2), max(all.df$x2), length.out = 100)
+  
+  xy.surface  <- expand.grid(x1 = xgrid, x2 = ygrid)
+  
+  xy.pred     <- predict(log.mod, newdata = xy.surface, type = "response")
+  z.pred      <-  matrix(xy.pred, nrow = 100, ncol = 100)
+  
+  
+  contour(x = xgrid, y = ygrid, z = z.pred,
+          xlab = "Predictor 1",
+          ylab = "Predictor 2",
+          main = "Probability of Outcome")
+ par(mfrow=c(1,1)) 
+  persp(xgrid, ygrid, z.pred,
+        xlim = c(min(all.df$x1), max(all.df$x1)),   #the values domain needs to be adjusted above
+        ylim = c(min(all.df$x2), max(all.df$x2)),          #Make sure to set an appropriate domain
+        # zlim = c(0, 6),
+        theta = -45, phi = 30, d = 0.5,
+        xlab="Predictor 1",
+        ylab="Predictor 2",
+        zlab="Potbability of Output", ticktype = "detailed")
+  title(main="Logistic Regression Model")   
+```
+###Interactive Plotly
+This is better viewed with an interactive *Plotly* graph:
+
+```{r, echo = FALSE}
+
+  model.surface.plotly <- plot_ly(x = ygrid, y = xgrid, z = z.pred) %>%
+    add_surface() %>%
+    layout(
+      title = "Probability of Outcome",
+      scene = list(
+        xaxis = list(title = "Predictor 1",
+                     range = c(min(all.df$x1), max(all.df$x1))),  #You shouldn't need to edit the
+        yaxis = list(title = "Predictor 2",      #The domain here, do it above
+                     range = c(min(all.df$x2), max(all.df$x2))),
+        zaxis = list(title = "Probability of Outcome")
+      ))                                                         
+  model.surface.plotly
+  
+```
+

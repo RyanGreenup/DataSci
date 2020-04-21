@@ -1,0 +1,29 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Practical 04}{1}{Doc-Start}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{Preamble}{1}{Doc-Start}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{(01) Binomial Distribution and Viewing Elements in a Matrix}{2}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Create Binomial Values}{2}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Create a matrix of Binomial Values}{2}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Looping through a matrix}{2}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{(02) Visualise Data Based on a Condition}{3}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Create the Conditional Matrix}{3}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Plot the Conditional Matrix}{3}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Base Plot}{3}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{Rotation}{4}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{Using \texttt {ggplot2}}{4}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{As a Function}{6}{Item.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subparagraph}{Use Data Frames (not expand.grid())}{7}{Item.4}%

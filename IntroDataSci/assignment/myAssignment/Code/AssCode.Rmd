@@ -1,0 +1,418 @@
+---
+title: Assignment; Introduction to Data Science
+output: html_notebook
+---
+# Preamble
+
+First Load all the packages etc into the script, I personally use the following:
+
+```{r setup, include=FALSE, include = FALSE, results = "hide", eval = TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+
+
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(caret, scales, ggplot2, rmarkdown, shiny, ISLR, class, BiocManager, corrplot, plotly, tidyverse, latex2exp, stringr, reshape2, cowplot, ggpubr, rstudioapi, wesanderson, RColorBrewer, colorspace, gridExtra, grid, car, boot, colourpicker, tree, ggtree, mise, rpart, rpart.plot, knitr, MASS, magrittr, envstats)
+  #Mass isn't available for R 3.5...
+
+set.seed(2655087) # Set the seed such that we might have reproducable results
+
+# Wipe all the damn variables to prevent mistakes
+mise()
+
+
+
+kabstr <- function(df){
+  
+data.frame(variable = names(df),
+           class = sapply(df, typeof),
+           first_values = sapply(df, function(x) paste0(head(x),  collapse = ", ")),
+           row.names = NULL) %>% 
+  kable()
+  
+} # Pretty Structure Print
+
+```
+
+# Question 01
+Consider “CPU_Performance.csv” dataset to answer the following questions.
+
+## 1. Explore the given dataset and identify the attributes of CPU that have linear association with CPU performance.
+### Import and inspect the dataset
+The data set can be imported by using the `read.csv` function by specifying a relative path directory:
+
+```{r}
+cpu <- read.csv(file = "./Datasets/CPU.csv", header = TRUE, sep = ",")
+head(cpu)
+```
+
+Now inspect the structure, dimensions and summary of the dataset:
+
+```{r}
+summary(cpu)
+str(cpu)
+dim(cpu)
+
+```
+
+From this we can see that there are 6 predictors for the performance of cpu
+
+### Consider Correlation
+
+in order to determine which ones have a linear association, take various correlation plots:
+
+```{r}
+corrplot(corr = cor(cpu), method = "number", type = "lower", title = "CPU Performance", diag = FALSE)
+```
+
+From this plot it can be seen that:
+
+* Minimum Main Memory
+* Maximum Main Memory
+
+Are strongly postively correlated with CPU Performance, while:
+
+* Cache Size
+* Minimum Channels
+* Maximum Channels
+
+Are weakly correlated with CPU performance.
+
+CPU Cycle time is weakly negatively correlated with performance and may not be useful predictor of performance.
+
+However we may elect to include cycle time because from a theoretical perspective cycle time should be predictive of CPU performance, the weak correlation is likely more indicative of the performance measure than the actual capacity of the CPU, perhaps, for example this method may benefit unduely from memory rather than from raw speed.
+
+### MultiColinearity
+The minimum and maximum amount of memory appears to be strongly positively correlated, indicating that it may be appropriate to consider interaction of these two variables.
+
+### Linearity
+Although the pearson correlation Coefficient measures the strength of the linear relationship between variables, the data may have a non-linear tendency that may compromise the model's capacity to forecast, hence we will consider the overall scatterplots to visually consider assumptions of homoskedasticity and linearity:
+
+```{r}
+pairs(cpu, cex = 0.05, col = "RoyalBlue")
+```
+
+This clearly demonstrates that the Number of channels has a non-constant variance with respect to performance and that the cycle time has a non-linear relationship, probably hyperbolic or quadratic.
+
+It would violate assumptions taken in linear regression to use this variable in linear regression and it would be hence innapropriate to include it.
+
+So instead we will consider the inverse of Cycle Time in order to get a linear model, more over it stands to reason the cpu performanc will by proportional to the frequency of the cpu rather than the period, further evidence justifying this transformation.
+
+```{r}
+cpu_invCyc <- cpu
+cpu_invCyc$CycleTime <- cpu$CycleTime^-1
+names(cpu_invCyc)[1] <- "freq"
+
+corrplot(corr = cor(cpu_invCyc), method = "number", type = "lower", title = "CPU Performance", diag = FALSE)
+
+```
+
+A similar analysis demonstrates that assuming quadratic behaviour for Cycle time produces a slightly lower $\rho$ value than a hyperbolic.
+
+Assuming this type of a relationship now makes cycle time a weakly correlated positive predictor.
+
+## 2. Select the most suitable attribute of CPU that can be used to predict accurately the performance of CPU using Simple Linear Regression. Justify your choice of the attribute.
+
+All attributes seem to be correlated with performance, however Maximum and Minimum performance seem to be correlated with each other and it may hence be in appropriate (overparameterisation) to include both these variables in the model (perhaps minimum memory drives maximum memory which in turn drives performance?)
+
+Moreover CycleTime^-1 is correlated with minimum memory more highly than it is correlated with performance, so again it may be inappropriate to include cycletime^-1 and Main memory, perhaps e.g. lower higher cycletime^-1 means more memory is required and only the memory improves performance?
+
+We will reject assumptions of significant multicolinearity for $\rho$ values of $\approx$ 0.5, this could be a result of both variables being correlated with performance, however the stron corelation previously mentioned needs to be considered.
+
+### multiColinearity
+
+Multicollinearity increases the standard errors of the coefficients. Increased standard errors in turn means that coefficients for some independent variables may be found not to be significantly different from 0. In other words, by overinflating the standard errors, multicollinearity makes some variables statistically insignificant when they should be significant. Without multicollinearity (and thus, with lower standard errors), those coefficients might be significant. [^mtab]
+
+[^mtab]: [Handling Multicollinearity in Regression Analysis](https://blog.minitab.com/blog/understanding-statistics/handling-multicollinearity-in-regression-analysis)
+
+In order to deal with this we will fit a greedy model with all predictors and then use backwards selection to remove variables that are correlated with each other, if the R^2 and RMSE is not significantly compromised by this, the variables will be kept out of the model.
+
+```{r}
+cpu.lm_greedy <- lm(Performance ~ ., data = cpu_invCyc)
+summary(cpu.lm_greedy)
+
+AIC(cpu.lm_greedy)
+BIC(cpu.lm_greedy)
+
+```
+
+As anticipated CycleTime^-1 is non-significant and so is the number of channels, using backward substitution and removing these variables gives the model:
+
+(be mindfuld that we could have used forward selection and removed other variables instead, we would have gotten a similar but slightly different model)
+
+```{r}
+cpu.lm_cleaned <- lm(Performance ~ . -CycleTimeInv -MinimumNumberOfChannels, data = cpu_invCyc)
+summary(cpu.lm_cleaned)
+AIC(cpu.lm_cleaned)
+BIC(cpu.lm_cleaned)
+```
+
+Removing these variable did not significantly affect the R^2 value (as in the amount of variation explained by the model) or the RMSE, a measurement of the misclassification of the model.
+
+However Maximum Main Memory is still in this model and it is significant, so for this reason it will remain in the model.
+
+It somewhat reduced the BIC and AIC, further evidence to accept this model
+
+
+
+This will prevent over parameterisation and will prevent our model from having too much variance, it will increase model bias but this would be appropriate.
+
+## 3. Model the performance of CPU using the attributes in the dataset, obtain the optimal model and  Interpret your findings.
+
+The model suggests that the following variables are highly significant owing to a very low p-value:
+
+* Minimum Main Memory
+* Maximum Main Memory
+* Cache Size
+* Maximimum Number of Channels
+
+These variables are all positively associated with cpu performance. i
+
+That is to say, these variables may be included in the model with a very low probability of incorrectly rejecting the hypothesis that there is no relationship between the variables, be careful this is not evidence that this model, or even a linear model is appropriate, merely that there isnt not a relationship between the variables, more over, some of these predictors were not homoskedastic and hence these p-values may not be indicative.
+
+## 4. Carry out model diagnostics and comment your findings.
+Although the R^2 value for this model is quite high and the rmse is less than the standard deviation of performance, the underlying assumptions required for linear regression, namely homoskedasticity of variables and , have been violated, we expect this to be represented in resiudal analysis and we will deal with it shortly
+
+```{r}
+plot(cpu.lm_cleaned)
+```
+
+these residuals are non-normal, in conjuction with the right-skewed histograms we may consider a log-transformation of the predictors, however our data has zeroes in it so instead wil will use a sqrt transform on the predictors.
+
+Because the variance of the data increases over the fitted values a log-transform may be appropriate, although we may consider using a sqrt transform in order to use the same transform across variables.
+
+because the variance is non-constant we will consider a concave transform of the predictors e.g. sqrt(y) or log (y), we have zeroes in the predictors so we choose root-transform of the response (Y).
+
+## 5. Suggest an appropriate transformation to overcome the issues in the previous method.
+
+Transforming data is a contentious issue [^paper]
+
+[^paper]: [Implications of Log Transform](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4120293/)
+
+and should be applied with caution, for example consider using the RSS method  on $\log (Y) = A \log(x) + B$ this will work, sure but it won't work as well as a numerical solution for $y = b\cdot e^{ax}$, it's only, empircally, 90 % as accurate.
+
+for one it appears that the cpu performance is not normally distributed but log-normal, hence we will fit that in the model.
+
+
+```{r}
+ggplot(data = cpu, aes(x = Performance)) + 
+  geom_histogram()
+```
+
+Let's go one further and consider the distribution of every variable:
+
+```{r}
+cpu.melt <- melt(data = cpu)
+#cpu.melt$value <- sqrt(cpu.melt$value)
+head(cpu.melt)
+ggplot(data = cpu.melt, aes(x = value)) + 
+stat_density() + 
+facet_wrap(~variable, scales = "free")
+```
+
+all these distributions are right-skewed, so we consider a log-normal distribution
+
+We should consider a log-normal distribution when he residual’s standard deviation is proportional to your fitted values which we can see from our residual diagnostics above [^stathowto]
+
+[^stathowto]: [stathowto](https://www.statisticshowto.datasciencecentral.com/probability-and-statistics/skewed-distribution/)
+
+[Some Info on Skewed Right Dist](https://www.itl.nist.gov/div898/handbook/eda/section3/histogr6.htm)
+
+[Info on DistTypes](https://onlinelibrary.wiley.com/doi/pdf/10.1002/9781119197096.app03)
+
+Although the sqrt will not be a powerful enough transformation for this, which can be seen from the histograms which I'll generate later.
+
+This leaves us with two choises:
+
+* take log(x+1)
+* Perform a box-cox transform
+  - This is suitable here because none of the data is negative [^forumpost]
+  
+[^forumpost]: [A post on Discuss Analytics](https://discuss.analyticsvidhya.com/t/methods-to-deal-with-zero-values-while-performing-log-transformation-of-variable/2431/5)
+
+
+### use sqrt transformation
+
+
+```{r}
+cpu_sqrt <- sqrt(cpu)
+cpu.melt <- melt(data = cpu_sqrt)
+#cpu.melt$value <- sqrt(cpu.melt$value)
+head(cpu.melt)
+ggplot(data = cpu.melt, aes(x = value)) + 
+stat_density() + 
+facet_wrap(~variable, scales = "free")
+```
+
+cache size still looks rediculous, let's look at the pairs again:
+
+```{r}
+pairs(cpu_sqrt, cex = 0.3)
+```
+
+The sqrt transform simply isn't a strong enough transformation, let's instead make a log-transform  by using a $log(x+1)$ transform:
+
+```{r}
+pairs(log(cpu+1), cex = 0.2)
+
+```
+
+
+
+
+```{r}
+cpu_log <- log(cpu+1)
+cpu_log
+cpu.loglm <- lm(formula = Performance ~ ., data = cpu_log )
+summary(cpu.loglm)
+plot(cpu.loglm)
+
+AIC(cpu.loglm)
+BIC(cpu.loglm)
+
+```
+
+So in this has resulted in the average Residual being $e^{0.43}$ and an AIC of 250, but let's consider just log transforming the performance:
+
+```{r}
+cpu_LogY <- cpu
+cpu_LogY$Performance <- log(cpu_LogY$Performance)
+pairs(cpu_LogY, cex = 0.1)
+```
+
+Following tis transformation it appears as if all variables follow a $\sqrt{x}$ distribution and cycle time is hyperbolic
+
+
+```{r}
+
+cpu.logY.lm <- lm(I(log(Performance)) ~ ., data = cpu) 
+cpu_log
+summary(cpu.loglm)
+plot(cpu.loglm)
+
+AIC(cpu.loglm)
+BIC(cpu.loglm)
+
+```
+ similar AIC/BIC, similar R^2, similar RSE so we accpet only a log transform of performance, probably non-linear relations on the other data are described by something other than being a log (e.g. Cycle really looks hyperbolic)
+ 
+the residuals are all more or less normal at this stage so we will leave it at that and worry about polynomials in a bit.
+
+
+#### Fit a model and use backwards selection
+
+#### Consider interactions
+
+Use a tree to look at interactions
+
+```{r}
+cpu.tree <- tree(Performance ~ ., data = cpu_invCyc)
+plot(cpu.tree)
+text(cpu.tree, pretty = 1, cex = 0.7)
+```
+
+This demonstrates that Main Memory is the biggest predictor of the CPU Performance, if the main memory is high then the number of channels is influential, it is not influential otherwise, so perhaps there is interaction between these two terms.
+
+Cache Size seems influential only low max memory or high max memory but lowMinMemory, however low min memory implies low max memory, so perhaps cache size has a greater effecct when main memory is low, let's try .
+
+We'll use the maximums because that's what tree suggests and they haven't been included in the model as features yet anyway.
+
+Well include two way and three way interaction and use backwards selection to prune the model.
+
+You can't plot residuals of functions that have an I() term [^stack] in the response
+
+[^stack]: [abline is the problem when its called inside qq plot](https://stackoverflow.com/questions/40572124/plot-lm-error-operator-is-invalid-for-atomic-vectors)
+
+
+
+Remember that backwards selection must be one at a time
+
+```{r}
+cpu_invCyc_LogPerf <- cpu_invCyc
+cpu_invCyc_LogPerf$Performance <- log(cpu$Performance)
+cpu.loglm <- lm(formula = Performance ~ . +I(MaximumMainMemory * MaximumNumberOfChannels), data = cpu_invCyc_LogPerf)
+summary(cpu.loglm)
+
+AIC(cpu.loglm)
+BIC(cpu.loglm)
+```
+
+Minimum numer of Channels is the least significant and it is strongly correlated with maximum Number of Channels and so it is dropped
+
+
+```{r}
+cpu_invCyc_LogPerf <- cpu_invCyc
+cpu_invCyc_LogPerf$Performance <- log(cpu$Performance)
+cpu.loglm <- lm(formula = Performance ~ . -MinimumNumberOfChannels +I(MaximumMainMemory * MaximumNumberOfChannels), data = cpu_invCyc_LogPerf)
+summary(cpu.loglm)
+
+AIC(cpu.loglm)
+BIC(cpu.loglm)
+```
+
+Minimum Main Memory is not significant, it is also strongly correlated with Maximum main memory and so we elect to remove it from our model (i.e. Max will predict min so it only serves to over parameterise)
+
+
+
+```{r}
+cpu_invCyc_LogPerf <- cpu_invCyc
+cpu_invCyc_LogPerf$Performance <- log(cpu$Performance)
+cpu.loglm <- lm(formula = Performance ~ . -MaximumMainMemory -MinimumNumberOfChannels +I(MaximumMainMemory * MaximumNumberOfChannels), data = cpu_invCyc_LogPerf)
+summary(cpu.loglm)
+
+AIC(cpu.loglm)
+BIC(cpu.loglm)
+```
+
+The interaction term is no longer significant and so it is removed:
+
+
+```{r}
+cpu_invCyc_LogPerf <- cpu_invCyc
+cpu_invCyc_LogPerf$Performance <- log(cpu$Performance)
+cpu.loglm <- lm(formula = Performance ~ . -MaximumMainMemory -MinimumNumberOfChannels , data = cpu_invCyc_LogPerf)
+summary(cpu.loglm)
+
+plot(cpu.loglm)
+
+AIC(cpu.loglm)
+BIC(cpu.loglm)
+```
+
+All terms are significant and the residuals are sufficiently normal, however there appears to be pattern in the residuals, for this we may consider transforming the predictor variables, we will consider this in the next question by fitting polynomial models.
+
+# Question 02
+Consider “CPU_Performance.csv” dataset to answer the following questions.
+
+The cycle time is the period, the inverse of which is the frequency, we may expect cpu requency to be proportional to performance and the data appears hyperbolic, so we choose a hyperbolic model for CPU performance.
+
+## 1. Select the most suitable attribute of CPU that can be used to predict accurately the performance of CPU using Polynomial Regression. Justify your choice of the attribute.
+
+### visualise the correlation
+
+## 2. Use 10-fold cross-validation to select the optimal polynomial regression model.
+## 3. Comment on the accuracy of the model.
+
+### Consider a hypoerbolic model
+The cycle time is the period, the inverse of which is the frequency, we may expect cpu requency to be proportional to performance and the data appears hyperbolic, so we choose a hyperbolic model for CPU performance.
+
+## 4. Carry out model diagnostics and comment your findings.
+
+# Question 03
+Consider “Wine_Quality.csv” dataset to answer the following questions.
+
+## 1. Divide the dataset into Training set with 4000 observations and assign rest of the observations into Test set. [Use set.seed as 10 to generate same randomness.]
+## 2. Build a decision tree model to predict the Quality of Wine. Hence, identify the attributes that contribute in creating a Quality Wine.
+## 3. Comment on the performance of the model obtained.
+## 4. Manufacturer classifies the wine quality as high if WineQuality > 6 and low otherwise. Create a new variable to categorise it as high or low and name it “Wine_Cat”. Build a decision tree model to classify the Quality of Wine.
+
+
+
+

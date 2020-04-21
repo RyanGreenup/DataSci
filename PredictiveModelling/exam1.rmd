@@ -1,0 +1,109 @@
+---
+title: "99 Final Exam"
+tags: [Notebooks/Predictive Modelling]
+date: 2018-June-4
+author: "Ryan Greenup (1780 5315)"
+# output:
+#   rmarkdown::html_document:
+#     theme: lumen
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+    #Possible themes are cayman, tactile, architect, leonids, hpstr
+---
+
+
+
+#Preamble
+##Clear Latent Variables
+First clear latent variables that could be leftover from past work
+```{r}
+rm(list = ls())
+```
+##Load Packages
+Now load all the necessary packages:
+```{r}
+
+if(require('pacman')){
+    library('pacman')
+  }else{
+    install.packages('pacman')
+    library('pacman')
+  }
+  
+  pacman::p_load(ggmap, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr, tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2, rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer, colorspace, prettydoc, glmnet)
+  
+```
+
+##Set Working Directory
+It is not necessary to set the working directory because this is a markdown file, the working directory is automatically set to the location of file
+
+##Load the data
+the data can be loaded using a relative file path, because the working directory is automatically set to
+the file location
+
+```{r}
+forest1.df <- read.csv(file = "forest1.csv", header = TRUE, ",")
+forest2.df <- read.csv(file = "forest2.csv", header = TRUE, ",")
+```
+
+#(a+b) Compute the Column Means
+Use a for loop to calculate the column means for the training data `forest1.df`
+and automatically put these means over missing `NA` values in both the training
+and testing data sets `forest1.df` and `forest2.df`.
+
+It is important to use the training means (rather than) the testing means
+because this can impede the performance of the model (due to data leakage)
+
+```{r}
+
+
+for (i in 1:ncol(forest1.df)) {
+  if (is.numeric(forest1.df[,i])) {
+    forest1.df[is.na(forest1.df[,i]),i] <- mean(forest1.df[,i], na.rm = TRUE)
+  }
+}
+
+##Make sure to use the testing means not the training means
+for (i in 1:ncol(forest2.df)) {
+  if (is.numeric(forest2.df[,i])) {
+    forest2.df[is.na(forest2.df[,i]),i] <- mean(forest1.df[,i], na.rm = TRUE)
+  }
+}
+
+
+if(!(sum(is.na(forest1.df)) + sum(is.na(forest1.df)))){
+  print("The cleaning was successfull")
+}
+
+```
+
+Now export the cleaned data
+
+```{r}
+write.csv(x = forest1.df, file = "forest3.csv")
+write.csv(x = forest2.df, file = "forest4.csv")
+  
+```
+
+#(c) Compute the Standard Deviation and mean value for each column
+In order to do this we need to remove the first column because it is
+non-numeric, for the love of God remember that the numbers mightn't 
+line up anymore.
+
+```{r}
+
+TrainMeanCol.vec <- sapply(X = forest1.df[,-1], FUN = mean)
+TrainSDCol.vec <- sapply(X = forest1.df[,-1], FUN = sd)
+
+data.frame("Column Names" = names(forest1.df[,-1]), "Mean Values" = TrainMeanCol.vec, "Standard Deviation" = TrainSDCol.vec) %>% print()
+
+```
+
+#(d) Standardising Data
+The answer is the first one:
+
+i. Divide each value by the standard deviation of the column, and subtract the column mean from the result
+
+

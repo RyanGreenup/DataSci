@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Orthogonal (fixes the correlation between the coefficients))}
+
+polymodel\PYGZus{}Orth \PYG{o}{\PYGZlt{}\PYGZhy{}} lm\PYG{p}{(}Sales \PYG{o}{\PYGZti{}} poly\PYG{p}{(}x \PYG{o}{=} TV\PYG{p}{,} degree \PYG{o}{=} \PYG{l+m}{3}\PYG{p}{,} raw \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{),} data \PYG{o}{=} adv\PYG{p}{)}
+\PYG{k+kp}{summary}\PYG{p}{(}polymodel\PYGZus{}Orth\PYG{p}{)}
+\end{Verbatim}

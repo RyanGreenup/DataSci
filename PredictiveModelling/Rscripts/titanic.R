@@ -1,0 +1,210 @@
+
+# Preamble ----------------------------------------------------------------
+##Clear latent variables
+rm(list = ls())
+
+##Set working directory and load packages
+
+setwd.loadpac <- function() {
+  
+  if(require('pacman')){
+    library('pacman')
+  }else{
+    install.packages('pacman')
+    library('pacman')
+  }
+  
+  pacman::p_load(ggmap, sca, plotly, EnvStats, ggplot2, GGally, corrplot, dplyr,
+                 tidyr, stringr, reshape2, cowplot, ggpubr, reshape2, ggplot2,
+                 rmarkdown, dplyr, plotly, rstudioapi, wesanderson, RColorBrewer)
+  
+  #Use the Rstudio API to get the working directory
+  
+  current_path <- getActiveDocumentContext()$path 
+  setwd(dirname(current_path ))
+  print( getwd() )
+  
+}
+
+setwd.loadpac()
+
+
+# Load Dataset ------------------------------------------------------------
+
+train.df <- read.csv(file = "titanictrain.csv", TRUE, ",")
+
+##Replace missing values with mean value
+
+train.df$Age[is.na(train.df$Age)] <- mean(train.df$Age, na.rm = TRUE)
+
+
+# Plot the Titanic Surivor Info -------------------------------------------
+
+#Base Plot
+##Numeric
+PlotCol.vec <- rainbow_hcl(3)
+plot(x = train.df$Pclass, y = train.df$Age, col = PlotCol.vec[train.df$Survived + 1], pch = 16, cex = 2)
+
+
+##Factors
+###Create Categorical Factors
+train.df$Pclass <- as.factor(train.df$Pclass)
+train.df$Survived <- as.factor(train.df$Survived)
+###Create the Plot (Box Plot)
+PlotCol.vec <- rainbow_hcl(2)
+plot(x = train.df$Pclass, y = train.df$Age, data = train.df,
+     col = PlotCol.vec[train.df$Survived], pch = 16,
+     xlab = "Passenger Class", ylab = "Passenger Age",
+     main = "Titanic Survivors")
+
+#GGplot
+
+###Create Categorical Factors
+train.df$Pclass <- as.factor(train.df$Pclass)
+train.df$Survived <- as.factor(train.df$Survived)
+
+
+ggplot(train.df, aes(x = Pclass, y = Age, col = Survived)) +
+  geom_point(lwd = 4) +
+  labs(title = "Titanic Survivors", x = "Passenger Class", y = "Passenger Age") +
+  scale_color_manual(name="Passenger Fate",
+                     labels=c("Survived", "Perished"),
+                     values=rainbow_hcl(2))
+
+#Model Selection
+##Build Various Models
+twovar.mod  <- glm(Survived ~ Age + Pclass, family = binomial(link = "logit"), data = train.df) 
+fourvar.mod <- glm(Survived ~ I(Age>13) + Age + Pclass + Sex, family = binomial(link = "logit"), data = train.df) 
+quad.mod    <- glm(Survived ~ I(Age^2) + Pclass + Parch, family = binomial(link = "logit"), data = train.df)
+##Select the lowest AIC
+ModAIC.vec <- c(summary(twovar.mod)$aic, summary(fourvar.mod)$aic, summary(quad.mod)$aic) 
+mod <- switch(EXPR = which.min(ModAIC.vec), twovar.mod, fourvar.mod, quad.mod) 
+print("Best fit: ") 
+print(mod$call)
+##Store the modelled probability
+pred <- predict(mod, type = 'response')
+train.df$SurvivalProb <- pred
+train.df <- train.df[,c(1, 2,13,3:12)]
+
+#Using the ROC to determine the Prediction Threshold
+##Function to compute sensitivity
+sensitivity <- function(probability, observation, threshold){
+  
+  PredObs <- ifelse(probability < threshold, 0, 1)
+  #sensitivity is the rate of true positives, so (no of True Pos)/(no. of obs pos)
+  TruePosPred.n <- sum(as.numeric(PredObs == 1) * as.numeric(observation == 1)) 
+      #No. of true observations predictived to be true
+  ObsPos.n <- sum(observation == 1)
+  return(TruePosPred.n/ObsPos.n)
+} #observation and ground_truth are synonymous
+
+
+##Function to compute specificity
+specificity <- function(probability, observation, threshold){
+        PredObs <- ifelse(probability < threshold, 0, 1)
+        #sensitivity is the rate of true positives, so (no of True Pos)/(no. of obs pos)
+        TrueNegPred.n <- sum(as.numeric(PredObs == 0) * as.numeric(observation == 0)) 
+            #No. of true observations predictived to be true
+        ObsPos.n <- sum(observation == 0)
+        return(TrueNegPred.n/ObsPos.n)
+        } #observation and ground_truth are synonymous
+
+##Function to calculate FalsePos and TruePos Rate  
+tpr <- sensitivity
+fpr <- function(probability, observation, threshold){
+  specificity.val <- specificity(probability, observation, threshold)
+  return(1 - specificity.val)
+} 
+cpredr <- function(probability, observation, threshold){
+  specificity.val <- specificity(probability, observation, threshold)
+  sensitivity.val <- sensitivity(probability, observation, threshold)
+  return(sensitivity.val + specificity.val)
+} #This is the rate of correct Predictions  
+acc <- function(probability, observation, threshold){
+  
+ PredObs <- ifelse(probability < threshold, 0, 1)
+ TrueNegPred.n <- sum(as.numeric(PredObs == 0) * as.numeric(observation == 0)) 
+ TruePosPred.n <- sum(as.numeric(PredObs == 1) * as.numeric(observation == 1)) 
+ totalpop <- nrow(train.df)
+ return((TrueNegPred.n+TruePosPred.n)/totalpop)
+}
+ 
+
+##Compute ROC values
+  #The ROC values are the truepos rate and falsepos rate that 
+  #occur for various threshold values, they can be calculated with a loop:
+
+  ###Create various threshold values
+  steps <- 10^3
+  threshold <- seq(0,1, length.out = steps)
+  ###Create the dataframe
+  roc.df <- data.frame("Threshold" = 0, "FalsePosR" = 0, "TruePosR" = 0,
+                       "CorrectPredRate" = 0, "Accuracy" = 0)
+    ####The loop will run faster if the dataframe is already the correct size
+      #NRows is steps and NCol 4
+      roc.df[nrow(roc.df)+steps,] <- NA
+  ###Create the dataframe
+      for(i in 1:steps){
+        roc.df[i, "Threshold"] <- threshold[i]
+        roc.df[i, "FalsePosR"] <- fpr(train.df$SurvivalProb, train.df$Survived, threshold[i])
+        roc.df[i, "TruePosR"] <- tpr(train.df$SurvivalProb, train.df$Survived, threshold[i])
+        roc.df[i, "CorrectPredRate"] <- cpredr(train.df$SurvivalProb, train.df$Survived, threshold[i])
+        roc.df[i, "Accuracy"] <- acc(train.df$SurvivalProb, train.df$Survived, threshold[i])
+        
+      }
+  
+      ###Inspect the ROC Values
+      head(roc.df)
+
+      ###Select the best Threshold value
+      best.roc.acc <- roc.df[which.max(roc.df$Accuracy), ]
+      best.roc.acc  
+      best.roc.spsaddsns <- roc.df[which.max(roc.df$Accuracy), ]
+      best.roc.spsaddsns
+      
+##Plot the ROC Curve
+cols.vec <- rainbow_hcl(3)
+layout(matrix(nrow = 2, data = c(1,2,1,3)))
+plot(y = roc.df$TruePosR, x = roc.df$FalsePosR, type = 'l', xlab = "False Positive Rate", ylab = "True Positive Rate", main = "Roc Curve", col = cols.vec[1], lwd = 2)
+i <- which.max(roc.df$Accuracy) 
+points(roc.df$FalsePosR[i], roc.df$TruePosR[i], pch = 8)
+#text(roc.df$FalsePosR[i], roc.df$TruePosR[i], paste("threshold = ", signif(roc.df$Threshold[i],2)), pos = 8)
+plot(y = roc.df$Accuracy, x = roc.df$TruePosR, type = 'l', xlab = "True Positive Rate",  ylab = "Accuracy", main = "Accuracy~TPR", col = cols.vec[2], lwd = 2)
+points(y = roc.df$Accuracy[i], x = roc.df$TruePosR[i], pch = 8)
+plot(y = roc.df$Accuracy, x = roc.df$FalsePosR, type = 'l', xlab = "False Positive Rate", ylab = "Accuracy", main = "Accuracy~FPR", col = cols.vec[3], lwd = 2)
+points(y = roc.df$Accuracy[i], x = roc.df$FalsePosR[i], pch = 8)
+  
+  ##ggplot
+ggplot(data = roc.df, aes( x = FalsePosR)) +
+  geom_line(data = roc.df, aes(x = FalsePosR, y = TruePosR, col = Accuracy), lwd = 1) +
+  geom_point(aes(x = roc.df$FalsePosR[i], y = roc.df$TruePosR[i]), col = "IndianRed", size = 6) +
+  annotate("text", x = roc.df$FalsePosR[i]*4.5, y = roc.df$TruePosR[i], label = paste("Threshold = ", round(roc.df$Threshold[i], 3)))
+  labs(x = "False Positive Rate", y = "True Positive Rate", title = "ROC Curve")
+
+  
+  ##Plotly
+
+obs.plotly <- plot_ly(roc.df, x = ~FalsePosR, y = ~TruePosR, z = ~Accuracy, color = ~Threshold) %>%
+  add_markers() %>%
+  layout(title = "Observed Values", scene = list(xaxis = list(title = 'False Positive Rate'),
+                      yaxis = list(title = 'True Positive Rate'),
+                      zaxis = list(title = 'Accuracy ((TPR+TNR)/TotalPop)')))
+
+obs.plotly
+
+
+# Assess the model with the Test Data -------------------------------------
+
+test.df <- read.csv(file = "titanictrain.csv", header = TRUE, sep = ",")
+  #Make as Factors
+  test.df$Pclass <- as.factor(train.df$Pclass)
+  test.df$Survived <- as.factor(train.df$Survived)
+
+test.df$prob <- predict(mod, newdata = test.df, type = 'response')
+test.df$pred <- ifelse(test.df$prob <   best.roc.spsaddsns$Threshold, 0, 1)
+
+  #Assess the Model Accuracy
+rate <- mean(na.omit(test.df$pred == test.df$Survived))
+
+paste("Thus the model created from training data predicts survival on the test 
+      set at a success rate of", signif(rate*100, 3), "%") %>% print()

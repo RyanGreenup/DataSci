@@ -1,0 +1,362 @@
+---
+title: "04 Simple Exposure Analysis"
+tags: [Notebooks/Thinking About Data]
+output: 
+  html_document: 
+    keep_md: yes
+    toc: yes
+  html_notebook: 
+    toc: yes
+---
+
+# (04) Simple Exposure Analysis
+
+## Preamble
+
+```{r}
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+    pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice,
+                 coin, primes, epitools, maps, clipr, ggmap, twitteR, ROAuth,
+                 tm, rtweet, base64enc, httpuv, SnowballC, RColorBrewer, wordcloud, ggwordcloud)
+
+  
+  
+   mise()
+
+knitr::opts_chunk$set(fig.path = "./figure/")
+
+##  Tokens can be located [here]
+## (~Dropbox/Studies/2020Autumn/Social_Web_Analytics/Practicals/Twitter_Tokens.org)
+```
+## Installing Libraries
+There are two packages, `rtweet` is newer, actively maintained and based on a
+more modern base R package.
+
+## Accessing Twitter
+
+### Obtaining OAuth Keys
+Apply for a developer account through twitter
+
+### Authorising R through twitteR
+
+```{r}
+options(RCurlOptions = list(verbose = FALSE, capath = system.file("CurlSSL", "cacert.pem", package = "RCurl"), ssl.verifypeer = FALSE))
+
+# setup_twitter_oauth(
+#     consumer_key = "*************************",
+#     consumer_secret = "**************************************************",
+#     access_token = "**************************************************",
+#     access_secret = "*********************************************")
+```
+
+Subsequent to this authorisation the credentials should be cached in
+`./.httr-oauth`, but I have a nasty suspicion that won't happen, so, instead, I
+think it will be necessary to access the tokens [here](/home/ryan/Dropbox/Studies/2020Autumn/Social_Web_Analytics/Practicals/Twitter_Tokens.org) on occasion.
+
+I will need to be mindful not to commit these keys to *Git* to a public git repo.
+
+### Searching Twitter
+
+Tweets can be searced for using the `searchTwitter` function.
+
+```{R, warning = FALSE}
+tweets = searchTwitter('kevin bacon', n = 100, lang = "en")
+# save(tweets, file = "04_twitter_1.rdata")
+head(tweets)
+tweets[[1]]
+```
+
+And this can be converted to a data frame using the `twListToDF` function:
+
+```{r, warning = FALSE}
+tweets.df <- twitteR::twListToDF(tweets)
+head(tweets.df)
+names(tweets.df)
+```
+
+#### Examine work frequency
+
+Regex and the `strsplit()` function can be used to analyse word frequency:
+
+```{r, warning = FALSE}
+# By Spaces
+strsplit(tweets.df$text, split = "\ ")
+# By Non-Letter Characters (+ is one or more, * is none or more)
+tweet_words <- strsplit(tweets.df$text, split = "[^A-Za-z]+")
+```
+This list of words can be tabulated:
+
+```{r, warning = FALSE}
+words_table <- tweet_words %>%
+    unlist() %>%
+    table()
+words_table
+(words_table <- sort(words_table, decreasing = TRUE)[1:20]) %>% barplot(main = "Most Frequent Words from Kevin Bacon Tweets")
+```
+
+
+### Accessing Twitter using `rtweet` package
+
+First create a token object:
+
+```{r}
+tk <- rtweet::create_token(
+  app = "SWA",
+  consumer_key = "dE7HNKhwHxMqqWdBl1qo9OAkN",
+  consumer_secret = "7ByyC6lR9d2aqLoXHHBkOtKRiU10cHhGguroiGKQ69AGDMMI9V",
+  access_token = "1240821178014388225-sFWver0NDDY3BhPdPyg8d4mtQxnl0K",
+  access_secret = "HLBWzHcemHzYJnw5ZLvKpEhQ5KaWwK6Nsj6cxBjUf51NJ",
+  set_renv = FALSE)
+```
+
+Then use the token object to use functions that interface with twitter:
+
+```{r}
+tweets_rt <- rtweet::search_tweets(q = "kevin bacon", n = 10^2, type = "recent", include_rts = FALSE, token = tk)
+head(tweets_rt)
+```
+
+## Text Mining
+
+the `tm` library can be used to analyse the text (the `SnowballC` package will
+be used for word stemming).
+
+It's first necessary to create a `corpus` object:
+
+```{r, warning = FALSE}
+tweet_source <- tm::VectorSource(tweets_rt$text)
+tweet_corpus <- tm::Corpus(x = tweet_source)
+```
+
+A corpus object is a list where each entry contains author, description, content et cetera. 
+
+```{r}
+tweet_corpus$content[1:5]
+tweet_corpus[[1]]$content
+tweet_corpus[1] %>% str()
+```
+
+Then use the `tm_map` function to apply a function to every document in the corpus, in this case we will convert the text encoding to UTF8:
+
+```{r, warning = FALSE}
+make_UTF <- function(x) {
+  iconv(x, to = "UTF-8")
+}
+tweet_corpus <- tm_map(x = tweet_corpus, FUN = make_UTF)
+
+tweet_corpus[[1]]$content
+```
+
+#### Clean the Corpus
+
+In order to clean the corpus it will be necessary to:
+
+1. remove numbers
+2. remove punctuation
+3. remove whitespace
+4. case fold all characters to lower case
+5. remove a set of stop words
+6. reduce each word to its stem
+
+So for example to remove the numbers it would be ideal to use the
+`tm::removeNumbers()` function, in order to apply this to the entire corpus the
+`tm_map` package.
+
+```{r}
+tm::removeNumbers(tweet_corpus$content) %>%
+  head(3)
+tm_map(tweet_corpus, removeNumbers)$content %>% 
+  head(3)
+```
+
+This would ideally be wrapped into a function:
+
+```{r}
+clean_corp <- function(corpus) {
+  corpus <- tm_map(corpus, FUN = removeNumbers)
+  corpus <- tm_map(corpus, FUN = removePunctuation)
+  corpus <- tm_map(corpus, FUN = stripWhitespace)
+  corpus <- tm_map(corpus, FUN = removeWords, stopwords()) 
+      ## stopwords() returns characters and is fead as second argument
+  corpus <- tm_map(corpus, FUN = stemDocument)
+}
+tweet_corpus <- clean_corp(tweet_corpus)
+```
+
+
+The behaviour of word stemming can be seen from this example:
+
+```{r}
+tm_map(tweet_corpus, FUN = stemDocument)$content %>% head(3) #so cuts some off e.g. `knowledge` becomes `knowledg`
+tweet_corpus$content %>% head(3)
+```
+
+
+### Weighting the Document Matrix
+
+A method to analyse word similarity is to treat each document as a vector with a
+number of dimensions corresponding to the number of unique terms. A simple way
+is to use the frequency of the word as the weight (as in the value for the
+corresponding dimension for that vector), this however has two issues:
+
+1. Repeating words shouldn't be linearly related to a similarity score, it
+   should taper off
+2. Common words dominate the results.
+
+A way around this is to use:
+
+* Inverse Document Frequency
+  + This is the number of documents per term occurrence, then log scaled.
+    + $\text{IDF}=\ln(\frac{N}{f_t})$
+* Term Frequency
+  + This is the frequency of the term within a document, log scaled (the +1
+    offset is because $\ln(0) \uparrow \quad \wedge \quad \ln(1)\downarrow$
+    + $\text{TF}=\ln(f_{d,t}+1)$
+
+These can be combined to give a form of TF-IDF weighting:
+
+$$\begin{aligned}
+    w_{d, t} = \ln\left(f_{d,t} + 1 \right)\times \ln\left( \frac{N}{f_t} \right)
+\end{aligned}$$
+
+In order to apply this type of weighting we will need a `DocumentTermMatrix`:
+
+```{r, warning = FALSE}
+                         ### RowColumnMatrix
+tweet_matrix   <- as.matrix(DocumentTermMatrix(tweet_corpus))
+colnames(tweet_matrix)[1:10]
+
+N <- nrow(tweet_matrix)   # Number of Documents
+ft <- apply(tweet_matrix, 2, sum)
+
+TF <- log(tweet_matrix + 1)
+IDF <- log(N/ft)
+
+# Because each term in TF needs to be multiplied through
+# each column of IDF there would be two ways to do it, 
+  # a for loop which will be really slow
+  # Diagonalise the matrix then use Matrix multiplication
+
+tweet_weighted           <- TF %*% diag(IDF)
+colnames(tweet_weighted) <- colnames(tweet_matrix)
+tweet_weighted[1:4, 1:4]
+tweet_matrix[1:4, 1:4]
+```
+
+Hence the matrix of weights can be 
+
+## Create a Word Cloud
+
+In order to create a wordcloud of the top 20 words, first identify the top 20 words and order them:
+
+```{r}
+(relevant <- sort(apply(tweet_weighted, 2, mean), decreasing = TRUE)[1:20]) %>% head()
+```
+
+Now use a built in package to build a wordcloud:
+
+```{r}
+library(wordcloud)
+wordcloud(tweet_corpus)
+wordcloud(words = names(relevant), freq = relevant, min.freq = 0, colors = 7:(7*6)/3, random.color = FALSE)
+```
+
+Or if you want a ggplot2 object there is an add-on layer [here](https://cran.r-project.org/web/packages/ggwordcloud/vignettes/ggwordcloud.html):
+
+```{r}
+data <- tibble(word = names(relevant), weight = relevant)
+
+ggplot(data, aes(label = word, size = weight)) +
+  scale_radius(range = c(0, 20), limits = c(0, NA)) +
+ scale_size_area(max_size = 24) + 
+  geom_text_wordcloud()
+```
+
+If you wanted to throw in some rotation:
+
+```{r}
+data <- data %>%
+  mutate(angle = 90 * sample(c(0, 1), n(), replace = TRUE, prob = c(60, 40)))
+
+
+ggplot(data, aes(label = word, size = weight, angle = angle)) +
+  scale_radius(range = c(0, 20), limits = c(0, NA)) +
+ scale_size_area(max_size = 24) + 
+  geom_text_wordcloud()
+```
+
+
+## Friends Name
+
+This can be repeated for a friends name:
+
+```{r}
+## Search for Tweets
+tweets_rt <- rtweet::search_tweets(q = 'Doreen', n = 10^2, type = "recent", include_rts = FALSE, token = tk)
+head(tweets_rt)
+
+## Create a Corpus
+tweet_source <- tm::VectorSource(tweets_rt$text)
+tweet_corpus <- tm::Corpus(x = tweet_source)
+
+## Format as UTF8
+make_UTF <- function(x) {
+  iconv(x, to = "UTF-8")
+}
+tweet_corpus <- tm_map(x = tweet_corpus, FUN = make_UTF)
+
+## Clean the Corpus
+clean_corp <- function(corpus) {
+ corpus <- tm_map(corpus, FUN = removeNumbers)
+ corpus <- tm_map(corpus, FUN = removePunctuation)
+ corpus <- tm_map(corpus, FUN = stripWhitespace)
+ corpus <- tm_map(corpus, FUN = removeWords, stopwords()) 
+      ## stopwords() returns characters and is fead as second argument
+  corpus <- tm_map(corpus, FUN = stemDocument)
+}
+tweet_corpus <- clean_corp(tweet_corpus)
+
+## Make a Document Term Matrix  
+                         ### RowColumnMatrix
+tweet_matrix   <- as.matrix(DocumentTermMatrix(tweet_corpus))
+colnames(tweet_matrix)[1:10]
+
+## Use Term-Frequency and Inter-Document Frequency
+N <- nrow(tweet_matrix)   # Number of Documents
+ft <- apply(tweet_matrix, 2, sum)
+
+TF <- log(tweet_matrix + 1)
+IDF <- log(N/ft)
+
+    # Because each term in TF needs to be multiplied through
+    # each column of IDF there would be two ways to do it, 
+      # a for loop which will be really slow
+      # Diagonalise the matrix then use Matrix multiplication
+
+tweet_weighted           <- TF %*% diag(IDF)
+colnames(tweet_weighted) <- colnames(tweet_matrix)
+
+                         ### RowColumnMatrix
+
+## Only consider the first 30 words
+(relevant <- sort(apply(tweet_weighted, 2, mean), decreasing = TRUE)[1:30]) %>% head()
+
+## Make plot
+wordcloud(tweet_corpus)
+```
+
+
+
+
+
+
+
+

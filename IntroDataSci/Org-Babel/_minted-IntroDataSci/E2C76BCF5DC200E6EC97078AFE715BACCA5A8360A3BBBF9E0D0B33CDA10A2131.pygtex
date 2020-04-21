@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Calculate Power??}
+
+\PYG{c+c1}{\PYGZsh{} n \PYGZlt{}\PYGZhy{}  length(adv)}
+\PYG{c+c1}{\PYGZsh{} sigma \PYGZlt{}\PYGZhy{}  sd(adv\PYGZdl{}Newspaper)}
+\PYG{c+c1}{\PYGZsh{} sem = sigma/sqrt(n)}
+\PYG{c+c1}{\PYGZsh{} alpha \PYGZlt{}\PYGZhy{}  0.05}
+\PYG{c+c1}{\PYGZsh{} mu0 \PYGZlt{}\PYGZhy{} 0}
+\PYG{c+c1}{\PYGZsh{} q \PYGZlt{}\PYGZhy{} qnorm(p = 0.005, mean = mu0, sd = sem);q}
+\PYG{c+c1}{\PYGZsh{} mu \PYGZlt{}\PYGZhy{} q \PYGZsh{} assumed actual mean value}
+\PYG{c+c1}{\PYGZsh{} pnorm(q, mean = mu, sd = sem, lower.tail = FALSE)}
+\end{Verbatim}

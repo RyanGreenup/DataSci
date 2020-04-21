@@ -1,0 +1,10 @@
+\select@language {english}
+\contentsline {section}{List of Tables}{II}{Doc-Start}% 
+\contentsline {section}{List of Figures}{III}{Doc-Start}% 
+\contentsline {section}{My Section Header 1}{1}{Doc-Start}% 
+\contentsline {subsection}{My Section Header 2}{2}{Doc-Start}% 
+\contentsline {section}{R-Code}{4}{Doc-Start}% 
+\contentsline {section}{Citation}{4}{Doc-Start}% 
+\contentsline {section}{Tabellen}{5}{Doc-Start}% 
+\contentsline {section}{Figures}{7}{table.1}% 
+\contentsline {section}{References}{7}{table.1}% 

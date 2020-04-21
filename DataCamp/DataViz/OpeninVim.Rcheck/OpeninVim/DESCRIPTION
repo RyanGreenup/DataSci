@@ -1,0 +1,14 @@
+Package: OpeninVim
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: no
+Packaged: 2020-02-08 23:56:22 UTC; ryan
+Built: R 3.6.2; ; 2020-02-08 23:56:29 UTC; unix

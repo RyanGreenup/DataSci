@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+plot\PYG{p}{(}Error \PYG{o}{\PYGZti{}} Output\PYG{p}{,} data \PYG{o}{=} ResDF\PYG{p}{,} pch \PYG{o}{=} \PYG{l+m}{19}\PYG{p}{,} col \PYG{o}{=} \PYG{l+s}{\PYGZdq{}IndianRed\PYGZdq{}}\PYG{p}{,} main \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Residuals against Predictions\PYGZdq{}}\PYG{p}{)}
+smooth \PYG{o}{\PYGZlt{}\PYGZhy{}} loess\PYG{p}{(}formula \PYG{o}{=} Error \PYG{o}{\PYGZti{}} Output\PYG{p}{,} data \PYG{o}{=} ResDF\PYG{p}{,} span \PYG{o}{=} \PYG{l+m}{0.8}\PYG{p}{)}
+predict\PYG{p}{(}smooth\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} lines\PYG{p}{(}col \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Blue\PYGZdq{}}\PYG{p}{)}
+abline\PYG{p}{(}lm\PYG{p}{(}Error \PYG{o}{\PYGZti{}} Output\PYG{p}{,} data \PYG{o}{=} ResDF\PYG{p}{),} col \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Purple\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

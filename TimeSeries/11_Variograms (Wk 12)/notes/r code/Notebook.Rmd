@@ -1,0 +1,140 @@
+---
+title: "Lecture 11 - R Code"
+subtitle: "Creating Variogram Plots in R"
+output: 
+  html_notebook: 
+    highlight: tango
+    theme: spacelab
+    toc: yes
+  pdf_document: 
+    toc: yes
+  word_document: 
+    toc: yes
+editor_options: 
+  chunk_output_type: inline
+---
+This is essentially a replication of the code used in the
+lecture notes, The only difference is it is a little
+less condenced and in HTML.
+
+#Preamble
+##Import Library
+
+The following code will automatically install packages that are 
+not already installed and load them into the library:
+
+```{r}
+if(require('pacman')){
+  library('pacman')
+}else{
+  install.packages('pacman')
+  library('pacman')
+}
+
+pacman::p_load(sp, EnvStats, gstat, ggplot2, rmarkdown)
+```
+
+##Create Assignments
+
+Note that  Benthic.df is included in the *EnvStats* package and is not a 
+data frame but an *sp* class, which is very similar to a data frame
+
+```{r}
+#Assignments
+benthic <- Benthic.df
+lat <- benthic$Latitude
+lon <- benthic$Longitude
+```
+
+
+#Create a Variogram
+
+```{r}
+coordinates(benthic) = ~Longitude + Latitude
+benthic.vg <- variogram(Index ~ 1, data = benthic)
+```
+
+##Create a base plot of that variogram
+
+```{r}
+plot(benthic.vg, main="Figure 11.1  Empirical variogram for Benthic Index")
+```
+
+##Create an attractive plot in ggplot
+
+```{r}
+ggplot(data = benthic.vg, aes(x = dist, y = gamma, col = gamma, size = np)) +
+  geom_point() +
+  labs(size = "Number of Point Pairs", col = "Sample Variogram Estimate",
+       y = "Sample Variogram estimate", x = "Distance",
+       title = 'Benthic Variogram Plot') +
+  theme_bw() +
+  geom_smooth(alpha = 0, size = 0.5)
+
+
+```
+
+
+#Fit a Variogram Model
+
+There are three common models for variograms:
+
+* Exponential
+      + $C(h) = \sigma^2 \times e^{\frac{-h}{r}}$
+* Gaussian
+     + $C(h) = \sigma^2 \times e^{({\frac{-h}{r}})^2}$
+* Spherical
+     + $C(h) = \sigma^2 \times (1 - \frac{3h}{2r} + \frac{h^2}{2r^3})$
+      
+      
+ 
+Unfourtunately `ggplot2` cannot take an object of class `variogramModel` and plot it 
+(atleast I cant figure out how to do it), hence it is necessary to
+use the base package to plot the model over the points.
+
+It also does not appear possible to comine the plots using  `par(mfrow = c(1,3))`.
+
+##Plot the model over the variogram
+###Exponential
+```{r}
+
+benthic.vg.fit.exp <- fit.variogram(benthic.vg,
+                                    model=vgm(1,"Exp", 0.5,1))
+plot(benthic.vg, benthic.vg.fit.exp,
+     main="Exponential variogram for Benthic Index")
+```
+
+###Gaussian
+```{r}
+
+benthic.vg.fit.gau <- fit.variogram(benthic.vg,
+                                    model=vgm(1,"Gau", 0.5,1))
+plot(benthic.vg, benthic.vg.fit.gau,
+     main="Gaussian variogram for Benthic Index")
+```
+
+###Spherical
+```{r}
+
+benthic.vg.fit.sph <- fit.variogram(benthic.vg,
+                                    model=vgm(1,"Sph", 0.5,1))
+plot(benthic.vg, benthic.vg.fit.sph,
+     main="Spherical variogram for Benthic Index")
+```
+
+#Directional Variograms
+
+Because a directional variogram is still of the class `variogramModel`, 
+it is not possible (to the best of my knowledge) to use `ggplot2`
+in order to plot it.
+
+The `alpha` option allows a vector of directional degrees to be specified, in this case, 0, 45, 90 and 135.
+
+```{r}
+benthic.dvg <- variogram(Index ~ 1,
+                         data=benthic, alpha=c(0, 45,90,135))
+benthic.dvg.fit <- vgm(1,"Sph", 0.5,1,anis=c(30,0.4))
+plot(benthic.dvg, benthic.dvg.fit,
+     main="Figure 11.5  Directional variograms for Benthic Index")
+```
+

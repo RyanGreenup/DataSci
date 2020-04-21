@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+lmMod \PYG{o}{\PYGZlt{}\PYGZhy{}} lm\PYG{p}{(}formula \PYG{o}{=} Sales \PYG{o}{\PYGZti{}} TV\PYG{p}{,} data \PYG{o}{=} adv\PYG{p}{)}
+lmSum \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{summary}\PYG{p}{(}lmMod\PYG{p}{)}
+lmSum
+\end{Verbatim}

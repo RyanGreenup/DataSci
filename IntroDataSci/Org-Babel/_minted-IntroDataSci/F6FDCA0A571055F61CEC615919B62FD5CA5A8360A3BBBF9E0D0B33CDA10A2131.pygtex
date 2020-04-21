@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} White Noise}
+
+ggplot\PYG{p}{(}ResDF\PYG{p}{,} aes\PYG{p}{(}x \PYG{o}{=} Input\PYG{p}{,} y \PYG{o}{=} Wnoise\PYG{p}{,} col \PYG{o}{=} Output\PYG{p}{))} \PYG{o}{+}
+  geom\PYGZus{}line\PYG{p}{()} \PYG{o}{+}
+  geom\PYGZus{}abline\PYG{p}{(}slope \PYG{o}{=} \PYG{l+m}{0}\PYG{p}{,} intercept \PYG{o}{=} \PYG{l+m}{0}\PYG{p}{,} lty \PYG{o}{=} \PYG{l+s}{\PYGZdq{}twodash\PYGZdq{}}\PYG{p}{,} col \PYG{o}{=} \PYG{l+s}{\PYGZdq{}IndianRed\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+  theme\PYG{p}{(}legend.position \PYG{o}{=} \PYG{l+s}{\PYGZdq{}none\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+  labs\PYG{p}{(}title \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Distribution of Residuals\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

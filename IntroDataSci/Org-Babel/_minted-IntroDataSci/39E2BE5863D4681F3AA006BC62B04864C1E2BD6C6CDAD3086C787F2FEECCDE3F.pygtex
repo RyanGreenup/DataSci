@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{k}{setq} \PYG{n+nv}{org\PYGZhy{}complete\PYGZhy{}tags\PYGZhy{}always\PYGZhy{}offer\PYGZhy{}all\PYGZhy{}agenda\PYGZhy{}tags} \PYG{n+no}{t}\PYG{p}{)}
+\PYG{p}{(}\PYG{k}{setq} \PYG{n+nv}{org\PYGZhy{}fast\PYGZhy{}tag\PYGZhy{}selection\PYGZhy{}single\PYGZhy{}key} \PYG{n+no}{nil}\PYG{p}{)}
+\end{Verbatim}

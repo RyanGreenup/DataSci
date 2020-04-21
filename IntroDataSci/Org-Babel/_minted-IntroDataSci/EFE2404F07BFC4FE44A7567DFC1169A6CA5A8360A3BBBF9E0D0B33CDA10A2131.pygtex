@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+pdom \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{c}\PYG{p}{(}\PYG{l+m}{0}\PYG{p}{,} \PYG{l+m}{300}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{}Plot Domain}
+plot\PYG{p}{(}formula \PYG{o}{=} Sales \PYG{o}{\PYGZti{}} TV\PYG{p}{,} data \PYG{o}{=} adv\PYG{p}{,} xlim \PYG{o}{=} pdom\PYG{p}{,}
+     main \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Sales Given TV Advertising\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

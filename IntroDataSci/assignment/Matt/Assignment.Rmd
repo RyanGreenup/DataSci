@@ -1,0 +1,192 @@
+---
+title: "Assignment"
+output: html_document
+---
+
+# Q1
+## Part 1
+The data set may be explored by using the following commands:
+
+```{r}
+CPU <- read.csv("CPU_Performance.csv")
+head(CPU)
+names(CPU)
+dim(CPU)
+summary(CPU)
+pairs(CPU,panel = panel.smooth)
+cor(CPU, method = "pearson")
+```
+
+It can be seen that the data set has 6 predictive features and one response variable, Performance.
+
+## Part 2
+
+Select Max Main Memory bacause it has the highest correlation coefficient and the most constant variance compared to the other predictors.
+Cycle time is expluded because of the non-linear relationship.
+
+```{r}
+library(tidyverse)
+lm(Performance ~ MaximumMainMemory, data = CPU) %>% summary()
+```
+The accepted model is :
+
+$$
+Y_{Perf} = - 34 + 0.0118 \times \text{MaxMem}
+$$
+
+## Part 3
+
+Produce a multiple linear regression with all the attributes:
+
+```{r}
+lm.Perf_fit <- lm(Performance~., data = CPU)
+summary(lm.Perf_fit)
+
+```
+
+Minimum Number of Channels is an non-significant parameter so it is removed,
+
+```{r}
+lm.Perf_fit <- lm(Performance~.-MinimumNumberOfChannels, data = CPU)
+summary(lm.Perf_fit)
+
+```
+All parameters are significant, therefore the model is accepted as optimal by the method of backward elimination
+
+## Part 4
+
+```{r}
+layout(matrix(1:4, nrow = 2))
+plot(lm.Perf_fit)
+```
+
+## Part 5
+The residuals have a heteroskedastic tendancy and hence an appropriate transform would be a concave transform such as $\sqrt$:
+
+```{r}
+lm.trans <- lm(sqrt(Performance) ~ . - MinimumNumberOfChannels,data = CPU)
+summary(lm.trans)
+```
+
+Following the transform the `CycleTime` parameter is non-significant and so it will be removed:
+
+```{r}
+lm.trans <- lm(sqrt(Performance) ~ . -MinimumNumberOfChannels- CycleTime, 
+               data = CPU) 
+summary(lm.trans)
+layout(matrix(1:4, nrow = 2))
+plot(lm.trans)
+```
+
+All parameters are significant and the residuals appear Gaussian and hence the model will be accepted as optimal by the process of backward elimination.
+
+# Question 2
+
+## Part 1 Choose Attribute
+Since Max Main Memory was an appropriate predictor for the linear model, we will accept it for the polynomial model
+
+maybe because it is heteroskedastic maybe a polynomial will fix that ?
+l
+
+
+## Part 2
+
+Consider up to 10th degree polynomial, `glm` must be used in order to use `cv.glm` 
+
+```{r}
+library(boot)
+set.seed(31415)
+cv.err = rep(0,10)
+for (i in 1:10) {
+  glm.fit = glm(Performance ~ poly(MaximumMainMemory, i), data = CPU)
+  cv.err[i] = cv.glm(CPU, glm.fit, K = 10)$delta[1]
+}
+cv.err
+
+cv.err[which.min(cv.err)] %>% sqrt %>% signif(2)
+
+plot(cv.err, type ="l")
+abline(v = which.min(cv.err))
+```
+The third degree polynomial model has the lowest testing error and so is accpepted as the optimal polynomial model using only as single attribute to predict the cv performance.
+
+## Part 3
+
+The expected error on unseen data as determined by cross validation is `r cv.err[which.min(cv.err)] %>% sqrt %>% signif(2)`, meaning that we would expect the model to return data within a range of that error, which is a fairly accurate model.
+
+## Part 4
+
+```{r}
+lm.poly <- lm(Performance ~ poly(MaximumMainMemory,2), data = CPU)
+layout(matrix(1:4, nrow = 2))
+plot(lm.poly)
+```
+
+There is insufficient evidence to reject the assumption of normal residuals and hence the model is accepted as adequate.
+
+# Q3 
+
+## Part 1
+
+The data set is divided into a training set of 4000 observations and the rest into a testing set:
+
+```{r}
+Wine <- read.csv(file = "Wine_Quality.csv")
+attach(Wine)
+
+set.seed(10)
+train = sample(1:nrow(Wine), 4000)
+Wine.test = Wine[-train,]
+```
+
+## Part 2
+
+Build a decision tree:
+
+```{r}
+library(ISLR)
+library(tree)
+tree.wine <-  tree(WineQuality~., Wine, subset = train)
+summary(tree.wine)
+plot(tree.wine)
+text(tree.wine, pretty = 0)
+```
+The attributes that contribute to a quality wine are "Volatile Acidity", "Free Sulfur Dioxide" and "Alcohol"
+
+## Part 3
+ In order to evaluate the model performance it is necessary to consider the squared error of the model
+ 
+```{r}
+Quality_predict = predict(tree.wine, Wine, type =)
+RMSE.Wine <- (Wine$WineQuality-Quality_predict)^2 %>% mean() %>% sqrt()
+#table(Quality_predict,tree.wine) # Only use this for classification , not regression
+#table(Quality_predict,Wine$WineQuality)
+
+  
+#table(tree.pred, HighQual.test)
+#(591+99)/898
+RMSE.Wine
+```
+This approach leads to correct predictions for 76.8% of the model !!!!!! Nah, its plus/minus 0.76 units not 76%)
+This model predicts the wine quality with an error rate of $\pm 0.76$ on the training data.
+
+## Part 4
+
+```{r}
+Wine_Cat = ifelse(WineQuality>6, "High", "Low")
+Wine = data.frame(Wine, Wine_Cat)
+tree.QWine = tree(Wine_Cat~. - WineQuality, Wine)
+summary(tree.QWine)
+plot(tree.QWine)
+text(tree.QWine)
+```
+
+## Part 5
+
+```{r}
+#Winenew = Wine_Cat[-1]
+Winenew <- Wine[,-1]
+tree_pred2 = predict(tree.QWine, Winenew, type = "class")
+
+```
+

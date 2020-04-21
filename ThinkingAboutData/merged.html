@@ -1,0 +1,1782 @@
+<h1 id="quizz-1">Quizz 1</h1>
+<h2 id="q1-comparison-of-observation-to-base-ratio">Q1; Comparison of Observation to Base Ratio</h2>
+<p>A set of 104 university students were surveyed, asking for their favourite pizza type, with the following results.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Hawaiian</th>
+<th>Barbecue</th>
+<th>Supreme</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>32</td>
+<td>14</td>
+<td>58</td>
+</tr>
+</tbody>
+</table>
+<p>The Australian population has the following pizza preferences.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Hawaian</th>
+<th>Barbecue</th>
+<th>Supreme</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.5</td>
+<td>0.3</td>
+<td>0.2</td>
+</tr>
+</tbody>
+</table>
+<p>Calculate the chi squared distance between the student sample and the Australian population.</p>
+<h3 id="solution">Solution</h3>
+<p>First enter the values, really carefully:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pizza &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">32</span>, <span class="dv">14</span>, <span class="dv">58</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>aus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">.3</span>, <span class="fl">0.2</span>)</span></code></pre></div>
+<p>This can either be calculated manually:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>e &lt;-<span class="st"> </span><span class="kw">sum</span>(pizza)<span class="op">*</span>aus</span>
+<span id="cb2-2"><a href="#cb2-2"></a>o &lt;-<span class="st"> </span>pizza</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>(chival &lt;-<span class="st"> </span><span class="kw">sum</span>((e<span class="op">-</span>o)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>e))</span></code></pre></div>
+<pre><code>## [1] 83.70513</code></pre>
+<p>Or the built in function can be used:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">chisq.test</span>(pizza, <span class="dt">p =</span> aus, <span class="dt">rescale.p =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  pizza
+## X-squared = 83.705, df = 2, p-value &lt; 2.2e-16</code></pre>
+<h2 id="q2-comparing-populations-assuming-theyre-identically-distributed">Q2; Comparing Populations (Assuming they’re identically distributed)</h2>
+<p>A survery was performed on 100 people, asking for their city of birth and their eye colour. The results are tabulated below.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Brown</th>
+<th>Hazel</th>
+<th>Blue</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sydney</td>
+<td>10.00</td>
+<td>30.00</td>
+<td>20.00</td>
+</tr>
+<tr class="even">
+<td>Melbourne</td>
+<td>20.00</td>
+<td>10.00</td>
+<td>10.00</td>
+</tr>
+</tbody>
+</table>
+<p>If we assume that city of birth has no effect on eye colour, calculate the expected number of people that are born in Melbourne and have brown eyes.</p>
+<h3 id="solution-1">Solution</h3>
+<p>So basically here:</p>
+<ul>
+<li>H0
+<ul>
+<li>Populations are distributed with equivalent Proportions</li>
+</ul></li>
+<li>Ha
+<ul>
+<li>Populations have different Proportions.</li>
+</ul></li>
+</ul>
+<h3 id="first-enter-the-data">First Enter the Data</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Create Vectors</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>sydney    &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Brown&quot;</span> =<span class="st"> </span><span class="dv">10</span>,<span class="st">&quot;Hazel&quot;</span> =<span class="st"> </span><span class="dv">30</span>,<span class="st">&quot;Blue&quot;</span> =<span class="st"> </span><span class="dv">20</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>melbourne &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Brown&quot;</span> =<span class="st"> </span><span class="dv">20</span>,<span class="st">&quot;Hazel&quot;</span> =<span class="st"> </span><span class="dv">10</span>,<span class="st">&quot;Blue&quot;</span> =<span class="st"> </span><span class="dv">10</span>)</span></code></pre></div>
+<h4 id="create-a-matrix">Create a Matrix</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>eye_Mat &lt;-<span class="st"> </span><span class="kw">rbind</span>(sydney, melbourne)</span></code></pre></div>
+<h3 id="determine-the-expected-distributions">Determine the expected distributions</h3>
+<h4 id="outer-product-method">Outer Product Method</h4>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>obs_count &lt;-<span class="st">  </span><span class="kw">rowSums</span>(eye_Mat)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>feature_proportions  &lt;-<span class="st"> </span><span class="kw">colSums</span>(eye_Mat)<span class="op">/</span><span class="kw">sum</span>(eye_Mat)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="kw">outer</span>(<span class="kw">rowSums</span>(eye_Mat), <span class="kw">colSums</span>(eye_Mat)<span class="op">/</span><span class="kw">sum</span>(eye_Mat))</span></code></pre></div>
+<pre><code>##           Brown Hazel Blue
+## sydney       18    24   18
+## melbourne    12    16   12</code></pre>
+<h4 id="matrix-method">Matrix Method</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>obs_count</span></code></pre></div>
+<pre><code>##    sydney melbourne 
+##        60        40</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>feature_proportions </span></code></pre></div>
+<pre><code>## Brown Hazel  Blue 
+##   0.3   0.4   0.3</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">as.matrix</span>(obs_count) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(feature_proportions)) </span></code></pre></div>
+<pre><code>##           Brown Hazel Blue
+## sydney       18    24   18
+## melbourne    12    16   12</code></pre>
+<h4 id="row-and-col-sum-method">Row and Col Sum Method</h4>
+<p>Another way to remember it is that the expected value is:</p>
+<p><span class="math display">\[
+e_{ij} = \frac{\textsf{rowTotal} * \textsf{colTotal}}{\textsf{grandTotal}}
+\]</span></p>
+<h3 id="perform-a-chi-test">Perform a Chi Test</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>(cht &lt;-<span class="st"> </span><span class="kw">chisq.test</span>(<span class="dt">x =</span> eye_Mat, <span class="dt">simulate.p.value =</span> <span class="ot">TRUE</span>, <span class="dt">B =</span> <span class="dv">10</span><span class="op">^</span><span class="dv">4</span>))</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with simulated p-value
+##  (based on 10000 replicates)
+## 
+## data:  eye_Mat
+## X-squared = 13.194, df = NA, p-value = 0.0017</code></pre>
+<p>Hence the probability of there detecting a difference between the two populations, under the assumption that the populations are identical is 0.002</p>
+<h2 id="q3-test-for-uniform-distribution">Q3; Test For Uniform Distribution</h2>
+<p>A Bank is open everyday from 10am to 3pm and closed for lunch between 12pm and 1am. For one particular day the tellers serve the following number of customers in each hour.</p>
+<table>
+<thead>
+<tr class="header">
+<th>10-11</th>
+<th>11-12</th>
+<th>1-2</th>
+<th>2-3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>80.00</td>
+<td>70.00</td>
+<td>69.00</td>
+<td>61.00</td>
+</tr>
+</tbody>
+</table>
+<p>Management would like to know if this is consistent with a uniform distribution of customers across the day. What is the expected number of customers per hour, if a uniform distribution is correct?</p>
+<h3 id="solution-2">Solution</h3>
+<p>A uniform distribution would be such that each value is equal, hence:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>bank &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">70</span>, <span class="dv">69</span>, <span class="dv">61</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a>e &lt;-<span class="st"> </span><span class="kw">mean</span>(bank)</span></code></pre></div>
+<p>The probability of incorrectly asserting that the values do differ over time (under the assumption that all values are identical) is given by:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">chisq.test</span>(bank, <span class="dt">rescale.p =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  bank
+## X-squared = 2.6, df = 3, p-value = 0.4575</code></pre>
+<p>This is equivalent to specifying equal proportions, that’s the default assumption made by <strong><em>R</em></strong>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">chisq.test</span>(bank, <span class="dt">p =</span> <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>), <span class="dt">rescale.p =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  bank
+## X-squared = 2.6, df = 3, p-value = 0.4575</code></pre>
+<p>In this case there is not enough evidence to reject the assumption that the distriution varies with time.</p>
+<h2 id="q4-expected-frequencies">Q4; Expected Frequencies</h2>
+<p>A large sample survey of Australian businesses showed the following percentage of computers running the following operating systems.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Windows</th>
+<th>OS X</th>
+<th>Linux</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>30.00</td>
+<td>50.00</td>
+<td>20.00</td>
+</tr>
+</tbody>
+</table>
+<p>Compute the expected number of computers using Linux from a sample of size 32.</p>
+<h3 id="solution-3">Solution</h3>
+<p>Just multiply the proportion through:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>comp &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">20</span>)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>comp_rate &lt;-<span class="st"> </span>comp<span class="op">/</span><span class="kw">sum</span>(comp)</span>
+<span id="cb23-3"><a href="#cb23-3"></a></span>
+<span id="cb23-4"><a href="#cb23-4"></a>comp_rate[<span class="dv">3</span>]<span class="op">*</span><span class="dv">32</span></span></code></pre></div>
+<pre><code>## [1] 6.4</code></pre>
+<p>hence the expected number of computers running linux is 6.4.</p>
+<h1 id="chi-distribution">Chi Distribution</h1>
+<h2 id="preamble">Preamble</h2>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>load.pac &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  </span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="cf">if</span>(<span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)){</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb25-5"><a href="#cb25-5"></a>  }<span class="cf">else</span>{</span>
+<span id="cb25-6"><a href="#cb25-6"></a>    <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span>
+<span id="cb25-7"><a href="#cb25-7"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb25-8"><a href="#cb25-8"></a>  }</span>
+<span id="cb25-9"><a href="#cb25-9"></a>  </span>
+<span id="cb25-10"><a href="#cb25-10"></a>  pacman<span class="op">::</span><span class="kw">p_load</span>(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, wesanderson,</span>
+<span id="cb25-11"><a href="#cb25-11"></a>                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr, latex2exp,</span>
+<span id="cb25-12"><a href="#cb25-12"></a>                 mise)</span>
+<span id="cb25-13"><a href="#cb25-13"></a>  </span>
+<span id="cb25-14"><a href="#cb25-14"></a><span class="co">#  devtools::install_github(&quot;tidyverse/tidyverse&quot;)</span></span>
+<span id="cb25-15"><a href="#cb25-15"></a>}</span>
+<span id="cb25-16"><a href="#cb25-16"></a></span>
+<span id="cb25-17"><a href="#cb25-17"></a><span class="kw">load.pac</span>()</span></code></pre></div>
+<pre><code>## Loading required package: pacman</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw">mise</span>()</span></code></pre></div>
+<h2 id="wellness-data-difference-from-control">Wellness Data (Difference From Control)</h2>
+<h3 id="enter-data">(01) Enter Data</h3>
+<p>Now be really careful here, make sure that the column names you choose are:</p>
+<ul>
+<li><a href="https://rdrr.io/r/base/make.names.html">Syntactically Correct</a> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+<ul>
+<li>Style Guides recommend lower case, <code>snake_case</code> for variable and function names (using nouns in the prior and verbs in the latter), this would include vectors.
+<ul>
+<li>Try to avoid using dots, the S3 scheme for defining classes uses <code>.</code>’s so you might end up with a confusing method like <code>as.data.frame.data.frame()</code></li>
+<li>I’m using camelCase for DF column names in order to distinguish them from variables and make them clearer inside <code>ggplot</code> as opposed to <code>snake_case</code>.</li>
+</ul></li>
+</ul></li>
+<li>Spelt correctly
+<ul>
+<li>You will need matching column names in order to use things like <code>pivot_longer</code> etc.</li>
+</ul></li>
+<li>Short enough to type in without making a spelling Mistake
+<ul>
+<li>Same as above, remenber axis-titles and so forth are distinct from data frame names.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>iraqi =<span class="st"> </span><span class="kw">c</span>(<span class="dv">123</span>, <span class="dv">70</span>, <span class="dv">93</span>, <span class="dv">157</span>)</span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="kw">names</span>(iraqi) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;moderate&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;veryHigh&quot;</span>)</span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="kw">head</span>(iraqi)</span></code></pre></div>
+<pre><code>##      low moderate     high veryHigh 
+##      123       70       93      157</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="kw">str</span>(iraqi)</span></code></pre></div>
+<pre><code>##  Named num [1:4] 123 70 93 157
+##  - attr(*, &quot;names&quot;)= chr [1:4] &quot;low&quot; &quot;moderate&quot; &quot;high&quot; &quot;veryHigh&quot;</code></pre>
+<h3 id="barplot">BarPlot</h3>
+<h4 id="base-plot">Base Plot</h4>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw">barplot</span>(iraqi)</span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-3-1.png" alt="" /><figcaption>plot of chunk unnamed-chunk-3</figcaption>
+</figure>
+<h4 id="ggplot2">GGPlot2</h4>
+<h5 id="tidy-data">Tidy Data</h5>
+<p>This can be done in ggplot2, but first a <code>tidy</code> data frame needs to be constructed. Tidy data satisfies the following three rules:</p>
+<ol type="1">
+<li>Each variable will have it’s own column</li>
+<li>Each ovservation will have it’s own row</li>
+<li>Each Value will have it’s own cell.</li>
+</ol>
+<p>A tidy data frame somewhat depends on context, for example:</p>
+<ul>
+<li>If only the refugees were sampled, the data would be structured where:
+<ul>
+<li>Observations would be:
+<ul>
+<li>Low</li>
+<li>Medium</li>
+<li>High</li>
+</ul></li>
+<li>Variables would be:
+<ul>
+<li>Count</li>
+</ul></li>
+</ul></li>
+<li>If Multiple populations were sampled, for example the Australian population and the iraqi populations, the tidy data frame may be such that:
+<ul>
+<li>Observations would be:
+<ul>
+<li>Australia</li>
+<li>Iraqi</li>
+</ul></li>
+<li>variables would be:
+<ul>
+<li>Count</li>
+<li>Distress Level</li>
+</ul></li>
+</ul></li>
+<li>If Individuals were classified into a distress category, the corresponding tidy data frame would be:
+<ul>
+<li>Observations would be:
+<ul>
+<li>Individuals</li>
+</ul></li>
+<li>variables would be:
+<ul>
+<li>Country of Origin/Residence</li>
+<li>Distress Level</li>
+</ul></li>
+</ul></li>
+</ul>
+<h5 id="make-the-plot">Make the Plot</h5>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co">#pivot_longer(data = iraqi, cols = names(iraqi))</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a>iraqi.tidy &lt;-<span class="st"> </span><span class="kw">melt</span>(iraqi, <span class="dt">value.name =</span> <span class="st">&quot;Count&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>(<span class="dt">rownames =</span> <span class="st">&quot;Distress&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>iraqi.tidy</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 2
+##   Distress Count
+##   &lt;chr&gt;    &lt;dbl&gt;
+## 1 low        123
+## 2 moderate    70
+## 3 high        93
+## 4 veryHigh   157</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Base</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="co">#barplot(height = iraqi.tidy$Count, names.arg = iraqi.tidy$Distress)</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a></span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="co"># GGPlot2</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> iraqi.tidy, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Distress, <span class="dt">y =</span> Count)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="st">  </span><span class="kw">geom_col</span>()</span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-4-1.png" alt="" /><figcaption>plot of chunk unnamed-chunk-4</figcaption>
+</figure>
+<h5 id="fix-the-order-of-the-plot">Fix the Order of the Plot</h5>
+<p>In making this plot you may observe that the order of the plot has been made to be alphabetical, the order of the data frame has been disregarded.</p>
+<p>This is desirable and expected behaviour, the values of distress have not been correctly encoded, they need to be encoded as ordered factors in order to be ordered, unordered factors may as well be placed in alphabetical order.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>iraqi.tidy &lt;-<span class="st"> </span><span class="kw">melt</span>(iraqi, <span class="dt">value.name =</span> <span class="st">&quot;Count&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>(<span class="dt">rownames =</span> <span class="st">&quot;Distress&quot;</span>)</span>
+<span id="cb36-2"><a href="#cb36-2"></a>iraqi.tidy<span class="op">$</span>Distress &lt;-<span class="st"> </span><span class="kw">factor</span>(iraqi.tidy<span class="op">$</span>Distress, <span class="dt">levels =</span> iraqi.tidy<span class="op">$</span>Distress, <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb36-3"><a href="#cb36-3"></a>iraqi.tidy</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 2
+##   Distress Count
+##   &lt;ord&gt;    &lt;dbl&gt;
+## 1 low        123
+## 2 moderate    70
+## 3 high        93
+## 4 veryHigh   157</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Base</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a>fillCols &lt;-<span class="st"> </span>RColorBrewer<span class="op">::</span><span class="kw">brewer.pal</span>(<span class="kw">nrow</span>(iraqi.tidy), <span class="dt">name =</span> <span class="st">&quot;Pastel1&quot;</span>)</span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="kw">barplot</span>(<span class="dt">height =</span> iraqi.tidy<span class="op">$</span>Count, <span class="dt">names.arg =</span> <span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Moderate&quot;</span>, <span class="st">&quot;High&quot;</span>, <span class="st">&quot;Very High&quot;</span>), <span class="dt">col =</span> fillCols, <span class="dt">main =</span> <span class="st">&quot;Distress Levels of Iraqi Refugees&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Distress Level&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Count&quot;</span>)</span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-5-1.png" alt="" /><figcaption>plot of chunk unnamed-chunk-5</figcaption>
+</figure>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># GGPlot2</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> iraqi.tidy, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Distress, <span class="dt">y =</span> Count)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">col =</span> Count, <span class="dt">fill =</span> Distress)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="st">  </span><span class="kw">theme_classic</span>() <span class="op">+</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Distress Levels of Iraqi Refugees&quot;</span>) <span class="op">+</span></span>
+<span id="cb39-6"><a href="#cb39-6"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">col =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-5-2.png" alt="" /><figcaption>plot of chunk unnamed-chunk-5</figcaption>
+</figure>
+<h3 id="enter-the-aihw-data">(02) Enter the AIHW Data</h3>
+<p>The <em>Australian Institute of Health and Wellness</em> data are as follows:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>aihw &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span> =<span class="st"> </span><span class="fl">70.65</span>, <span class="st">&quot;moderate&quot;</span> =<span class="st"> </span><span class="fl">18.5</span>, <span class="st">&quot;high&quot;</span> =<span class="st"> </span><span class="fl">7.41</span>, <span class="st">&quot;veryHigh&quot;</span> =<span class="st"> </span><span class="fl">3.43</span>)</span>
+<span id="cb40-2"><a href="#cb40-2"></a>aihw.tidy &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">enframe</span>(aihw) <span class="co"># %&gt;% cbind(aihw, iraqi)</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a><span class="kw">names</span>(aihw.tidy) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Distress&quot;</span>, <span class="st">&quot;Count&quot;</span>)</span>
+<span id="cb40-4"><a href="#cb40-4"></a>aihw.tidy<span class="op">$</span>Distress &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="dt">x =</span> aihw.tidy<span class="op">$</span>Distress, <span class="dt">levels =</span> aihw.tidy<span class="op">$</span>Distress, <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb40-5"><a href="#cb40-5"></a>aihw.tidy</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 2
+##   Distress Count
+##   &lt;ord&gt;    &lt;dbl&gt;
+## 1 low      70.6 
+## 2 moderate 18.5 
+## 3 high      7.41
+## 4 veryHigh  3.43</code></pre>
+<h4 id="combine-all-observations">Combine all Observations</h4>
+<p>Ideally all the data should be combined into a single data set, be mindful that <code>pivot_longer()</code> is gonna complain if columns with the same name have different data types, so make sure to remember to re-class categories as factors rather than factors.:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># First add a variable that can be used to distinguish the two Data Sets</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a>iraqi.tidy<span class="op">$</span>Region &lt;-<span class="st"> &quot;Iraq&quot;</span></span>
+<span id="cb42-3"><a href="#cb42-3"></a>aihw.tidy<span class="op">$</span>Region &lt;-<span class="st"> &quot;Australia&quot;</span></span>
+<span id="cb42-4"><a href="#cb42-4"></a><span class="co"># Combine the Data Sets</span></span>
+<span id="cb42-5"><a href="#cb42-5"></a>all.tidy &lt;-<span class="st"> </span><span class="kw">rbind</span>(iraqi.tidy, aihw.tidy) </span>
+<span id="cb42-6"><a href="#cb42-6"></a>all.tidy </span></code></pre></div>
+<pre><code>## # A tibble: 8 x 3
+##   Distress  Count Region   
+##   &lt;ord&gt;     &lt;dbl&gt; &lt;chr&gt;    
+## 1 low      123    Iraq     
+## 2 moderate  70    Iraq     
+## 3 high      93    Iraq     
+## 4 veryHigh 157    Iraq     
+## 5 low       70.6  Australia
+## 6 moderate  18.5  Australia
+## 7 high       7.41 Australia
+## 8 veryHigh   3.43 Australia</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>all.tidy<span class="op">$</span>Distress &lt;-<span class="st"> </span><span class="kw">factor</span>(all.tidy<span class="op">$</span>Distress, <span class="dt">levels =</span> iraqi.tidy<span class="op">$</span>Distress, <span class="dt">ordered =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb44-2"><a href="#cb44-2"></a></span>
+<span id="cb44-3"><a href="#cb44-3"></a><span class="co"># Use Pivot Wider in order to make the column names the Region and the variable the count</span></span>
+<span id="cb44-4"><a href="#cb44-4"></a>all.wide &lt;-<span class="st"> </span><span class="kw">pivot_wider</span>(<span class="dt">data =</span> all.tidy, <span class="dt">names_from =</span> Region, <span class="dt">values_from =</span> Count)</span>
+<span id="cb44-5"><a href="#cb44-5"></a>all.wide</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 3
+##   Distress  Iraq Australia
+##   &lt;ord&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 low        123     70.6 
+## 2 moderate    70     18.5 
+## 3 high        93      7.41
+## 4 veryHigh   157      3.43</code></pre>
+<h4 id="plot-the-aihw-data">Plot the aihw Data</h4>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># Base Plot</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a></span>
+<span id="cb46-3"><a href="#cb46-3"></a>fillCols &lt;-<span class="st"> </span>RColorBrewer<span class="op">::</span><span class="kw">brewer.pal</span>(<span class="kw">nrow</span>(iraqi.tidy), <span class="dt">name =</span> <span class="st">&quot;Pastel2&quot;</span>)</span>
+<span id="cb46-4"><a href="#cb46-4"></a><span class="kw">barplot</span>(<span class="dt">height =</span> all.wide<span class="op">$</span>Australia, <span class="dt">names.arg =</span> <span class="kw">c</span>(<span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Moderate&quot;</span>, <span class="st">&quot;High&quot;</span>, <span class="st">&quot;Very High&quot;</span>), <span class="dt">col =</span> fillCols, <span class="dt">main =</span> <span class="st">&quot;Distress Levels of Iraqi Refugees&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Distress Level&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Count&quot;</span>)</span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-8-1.png" alt="" /><figcaption>plot of chunk unnamed-chunk-8</figcaption>
+</figure>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="co">## ggplot2</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> all.tidy, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Distress, <span class="dt">y =</span> Count, <span class="dt">fill =</span> Region, <span class="dt">col =</span> Count)) <span class="op">+</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb47-4"><a href="#cb47-4"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">col =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb47-5"><a href="#cb47-5"></a><span class="st">  </span><span class="kw">theme_classic</span>() <span class="op">+</span></span>
+<span id="cb47-6"><a href="#cb47-6"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Distress of Refugees&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Frequency&quot;</span>)</span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-8-2.png" alt="" /><figcaption>plot of chunk unnamed-chunk-8</figcaption>
+</figure>
+<h3 id="determine-expected-frequency">(03) Determine Expected Frequency</h3>
+<h4 id="hypothesis">Hypothesis</h4>
+<ol type="1">
+<li><span class="math inline">\(H_0 \enspace : \quad\)</span> The Refugee Distress Categories will have frequencies equal to Australia</li>
+<li><span class="math inline">\(H_a \enspace : \quad\)</span> There will be a difference between the categories</li>
+</ol>
+<p>Assuming that the null hypothesis is true, the expected frequency of the categories can be deterimed:</p>
+<p><span class="math display">\[
+\textsf{e} = 443 \times \frac{\texttt{aihw}}{100}
+\]</span></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>all.wide<span class="op">$</span>IraqExpected &lt;-<span class="st"> </span>all.wide<span class="op">$</span>Australia <span class="op">*</span><span class="st"> </span>(<span class="kw">sum</span>(all.wide<span class="op">$</span>Iraq)<span class="op">/</span><span class="dv">100</span>)</span>
+<span id="cb48-2"><a href="#cb48-2"></a></span>
+<span id="cb48-3"><a href="#cb48-3"></a><span class="co"># Rename the Column to reflect expected and observed frequencies</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a></span>
+<span id="cb48-5"><a href="#cb48-5"></a><span class="co">## using Dplyer</span></span>
+<span id="cb48-6"><a href="#cb48-6"></a>all.wide <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb48-7"><a href="#cb48-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(</span>
+<span id="cb48-8"><a href="#cb48-8"></a>    <span class="dt">IraqObserved =</span> Iraq</span>
+<span id="cb48-9"><a href="#cb48-9"></a>  )</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+##   Distress IraqObserved Australia IraqExpected
+##   &lt;ord&gt;           &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+## 1 low               123     70.6         313. 
+## 2 moderate           70     18.5          82.0
+## 3 high               93      7.41         32.8
+## 4 veryHigh          157      3.43         15.2</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="co">## using Base Functions</span></span>
+<span id="cb50-2"><a href="#cb50-2"></a><span class="kw">names</span>(all.wide)[<span class="kw">names</span>(all.wide)<span class="op">==</span><span class="st">&quot;Iraq&quot;</span>] &lt;-<span class="st"> &quot;IraqObserved&quot;</span></span>
+<span id="cb50-3"><a href="#cb50-3"></a></span>
+<span id="cb50-4"><a href="#cb50-4"></a><span class="co"># Print the DataFrame</span></span>
+<span id="cb50-5"><a href="#cb50-5"></a>all.wide</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+##   Distress IraqObserved Australia IraqExpected
+##   &lt;ord&gt;           &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+## 1 low               123     70.6         313. 
+## 2 moderate           70     18.5          82.0
+## 3 high               93      7.41         32.8
+## 4 veryHigh          157      3.43         15.2</code></pre>
+<h3 id="compute-the-chi-squared-distance">(04)Compute the Chi-Squared Distance</h3>
+<p>The <em>Chi-Squared</em> (<span class="math inline">\(\chi^2\)</span>) statistic is the squared distance from the the expected and observed values to the expected value:</p>
+<p><span class="math display">\[
+\chi^2 = \sum^n_{i=1} \left[ \frac{(o-e)^2}{e} \right]
+\]</span></p>
+<p>This can be done readily in <strong><em>R</em></strong>:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>o &lt;-<span class="st"> </span>all.wide<span class="op">$</span>IraqObserved</span>
+<span id="cb52-2"><a href="#cb52-2"></a>e &lt;-<span class="st"> </span>all.wide<span class="op">$</span>IraqExpected</span>
+<span id="cb52-3"><a href="#cb52-3"></a></span>
+<span id="cb52-4"><a href="#cb52-4"></a>all.wide<span class="op">$</span>ChiDist &lt;-<span class="st"> </span>((o<span class="op">-</span>e)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>e)</span>
+<span id="cb52-5"><a href="#cb52-5"></a>ChiStat &lt;-<span class="st"> </span><span class="kw">sum</span>(all.wide<span class="op">$</span>ChiDist)</span>
+<span id="cb52-6"><a href="#cb52-6"></a>ChiStat</span></code></pre></div>
+<pre><code>## [1] 1550.75</code></pre>
+<p>And returns the value <span class="math inline">\(\chi^2 \approx 1551\)</span></p>
+<h3 id="similate-the-counts">(05) Similate the Counts</h3>
+<p>A distribution with multiple categories of different probabilities is a <strong>multinomial</strong> distribution and can be simulated:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="kw">rmultinom</span>(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">443</span>, <span class="dt">prob =</span> aihw<span class="op">/</span><span class="dv">100</span>)</span></code></pre></div>
+<pre><code>##          [,1]
+## low       316
+## moderate   86
+## high       25
+## veryHigh   16</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="co"># A more Rigurous simulation by averaging various other simulations</span></span>
+<span id="cb56-2"><a href="#cb56-2"></a>average_sim_count      &lt;-<span class="st"> </span><span class="kw">rmultinom</span>(<span class="dt">n =</span> <span class="dv">10000</span>, <span class="dt">size =</span> <span class="dv">443</span>, <span class="dt">prob =</span> aihw<span class="op">/</span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowMeans</span>()</span>
+<span id="cb56-3"><a href="#cb56-3"></a>all.wide<span class="op">$</span>IraqSimulated &lt;-<span class="st"> </span>average_sim_count </span>
+<span id="cb56-4"><a href="#cb56-4"></a>all.wide</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 6
+##   Distress IraqObserved Australia IraqExpected ChiDist IraqSimulated
+##   &lt;ord&gt;           &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;
+## 1 low               123     70.6         313.   115.           313. 
+## 2 moderate           70     18.5          82.0    1.74          82.0
+## 3 high               93      7.41         32.8  110.            32.9
+## 4 veryHigh          157      3.43         15.2 1323.            15.2</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="co"># Building a Confidence Interval for the true mean given this Distribution</span></span>
+<span id="cb58-2"><a href="#cb58-2"></a><span class="co"># The confidence interval is meaningless really, it can be made arbitrarily small by</span></span>
+<span id="cb58-3"><a href="#cb58-3"></a><span class="co"># making n sufficietnly large, this is just to illustrate confidence intervals for</span></span>
+<span id="cb58-4"><a href="#cb58-4"></a><span class="co"># population means given a sample of sample means.</span></span>
+<span id="cb58-5"><a href="#cb58-5"></a>sd_sim_count      &lt;-<span class="st"> </span><span class="kw">rmultinom</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">size =</span> <span class="dv">443</span>, <span class="dt">prob =</span> aihw<span class="op">/</span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">apply</span>(<span class="dt">MARGIN =</span> <span class="dv">1</span>, sd) <span class="co"># 1 is row, 2 is column</span></span>
+<span id="cb58-6"><a href="#cb58-6"></a></span>
+<span id="cb58-7"><a href="#cb58-7"></a><span class="co"># Calculate the t-statistic for 95%</span></span>
+<span id="cb58-8"><a href="#cb58-8"></a>t &lt;-<span class="st"> </span><span class="kw">qt</span>(<span class="dt">p =</span> <span class="fl">0.95</span>, <span class="dt">df =</span> <span class="dv">999</span>)</span>
+<span id="cb58-9"><a href="#cb58-9"></a></span>
+<span id="cb58-10"><a href="#cb58-10"></a><span class="kw">data.frame</span>(</span>
+<span id="cb58-11"><a href="#cb58-11"></a>  <span class="dt">averageSimCount =</span> average_sim_count,</span>
+<span id="cb58-12"><a href="#cb58-12"></a>  <span class="dt">sdSimCount =</span> sd_sim_count,</span>
+<span id="cb58-13"><a href="#cb58-13"></a>  <span class="dt">lowerConfidenceForMean=</span> <span class="kw">round</span>(average_sim_count <span class="op">-</span><span class="st"> </span>t <span class="op">*</span><span class="st"> </span>(sd_sim_count)<span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">1000</span>)),</span>
+<span id="cb58-14"><a href="#cb58-14"></a>  <span class="dt">upperConfidenceForMean =</span> <span class="kw">round</span>(average_sim_count <span class="op">+</span><span class="st"> </span>t <span class="op">*</span><span class="st"> </span>(sd_sim_count)<span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">1000</span>))</span>
+<span id="cb58-15"><a href="#cb58-15"></a>)</span></code></pre></div>
+<pre><code>##          averageSimCount sdSimCount lowerConfidenceForMean upperConfidenceForMean
+## low             312.8818   9.557677                    312                    313
+## moderate         81.9786   8.321460                     82                     82
+## high             32.9205   5.451160                     33                     33
+## veryHigh         15.2191   3.780478                     15                     15</code></pre>
+<p>Or this could be simulated by using the <code>sample()</code> function:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>frequency &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">443</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob=</span>all.wide<span class="op">$</span>Australia) <span class="op">%&gt;%</span></span>
+<span id="cb60-2"><a href="#cb60-2"></a><span class="st">  </span>table <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-3"><a href="#cb60-3"></a><span class="st">  </span>tibble<span class="op">::</span><span class="kw">enframe</span>()</span>
+<span id="cb60-4"><a href="#cb60-4"></a></span>
+<span id="cb60-5"><a href="#cb60-5"></a><span class="kw">names</span>(frequency) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Distress&quot;</span>, <span class="st">&quot;Count&quot;</span>)</span>
+<span id="cb60-6"><a href="#cb60-6"></a>frequency<span class="op">$</span>Distress &lt;-<span class="st"> </span><span class="kw">names</span>(iraqi)</span>
+<span id="cb60-7"><a href="#cb60-7"></a>frequency</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 2
+##   Distress Count  
+##   &lt;chr&gt;    &lt;table&gt;
+## 1 low      307    
+## 2 moderate  80    
+## 3 high      40    
+## 4 veryHigh  16</code></pre>
+<h3 id="put-everything-together">(06) Put Everything together</h3>
+<p>So the idea is, in order to test the hypothesis that there is no difference we will set up a hypothesis test.</p>
+<p>The test statistic will be the total squared distance relative to the expected value for the distribution, this is known as the <span class="math inline">\(\chi ^2\)</span> value.</p>
+<p>If we can:</p>
+<ul>
+<li>Assume the null hypothesis is true
+<ul>
+<li>(no difference between the number of iraqi counts and the number of <code>aihw</code> counts)</li>
+</ul></li>
+<li>With only 5% probability of getting a false positive under this assumption</li>
+</ul>
+<p>then we will reject the null hypothesis that they are the same and accept that there is a significant difference between the distribution of distress in the iraqi population. + (this necessarily show that the iraqi refugees are more distressed, merely that the distribution is different from the Australian distribution in such a way that would be unlikely to be a false positive assuming they were identical.)</p>
+<p>In order to evaluate this, We can take a random sample of values that are distributed with the same frequency as the <code>aihw</code> data and measure how often the corresponding <span class="math inline">\(\chi^2\)</span> value of the sampled values exceed that of the observed values for the iraqi values, under the assumption that the iraqi values are distributed at the same frequency of the <code>aihw</code>, this would amount to a False Positive for a difference.</p>
+<p>Creating many chi statistics, comparing them and repeating gives a false positive rate:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="co"># Calcualate the iraqi Chi Stat</span></span>
+<span id="cb62-2"><a href="#cb62-2"></a>e &lt;-<span class="st"> </span>aihw<span class="op">/</span><span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>(iraqi)</span>
+<span id="cb62-3"><a href="#cb62-3"></a>o &lt;-<span class="st"> </span>iraqi</span>
+<span id="cb62-4"><a href="#cb62-4"></a>iraqi_chi &lt;-<span class="st"> </span><span class="kw">sum</span>((e<span class="op">-</span>o)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>e)</span>
+<span id="cb62-5"><a href="#cb62-5"></a></span>
+<span id="cb62-6"><a href="#cb62-6"></a><span class="co"># Simulate the False Positive Rate for data following the Aus Distribution</span></span>
+<span id="cb62-7"><a href="#cb62-7"></a>n &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">3</span> <span class="co"># Simulation Length</span></span>
+<span id="cb62-8"><a href="#cb62-8"></a>FalsePosVec &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="dt">length =</span> n)</span>
+<span id="cb62-9"><a href="#cb62-9"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n) {</span>
+<span id="cb62-10"><a href="#cb62-10"></a> <span class="co"># e &lt;- rmultinom(1, 443, aihw/100)</span></span>
+<span id="cb62-11"><a href="#cb62-11"></a>  e &lt;-<span class="st">  </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">443</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob=</span>aihw) <span class="op">%&gt;%</span><span class="st">  </span>table</span>
+<span id="cb62-12"><a href="#cb62-12"></a>  o &lt;-<span class="st"> </span>aihw</span>
+<span id="cb62-13"><a href="#cb62-13"></a><span class="co">#  o &lt;- iraqi</span></span>
+<span id="cb62-14"><a href="#cb62-14"></a>  sim_chi &lt;-<span class="st"> </span><span class="kw">sum</span>((e<span class="op">-</span>o)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>e )</span>
+<span id="cb62-15"><a href="#cb62-15"></a>  <span class="co"># Assume null hypotheses, this means we assume the iraqi distance does not exceed the sim distance</span></span>
+<span id="cb62-16"><a href="#cb62-16"></a>  <span class="co"># The number of times it does exceed is:</span></span>
+<span id="cb62-17"><a href="#cb62-17"></a>      <span class="co"># the probability of a false positive assuming the null hypothesis is correct</span></span>
+<span id="cb62-18"><a href="#cb62-18"></a>           <span class="co"># this is the p-value.</span></span>
+<span id="cb62-19"><a href="#cb62-19"></a>  FalsePosQ &lt;-<span class="st"> </span><span class="op">!</span>(iraqi_chi <span class="op">&lt;</span><span class="st"> </span>sim_chi) <span class="co">#(assuming null hypothesis means assuming iraqi distance leq to  sim)</span></span>
+<span id="cb62-20"><a href="#cb62-20"></a>                                     <span class="co"># The number of positives will be the FPR and indicative of </span></span>
+<span id="cb62-21"><a href="#cb62-21"></a>                                     <span class="co"># the p-value)</span></span>
+<span id="cb62-22"><a href="#cb62-22"></a>  FalsePosVec[i] &lt;-<span class="st"> </span>FalsePosQ</span>
+<span id="cb62-23"><a href="#cb62-23"></a>}</span>
+<span id="cb62-24"><a href="#cb62-24"></a></span>
+<span id="cb62-25"><a href="#cb62-25"></a>pval &lt;-<span class="st"> </span><span class="kw">mean</span>(FalsePosVec)</span>
+<span id="cb62-26"><a href="#cb62-26"></a><span class="kw">print</span>(pval)</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>This could be made more efficient by using <code>replicate</code> rather than a <code>for</code> loop (<code>replicate</code> is to <strong><em>R</em></strong> as <code>Table[]</code> is to <em>Mathematica</em>):</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a>e &lt;-<span class="st"> </span>aihw<span class="op">/</span><span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>(iraqi)</span>
+<span id="cb64-2"><a href="#cb64-2"></a>o &lt;-<span class="st"> </span>iraqi</span>
+<span id="cb64-3"><a href="#cb64-3"></a>iraqi_chi &lt;-<span class="st"> </span><span class="kw">sum</span>((e<span class="op">-</span>o)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>e)</span>
+<span id="cb64-4"><a href="#cb64-4"></a></span>
+<span id="cb64-5"><a href="#cb64-5"></a>FalsePosCount &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">10</span><span class="op">^</span><span class="dv">4</span>, <span class="dt">expr =</span> {</span>
+<span id="cb64-6"><a href="#cb64-6"></a>  o &lt;-<span class="st"> </span><span class="kw">rmultinom</span>(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">size =</span> <span class="kw">sum</span>(iraqi), <span class="dt">prob =</span> aihw)</span>
+<span id="cb64-7"><a href="#cb64-7"></a>  sim_chi &lt;-<span class="st"> </span><span class="kw">sum</span>((e<span class="op">-</span>o)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>e)</span>
+<span id="cb64-8"><a href="#cb64-8"></a>  <span class="op">!</span>(iraqi_chi <span class="op">&lt;</span><span class="st"> </span>sim_chi)</span>
+<span id="cb64-9"><a href="#cb64-9"></a>})</span>
+<span id="cb64-10"><a href="#cb64-10"></a></span>
+<span id="cb64-11"><a href="#cb64-11"></a><span class="kw">mean</span>(FalsePosCount)</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<p>This returns a value of 1, indicating that the probability of a false positive, assuming that the data was randomly sampled following the probabilities of the proportions of the Australian populatation, is effectively 1, thus the null hypothesis should be rejected and the alternative hypothesis accepted.</p>
+<h3 id="use-the-inbuilt-chi-square-statistic">(07) Use the InBuilt Chi-Square Statistic</h3>
+<p>The chi-squared value that would correspond to a false positive rate like in the above simulation, may be determined by integrating the appropriate probability density function:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_n\left( x \right)= \frac{1}{2^{\frac{n}{2}} \cdot  \Gamma\left( \frac{n}{2} \right)} \cdot  x^{\frac{n}{2} -  1}\cdot  e^{- \frac{x}{2}}
+\end{aligned}
+\]</span></p>
+<p>where the mean and variance are <span class="math inline">\(n\)</span> and <span class="math inline">\(2n\)</span> respectively; <span class="math inline">\(\Gamma\left( x \right)\)</span> is the gamma function it’s very similar to the factorial function (<span class="math inline">\(x!\)</span>):</p>
+<p><span class="math display">\[\begin{aligned}
+x! &amp;= \Gamma\left( x+ 1 \right)\\
+x! &amp;= x \cdot  \Gamma\left( x \right)\\
+\Gamma\left( n \right)&amp;= \left( n- 1 \right)!, \qquad \forall n \in \mathbb{Z} \setminus \mathbb{Z}^- \\
+\Gamma\left( z \right) &amp;= \int_{0}^{\infty}\left(  \left( \# \right)^{z- 1}\cdot  e^{-\left( \# \right)} \right) \mathrm{d} \left( \# \right), \qquad z \in \mathbb{C} \wedge \Re\left( z \right)&gt;0
+\end{aligned}\]</span></p>
+<p>This doesn’t seem quick to solve, plugging it into <em>Mathematica</em> gives:</p>
+<pre class="wolfram"><code>Integrate[ 1/2^(n/2*Gamma[n/2])*x^(n/2 - 1)*e^(-x/2), {x, 0, \[Infinity]}]</code></pre>
+<pre><code>ConditionalExpression[(2^(1/2 - (3 Sqrt[\[Pi]])/4) Sqrt[\[Pi]])/ Log[e]^(3/2), Re[Log[e]] &gt; 0]</code></pre>
+<p><span class="math display">\[
+\int^{\infty}_0\frac{1}{2^{\frac{n}{2}} \cdot  \Gamma\left( \frac{n}{2} \right)} \cdot  x^{\frac{n}{2} -  1}\cdot  e^{- \frac{x}{2}} \enspace \mathrm{d}x =   \frac{2^{\frac{1}{2}-\frac{3 \sqrt{\pi }}{4}} \sqrt{\pi }}{\log ^{\frac{3}{2}}(e)} 
+ \]</span></p>
+<p>Howerver inside <strong><em>R</em></strong> this is all built into the <code>pchisq()</code> function and the null hypothesis may be evaluated without necessarily undertaking the simulation.</p>
+<h4 id="evaluate-test-statistic-using-chi-statistic">Evaluate Test Statistic Using Chi Statistic</h4>
+<p>The probability of a false positive, assuming that the null hypothesis is true can be determined directly from the critical values of the Chi-Statistic.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="co"># the null hypothesis is that there is no difference, the</span></span>
+<span id="cb68-2"><a href="#cb68-2"></a><span class="co"># probability of detecting a difference will be the upper tail and would be the p-value</span></span>
+<span id="cb68-3"><a href="#cb68-3"></a><span class="kw">pchisq</span>(<span class="dt">q =</span> iraqi_chi, <span class="dt">df =</span> (<span class="kw">length</span>(aihw)<span class="op">-</span><span class="dv">1</span>), <span class="dt">lower.tail =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<p>It isn’t even necessary to calculate the <span class="math inline">\(\chi^2\)</span> value, this is built into <strong><em>R</em></strong> and can be done all at once:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="kw">chisq.test</span>(<span class="dt">x =</span> iraqi, <span class="dt">p =</span> aihw, <span class="dt">rescale.p =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  iraqi
+## X-squared = 1550.6, df = 3, p-value &lt; 2.2e-16</code></pre>
+<p>As opposed to using the <span class="math inline">\(\chi^2\)</span> distribution, it is possible to use a <em>Monte Carlo</em> simulation all in one line as well:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1"></a><span class="kw">chisq.test</span>(<span class="dt">x =</span> iraqi, <span class="dt">p =</span> aihw, <span class="dt">rescale.p =</span> <span class="ot">TRUE</span>, <span class="dt">simulate.p.value =</span> <span class="ot">TRUE</span>, <span class="dt">B =</span> <span class="dv">10</span><span class="op">^</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## 
+##  Chi-squared test for given probabilities with simulated p-value (based on 1000 replicates)
+## 
+## data:  iraqi
+## X-squared = 1550.6, df = NA, p-value = 0.000999</code></pre>
+<p>I can’t think of any reason to use the monte carlo simulation over the density distribution though</p>
+<h2 id="eels-data-comparison-of-two-populations">Eels Data (Comparison of Two Populations)</h2>
+<h3 id="enter-the-data">(1) Enter the Data</h3>
+<p>The data can be entered as a data frame or a matrix, the prior will be better for plotting and visualisation but the latter may be the expected format for various built in functions:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1"></a><span class="co"># Create Vectors</span></span>
+<span id="cb74-2"><a href="#cb74-2"></a>g_moringa &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;BoRdeR&quot;</span> =<span class="st"> </span><span class="dv">264</span>,<span class="st">&quot;GraSs&quot;</span> =<span class="st"> </span><span class="dv">127</span>,<span class="st">&quot;SaNd&quot;</span> =<span class="st"> </span><span class="dv">99</span>)</span>
+<span id="cb74-3"><a href="#cb74-3"></a>g_vicinus &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;BoRder&quot;</span> =<span class="st"> </span><span class="dv">161</span>,<span class="st">&quot;GraSs&quot;</span> =<span class="st"> </span><span class="dv">116</span>,<span class="st">&quot;SaNd&quot;</span> =<span class="st"> </span><span class="dv">67</span>)</span>
+<span id="cb74-4"><a href="#cb74-4"></a>    <span class="co"># Capitals to emphasise change later with dimnames</span></span>
+<span id="cb74-5"><a href="#cb74-5"></a></span>
+<span id="cb74-6"><a href="#cb74-6"></a><span class="co"># Create a Matrix</span></span>
+<span id="cb74-7"><a href="#cb74-7"></a>eel_Mat &lt;-<span class="st"> </span><span class="kw">rbind</span>(g_moringa, g_vicinus)</span>
+<span id="cb74-8"><a href="#cb74-8"></a><span class="kw">dimnames</span>(eel_Mat) &lt;-<span class="st">  </span><span class="kw">list</span>(<span class="dt">species =</span> <span class="kw">c</span>(<span class="st">&quot;G.moringa&quot;</span>, <span class="st">&quot;G.vicinus&quot;</span>),</span>
+<span id="cb74-9"><a href="#cb74-9"></a>                           <span class="dt">location =</span> <span class="kw">c</span>(<span class="st">&quot;Border&quot;</span>, <span class="st">&quot;Grass&quot;</span>, <span class="st">&quot;Sand&quot;</span>)</span>
+<span id="cb74-10"><a href="#cb74-10"></a>                           )</span>
+<span id="cb74-11"><a href="#cb74-11"></a></span>
+<span id="cb74-12"><a href="#cb74-12"></a></span>
+<span id="cb74-13"><a href="#cb74-13"></a><span class="co"># Create a Data Frame</span></span>
+<span id="cb74-14"><a href="#cb74-14"></a>eel_DF  &lt;-<span class="st"> </span>eel_Mat <span class="op">%&gt;%</span></span>
+<span id="cb74-15"><a href="#cb74-15"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></span>
+<span id="cb74-16"><a href="#cb74-16"></a><span class="st">  </span><span class="kw">add_column</span>(<span class="st">&quot;Species&quot;</span> =<span class="st"> </span><span class="kw">factor</span>(<span class="kw">rownames</span>(eel_Mat))) <span class="op">%&gt;%</span></span>
+<span id="cb74-17"><a href="#cb74-17"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(Species, Border, Grass, Sand)</span>
+<span id="cb74-18"><a href="#cb74-18"></a></span>
+<span id="cb74-19"><a href="#cb74-19"></a>eel_DF <span class="co"># %&gt;% kable()</span></span></code></pre></div>
+<pre><code>## # A tibble: 2 x 4
+##   Species   Border Grass  Sand
+##   &lt;fct&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 G.moringa    264   127    99
+## 2 G.vicinus    161   116    67</code></pre>
+<h4 id="plot-the-data">Plot the Data</h4>
+<p>In order to plot the data a tidy data frame needs to be made using <code>tidyr::pivot_longer()</code> or <code>reshape2::melt()</code>. A custom colour pallet can be specified using the following layers <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
+<ul>
+<li>Discrete Data
+<ul>
+<li><code>scale_fill_manual()</code>
+<ul>
+<li>to change the fill of the object</li>
+</ul></li>
+<li><code>scale_color_manual()</code>
+<ul>
+<li>to change the colour of the <strong>outline</strong> of the object</li>
+</ul></li>
+<li>Using Built in Palletes:
+<ul>
+<li><code>RColorBrewer</code>
+<ul>
+<li><code>scale_fill_brewer(palette="Dark2")</code></li>
+<li><code>scale_color_brewer(palette="Dark2")</code></li>
+</ul></li>
+<li><code>wesanderson</code>
+<ul>
+<li><code>scale_fill_manual(values=wes_palette(n=3, name="GrandBudapest"))</code></li>
+<li><code>scale_color_(values=wes_palette(n=3, name="GrandBudapest"))</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Continuous Data
+<ul>
+<li><code>scale_color_gradient(low="blue", high="red")</code>
+<ul>
+<li>Color is the outline, so think Scatter Plot</li>
+<li>To Have a Diverging Pallet:
+<ul>
+<li><code>scale_color_gradient2</code>(midpoint=mid, low=“blue”, mid=“white”, high=“red”, space =“Lab” )</li>
+</ul></li>
+<li>To have a pallet of n different colours (in this example 7:
+<ul>
+<li><code>scale_color_gradientn(colours = rainbow(7))</code></li>
+</ul></li>
+</ul></li>
+<li><code>scale_fill_gradient()</code>
+<ul>
+<li>Fill is the filling so think Histogram</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>scale_color_gradient(low=“blue”, high=“red”)</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a><span class="co"># Create a Tidy Data Frame</span></span>
+<span id="cb76-2"><a href="#cb76-2"></a></span>
+<span id="cb76-3"><a href="#cb76-3"></a><span class="co">## Using Pivot Longer from `tidyverse` (dev git repo)</span></span>
+<span id="cb76-4"><a href="#cb76-4"></a>eel_DF_Tidy &lt;-<span class="st"> </span><span class="kw">pivot_longer</span>(<span class="dt">data =</span> eel_DF,</span>
+<span id="cb76-5"><a href="#cb76-5"></a>                            <span class="dt">cols =</span> <span class="kw">names</span>(eel_DF[,<span class="op">-</span><span class="dv">1</span>]),</span>
+<span id="cb76-6"><a href="#cb76-6"></a>                            <span class="dt">names_to =</span> <span class="st">&quot;Location&quot;</span>,</span>
+<span id="cb76-7"><a href="#cb76-7"></a>                            <span class="dt">values_to =</span> <span class="st">&quot;Count&quot;</span>) </span>
+<span id="cb76-8"><a href="#cb76-8"></a></span>
+<span id="cb76-9"><a href="#cb76-9"></a>eel_DF_Tidy<span class="op">$</span>Species &lt;-<span class="st"> </span><span class="kw">factor</span>(eel_DF<span class="op">$</span>Species)</span>
+<span id="cb76-10"><a href="#cb76-10"></a>eel_DF_Tidy<span class="op">$</span>Location &lt;-<span class="st"> </span><span class="kw">factor</span>(eel_DF_Tidy<span class="op">$</span>Location)</span>
+<span id="cb76-11"><a href="#cb76-11"></a></span>
+<span id="cb76-12"><a href="#cb76-12"></a><span class="co">## Using Melt from `reshape2`</span></span>
+<span id="cb76-13"><a href="#cb76-13"></a><span class="kw">melt</span>(eel_DF, ) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="st">&quot;Location&quot;</span> =<span class="st"> </span>variable,</span>
+<span id="cb76-14"><a href="#cb76-14"></a>                               <span class="st">&quot;Count&quot;</span> =<span class="st"> </span>value)</span></code></pre></div>
+<pre><code>## Using Species as id variables</code></pre>
+<pre><code>##     Species Location Count
+## 1 G.moringa   Border   264
+## 2 G.vicinus   Border   161
+## 3 G.moringa    Grass   127
+## 4 G.vicinus    Grass   116
+## 5 G.moringa     Sand    99
+## 6 G.vicinus     Sand    67</code></pre>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1"></a>    <span class="co"># Instead of using dplyr I could have used `variable.name=`...,</span></span>
+<span id="cb79-2"><a href="#cb79-2"></a>        <span class="co"># just done for reference</span></span>
+<span id="cb79-3"><a href="#cb79-3"></a></span>
+<span id="cb79-4"><a href="#cb79-4"></a><span class="co">## ggplot2</span></span>
+<span id="cb79-5"><a href="#cb79-5"></a>violetBluePallet &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#511FB5&quot;</span>, <span class="st">&quot;dodgerblue3&quot;</span>, <span class="st">&quot;#e31a1c&quot;</span>)</span>
+<span id="cb79-6"><a href="#cb79-6"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> eel_DF_Tidy,</span>
+<span id="cb79-7"><a href="#cb79-7"></a>       <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Location,</span>
+<span id="cb79-8"><a href="#cb79-8"></a>                     <span class="dt">y =</span> Count,</span>
+<span id="cb79-9"><a href="#cb79-9"></a>                     <span class="dt">fill =</span> Species,</span>
+<span id="cb79-10"><a href="#cb79-10"></a>                     <span class="dt">col =</span> Count)) <span class="op">+</span></span>
+<span id="cb79-11"><a href="#cb79-11"></a><span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="op">+</span></span>
+<span id="cb79-12"><a href="#cb79-12"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">col =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb79-13"><a href="#cb79-13"></a><span class="st">  </span><span class="kw">theme_classic</span>() <span class="op">+</span></span>
+<span id="cb79-14"><a href="#cb79-14"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;blah&quot;</span>, <span class="dt">subtitle =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Frequency&quot;</span>) <span class="op">+</span></span>
+<span id="cb79-15"><a href="#cb79-15"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span>violetBluePallet)</span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-19-1.png" alt="" /><figcaption>plot of chunk unnamed-chunk-19</figcaption>
+</figure>
+<h3 id="expected-values">(2) Expected Values</h3>
+<p>In this case the two hypothesis are:</p>
+<ul>
+<li><span class="math inline">\(H_0: \quad\)</span> the two species are distriuted with the same frequency
+<ul>
+<li>So the proportion in both areas is assumed to be equal
+<ul>
+<li>Given this assumption we may take the proportion of the total number of observations that occur in this area and this will be equal to averaging the proportions of each species that occur in the two areas.</li>
+</ul></li>
+</ul></li>
+<li><span class="math inline">\(H_a: \quad\)</span> there is a difference between the distribution of the two frequencies</li>
+</ul>
+<p>Under the assumption that both species have the same distribution (i.e. assume <span class="math inline">\(\mathrm{H}_0\)</span> is true) each term <span class="math inline">\(x_{ij}\)</span> will have an expected frequency of <span class="math inline">\(f = \frac{1}{n} \cdot \sum^{2}_{i= 1} \left[x_i \right]\)</span> and hence the expected count would be the frequency multiplied by the total number of observed species:</p>
+<p><span class="math display">\[\begin{aligned}
+    x_{ij}&amp;= f \cdot  \sum^{3}_{j= 1}   \left[ x_{ij} \right] \\
+&amp;=  \frac{1}{n} \cdot   \sum^{2}_{i= 1}   \left[x_i \right] \cdot  \sum^{3}_{j= 1}   \left[ x_{ij} \right] 
+\end{aligned}\]</span></p>
+<p>so the resulting matrix of counts would be:</p>
+<p><span class="math display">\[\begin{aligned}
+    \begin{bmatrix} 490 \\ 344 \end{bmatrix}  
+    \times 
+    \begin{bmatrix} 0.5 &amp; 0.29 &amp; 0.2 \end{bmatrix}  \\
+    = \begin{bmatrix} 250 &amp; 143 &amp; 98 \\
+    175 &amp; 100 &amp; 68 \end{bmatrix} 
+\end{aligned}\]</span></p>
+<p>Assuming that the null hypothesis is true, the expected distribution between areas could be calculated by using matrix multiplcication:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a>species_counts       &lt;-<span class="st">  </span><span class="kw">rowSums</span>(eel_Mat)</span>
+<span id="cb80-2"><a href="#cb80-2"></a>location_proportions  &lt;-<span class="st"> </span><span class="kw">colSums</span>(eel_Mat)<span class="op">/</span><span class="kw">sum</span>(eel_Mat)</span>
+<span id="cb80-3"><a href="#cb80-3"></a> </span>
+<span id="cb80-4"><a href="#cb80-4"></a><span class="co"># Now Perform matrix Multiplication</span></span>
+<span id="cb80-5"><a href="#cb80-5"></a> species_counts      </span></code></pre></div>
+<pre><code>## G.moringa G.vicinus 
+##       490       344</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a> location_proportions </span></code></pre></div>
+<pre><code>##    Border     Grass      Sand 
+## 0.5095923 0.2913669 0.1990408</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a> <span class="kw">as.matrix</span>(species_counts) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(location_proportions)) </span></code></pre></div>
+<pre><code>##             Border    Grass     Sand
+## G.moringa 249.7002 142.7698 97.52998
+## G.vicinus 175.2998 100.2302 68.47002</code></pre>
+<p>This is actually the definition of the outer product; the <a href="https://en.wikipedia.org/wiki/Outer_product#Definition"><em>Outer Product</em></a> is defined as:</p>
+<p><span class="math display">\[
+\mathbf{u} \otimes \mathbf {v} =\mathbf {u} \mathbf {v} ^{\textsf {T}}={\begin{bmatrix}u_{1}\\u_{2}\\u_{3}\\u_{4}\end{bmatrix}}{\begin{bmatrix}v_{1}&amp;v_{2}&amp;v_{3}\end{bmatrix}}={\begin{bmatrix}u_{1}v_{1}&amp;u_{1}v_{2}&amp;u_{1}v_{3}\\u_{2}v_{1}&amp;u_{2}v_{2}&amp;u_{2}v_{3}\\u_{3}v_{1}&amp;u_{3}v_{2}&amp;u_{3}v_{3}\\u_{4}v_{1}&amp;u_{4}v_{2}&amp;u_{4}v_{3}\end{bmatrix}}.
+\]</span> In <strong><em>R</em></strong> vectors <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> of length <span class="math inline">\(m\)</span> are treated as <span class="math inline">\(m \times 1\)</span> matrices as can be observed by evaluating <code>as.matrix(1:3)</code> and <code>t(as.matrix(1:3))</code>, this means that the outer product of two vectors will be equivalent to:</p>
+<p><span class="math display">\[
+\mathbf {u} \otimes \mathbf {v} =\mathbf {A} ={\begin{bmatrix}u_{1}v_{1}&amp;u_{1}v_{2}&amp;\dots &amp;u_{1}v_{n}\\u_{2}v_{1}&amp;u_{2}v_{2}&amp;\dots &amp;u_{2}v_{n}\\\vdots &amp;\vdots &amp;\ddots &amp;\vdots \\u_{m}v_{1}&amp;u_{m}v_{2}&amp;\dots &amp;u_{m}v_{n}\end{bmatrix}}
+\]</span></p>
+<p>So the expected occurence rate of the species would be:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a><span class="co"># Determine how many species there are</span></span>
+<span id="cb86-2"><a href="#cb86-2"></a>species_counts       &lt;-<span class="st">  </span><span class="kw">rowSums</span>(eel_Mat)</span>
+<span id="cb86-3"><a href="#cb86-3"></a>species_proportions &lt;-<span class="st">  </span><span class="kw">rowSums</span>(eel_Mat)<span class="op">/</span>n</span>
+<span id="cb86-4"><a href="#cb86-4"></a><span class="co"># Determine the area proportions</span></span>
+<span id="cb86-5"><a href="#cb86-5"></a>location_proportions  &lt;-<span class="st"> </span><span class="kw">colSums</span>(eel_Mat)<span class="op">/</span><span class="kw">sum</span>(eel_Mat)</span>
+<span id="cb86-6"><a href="#cb86-6"></a></span>
+<span id="cb86-7"><a href="#cb86-7"></a><span class="co"># Calculate the expected distribution of that number for those proportions</span></span>
+<span id="cb86-8"><a href="#cb86-8"></a>expected_counts &lt;-<span class="st"> </span>base<span class="op">::</span><span class="kw">outer</span>(species_counts, location_proportions) </span>
+<span id="cb86-9"><a href="#cb86-9"></a></span>
+<span id="cb86-10"><a href="#cb86-10"></a><span class="kw">print</span>(<span class="kw">list</span>(species_counts, location_proportions, expected_counts, base<span class="op">::</span><span class="kw">outer</span>(location_proportions, species_counts) ))</span></code></pre></div>
+<pre><code>## [[1]]
+## G.moringa G.vicinus 
+##       490       344 
+## 
+## [[2]]
+##    Border     Grass      Sand 
+## 0.5095923 0.2913669 0.1990408 
+## 
+## [[3]]
+##             Border    Grass     Sand
+## G.moringa 249.7002 142.7698 97.52998
+## G.vicinus 175.2998 100.2302 68.47002
+## 
+## [[4]]
+##        G.moringa G.vicinus
+## Border 249.70024 175.29976
+## Grass  142.76978 100.23022
+## Sand    97.52998  68.47002</code></pre>
+<p>or if you’re willing to remember that:</p>
+<p><span class="math display">\[
+e_{ij} = \frac{\sum{[\textsf{row}]} * \sum{[\textsf{col}]}}{n}
+\]</span></p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1"></a>e &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb88-2"><a href="#cb88-2"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(eel_Mat)) {</span>
+<span id="cb88-3"><a href="#cb88-3"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(eel_Mat)) {</span>
+<span id="cb88-4"><a href="#cb88-4"></a>      e[i,j] &lt;-<span class="st"> </span><span class="kw">colSums</span>(eel_Mat)[j] <span class="op">*</span><span class="st"> </span><span class="kw">rowSums</span>(eel_Mat)[i] <span class="op">/</span><span class="st"> </span>n</span>
+<span id="cb88-5"><a href="#cb88-5"></a>    }</span>
+<span id="cb88-6"><a href="#cb88-6"></a>  }</span></code></pre></div>
+<h3 id="simulate-the-values">(3) Simulate The Values</h3>
+<p>The game plan here is to:</p>
+<ol type="1">
+<li>Assume that the null hypothesis is true:</li>
+</ol>
+<ul>
+<li>The observations are distributed equally across features:
+<ul>
+<li><span class="math inline">\(e_{ij} = \sum \left[ \textsf{rows} \times \right] \sum \left[ \textsf{cols} \right] \times \frac{1}{n}\)</span></li>
+</ul></li>
+</ul>
+<ol start="2" type="1">
+<li>Randomly sample values at the same probability</li>
+</ol>
+<ul>
+<li>given this simulated observation, determine what the expected distribution would be determined to be assuming that the null hypothesis was true.</li>
+<li>Determine what the corresponding <span class="math inline">\(\chi^2\)</span> value is.</li>
+<li>the number of times that this simulated <span class="math inline">\(\chi^2\)</span> value is greater than the observed <span class="math inline">\(\chi^2\)</span> value is the <em><strong>F</strong>alse <strong>P</strong>ositive <strong>R</strong>ate</em></li>
+</ul>
+<h4 id="sample-a-single-value">Sample a Single Value</h4>
+<p>In order to simulate the values we need simulate data distributed at given probabilities, this is known as a multinomial distribution, it’s essentially rolling a really oddly lopsided die that matches the probabilities specified.</p>
+<p>From that sample it is necessary to calculate what we would determine the expected distribution to be assuming that the null hypothesis was true:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a>overall_proportion &lt;-<span class="st"> </span>expected_counts<span class="op">/</span><span class="kw">sum</span>(expected_counts)</span>
+<span id="cb89-2"><a href="#cb89-2"></a></span>
+<span id="cb89-3"><a href="#cb89-3"></a><span class="co"># Presuming that R&#39;s internal structure is consistent</span></span>
+<span id="cb89-4"><a href="#cb89-4"></a><span class="kw">rmultinom</span>(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">size =</span> <span class="kw">sum</span>(eel_Mat), <span class="dt">prob =</span> overall_proportion) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]  229  153   96
+## [2,]  184  102   70</code></pre>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a><span class="co"># Presuming it&#39;s not</span></span>
+<span id="cb91-2"><a href="#cb91-2"></a>dist_prob &lt;-<span class="st"> </span>overall_proportion <span class="op">%&gt;%</span><span class="st"> </span>as.vector</span>
+<span id="cb91-3"><a href="#cb91-3"></a>obs_sim   &lt;-<span class="st"> </span><span class="kw">rmultinom</span>(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">size =</span> <span class="kw">sum</span>(eel_Mat), <span class="dt">prob =</span> dist_prob) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb91-4"><a href="#cb91-4"></a>e_sim     &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">/</span>n<span class="op">*</span><span class="kw">outer</span>(<span class="dt">X =</span> <span class="kw">rowSums</span>(obs_sim), <span class="kw">colSums</span>(obs_sim))</span>
+<span id="cb91-5"><a href="#cb91-5"></a></span>
+<span id="cb91-6"><a href="#cb91-6"></a><span class="kw">print</span>(<span class="kw">list</span>(obs_sim, e_sim), <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+##      [,1] [,2] [,3]
+## [1,]  228  144  107
+## [2,]  193   99   63
+## 
+## [[2]]
+##      [,1] [,2] [,3]
+## [1,]  202  116   81
+## [2,]  149   86   60</code></pre>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a><span class="co">## Sanity Check</span></span>
+<span id="cb93-2"><a href="#cb93-2"></a><span class="co">#1:6 %&gt;% matrix(nrow = 2, ncol =3) %&gt;% as.vector() </span></span>
+<span id="cb93-3"><a href="#cb93-3"></a><span class="co">#1:6 %&gt;% as.matrix() %&gt;% as.vector() %&gt;% matrix(nrow = 2, ncol =3)</span></span>
+<span id="cb93-4"><a href="#cb93-4"></a><span class="co">#1:6 %&gt;% as.matrix() %&gt;% as.vector() %&gt;% matrix(nrow = 2, ncol =3) %&gt;% as.vector()</span></span>
+<span id="cb93-5"><a href="#cb93-5"></a><span class="co">#1:6 %&gt;% as.matrix() %&gt;% as.vector() %&gt;% matrix(nrow = 2, ncol =3) %&gt;% as.vector() %&gt;% matrix(nrow = 2, ncol =3)</span></span></code></pre></div>
+<p>If this was repeated many times over, the number of times that the <span class="math inline">\(\chi^2\)</span> statistic was sufficiently extreme to reject the null hypothesis would represent the false positive rate, which would be an acceptable estimate for the probability of a type I error, the <span class="math inline">\(p\)</span>-value:</p>
+<blockquote>
+<p>The probability of rejecting the null hypothesis under the assumption that it is true (i.e. under the assumption that there is no true effect). Careful, this is different from the false discovery rate</p>
+</blockquote>
+<p>This simulation is under the assumption that the null hypothesis is true and that the two populations are distributed equally, so the null hypothesis assumes that:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\mathrm{H}_0:\quad \chi^2_{obs} &lt; \chi^2_{sim} \\
+\end{aligned}
+\]</span></p>
+<p>A False Positive would be an observation that violates that assumption, if the probability of a false positive, the <span class="math inline">\(p\)</span> -value:</p>
+<ul>
+<li>Sufficiently small, the null hypothesis will be rejected.</li>
+<li>too high the null hypothesis will not be rejected.</li>
+</ul>
+<h4 id="simulate-samples-of-that-frequency">Simulate Samples of that frequency</h4>
+<p>Calculate the Chi Distribution for the observations which will become the test statistic:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a><span class="co"># Create expected and observed vectors</span></span>
+<span id="cb94-2"><a href="#cb94-2"></a>e &lt;-<span class="st"> </span>expected_counts</span>
+<span id="cb94-3"><a href="#cb94-3"></a>o &lt;-<span class="st"> </span>eel_Mat</span>
+<span id="cb94-4"><a href="#cb94-4"></a>n &lt;-<span class="st"> </span><span class="kw">sum</span>(eel_Mat)</span>
+<span id="cb94-5"><a href="#cb94-5"></a> </span>
+<span id="cb94-6"><a href="#cb94-6"></a>chi_obs &lt;-<span class="st"> </span><span class="kw">sum</span>((e<span class="op">-</span>o)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>e)</span>
+<span id="cb94-7"><a href="#cb94-7"></a></span>
+<span id="cb94-8"><a href="#cb94-8"></a><span class="co">#obs_sim   &lt;- rmultinom(n = 1, size = sum(eel_Mat), prob = dist_prob) %&gt;% matrix(ncol = 3, nrow = 2)</span></span></code></pre></div>
+<p>The idea of the simulation is to generate observations at the proportion assumed by the null hypothesis and reduce these matrices to corresponding <span class="math inline">\(\chi^2\)</span> values.</p>
+<p>Simulate samples at the same proportion and sample the <span class="math inline">\(\chi^2\)</span> statistic:</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a><span class="co"># Simulate distribution</span></span>
+<span id="cb95-2"><a href="#cb95-2"></a>    <span class="co"># Use `Replicate` not `for` because it&#39;s faster</span></span>
+<span id="cb95-3"><a href="#cb95-3"></a></span>
+<span id="cb95-4"><a href="#cb95-4"></a>dist_prob &lt;-<span class="st"> </span>overall_proportion <span class="op">%&gt;%</span><span class="st"> </span>as.vector</span>
+<span id="cb95-5"><a href="#cb95-5"></a>  <span class="co"># I could also have used rmultinom to sample the split of the population across two species</span></span>
+<span id="cb95-6"><a href="#cb95-6"></a>  <span class="co"># Then split those species amont locations</span></span>
+<span id="cb95-7"><a href="#cb95-7"></a>  <span class="co"># or made two samples of the species and location dist and then used `table()`</span></span>
+<span id="cb95-8"><a href="#cb95-8"></a></span>
+<span id="cb95-9"><a href="#cb95-9"></a>sim_chi_vec &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">10</span><span class="op">^</span><span class="dv">4</span>, {</span>
+<span id="cb95-10"><a href="#cb95-10"></a>  </span>
+<span id="cb95-11"><a href="#cb95-11"></a>  <span class="co">## Simulate Samples</span></span>
+<span id="cb95-12"><a href="#cb95-12"></a>obs_sim   &lt;-<span class="st"> </span><span class="kw">rmultinom</span>(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">size =</span> <span class="kw">sum</span>(eel_Mat), <span class="dt">prob =</span> dist_prob) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb95-13"><a href="#cb95-13"></a>  </span>
+<span id="cb95-14"><a href="#cb95-14"></a>  <span class="co">## Calculate the expected values from the sample</span></span>
+<span id="cb95-15"><a href="#cb95-15"></a>    <span class="co">## Assuming the null hypothesis that both rows are equal.</span></span>
+<span id="cb95-16"><a href="#cb95-16"></a>e &lt;-<span class="st"> </span><span class="kw">outer</span>(<span class="kw">rowSums</span>(obs_sim), <span class="kw">colSums</span>(obs_sim))<span class="op">/</span>n</span>
+<span id="cb95-17"><a href="#cb95-17"></a></span>
+<span id="cb95-18"><a href="#cb95-18"></a>  <span class="co">## Calculate the Chi Squared Statistic</span></span>
+<span id="cb95-19"><a href="#cb95-19"></a>sim_chi &lt;-<span class="st"> </span><span class="kw">sum</span>((e<span class="op">-</span>obs_sim)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>e)</span>
+<span id="cb95-20"><a href="#cb95-20"></a>sim_chi</span>
+<span id="cb95-21"><a href="#cb95-21"></a>  </span>
+<span id="cb95-22"><a href="#cb95-22"></a>})</span></code></pre></div>
+<p>If a simulated distribution had a <span class="math inline">\(\chi^2\)</span> value more extreme than the observation, the null hypothesis would be rejected, the simulation was generated under circumstanes where the null hypothesis was true and so this would be a false positive or a <em>Type I Error</em>.</p>
+<p>The rate of false positives is an estimator for the probability of commiting a Type I error (the <span class="math inline">\(p\)</span> -value), this can be calculated:</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a>calculate_p_value &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb96-2"><a href="#cb96-2"></a>  <span class="kw">mean</span>(<span class="kw">falsepos</span>())</span>
+<span id="cb96-3"><a href="#cb96-3"></a>}</span>
+<span id="cb96-4"><a href="#cb96-4"></a></span>
+<span id="cb96-5"><a href="#cb96-5"></a>  falsepos &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb96-6"><a href="#cb96-6"></a>    <span class="co"># If the critical value was our observation, would the simulation be less extreme?</span></span>
+<span id="cb96-7"><a href="#cb96-7"></a>      <span class="co"># If not this is a false positive</span></span>
+<span id="cb96-8"><a href="#cb96-8"></a>    <span class="co"># If the simulated value is more extreme than the </span></span>
+<span id="cb96-9"><a href="#cb96-9"></a>    <span class="op">!</span>(sim_chi_vec <span class="op">&gt;</span><span class="st"> </span>chi_obs)</span>
+<span id="cb96-10"><a href="#cb96-10"></a>    sim_chi_vec <span class="op">&gt;</span><span class="st"> </span>chi_obs</span>
+<span id="cb96-11"><a href="#cb96-11"></a>  }</span>
+<span id="cb96-12"><a href="#cb96-12"></a></span>
+<span id="cb96-13"><a href="#cb96-13"></a>p &lt;-<span class="st"> </span><span class="kw">calculate_p_value</span>()</span>
+<span id="cb96-14"><a href="#cb96-14"></a></span>
+<span id="cb96-15"><a href="#cb96-15"></a><span class="kw">paste</span>(<span class="st">&quot;The Probability of rejecting the null hypothesis, assuming that it was true (i.e. detecting a false positive assuming there is no difference between species) is&quot;</span>, p) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;The Probability of rejecting the null hypothesis, assuming that it was true (i.e. detecting a false positive assuming there is no difference between species) is 0.0403&quot;</code></pre>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1"></a><span class="st">&quot;This is too high and so the null hypothesis is not rejected.&quot;</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;This is too high and so the null hypothesis is not rejected.&quot;</code></pre>
+<p>Hence the probability of rejecting the null hypothesis when it is true is quite small, the <span class="math inline">\(p\)</span> -value is less than 5% and so the null hypothesis is rejected and the alternative hypothesis, that the species are distributed differently is accepted.</p>
+<p>This can be visualised in a histogram:</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1"></a><span class="co"># Plot a Histogram</span></span>
+<span id="cb100-2"><a href="#cb100-2"></a></span>
+<span id="cb100-3"><a href="#cb100-3"></a>  <span class="co">## Base Plot</span></span>
+<span id="cb100-4"><a href="#cb100-4"></a>  myhist &lt;-<span class="st"> </span><span class="kw">hist</span>(sim_chi_vec, <span class="dt">breaks =</span> <span class="dv">50</span>) </span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-27-1.png" alt="" /><figcaption>plot of chunk unnamed-chunk-27</figcaption>
+</figure>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1"></a>  <span class="kw">plot</span>(myhist, <span class="dt">col =</span> <span class="kw">ifelse</span>(myhist<span class="op">$</span>mid<span class="op">&lt;</span><span class="dv">6</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;lightblue&quot;</span>), </span>
+<span id="cb101-2"><a href="#cb101-2"></a>       <span class="dt">main=</span> latex2exp<span class="op">::</span><span class="kw">TeX</span>(<span class="st">&quot;Simulated $</span><span class="ch">\\</span><span class="st">chi^2$ Distances&quot;</span>),</span>
+<span id="cb101-3"><a href="#cb101-3"></a>       <span class="dt">freq =</span> <span class="ot">FALSE</span>, </span>
+<span id="cb101-4"><a href="#cb101-4"></a>       <span class="dt">xlab =</span> <span class="kw">TeX</span>(<span class="st">&quot;$</span><span class="ch">\\</span><span class="st">chi^2$ distance&quot;</span>))</span>
+<span id="cb101-5"><a href="#cb101-5"></a>  <span class="kw">abline</span>(<span class="dt">v =</span> chi_obs, <span class="dt">col =</span> <span class="st">&quot;Indianred&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">lwd =</span> <span class="dv">3</span>)</span></code></pre></div>
+<figure>
+<img src="figure/unnamed-chunk-27-2.png" alt="" /><figcaption>plot of chunk unnamed-chunk-27</figcaption>
+</figure>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1"></a>    <span class="co"># Conditional Colour: # https://stat.ethz.ch/pipermail/r-help/2008-July/167936.html</span></span>
+<span id="cb102-2"><a href="#cb102-2"></a></span>
+<span id="cb102-3"><a href="#cb102-3"></a>  <span class="co">## GGPlot2</span></span>
+<span id="cb102-4"><a href="#cb102-4"></a></span>
+<span id="cb102-5"><a href="#cb102-5"></a>    <span class="co">### Make a Tidy Data Frame</span></span>
+<span id="cb102-6"><a href="#cb102-6"></a>    chi_vals_Tib &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">enframe</span>(sim_chi_vec)</span>
+<span id="cb102-7"><a href="#cb102-7"></a>    chi_vals_Tib<span class="op">$</span>name[sim_chi_vec<span class="op">&lt;</span>chi_obs] &lt;-<span class="st"> &quot;TruePos&quot;</span></span>
+<span id="cb102-8"><a href="#cb102-8"></a>    chi_vals_Tib<span class="op">$</span>name[sim_chi_vec<span class="op">&gt;</span>chi_obs] &lt;-<span class="st"> &quot;FalsePos&quot;</span></span>
+<span id="cb102-9"><a href="#cb102-9"></a>    </span>
+<span id="cb102-10"><a href="#cb102-10"></a>    <span class="co">### Plot the Data</span></span>
+<span id="cb102-11"><a href="#cb102-11"></a>    <span class="kw">ggplot</span>(<span class="dt">data =</span> chi_vals_Tib, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> value))<span class="op">+</span></span>
+<span id="cb102-12"><a href="#cb102-12"></a><span class="st">      </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.4</span>, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> name)) <span class="op">+</span></span>
+<span id="cb102-13"><a href="#cb102-13"></a><span class="st">      </span><span class="kw">theme_classic</span>() <span class="op">+</span></span>
+<span id="cb102-14"><a href="#cb102-14"></a><span class="st">      </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_legend</span>(<span class="st">&quot;Conclustion</span><span class="ch">\n</span><span class="st">Status&quot;</span>)) <span class="op">+</span></span>
+<span id="cb102-15"><a href="#cb102-15"></a><span class="st">      </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> chi_obs, <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;purple&quot;</span>) <span class="op">+</span></span>
+<span id="cb102-16"><a href="#cb102-16"></a><span class="st">      </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;indianred&quot;</span>, <span class="st">&quot;lightblue&quot;</span>),</span>
+<span id="cb102-17"><a href="#cb102-17"></a>                        <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;False Positive / Type I&quot;</span>, <span class="st">&quot;True Positive&quot;</span>)</span>
+<span id="cb102-18"><a href="#cb102-18"></a>                        ) <span class="op">+</span></span>
+<span id="cb102-19"><a href="#cb102-19"></a><span class="st">      </span><span class="kw">labs</span>(<span class="dt">title =</span> latex2exp<span class="op">::</span><span class="kw">TeX</span>(<span class="st">&quot;Simulated $</span><span class="ch">\\</span><span class="st">chi^2$ Values&quot;</span>)) <span class="op">+</span></span>
+<span id="cb102-20"><a href="#cb102-20"></a><span class="st">      </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">11.5</span>))</span></code></pre></div>
+<pre><code>## Warning: Removed 32 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_bar).</code></pre>
+<figure>
+<img src="figure/unnamed-chunk-27-3.png" alt="" /><figcaption>plot of chunk unnamed-chunk-27</figcaption>
+</figure>
+<h3 id="use-the-chi-squared-distribution">(4) Use the Chi Squared Distribution</h3>
+<p>The <span class="math inline">\(p\)</span>-value is a function of:</p>
+<ul>
+<li>The degrees of freedom
+<ul>
+<li><span class="math inline">\(\mathsf{d.f. = (\mathsf{rows}-1) \times (\mathsf{cols}-1)}\)</span></li>
+</ul></li>
+<li>The <span class="math inline">\(\chi^2\)</span> value</li>
+</ul>
+<p>So the probability of rejecting the null hypothesis, under the assumption that it is true can be determined using a predefined function.</p>
+<h4 id="monte-carlo-simulation">Monte Carlo Simulation</h4>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1"></a><span class="kw">chisq.test</span>(<span class="dt">x =</span> eel_Mat, <span class="dt">simulate.p.value =</span> <span class="ot">TRUE</span>, <span class="dt">B =</span> <span class="dv">10</span><span class="op">^</span><span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with simulated p-value (based on 10000 replicates)
+## 
+## data:  eel_Mat
+## X-squared = 6.2621, df = NA, p-value = 0.0459</code></pre>
+<h4 id="analytic-function">Analytic Function</h4>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1"></a><span class="kw">chisq.test</span>(eel_Mat)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  eel_Mat
+## X-squared = 6.2621, df = 2, p-value = 0.04367</code></pre>
+<h3 id="summary">Summary</h3>
+<p>To determine whether or not the two species are distributed differently:</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1"></a><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">264</span>, <span class="dv">161</span>, <span class="dv">127</span>, <span class="dv">116</span>, <span class="dv">99</span>, <span class="dv">67</span>), <span class="dt">nrow =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">chisq.test</span>()</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  .
+## X-squared = 6.2621, df = 2, p-value = 0.04367</code></pre>
+<h2 id="other-examples">Other Examples</h2>
+<h3 id="daily-frequency">(1) Daily Frequency</h3>
+<p>ABC bank has determined the following counts of ATM use, is there any evidence to suggest that the spread is not equal?</p>
+<table>
+<thead>
+<tr class="header">
+<th>Mon</th>
+<th>Tues</th>
+<th>Wed</th>
+<th>Thur</th>
+<th>Fri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>253</td>
+<td>197</td>
+<td>204</td>
+<td>279</td>
+<td>267</td>
+</tr>
+</tbody>
+</table>
+<h4 id="hypothesis-1">Hypothesis</h4>
+<ol type="1">
+<li><span class="math inline">\(H_0:\quad x_1 = x_2 = ... x_5\)</span></li>
+<li><span class="math inline">\(H_a:\quad x_i \neq x_j \enspace \exists i,j \in \left\{1,2,3,4,5\right\}\)</span></li>
+</ol>
+<h4 id="rejection-region">Rejection Region</h4>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1"></a>atm_usage &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">253</span>, <span class="dv">197</span>, <span class="dv">204</span>, <span class="dv">279</span>, <span class="dv">267</span>)</span>
+<span id="cb111-2"><a href="#cb111-2"></a><span class="kw">chisq.test</span>(<span class="dt">x =</span> atm_usage)</span></code></pre></div>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  atm_usage
+## X-squared = 23.183, df = 4, p-value = 0.0001164</code></pre>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1"></a><span class="kw">chisq.test</span>(<span class="dt">x =</span> atm_usage, <span class="dt">simulate.p.value =</span> <span class="ot">TRUE</span>, <span class="dt">B =</span> <span class="dv">10</span><span class="op">^</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## 
+##  Chi-squared test for given probabilities with simulated p-value (based on 1000 replicates)
+## 
+## data:  atm_usage
+## X-squared = 23.183, df = NA, p-value = 0.000999</code></pre>
+<p>The <span class="math inline">\(p\)</span> -value is less than 5% and so the null hypothesis is rejected and it is concluded that the usage differs between days of usage.</p>
+<h3 id="mendellian-genetics">(2) Mendellian Genetics</h3>
+<p>Clasp you hands together. Which thumb is on top? Everyone has two copies of a gene which determines which thumb is most comfortable on top, the variants can be labelled L and R, an individual is either LL, LR, or RR. Counts of 65 children found,</p>
+<table>
+<thead>
+<tr class="header">
+<th>LL</th>
+<th>LR</th>
+<th>RR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>14</td>
+<td>31</td>
+<td>20</td>
+</tr>
+</tbody>
+</table>
+<p>According to Mendelian genetics 25% should be LL, 50% LR and 25% RR. Use chisq.test to see if the data is consistent with this hypothesis.</p>
+<h4 id="hypotheses">Hypotheses</h4>
+<ol type="1">
+<li><span class="math inline">\(H_0:\quad \mathsf{LL}=\mathsf{RR}=0.25; \enspace \mathsf{LR}=0.5\)</span></li>
+<li><span class="math inline">\(H_a:\quad\)</span> The distribution differs from 0.25, 0.25, 0.5.</li>
+</ol>
+<h4 id="rejection-region-1">Rejection Region</h4>
+<p>In order to deal with this type of hypothesis, it is necessary to pass the probabilities to the function as a seperate argument:</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1"></a>gene_hand &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">14</span>, <span class="dv">31</span>, <span class="dv">20</span>)</span>
+<span id="cb115-2"><a href="#cb115-2"></a><span class="kw">chisq.test</span>(gene_hand, <span class="dt">p =</span> <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.25</span>))</span></code></pre></div>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  gene_hand
+## X-squared = 1.2462, df = 2, p-value = 0.5363</code></pre>
+<p>The <span class="math inline">\(p\)</span> -value is 50%, this indicates that the probability of rejecting the null hypothesis, if it was true and hence commiting a Type I error is quite high.</p>
+<p>Hence the null hypothesis is not rejected and it is concluded that:</p>
+<ul>
+<li>There is insufficient evidence to reject the hypothesis that the hand usage are distributed in a way consistent with <em>Mendellian</em> genetics.</li>
+</ul>
+<h3 id="political-opinion">(3) Political Opinion</h3>
+<p>300 adults were asked whether school teachers should be given more freedom to punish unruly students. The following results were obtained?</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>In Favour</th>
+<th>Against</th>
+<th>No Opinion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Men</td>
+<td>93</td>
+<td>70</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>Women</td>
+<td>87</td>
+<td>32</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>Do men and women have the same distribution of opinions?</p>
+<h4 id="rejection-region-2">Rejection Region</h4>
+<p>By default a Chi-Squared test in <strong><em>R</em></strong> will compare whether or not rows (observations) in a matrix have the same distribution.</p>
+<p>This is distinct from Question 2 above where the question was:</p>
+<ul>
+<li>Is the observation distributed at the speciefied frequency</li>
+</ul>
+<p>In this case the question is:</p>
+<ul>
+<li>Are the two cases distributed with the same frequency
+<ul>
+<li>Assuming that they are means that the true distribution will be the mean value of the two observations.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1"></a>opinion_punish &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">93</span>, <span class="dv">87</span>, <span class="dv">70</span>, <span class="dv">32</span>, <span class="dv">12</span>, <span class="dv">6</span>), <span class="dt">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb117-2"><a href="#cb117-2"></a></span>
+<span id="cb117-3"><a href="#cb117-3"></a><span class="kw">chisq.test</span>(opinion_punish)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  opinion_punish
+## X-squared = 8.2528, df = 2, p-value = 0.01614</code></pre>
+<p>The <span class="math inline">\(p\)</span> -value is 2% indicating the probability of rejecting the null-hypothesis if it were true is quite low, hence the null hypothesis is rejected and it is concluded that men and women have differing distributions of opinions.</p>
+<h3 id="medical-efficacy">(4) Medical Efficacy</h3>
+<p>Two drugs are administered to patients to treat the same disease.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Cured</th>
+<th>Not Cured</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Drug A</td>
+<td>44</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>Drug B</td>
+<td>18</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p>Are the drugs equally effective?</p>
+<h4 id="rejection-region-3">Rejection Region</h4>
+<p>This is the same as the eels or men/women problem, the drugs are rows / observations of different classes and the columns will be the outcome of the treatment:</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1"></a>drug_effect &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">44</span>, <span class="dv">18</span>, <span class="dv">16</span>, <span class="dv">22</span>), <span class="dt">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb119-2"><a href="#cb119-2"></a><span class="kw">rownames</span>(drug_effect) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Drug A&quot;</span>, <span class="st">&quot;Drug B&quot;</span>)</span>
+<span id="cb119-3"><a href="#cb119-3"></a><span class="kw">colnames</span>(drug_effect) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cured&quot;</span>, <span class="st">&quot;Not Cured&quot;</span>)</span>
+<span id="cb119-4"><a href="#cb119-4"></a></span>
+<span id="cb119-5"><a href="#cb119-5"></a><span class="kw">chisq.test</span>(drug_effect)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  drug_effect
+## X-squared = 7.0193, df = 1, p-value = 0.008064</code></pre>
+<p>The p-value is &lt;1% indicating that the probability of rejecting the null hypothesis, under the assumption that it is true, is very small.</p>
+<p>Hence the null hypothesis is rejected and it is concluded that the drugs differ in effectiveness.</p>
+<h1 id="comparison-of-samples">Comparison of Samples</h1>
+<h2 id="preamble-1">Preamble</h2>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1"></a><span class="co"># Preamble</span></span>
+<span id="cb121-2"><a href="#cb121-2"></a><span class="co">## Install Pacman</span></span>
+<span id="cb121-3"><a href="#cb121-3"></a>load.pac &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb121-4"><a href="#cb121-4"></a>  <span class="cf">if</span> (<span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)) {</span>
+<span id="cb121-5"><a href="#cb121-5"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb121-6"><a href="#cb121-6"></a>   }<span class="cf">else</span>{</span>
+<span id="cb121-7"><a href="#cb121-7"></a>    <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span>
+<span id="cb121-8"><a href="#cb121-8"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb121-9"><a href="#cb121-9"></a>  }</span>
+<span id="cb121-10"><a href="#cb121-10"></a>  pacman<span class="op">::</span><span class="kw">p_load</span>(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, parallel,</span>
+<span id="cb121-11"><a href="#cb121-11"></a>                  dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr, swirl,</span>
+<span id="cb121-12"><a href="#cb121-12"></a>                  corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice,</span>
+<span id="cb121-13"><a href="#cb121-13"></a>                  rstudioapi)</span>
+<span id="cb121-14"><a href="#cb121-14"></a>  </span>
+<span id="cb121-15"><a href="#cb121-15"></a>  <span class="kw">mise</span>()</span>
+<span id="cb121-16"><a href="#cb121-16"></a>}</span>
+<span id="cb121-17"><a href="#cb121-17"></a></span>
+<span id="cb121-18"><a href="#cb121-18"></a><span class="kw">load.pac</span>()</span></code></pre></div>
+<pre><code>## Loading required package: pacman</code></pre>
+<p></p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1"></a><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;./TAD.rdata&quot;</span>)</span></code></pre></div>
+<p>Load the Data</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1"></a>(birthwt &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">&quot;./0datasets/birthwt.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)))</span></code></pre></div>
+<pre><code>## # A tibble: 1,226 x 2
+##      bwt smoke
+##    &lt;int&gt; &lt;fct&gt;
+##  1  3429 no   
+##  2  3229 no   
+##  3  3657 yes  
+##  4  3514 no   
+##  5  3086 yes  
+##  6  3886 no   
+##  7  3943 no   
+##  8  3771 no   
+##  9  3429 no   
+## 10  4086 yes  
+## # … with 1,216 more rows</code></pre>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1"></a> <span class="co"># Always use doubles / numeric unless the data is legitamately</span></span>
+<span id="cb126-2"><a href="#cb126-2"></a>   <span class="co"># restricted to the integers, it will break functions ( and so it should)</span></span>
+<span id="cb126-3"><a href="#cb126-3"></a>birthwt<span class="op">$</span>bwt &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(birthwt<span class="op">$</span>bwt)</span>
+<span id="cb126-4"><a href="#cb126-4"></a></span>
+<span id="cb126-5"><a href="#cb126-5"></a>birthwt<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>)[birthwt<span class="op">$</span>smoke]</span>
+<span id="cb126-6"><a href="#cb126-6"></a></span>
+<span id="cb126-7"><a href="#cb126-7"></a><span class="kw">summary</span>(birthwt)</span></code></pre></div>
+<pre><code>##       bwt         smoke        
+##  Min.   :1571   Mode :logical  
+##  1st Qu.:3114   FALSE:742      
+##  Median :3429   TRUE :484      
+##  Mean   :3415                  
+##  3rd Qu.:3743                  
+##  Max.   :5029</code></pre>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1"></a><span class="kw">str</span>(birthwt)</span></code></pre></div>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    1226 obs. of  2 variables:
+##  $ bwt  : num  3429 3229 3657 3514 3086 ...
+##  $ smoke: logi  FALSE FALSE TRUE FALSE TRUE FALSE ...</code></pre>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1"></a><span class="kw">dim</span>(birthwt)</span></code></pre></div>
+<pre><code>## [1] 1226    2</code></pre>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1"></a><span class="kw">nrow</span>(birthwt)</span></code></pre></div>
+<pre><code>## [1] 1226</code></pre>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1"></a><span class="kw">ncol</span>(birthwt)</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<h2 id="smoking-and-birth-weight">Smoking and Birth Weight</h2>
+<h3 id="summarise-data">Summarise Data</h3>
+<h4 id="table">Table</h4>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1"></a><span class="kw">table</span>(birthwt<span class="op">$</span>smoke)</span></code></pre></div>
+<pre><code>## 
+## FALSE  TRUE 
+##   742   484</code></pre>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1"></a><span class="kw">table</span>(birthwt<span class="op">$</span>smoke) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">barplot</span>(<span class="dt">main =</span> <span class="st">&quot;Birth Weight and Smoking&quot;</span>)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-3-1.png" /><!-- --></p>
+<h4 id="barplot-1">Barplot</h4>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1"></a>desc_stats &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb139-2"><a href="#cb139-2"></a>  <span class="kw">mean</span>(x)</span>
+<span id="cb139-3"><a href="#cb139-3"></a>  <span class="kw">median</span>(x)</span>
+<span id="cb139-4"><a href="#cb139-4"></a>  <span class="kw">var</span>(x)</span>
+<span id="cb139-5"><a href="#cb139-5"></a>  <span class="kw">sd</span>(x)</span>
+<span id="cb139-6"><a href="#cb139-6"></a>}</span>
+<span id="cb139-7"><a href="#cb139-7"></a></span>
+<span id="cb139-8"><a href="#cb139-8"></a>(desc_stats &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb139-9"><a href="#cb139-9"></a><span class="dt">mean =</span> <span class="kw">apply</span>(birthwt, <span class="dv">2</span>, mean),</span>
+<span id="cb139-10"><a href="#cb139-10"></a><span class="dt">median =</span> <span class="kw">apply</span>(birthwt, <span class="dv">2</span>, median),</span>
+<span id="cb139-11"><a href="#cb139-11"></a><span class="dt">var =</span> <span class="kw">apply</span>(birthwt, <span class="dv">2</span>, var),</span>
+<span id="cb139-12"><a href="#cb139-12"></a><span class="dt">sd =</span> <span class="kw">apply</span>(birthwt, <span class="dv">2</span>, sd)</span>
+<span id="cb139-13"><a href="#cb139-13"></a>))</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 4
+##       mean median        var      sd
+##      &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+## 1 3415.      3429 270498.    520.   
+## 2    0.395      0      0.239   0.489</code></pre>
+<h5 id="range">Range</h5>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1"></a><span class="kw">range</span>(birthwt<span class="op">$</span>bwt)</span></code></pre></div>
+<pre><code>## [1] 1571 5029</code></pre>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1"></a><span class="kw">range</span>(birthwt<span class="op">$</span>bwt) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">diff</span>()</span></code></pre></div>
+<pre><code>## [1] 3458</code></pre>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1"></a><span class="kw">max</span>(birthwt<span class="op">$</span>bwt) <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(birthwt<span class="op">$</span>bwt)</span></code></pre></div>
+<pre><code>## [1] 3458</code></pre>
+<h6 id="quantile">Quantile</h6>
+<p>The quantile function returns <span class="math inline">\(x\)</span> -axis values corresponding to a what proportion of the data is specified, so for example, for a standard normal distribution <span class="math inline">\(\mathcal{N}~\left( 0, 1 \right)\)</span>, 2.5% of the observations lie below 2 and another 2.5% lie above 2.</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1"></a><span class="kw">quantile</span>(<span class="kw">rnorm</span>(<span class="dv">1000</span>), <span class="fl">0.025</span>)</span></code></pre></div>
+<pre><code>##      2.5% 
+## -1.900635</code></pre>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1"></a><span class="kw">quantile</span>(birthwt<span class="op">$</span>bwt, <span class="fl">0.25</span>)</span></code></pre></div>
+<pre><code>##  25% 
+## 3114</code></pre>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1"></a><span class="kw">quantile</span>(birthwt<span class="op">$</span>bwt, <span class="fl">0.75</span>)</span></code></pre></div>
+<pre><code>##  75% 
+## 3743</code></pre>
+<h6 id="inter-quartile-range">Inter-Quartile Range</h6>
+<p>This can be calculated thusly:</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1"></a><span class="kw">IQR</span>(birthwt<span class="op">$</span>bwt)</span></code></pre></div>
+<pre><code>## [1] 629</code></pre>
+<p>For normally distributed data we would expect:</p>
+<p><span class="math display">\[
+\textsf{IQR} = 1.349 \times \sigma
+\]</span></p>
+<p>Remember tha the normal distribution is modelled using calculus:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f(x) &amp;= - \sqrt{\frac{k}{2\pi}}  \cdot   e^{k\cdot  \frac{\left( x- \mu \right)^2}{2}} \\
+    f\left( x \right)&amp;= \sqrt{\frac{1}{2\pi}}\cdot  \sum^{\infty}_{n= 0}   \left[\frac{ \left( - \frac{1}{2}z^2 \right)^n}{n!} \right]  \\
+\int f\left( x \right) \mathrm{d}x &amp;= \frac{1}{\sqrt{2\pi} }\int \sum^{\infty}_{n= 0}   \left[ \frac{\left( - \frac{1}{2}z^2 \right)^n}{n!} \right]  \mathrm{d}z \\
+&amp;= \frac{1}{\sqrt{2\pi} }\cdot  \sum^{\infty}_{n= 0}   \left[ \int \frac{\left( - 1 \right)^{- 1}z^{2n}}{2^n\cdot  n!} \mathrm{d}z  \right] \\
+&amp;= \frac{1}{\sqrt{2\pi} }\cdot  \sum^{\infty}_{n= 0}   \left[ \frac{\left( - 1 \right)^n \cdot  z^{2n+ 1}}{2^n\left( 2n+  1 \right)n!} \right] 
+\end{aligned}
+\]</span></p>
+<h4 id="histograms">Histograms</h4>
+<p>A histogram would offer a better understanding of the data:</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1"></a>x &lt;-<span class="st"> </span>birthwt<span class="op">$</span>bwt</span>
+<span id="cb155-2"><a href="#cb155-2"></a><span class="kw">hist</span>(birthwt<span class="op">$</span>bwt, <span class="dt">main =</span> <span class="st">&quot;Histogram of Birth Weight Given Smoking&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;indianred&quot;</span>, <span class="dt">freq =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-8-1.png" /><!-- --></p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1"></a><span class="co"># curve(dnorm(x, mean(x), sd(x)), add = TRUE)</span></span></code></pre></div>
+<p>Adding a Density urve is extremely difficult in base plot, it’s so much easier to use ggplot2:</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1"></a>birthwt_pretty &lt;-<span class="st"> </span>birthwt</span>
+<span id="cb157-2"><a href="#cb157-2"></a>birthwt_pretty<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">ifelse</span>(birthwt<span class="op">$</span>smoke, <span class="st">&quot;Smoking&quot;</span>, <span class="st">&quot;non</span><span class="ch">\n</span><span class="st">Smoking&quot;</span>)</span>
+<span id="cb157-3"><a href="#cb157-3"></a></span>
+<span id="cb157-4"><a href="#cb157-4"></a>hist &lt;-<span class="st"> </span><span class="kw">ggplot</span>(birthwt_pretty, <span class="kw">aes</span>(<span class="dt">x =</span> bwt, <span class="dt">fill =</span> smoke, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">y =</span> ..density..)) <span class="op">+</span></span>
+<span id="cb157-5"><a href="#cb157-5"></a><span class="st">         </span><span class="kw">theme_classic</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb157-6"><a href="#cb157-6"></a><span class="st">         </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Birth Weight&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Density&quot;</span>)</span>
+<span id="cb157-7"><a href="#cb157-7"></a></span>
+<span id="cb157-8"><a href="#cb157-8"></a>plots &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
+<span id="cb157-9"><a href="#cb157-9"></a></span>
+<span id="cb157-10"><a href="#cb157-10"></a><span class="co"># Dodge</span></span>
+<span id="cb157-11"><a href="#cb157-11"></a>plots[[<span class="dv">1</span>]] &lt;-<span class="st"> </span>hist <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">position =</span> <span class="st">&quot;dodge2&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">binwidth =</span> <span class="dv">300</span>)</span>
+<span id="cb157-12"><a href="#cb157-12"></a></span>
+<span id="cb157-13"><a href="#cb157-13"></a><span class="co"># Overlay</span></span>
+<span id="cb157-14"><a href="#cb157-14"></a>plots[[<span class="dv">2</span>]] &lt;-<span class="st">  </span>hist <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">300</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb157-15"><a href="#cb157-15"></a></span>
+<span id="cb157-16"><a href="#cb157-16"></a><span class="co"># Single Histogram</span></span>
+<span id="cb157-17"><a href="#cb157-17"></a>plots[[<span class="dv">3</span>]] &lt;-<span class="st"> </span>hist <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">300</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="kw">aes</span>(<span class="dt">group =</span> <span class="dv">1</span>), <span class="dt">fill =</span> <span class="st">&quot;lightblue&quot;</span>) </span>
+<span id="cb157-18"><a href="#cb157-18"></a></span>
+<span id="cb157-19"><a href="#cb157-19"></a><span class="co"># Facet Grid (i.e. Split Chart)</span></span>
+<span id="cb157-20"><a href="#cb157-20"></a> plots[[<span class="dv">4</span>]] &lt;-<span class="st"> </span>hist <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">300</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></span>
+<span id="cb157-21"><a href="#cb157-21"></a><span class="st">         </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>smoke) <span class="op">+</span></span>
+<span id="cb157-22"><a href="#cb157-22"></a><span class="st">         </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb157-23"><a href="#cb157-23"></a></span>
+<span id="cb157-24"><a href="#cb157-24"></a>  </span>
+<span id="cb157-25"><a href="#cb157-25"></a>  <span class="co"># Colour it</span></span>
+<span id="cb157-26"><a href="#cb157-26"></a>  <span class="co"># Make a Facet Grid</span></span>
+<span id="cb157-27"><a href="#cb157-27"></a>  <span class="co"># Add a Density Curve</span></span></code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1"></a>layout &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">byrow =</span> <span class="ot">TRUE</span>, <span class="dt">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb158-2"><a href="#cb158-2"></a><span class="co"># arrangeGrob(grobs = plots, layou_tmatrix = layout)</span></span>
+<span id="cb158-3"><a href="#cb158-3"></a><span class="kw">grid.arrange</span>(<span class="dt">grobs =</span> plots, <span class="dt">layout_matrix =</span> layout)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-10-1.png" /><!-- --></p>
+<h4 id="splitting-the-data-up">Splitting the Data Up</h4>
+<p>The <code>aggregate()</code> function can split up data by a specified variable given a <code>formula</code>:</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1"></a>bwt_form &lt;-<span class="st"> </span>bwt<span class="op">~</span>smoke</span>
+<span id="cb159-2"><a href="#cb159-2"></a></span>
+<span id="cb159-3"><a href="#cb159-3"></a><span class="co"># Formula as a variable</span></span>
+<span id="cb159-4"><a href="#cb159-4"></a><span class="kw">aggregate</span>(bwt_form, birthwt, mean)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   smoke   bwt
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE 3516.
+## 2 TRUE  3260.</code></pre>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1"></a><span class="co"># Otherwise</span></span>
+<span id="cb161-2"><a href="#cb161-2"></a><span class="kw">aggregate</span>(bwt<span class="op">~</span>smoke, birthwt, sd)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   smoke   bwt
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE  497.
+## 2 TRUE   517.</code></pre>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1"></a><span class="kw">aggregate</span>(bwt<span class="op">~</span>smoke, birthwt, median)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   smoke   bwt
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE  3514
+## 2 TRUE   3286</code></pre>
+<p>It would also be possible to do this manually but it’s actually quite tricky: &gt; Tibble’s will always remain as tibble’s when a column is extracted and will not yield to <code>as.vector()</code>, it is necessary to instead use the <code>dplyr::pull()</code> function or first conver the tibble to a matrix.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1"></a><span class="kw">matrix</span>(</span>
+<span id="cb165-2"><a href="#cb165-2"></a>  <span class="kw">c</span>(</span>
+<span id="cb165-3"><a href="#cb165-3"></a><span class="st">&quot;Mean_Smokers&quot;</span>  =<span class="st"> </span><span class="kw">as.matrix</span>(birthwt)[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="dv">1</span>,<span class="st">&quot;bwt&quot;</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean</span>(),</span>
+<span id="cb165-4"><a href="#cb165-4"></a><span class="st">&quot;Mean_NonSmoke&quot;</span> =<span class="st"> </span><span class="kw">as.matrix</span>(birthwt)[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="dv">0</span>,<span class="st">&quot;bwt&quot;</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean</span>()</span>
+<span id="cb165-5"><a href="#cb165-5"></a>))</span></code></pre></div>
+<pre><code>##          [,1]
+## [1,] 3260.285
+## [2,] 3515.639</code></pre>
+<h4 id="split-charts">Split Charts</h4>
+<h5 id="base">Base</h5>
+<p>Split Charts are essentially a <code>facet grid</code> of two historgrams corresponding to a variable, the can be generated using the <code>lattice</code> library which is usually bundled with base <strong><em>R</em></strong>:</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1"></a><span class="kw">library</span>(lattice)</span>
+<span id="cb167-2"><a href="#cb167-2"></a><span class="kw">histogram</span>(<span class="op">~</span>bwt<span class="op">|</span>smoke, <span class="dt">data =</span> birthwt)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-13-1.png" /><!-- --></p>
+<h5 id="ggplot2-1">GGPlot2</h5>
+<p>This was shown previously:</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1"></a><span class="co"># Facet Grid</span></span>
+<span id="cb168-2"><a href="#cb168-2"></a></span>
+<span id="cb168-3"><a href="#cb168-3"></a><span class="kw">ggplot</span>(birthwt_pretty, <span class="kw">aes</span>(<span class="dt">x =</span> bwt, <span class="dt">fill =</span> smoke, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">y =</span> ..density..)) <span class="op">+</span></span>
+<span id="cb168-4"><a href="#cb168-4"></a><span class="st">         </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">300</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></span>
+<span id="cb168-5"><a href="#cb168-5"></a><span class="st">         </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>smoke) <span class="op">+</span></span>
+<span id="cb168-6"><a href="#cb168-6"></a><span class="st">         </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb168-7"><a href="#cb168-7"></a><span class="st">         </span><span class="kw">theme_classic</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb168-8"><a href="#cb168-8"></a><span class="st">         </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Birth Weight&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Density&quot;</span>)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-14-1.png" /><!-- --></p>
+<h4 id="box-plots">Box Plots</h4>
+<h5 id="base-1">Base</h5>
+<p>This is varily easy if the data is such that one variable is a factor/logical, the syntax uses a <code>formula</code>, so in this case <code>Y ~ X</code> would by <em>birthweights depends on smoking</em> <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>:</p>
+<h6 id="vertical">Vertical</h6>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1"></a>birthwt_pretty &lt;-<span class="st"> </span>birthwt</span>
+<span id="cb169-2"><a href="#cb169-2"></a>birthwt_pretty<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">ifelse</span>(birthwt<span class="op">$</span>smoke, <span class="st">&quot;Smoking&quot;</span>, <span class="st">&quot;Non-Smoking&quot;</span>)</span>
+<span id="cb169-3"><a href="#cb169-3"></a><span class="kw">boxplot</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, birthwt_pretty,</span>
+<span id="cb169-4"><a href="#cb169-4"></a>        <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Comparison of Birthweight Given Smoking&quot;</span>,</span>
+<span id="cb169-5"><a href="#cb169-5"></a>        <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Birth Weight&quot;</span>, <span class="dt">cex =</span> <span class="dv">2</span>, <span class="dt">pch =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-15-1.png" /><!-- --></p>
+<h6 id="horizontal">Horizontal</h6>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1"></a>birthwt_pretty &lt;-<span class="st"> </span>birthwt</span>
+<span id="cb170-2"><a href="#cb170-2"></a>birthwt_pretty<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">ifelse</span>(birthwt<span class="op">$</span>smoke, <span class="st">&quot;Smoking&quot;</span>, <span class="st">&quot;Non-Smoking&quot;</span>)</span>
+<span id="cb170-3"><a href="#cb170-3"></a><span class="kw">boxplot</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, birthwt_pretty,</span>
+<span id="cb170-4"><a href="#cb170-4"></a>        <span class="dt">col =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;Comparison of Birthweight Given Smoking&quot;</span>,</span>
+<span id="cb170-5"><a href="#cb170-5"></a>        <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Birth Weight&quot;</span>, <span class="dt">cex =</span> <span class="dv">2</span>, <span class="dt">pch =</span> <span class="dv">3</span>, <span class="dt">horizontal =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-16-1.png" /><!-- --></p>
+<h5 id="ggplot2-2">GGPlot2</h5>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1"></a><span class="kw">ggplot</span>(birthwt, <span class="kw">aes</span>(<span class="dt">x =</span> smoke, <span class="dt">y =</span> bwt, <span class="dt">fill =</span> smoke)) <span class="op">+</span></span>
+<span id="cb171-2"><a href="#cb171-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb171-3"><a href="#cb171-3"></a><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Non</span><span class="ch">\n</span><span class="st">Smoking&quot;</span>, <span class="st">&quot;Smoking&quot;</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb171-4"><a href="#cb171-4"></a><span class="st">  </span><span class="kw">theme_classic</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb171-5"><a href="#cb171-5"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Birth Weight&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Comparison of Birthweight Given Smoking Habits&quot;</span>)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-17-1.png" /><!-- --></p>
+<h3 id="difference-in-means">Difference in Means</h3>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1"></a>(birthwt_agg &lt;-<span class="st"> </span><span class="kw">aggregate</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, <span class="dt">data =</span> birthwt, <span class="dt">FUN =</span> mean))</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   smoke   bwt
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE 3516.
+## 2 TRUE  3260.</code></pre>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1"></a><span class="co"># Diff is the difference like the delta or the derivative in calculus or real anlysis so X2-X1</span></span>
+<span id="cb174-2"><a href="#cb174-2"></a> <span class="co"># this represents the change from those that smoke to those that dont</span></span>
+<span id="cb174-3"><a href="#cb174-3"></a></span>
+<span id="cb174-4"><a href="#cb174-4"></a><span class="co"># yes - no</span></span>
+<span id="cb174-5"><a href="#cb174-5"></a><span class="kw">diff</span>(birthwt_agg<span class="op">$</span>bwt)</span></code></pre></div>
+<pre><code>## [1] -255.3537</code></pre>
+<p>In order to simulate a test statistic consider the difference in the mean values, under the null hypothesis this would be zero.</p>
+<h4 id="simulation">Simulation</h4>
+<p>Under the Null Hypothesis the Birth Weight is identical regardless of smoking status, so the simulation would simply consider random permutations of smoking across the birth weights.</p>
+<p>The number of times the birthwt is lower in the observation that that expected by chance is the rate of false positives, the expected value of which is the p-value:</p>
+<blockquote>
+<p>recall that the false positive rate is the rate at which false positives occur from all negative responses, i.e. the rate of false positives assuming that the null hypothesis is true.</p>
+</blockquote>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1"></a>smoke.sim &lt;-<span class="st"> </span>birthwt</span>
+<span id="cb176-2"><a href="#cb176-2"></a>smoke.sim<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">sample</span>(birthwt<span class="op">$</span>smoke, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb176-3"><a href="#cb176-3"></a></span>
+<span id="cb176-4"><a href="#cb176-4"></a>(smoke.sim_agg &lt;-<span class="st"> </span><span class="kw">aggregate</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, smoke.sim, mean))</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   smoke   bwt
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE 3427.
+## 2 TRUE  3397.</code></pre>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1"></a><span class="co"># yes - no</span></span>
+<span id="cb178-2"><a href="#cb178-2"></a><span class="kw">diff</span>(smoke.sim_agg<span class="op">$</span>bwt)</span></code></pre></div>
+<pre><code>## [1] -29.57357</code></pre>
+<p>A False Positive occurs when the random value is even more extreme than what we observed, this measures the frequency of false positives for this observation, i.e. the p-value corresponding to this sample.</p>
+<h4 id="replicate-the-simulation">Replicate the Simulation</h4>
+<p>Replicate uses a <code>apply</code> and automatically creates a vector (statically not dynamicall), so it’s usually better to use than a for loop.</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="#cb180-1"></a><span class="co">## Create the Simulation</span></span>
+<span id="cb180-2"><a href="#cb180-2"></a></span>
+<span id="cb180-3"><a href="#cb180-3"></a>sim_diff &lt;-<span class="st"> </span>birthwt</span>
+<span id="cb180-4"><a href="#cb180-4"></a><span class="co"># smoke.sim &lt;- birthwt</span></span>
+<span id="cb180-5"><a href="#cb180-5"></a>simulation &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb180-6"><a href="#cb180-6"></a>  <span class="kw">replicate</span>(<span class="dt">n =</span> <span class="dv">10</span><span class="op">^</span><span class="dv">3</span>, <span class="dt">expr =</span> {</span>
+<span id="cb180-7"><a href="#cb180-7"></a>    <span class="kw">comparison</span>()</span>
+<span id="cb180-8"><a href="#cb180-8"></a>  }</span>
+<span id="cb180-9"><a href="#cb180-9"></a> )</span>
+<span id="cb180-10"><a href="#cb180-10"></a>}</span>
+<span id="cb180-11"><a href="#cb180-11"></a></span>
+<span id="cb180-12"><a href="#cb180-12"></a>comparison &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb180-13"><a href="#cb180-13"></a>smoke.sim<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">sample</span>(birthwt<span class="op">$</span>smoke, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb180-14"><a href="#cb180-14"></a>smoke.sim_agg   &lt;-<span class="st"> </span><span class="kw">aggregate</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, smoke.sim, mean)</span>
+<span id="cb180-15"><a href="#cb180-15"></a></span>
+<span id="cb180-16"><a href="#cb180-16"></a><span class="kw">diff</span>(smoke.sim_agg<span class="op">$</span>bwt) </span>
+<span id="cb180-17"><a href="#cb180-17"></a>}</span>
+<span id="cb180-18"><a href="#cb180-18"></a></span>
+<span id="cb180-19"><a href="#cb180-19"></a><span class="co"># using Abs is a good healthy sanity check</span></span>
+<span id="cb180-20"><a href="#cb180-20"></a>obs     &lt;-<span class="st"> </span><span class="kw">aggregate</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, birthwt, <span class="dt">FUN =</span> mean) <span class="op">%&gt;%</span></span>
+<span id="cb180-21"><a href="#cb180-21"></a><span class="st">  </span><span class="kw">pull</span>(bwt) <span class="op">%&gt;%</span></span>
+<span id="cb180-22"><a href="#cb180-22"></a><span class="st">  </span><span class="kw">diff</span>() <span class="op">%&gt;%</span></span>
+<span id="cb180-23"><a href="#cb180-23"></a><span class="st">  </span><span class="kw">abs</span>()<span class="op">*-</span><span class="dv">1</span></span>
+<span id="cb180-24"><a href="#cb180-24"></a></span>
+<span id="cb180-25"><a href="#cb180-25"></a>simdata &lt;-<span class="st"> </span><span class="kw">simulation</span>()</span>
+<span id="cb180-26"><a href="#cb180-26"></a>simdata.tb &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">enframe</span>(simdata, <span class="dt">value =</span> <span class="st">&quot;Weight&quot;</span>)</span></code></pre></div>
+<h5 id="create-a-histogram">Create a Histogram</h5>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1"></a><span class="co"># Plot a Histogram</span></span>
+<span id="cb181-2"><a href="#cb181-2"></a>  <span class="co">## Base</span></span>
+<span id="cb181-3"><a href="#cb181-3"></a>   <span class="co">### Be mindful to set xlim</span></span>
+<span id="cb181-4"><a href="#cb181-4"></a>simdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">hist</span>(<span class="dt">main =</span> <span class="st">&quot;Expected Difference in Birthweights</span><span class="ch">\n</span><span class="st"> Assuming No Population Difference&quot;</span>,</span>
+<span id="cb181-5"><a href="#cb181-5"></a>                 <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="kw">abs</span>(obs), <span class="kw">abs</span>(obs)))</span>
+<span id="cb181-6"><a href="#cb181-6"></a><span class="kw">abline</span>(<span class="dt">v =</span> obs)</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-21-1.png" /><!-- --></p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1"></a><span class="co">## ggplot</span></span>
+<span id="cb182-2"><a href="#cb182-2"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> simdata.tb, <span class="kw">aes</span>(<span class="dt">x =</span> Weight, <span class="dt">y =</span> ..density..)) <span class="op">+</span></span>
+<span id="cb182-3"><a href="#cb182-3"></a><span class="st">    </span><span class="kw">geom_histogram</span>(<span class="dt">fill =</span> <span class="st">&quot;#Eea2ad&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;#1e90ff&quot;</span> ) <span class="op">+</span></span>
+<span id="cb182-4"><a href="#cb182-4"></a><span class="st">    </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb182-5"><a href="#cb182-5"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Frequency&quot;</span>, <span class="dt">title =</span> <span class="st">&quot;Simulated Samples Under null hypothesis&quot;</span>) <span class="op">+</span></span>
+<span id="cb182-6"><a href="#cb182-6"></a><span class="st">    </span><span class="co"># Use aes() to make legend</span></span>
+<span id="cb182-7"><a href="#cb182-7"></a><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">lwd =</span> <span class="fl">0.8</span>, <span class="dt">lty =</span> <span class="dv">2</span>, <span class="kw">aes</span>(<span class="dt">xintercept =</span> obs, <span class="dt">col =</span> <span class="st">&quot;Observation&quot;</span>)) <span class="op">+</span></span>
+<span id="cb182-8"><a href="#cb182-8"></a><span class="st">    </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Observation&quot;</span>, <span class="dt">values =</span> <span class="kw">c</span>(<span class="dt">Observation=</span> <span class="st">&quot;#D02090&quot;</span>, <span class="dt">mean =</span> <span class="st">&quot;red&quot;</span>), <span class="dt">label =</span> <span class="st">&quot;Observed Value&quot;</span>)</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="./figure/unnamed-chunk-21-2.png" /><!-- --></p>
+<h5 id="p-value">P-value</h5>
+<p>The rate at which our observation exceeds the simulation (which is performed under the assumption that there is no difference) is the false positive rate, this is the expected value of the p-value.</p>
+<p>The p-value is the probability of a type 1 error, the probability of rejecting the null hypothesis, under the assumption that it is true.</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1"></a>(pval &lt;-<span class="st"> </span><span class="kw">mean</span>(sim_diff <span class="op">&lt;</span><span class="st"> </span>obs))</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<p>Hence the probability of asserting that:</p>
+<ul>
+<li>smoking decreases birthweight</li>
+</ul>
+<p>Assuming that smoking caused no difference, is too small to detect and hence we conlude that smoking decreases birthweight.</p>
+<h3 id="simulating-data-all-together">Simulating Data (All Together)</h3>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1"></a><span class="co">## Create the Simulation</span></span>
+<span id="cb186-2"><a href="#cb186-2"></a>smoke.sim &lt;-<span class="st"> </span>birthwt</span>
+<span id="cb186-3"><a href="#cb186-3"></a>sim_diff &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dt">n =</span> <span class="dv">10</span> <span class="op">^</span><span class="st"> </span><span class="dv">3</span>, <span class="dt">expr =</span> {</span>
+<span id="cb186-4"><a href="#cb186-4"></a>  <span class="co"># Shuffle the Smoking Status</span></span>
+<span id="cb186-5"><a href="#cb186-5"></a>  smoke.sim<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">sample</span>(birthwt<span class="op">$</span>smoke, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb186-6"><a href="#cb186-6"></a>  <span class="co"># Aggregate the average Value</span></span>
+<span id="cb186-7"><a href="#cb186-7"></a>  smoke.sim_agg   &lt;-<span class="st"> </span><span class="kw">aggregate</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, smoke.sim, mean)</span>
+<span id="cb186-8"><a href="#cb186-8"></a>  </span>
+<span id="cb186-9"><a href="#cb186-9"></a>  <span class="co"># Determine the Difference</span></span>
+<span id="cb186-10"><a href="#cb186-10"></a>  <span class="kw">diff</span>(smoke.sim_agg<span class="op">$</span>bwt) </span>
+<span id="cb186-11"><a href="#cb186-11"></a>})</span>
+<span id="cb186-12"><a href="#cb186-12"></a></span>
+<span id="cb186-13"><a href="#cb186-13"></a><span class="co"># Select for a data frame; Pull out a vector</span></span>
+<span id="cb186-14"><a href="#cb186-14"></a>obs &lt;-<span class="st"> </span><span class="kw">aggregate</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, birthwt, mean) <span class="op">%&gt;%</span></span>
+<span id="cb186-15"><a href="#cb186-15"></a><span class="st">  </span><span class="kw">pull</span>(bwt) <span class="op">%&gt;%</span></span>
+<span id="cb186-16"><a href="#cb186-16"></a><span class="st">  </span><span class="kw">diff</span>()</span>
+<span id="cb186-17"><a href="#cb186-17"></a></span>
+<span id="cb186-18"><a href="#cb186-18"></a><span class="co"># How often is a value equally extreme observed?</span></span>
+<span id="cb186-19"><a href="#cb186-19"></a><span class="co"># Question on Two Sided vs One Sided</span></span>
+<span id="cb186-20"><a href="#cb186-20"></a></span>
+<span id="cb186-21"><a href="#cb186-21"></a>pval &lt;-<span class="st"> </span><span class="kw">mean</span>(sim_diff <span class="op">&lt;</span><span class="st"> </span><span class="op">-</span>obs)</span></code></pre></div>
+<h2 id="a-note-on-hypotheses-formation">A note on Hypotheses Formation</h2>
+<p>The null hypothesis <span class="math inline">\(H_0\)</span> is always that the two populations, as indicated by the mean value of the sample statistic, is zero, this is independent of the alternative hypothesis.</p>
+<p>The alternative hypothesis depends entirely on the direction of the teststatistic, if the false positives are tested for above below or both above/below determines the whether or not the alternative hypothesis is upper/lower tail or two-sided.</p>
+<h2 id="challenge-data">Challenge Data</h2>
+<h2 id="east-and-west">East and West</h2>
+<h3 id="what-is-the-average-difference">What is the average difference?</h3>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="#cb187-1"></a><span class="co"># attach(salesEW) # (would warn me (but don&#39;t use the variable assignments it makes,</span></span>
+<span id="cb187-2"><a href="#cb187-2"></a>                   <span class="co"># that&#39;s asking for trouble, but do use the autocomplete)</span></span>
+<span id="cb187-3"><a href="#cb187-3"></a><span class="kw">names</span>(salesEW)</span></code></pre></div>
+<pre><code>## [1] &quot;sales&quot;  &quot;office&quot;</code></pre>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="#cb189-1"></a>xbar_obs &lt;-<span class="st"> </span><span class="kw">aggregate</span>(sales <span class="op">~</span><span class="st"> </span>office, <span class="dt">data =</span> salesEW, <span class="dt">FUN =</span> mean)[,<span class="dv">2</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">diff</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">abs</span>() </span></code></pre></div>
+<h3 id="what-is-the-simulated-average-difference">What is the simulated average difference</h3>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1"></a>  sales_shuffle &lt;-<span class="st"> </span>salesEW</span>
+<span id="cb190-2"><a href="#cb190-2"></a>xbar_sim &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">10</span><span class="op">^</span><span class="dv">3</span>, {</span>
+<span id="cb190-3"><a href="#cb190-3"></a>  sales_shuffle<span class="op">$</span>office &lt;-<span class="st"> </span><span class="kw">sample</span>(salesEW<span class="op">$</span>office)</span>
+<span id="cb190-4"><a href="#cb190-4"></a>  <span class="kw">aggregate</span>(sales <span class="op">~</span><span class="st"> </span>office, sales_shuffle, mean)[,<span class="dv">2</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">diff</span>() <span class="co"># NEVER Abs Here it doesn&#39;t make sense!%&gt;% abs</span></span>
+<span id="cb190-5"><a href="#cb190-5"></a>})</span></code></pre></div>
+<h3 id="what-is-the-p-value">What is the P-Value</h3>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1"></a><span class="co">#How often is the simulated difference really negative?</span></span>
+<span id="cb191-2"><a href="#cb191-2"></a>p_<span class="dv">12</span> &lt;-<span class="st"> </span><span class="kw">mean</span>(xbar_sim <span class="op">&lt;</span><span class="st"> </span><span class="op">-</span>xbar_obs) <span class="op">+</span><span class="st"> </span><span class="kw">mean</span>(xbar_sim <span class="op">&gt;</span><span class="st"> </span>xbar_obs)</span>
+<span id="cb191-3"><a href="#cb191-3"></a><span class="co">#How often is the simulated difference really Positive?</span></span>
+<span id="cb191-4"><a href="#cb191-4"></a>p_<span class="dv">12</span> &lt;-<span class="kw">mean</span>(xbar_sim <span class="op">&gt;</span><span class="st"> </span>xbar_obs)</span>
+<span id="cb191-5"><a href="#cb191-5"></a></span>
+<span id="cb191-6"><a href="#cb191-6"></a><span class="co"># Putting them together what&#39;s the total FPR for any difference?</span></span>
+<span id="cb191-7"><a href="#cb191-7"></a></span>
+<span id="cb191-8"><a href="#cb191-8"></a>(pval &lt;-<span class="st"> </span><span class="kw">mean</span>(xbar_sim <span class="op">&lt;</span><span class="st"> </span><span class="op">-</span>xbar_obs) <span class="op">+</span><span class="st"> </span><span class="kw">mean</span>(xbar_sim <span class="op">&gt;</span><span class="st"> </span>xbar_obs))</span></code></pre></div>
+<pre><code>## [1] 0.055</code></pre>
+<p>Hence the probability of incorrectly asserting there is a difference in sales between the two locations (assumint there isn’t one) is about 5% and so the the null hypothesis is rejected and it is concluded that there is indeed a difference in sales between the two offices.</p>
+<h3 id="plot-the-data-1">Plot the Data</h3>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="#cb193-1"></a><span class="kw">ggplot</span>(salesEW, <span class="kw">aes</span>(<span class="dt">x =</span> office, <span class="dt">y =</span> sales)) <span class="op">+</span></span>
+<span id="cb193-2"><a href="#cb193-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="./figure/unnamed-chunk-27-1.png" /><!-- --></p>
+<h2 id="spiders">Spiders</h2>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1"></a><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;~/Notes/DataSci/ThinkingAboutData/TAD.rdata&quot;</span>)</span>
+<span id="cb194-2"><a href="#cb194-2"></a>spider &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">&quot;./0datasets/Spider.csv&quot;</span>)</span>
+<span id="cb194-3"><a href="#cb194-3"></a><span class="kw">str</span>(spider)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    24 obs. of  2 variables:
+##  $ Group  : Factor w/ 2 levels &quot;Picture&quot;,&quot;Real Spider&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Anxiety: int  30 35 45 40 50 35 55 25 30 45 ...</code></pre>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1"></a><span class="kw">attach</span>(spider)</span></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="#cb197-1"></a>g &lt;-<span class="st"> </span><span class="kw">diff</span>(<span class="kw">aggregate</span>(Anxiety <span class="op">~</span><span class="st"> </span>Group, spider, mean)<span class="op">$</span>Anxiety)</span>
+<span id="cb197-2"><a href="#cb197-2"></a>g0 &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">10</span><span class="op">^</span><span class="dv">3</span>, {</span>
+<span id="cb197-3"><a href="#cb197-3"></a>  groupShuf &lt;-<span class="st"> </span><span class="kw">sample</span>(spider<span class="op">$</span>Group)</span>
+<span id="cb197-4"><a href="#cb197-4"></a>  <span class="kw">diff</span>(<span class="kw">aggregate</span>(Anxiety<span class="op">~</span>groupShuf, spider, mean)<span class="op">$</span>Anxiety)</span>
+<span id="cb197-5"><a href="#cb197-5"></a>})</span>
+<span id="cb197-6"><a href="#cb197-6"></a></span>
+<span id="cb197-7"><a href="#cb197-7"></a>(pVal &lt;-<span class="st"> </span><span class="kw">mean</span>(g0 <span class="op">&gt;</span><span class="st"> </span>g))</span></code></pre></div>
+<pre><code>## [1] 0.049</code></pre>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="#cb199-1"></a><span class="kw">detach</span>(spider)</span></code></pre></div>
+<h2 id="knit-doc">Knit Doc</h2>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1"></a><span class="co"># </span></span>
+<span id="cb200-2"><a href="#cb200-2"></a><span class="co"># if (require(rmarkdown)) {</span></span>
+<span id="cb200-3"><a href="#cb200-3"></a><span class="co">#   render(&quot;name.md&quot;, md_document(preserve_yaml = TRUE, toc = TRUE))</span></span>
+<span id="cb200-4"><a href="#cb200-4"></a><span class="co"># }</span></span>
+<span id="cb200-5"><a href="#cb200-5"></a><span class="co"># </span></span>
+<span id="cb200-6"><a href="#cb200-6"></a><span class="co">#   # Use the Rstudio API to get the working directory</span></span>
+<span id="cb200-7"><a href="#cb200-7"></a><span class="co">#   current_path &lt;- getActiveDocumentContext()$path</span></span>
+<span id="cb200-8"><a href="#cb200-8"></a><span class="co">#  </span></span>
+<span id="cb200-9"><a href="#cb200-9"></a>  </span>
+<span id="cb200-10"><a href="#cb200-10"></a></span>
+<span id="cb200-11"><a href="#cb200-11"></a><span class="co">#rmarkdown::_document</span></span></code></pre></div>
+<h1 id="comparison-of-samples-with-students-t-test">Comparison of Samples with <em>Student</em>’s <span class="math inline">\(t\)</span> test</h1>
+<h2 id="preamble-2">Preamble</h2>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1"></a><span class="co"># Preamble</span></span>
+<span id="cb201-2"><a href="#cb201-2"></a><span class="co">## Install Pacman</span></span>
+<span id="cb201-3"><a href="#cb201-3"></a>load.pac &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb201-4"><a href="#cb201-4"></a>  </span>
+<span id="cb201-5"><a href="#cb201-5"></a>  <span class="cf">if</span>(<span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)){</span>
+<span id="cb201-6"><a href="#cb201-6"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb201-7"><a href="#cb201-7"></a>  }<span class="cf">else</span>{</span>
+<span id="cb201-8"><a href="#cb201-8"></a>    <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span>
+<span id="cb201-9"><a href="#cb201-9"></a>    <span class="kw">library</span>(pacman)</span>
+<span id="cb201-10"><a href="#cb201-10"></a>  }</span>
+<span id="cb201-11"><a href="#cb201-11"></a>  </span>
+<span id="cb201-12"><a href="#cb201-12"></a>  pacman<span class="op">::</span><span class="kw">p_load</span>(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,</span>
+<span id="cb201-13"><a href="#cb201-13"></a>                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,</span>
+<span id="cb201-14"><a href="#cb201-14"></a>                 swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice,</span>
+<span id="cb201-15"><a href="#cb201-15"></a>                 coin)</span>
+<span id="cb201-16"><a href="#cb201-16"></a>  </span>
+<span id="cb201-17"><a href="#cb201-17"></a>  </span>
+<span id="cb201-18"><a href="#cb201-18"></a>   <span class="kw">mise</span>()</span>
+<span id="cb201-19"><a href="#cb201-19"></a>}</span>
+<span id="cb201-20"><a href="#cb201-20"></a></span>
+<span id="cb201-21"><a href="#cb201-21"></a><span class="kw">load.pac</span>()</span></code></pre></div>
+<pre><code>## Loading required package: pacman</code></pre>
+<p></p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="#cb203-1"></a><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;~/Notes/DataSci/ThinkingAboutData/TAD.rdata&quot;</span>)</span>
+<span id="cb203-2"><a href="#cb203-2"></a><span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;./TAD.rdata&quot;</span>)</span></code></pre></div>
+<h2 id="permutation-test">Permutation Test</h2>
+<p>So in <a href="./03_Summarising_Data.Rmd">wk 3</a> the code to test for a difference was to the effect of:</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="#cb204-1"></a><span class="co"># Aggregate is a wrapper for apply</span></span>
+<span id="cb204-2"><a href="#cb204-2"></a>  <span class="co">## As a Function</span></span>
+<span id="cb204-3"><a href="#cb204-3"></a><span class="kw">aggregate</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, birthwt, mean)</span></code></pre></div>
+<pre><code>##   smoke      bwt
+## 1    no 3515.639
+## 2   yes 3260.285</code></pre>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="#cb206-1"></a>  <span class="co">## For Data Frames</span></span>
+<span id="cb206-2"><a href="#cb206-2"></a><span class="kw">aggregate</span>(<span class="dt">x =</span> birthwt<span class="op">$</span>bwt, <span class="dt">by =</span> <span class="kw">list</span>(<span class="dt">smoking_status =</span> birthwt<span class="op">$</span>smoke), <span class="dt">FUN =</span> mean)</span></code></pre></div>
+<pre><code>##   smoking_status        x
+## 1             no 3515.639
+## 2            yes 3260.285</code></pre>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1"></a>obs_diff &lt;-<span class="st"> </span><span class="kw">aggregate</span>(<span class="dt">x =</span> birthwt<span class="op">$</span>bwt, <span class="dt">by =</span> <span class="kw">list</span>(<span class="dt">smoking_status =</span> birthwt<span class="op">$</span>smoke), <span class="dt">FUN =</span> mean)[,<span class="dv">2</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">diff</span>()</span>
+<span id="cb208-2"><a href="#cb208-2"></a></span>
+<span id="cb208-3"><a href="#cb208-3"></a></span>
+<span id="cb208-4"><a href="#cb208-4"></a></span>
+<span id="cb208-5"><a href="#cb208-5"></a>sim_diff_samples &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb208-6"><a href="#cb208-6"></a>  smoke.sim &lt;-<span class="st"> </span>birthwt</span>
+<span id="cb208-7"><a href="#cb208-7"></a>  smoke.sim<span class="op">$</span>smoke &lt;-<span class="st"> </span><span class="kw">sample</span>(birthwt<span class="op">$</span>smoke)</span>
+<span id="cb208-8"><a href="#cb208-8"></a>  sim_diff &lt;-</span>
+<span id="cb208-9"><a href="#cb208-9"></a><span class="st">    </span><span class="kw">aggregate</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, smoke.sim, mean)[, <span class="dv">2</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">diff</span>()</span>
+<span id="cb208-10"><a href="#cb208-10"></a>})</span>
+<span id="cb208-11"><a href="#cb208-11"></a></span>
+<span id="cb208-12"><a href="#cb208-12"></a><span class="co"># H_a, bwt less in smoking</span></span>
+<span id="cb208-13"><a href="#cb208-13"></a></span>
+<span id="cb208-14"><a href="#cb208-14"></a>(pval &lt;-<span class="st"> </span>sim_diff_samples <span class="op">&lt;</span><span class="st"> </span>obs_diff) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean</span>()</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<h2 id="wilcoxon-mann-whitney-test">Wilcoxon-Mann-Whitney Test</h2>
+<p>Suppose that we wanted to use the <span class="math inline">\(U\)</span>-Statistic from the <em>Wilcoxon-Mann-Whitney</em> test:</p>
+<blockquote>
+<p><em>U</em> is the number of data points where <span class="math inline">\(s_i\)</span> &lt; <span class="math inline">\(n_i\)</span>;</p>
+</blockquote>
+<h3 id="the-outer-product-again">The outer Product again</h3>
+<p>In order to perform this test we can use the outer product (as opposed to an awful nested for loop), for more information on the use of the outer product refer to:</p>
+<ul>
+<li><a href="~/Notes/MD/University/ThinkingAboutData/04_Using_Outer_for_Wilcoxon-Mann-Whitney_Test.md">Using the Outer Product for Wilcoxon-Mann-Whitney Test</a></li>
+<li><a href="~/Notes/MD/Mathematics/LinearAlgebra/The_Outer_Product.md">The Outer Product Generally</a></li>
+</ul>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="#cb210-1"></a><span class="co"># Return all the birthweights for nonSmokers</span></span>
+<span id="cb210-2"><a href="#cb210-2"></a><span class="co">## method 1</span></span>
+<span id="cb210-3"><a href="#cb210-3"></a>bwt_nonsmoke &lt;-<span class="st"> </span>birthwt[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;no&quot;</span>,]<span class="op">$</span>bwt</span>
+<span id="cb210-4"><a href="#cb210-4"></a>bwt_smoke &lt;-<span class="st"> </span>birthwt[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;yes&quot;</span>,]<span class="op">$</span>bwt</span>
+<span id="cb210-5"><a href="#cb210-5"></a><span class="co">## method 2</span></span>
+<span id="cb210-6"><a href="#cb210-6"></a>bwt_nonsmoke &lt;-<span class="st"> </span><span class="kw">subset</span>(<span class="dt">x =</span> birthwt, <span class="dt">subset =</span> birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;no&quot;</span>, <span class="dt">select =</span> bwt, <span class="dt">drop =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb210-7"><a href="#cb210-7"></a>bwt_smoke &lt;-<span class="st"> </span><span class="kw">subset</span>(<span class="dt">x =</span> birthwt, <span class="dt">subset =</span> birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;yes&quot;</span>, <span class="dt">select =</span> bwt, <span class="dt">drop =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb210-8"><a href="#cb210-8"></a></span>
+<span id="cb210-9"><a href="#cb210-9"></a><span class="co"># Sum the values </span></span>
+<span id="cb210-10"><a href="#cb210-10"></a><span class="kw">outer</span>(bwt_smoke, bwt_nonsmoke, <span class="st">&quot;&lt;&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sum</span>()</span></code></pre></div>
+<pre><code>## [1] 229164</code></pre>
+<p>This can be done by using the built-in functionj (any differences will be due to special treatment when observations are equal):</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="#cb212-1"></a><span class="kw">wilcox.test</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, birthwt, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  bwt by smoke
+## W = 231918, p-value &lt; 2.2e-16
+## alternative hypothesis: true location shift is greater than 0</code></pre>
+<h2 id="standardisation">Standardisation</h2>
+<p style="font-family:Courier New,Courier, monospace,serif;font-size:22px;font-style:italic; " align="right" color="blue">
+<b> #standardise<br> </b>
+</p>
+<p>It is often useful to standardise data, an example of this is when <a href="~/Notes/MD/Programming/R/IntroDataSci/PCA-PrincipalComponentAnalysis_10_IntroDataSci.md">performing PCA</a>, in <strong><em>R</em></strong> it is also known as scaling the data.</p>
+<h3 id="standardise-the-observations">Standardise the Observations</h3>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="#cb214-1"></a>birthwt<span class="op">$</span>std_bwt &lt;-<span class="st">  </span><span class="kw">scale</span>(birthwt<span class="op">$</span>bwt, <span class="dt">center =</span> <span class="ot">TRUE</span>, <span class="dt">scale =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb214-2"><a href="#cb214-2"></a></span>
+<span id="cb214-3"><a href="#cb214-3"></a>xbar &lt;-<span class="st"> </span><span class="kw">mean</span>(birthwt<span class="op">$</span>std_bwt)</span>
+<span id="cb214-4"><a href="#cb214-4"></a>s    &lt;-<span class="st"> </span><span class="kw">sd</span>(birthwt<span class="op">$</span>std_bwt)</span>
+<span id="cb214-5"><a href="#cb214-5"></a>x    &lt;-<span class="st"> </span>birthwt<span class="op">$</span>std_bwt</span>
+<span id="cb214-6"><a href="#cb214-6"></a>birthwt<span class="op">$</span>std_bwt &lt;-<span class="st"> </span>(x<span class="op">-</span>xbar)<span class="op">/</span>s</span></code></pre></div>
+<h4 id="calculate-the-pooled-variance">Calculate the Pooled Variance</h4>
+<p>Recall that the pooled variance is merely the variance of both populations:</p>
+<p><span class="math display">\[
+\begin{aligned}
+s_{p}^2 &amp;= \frac{1}{n_1 - 1 +  n_2 - 1} \cdot  \sum^{n_1+ n_2}_{i= 1}   \left[ \left( x_i- \overline{x} \right)^2 \right]  \\
+\ \\
+&amp;=  \frac{(n_1 - 1) \times s^2_1   +  (n_2 - 1) \times s^2_2}{n_1- 1 +  n_2- 1}  
+\end{aligned}
+\]</span></p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="#cb215-1"></a><span class="co"># Simple</span></span>
+<span id="cb215-2"><a href="#cb215-2"></a>(v_p1 &lt;-<span class="st"> </span><span class="kw">var</span>(birthwt<span class="op">$</span>bwt))</span></code></pre></div>
+<pre><code>## [1] 270498.5</code></pre>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="#cb217-1"></a>s_p1 &lt;-<span class="st"> </span><span class="kw">sd</span>(birthwt<span class="op">$</span>bwt)</span>
+<span id="cb217-2"><a href="#cb217-2"></a></span>
+<span id="cb217-3"><a href="#cb217-3"></a><span class="co"># Formula</span></span>
+<span id="cb217-4"><a href="#cb217-4"></a><span class="co">## Summary Stats</span></span>
+<span id="cb217-5"><a href="#cb217-5"></a><span class="co">### Smokers</span></span>
+<span id="cb217-6"><a href="#cb217-6"></a>n_s &lt;-<span class="st"> </span><span class="kw">sum</span>(birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;yes&quot;</span>)</span>
+<span id="cb217-7"><a href="#cb217-7"></a>df_s &lt;-<span class="st"> </span>n_s <span class="dv">-1</span></span>
+<span id="cb217-8"><a href="#cb217-8"></a>sd_s &lt;-<span class="st"> </span><span class="kw">sd</span>(birthwt<span class="op">$</span>bwt[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;yes&quot;</span>])</span>
+<span id="cb217-9"><a href="#cb217-9"></a>xbar_s &lt;-<span class="st"> </span><span class="kw">mean</span>(birthwt<span class="op">$</span>bwt[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;yes&quot;</span>])</span>
+<span id="cb217-10"><a href="#cb217-10"></a>var_s &lt;-<span class="st"> </span><span class="kw">var</span>(birthwt<span class="op">$</span>bwt[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;yes&quot;</span>])</span>
+<span id="cb217-11"><a href="#cb217-11"></a><span class="co">### Non Smokers</span></span>
+<span id="cb217-12"><a href="#cb217-12"></a>n_n &lt;-<span class="st"> </span><span class="kw">sum</span>(birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;no&quot;</span>)</span>
+<span id="cb217-13"><a href="#cb217-13"></a>df_n &lt;-<span class="st"> </span>n_n <span class="dv">-1</span></span>
+<span id="cb217-14"><a href="#cb217-14"></a>xbar_n &lt;-<span class="st"> </span><span class="kw">mean</span>(birthwt<span class="op">$</span>bwt[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;no&quot;</span>])</span>
+<span id="cb217-15"><a href="#cb217-15"></a>sd_n &lt;-<span class="st"> </span><span class="kw">sd</span>(birthwt<span class="op">$</span>bwt[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;no&quot;</span>])</span>
+<span id="cb217-16"><a href="#cb217-16"></a>var_n &lt;-<span class="st"> </span><span class="kw">var</span>(birthwt<span class="op">$</span>bwt[birthwt<span class="op">$</span>smoke<span class="op">==</span><span class="st">&quot;no&quot;</span>])</span>
+<span id="cb217-17"><a href="#cb217-17"></a></span>
+<span id="cb217-18"><a href="#cb217-18"></a>(v_p2 &lt;-<span class="st"> </span>(df_s <span class="op">*</span><span class="st"> </span>sd_s<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>df_n <span class="op">*</span><span class="st"> </span>sd_n<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span>(df_s <span class="op">+</span><span class="st"> </span>df_n))</span></code></pre></div>
+<pre><code>## [1] 255114.6</code></pre>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="#cb219-1"></a>s_p2 &lt;-<span class="st"> </span><span class="kw">sqrt</span>(v_p2)</span></code></pre></div>
+<h3 id="calculate-the-standard-error-for-the-difference">Calculate the standard error for the difference</h3>
+<p>For proofs refer to the <a href="https://ryangreenup.github.io/Org-Publish/ThinkingAboutData.html#org0ac88e7">org file</a>.</p>
+<p><span class="math display">\[\begin{aligned}
+\sigma_{\overline{x}_{1}\pm \overline{x}_{2}} &amp;=\sigma_p \cdot  \sqrt{\frac{1}{n_{1}} +  \frac{1}{n_{2}}}\\
+\end{aligned}\]</span></p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="#cb220-1"></a>SED &lt;-<span class="st"> </span>s_p1<span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">/</span>n_s <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>n_n)</span>
+<span id="cb220-2"><a href="#cb220-2"></a>SED &lt;-<span class="st"> </span>s_p2<span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">1</span><span class="op">/</span>n_s <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">/</span>n_n)</span></code></pre></div>
+<h3 id="calculate-the-t-statistic">Calculate the t-statistic</h3>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="#cb221-1"></a><span class="co">#    bwt ~ smoke</span></span>
+<span id="cb221-2"><a href="#cb221-2"></a>(t_stat &lt;-<span class="st"> </span>(xbar_n <span class="op">-</span><span class="st"> </span>xbar_s)<span class="op">/</span>(SED))</span></code></pre></div>
+<pre><code>## [1] 8.652745</code></pre>
+<h4 id="using-the-built-in-t.test">Using the Built in t.test</h4>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="#cb223-1"></a><span class="kw">t.test</span>(bwt <span class="op">~</span><span class="st"> </span>smoke, birthwt)</span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  bwt by smoke
+## t = 8.5811, df = 1003.2, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  196.9596 313.7478
+## sample estimates:
+##  mean in group no mean in group yes 
+##          3515.639          3260.285</code></pre>
+<h3 id="permutation-again">Permutation Again</h3>
+<p>In order to perform the permutation based test we can use an additional library:</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="#cb225-1"></a><span class="kw">library</span>(coin)</span>
+<span id="cb225-2"><a href="#cb225-2"></a>coin<span class="op">::</span><span class="kw">oneway_test</span>(<span class="dt">formula =</span> bwt <span class="op">~</span><span class="st"> </span>smoke,</span>
+<span id="cb225-3"><a href="#cb225-3"></a>                  <span class="dt">data =</span> birthwt,</span>
+<span id="cb225-4"><a href="#cb225-4"></a>                  <span class="dt">distribution =</span> coin<span class="op">::</span><span class="kw">approximate</span>(<span class="dt">nresample =</span> <span class="dv">1000</span>),</span>
+<span id="cb225-5"><a href="#cb225-5"></a>                  <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  Approximative Two-Sample Fisher-Pitman Permutation Test
+## 
+## data:  bwt by smoke (no, yes)
+## Z = 8.4031, p-value &lt; 0.001
+## alternative hypothesis: true mu is greater than 0</code></pre>
+<h2 id="confidence-intervals">Confidence Intervals</h2>
+<h3 id="bootstrap">Bootstrap</h3>
+<h3 id="using-the-boot-library">Using the <code>boot()</code> library</h3>
+<h2 id="t-based">t-based</h2>
+<h2 id="challenge">Challenge</h2>
+<h3 id="sales-data">Sales Data</h3>
+<p>Using the data <code>salesEW.csv</code>:</p>
+<ul>
+<li>determine if there is a difference in mean sales between the East and West offices.</li>
+<li>Compute the 90% confidence interval for the difference in means.</li>
+</ul>
+<h3 id="spider-data">Spider Data</h3>
+<p>Using the data <code>spider.csv</code>:</p>
+<ul>
+<li>determine if there is an increase in mean anxiety levels when seeing a spider.</li>
+<li>Compute the confidence interval for the differenc in mean anxiety levels</li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1" role="doc-endnote"><p><a href="http://r-pkgs.had.co.nz/style.html">Style Guide</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p><a href="http://www.sthda.com/english/wiki/ggplot2-colors-how-to-change-colors-automatically-and-manually">ggplot2 colors : How to change colors automatically and manually? - Easy Guides - Wiki - STHDA</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>In this context a matrix is vector in the sense that matrices can be used to satisfy the axiom of vector addition for a Vector Space, refer to 4.2 of R Larson’s <em>Linear Algebra</em> 7th ed.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>As opposed to smoking depending on birthweight.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>

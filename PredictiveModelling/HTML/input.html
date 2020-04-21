@@ -1,0 +1,2632 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN" 
+"http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd" > 
+<html xmlns="http://www.w3.org/1999/xhtml"  
+> 
+<head> <title>Simple Linear Regression</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+<meta name="generator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<meta name="originator" content="TeX4ht (http://www.tug.org/tex4ht/)" /> 
+<!-- html,xhtml,mathml --> 
+<meta name="src" content="input.tex" /> 
+<link rel="stylesheet" type="text/css" href="input.css" /> 
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_CHTML"> </script> 
+</head><body 
+>
+   <div class="maketitle">
+
+
+
+<h2 class="titleHead">Simple Linear Regression</h2>
+<div class="author" ><span 
+class="cmr-12">Week 1</span></div><br />
+<div class="date" ><span 
+class="cmr-12">August 8, 2019</span></div>
+   </div>
+   <h3 class="sectionHead"><span class="titlemark">1   </span> <a 
+ id="x1-10001"></a>How to Fit a Line to Data</h3>
+<!--l. 14--><p class="noindent" >Given a plot of data a Linear Regression would be the linear function that minimizes
+the error between the points.<br 
+class="newline" /></p><hr class="figure" /><div class="figure" 
+>
+
+<a 
+ id="x1-10011"></a>
+
+<!--l. 17--><p class="noindent" >
+<br /> </p><div class="caption" 
+><span class="id">Figure&#x00A0;1: </span><span  
+class="content">Differing error between linear functions</span></div><!--tex4ht:label?: x1-10011 -->
+
+   </div><hr class="endfigure" />
+<!--l. 21--><p class="indent" >   The Linear function would be of the form: </p><table class="equation"><tr><td> <a 
+ id="x1-1002r1"></a>
+<!--l. 22--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" class="equation">
+                        <mi 
+>y</mi> <mo 
+class="MathClass-rel">=</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">+</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <mi 
+>x</mi> <mo 
+class="MathClass-bin">+</mo> <mi 
+>&#x03F5;</mi>
+</math></td><td class="eq-no">(1)</td></tr></table>
+<!--l. 25--><p class="indent" >   The value <!--l. 25--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><mi 
+>&#x03F5;</mi></math>
+represents the residual, the difference between the observed value and the value predicted by
+the model: <!--l. 25--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>&#x03F5;</mi></mrow><mrow 
+><mi 
+>j</mi></mrow></msub 
+> <mo 
+class="MathClass-rel">=</mo> <msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>j</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo><mover 
+accent="true"><mrow 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>j</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-op"> ^</mo></mover></math>.<br 
+class="newline" />
+</p><!--l. 27--><p class="indent" >
+
+</p><!--l. 29--><p class="indent" >   To work out the linear function that best fits the points we use a concept
+called the <span 
+class="cmti-10">cost of a line </span>and it is the summed value of all the error for a
+line:<br 
+class="newline" /></p><hr class="figure" /><div class="figure" 
+>
+
+<a 
+ id="x1-10032"></a>
+
+<!--l. 32--><p class="noindent" >
+<br /> </p><div class="caption" 
+><span class="id">Figure&#x00A0;2: </span><span  
+class="content">Differing error between linear functions</span></div><!--tex4ht:label?: x1-10032 -->
+
+   </div><hr class="endfigure" />
+<!--l. 37--><p class="indent" >   The value of the error would be <!--l. 37--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>&#x03F5;</mi></mrow><mrow 
+><mi 
+>j</mi></mrow></msub 
+></math>,
+because <!--l. 37--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><mi 
+>&#x03F5;</mi></math>
+can be positive or negative we take the square value such that we have positive
+numbers and sum them.<br 
+class="newline" />Thus the <span 
+class="cmti-10">Residual Sum of Squares </span>(<span 
+class="cmbxti-10">RSS</span>) is:<br 
+class="newline" />
+</p><!--l. 41--><p class="indent" >
+</p><!--tex4ht:inline--><!--l. 43--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+                      <mtr><mtd 
+columnalign="right" class="align-odd"><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>&#x03F5;</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>j</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo><mover 
+accent="true"><mrow 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>j</mi></mrow></msub 
+></mrow><mo> ^</mo></mover></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mtd>                      <mtd 
+class="align-even"><mspace width="2em"/></mtd>                      <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-1004r2"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(2)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+<!--l. 45--><p class="indent" >   and the best fit for the line is defined as the one that minimimises the
+RSS.
+
+</p>
+   <h3 class="sectionHead"><span class="titlemark">2   </span> <a 
+ id="x1-20002"></a>How to Minimise the RSS</h3>
+<!--l. 48--><p class="noindent" >
+</p>
+   <h4 class="subsectionHead"><span class="titlemark">2.1   </span> <a 
+ id="x1-30002.1"></a>The Analytical Solution</h4>
+<!--l. 49--><p class="noindent" >Obviously the RSS will depend on the line chosen to fit the data,
+the line depends on two variables, the gradient and intersect,
+<!--l. 49--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></math> and
+<!--l. 49--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></math>:
+</p><!--l. 51--><p class="indent" >
+</p><!--tex4ht:inline--><!--l. 55--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+                   <mtr><mtd 
+columnalign="right" class="align-odd"><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi></mtd>                   <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>&#x03F5;</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>                              <mtd 
+columnalign="right" class="align-label"></mtd>                   <mtd 
+class="align-label">
+                   <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                       <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo><mover 
+accent="true"><mrow 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo> ^</mo></mover></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                         <mtd 
+columnalign="right" class="align-label"></mtd>                   <mtd 
+class="align-label">
+                   <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                       <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>2</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                                      <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-3001r3"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(3)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+Now given that the value <!--l. 56--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></math>
+is a constant fixed value that is observed and
+<!--l. 56--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></math> also refers to a fixed
+value observe that <!--l. 56--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi> <mo 
+class="MathClass-rel">=</mo> <mi 
+>f</mi><mrow ><mo 
+class="MathClass-open">(</mo><mrow><mi 
+>x</mi><mo 
+class="MathClass-punc">,</mo><mi 
+>y</mi></mrow><mo 
+class="MathClass-close">)</mo></mrow></math>,
+this RSS value represents a 3-dimensional parabolic curve:<br 
+class="newline" /><hr class="figure" /><div class="figure" 
+>
+
+<a 
+ id="x1-30023"></a>
+
+<!--l. 59--><p class="noindent" >
+<br />   </p><div class="caption" 
+><span class="id">Figure&#x00A0;3:    </span><span  
+class="content">The    variation    of    RSS    given    various    values    of
+<!--l. 60--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></math>
+and
+<!--l. 60--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></math></span></div><!--tex4ht:label?: x1-30023 -->
+
+   </div><hr class="endfigure" />
+<!--l. 63--><p class="indent" >
+
+</p><!--l. 64--><p class="indent" >   Thus we now know that the minimum RSS value will occur at a stationary point
+and this can be solved with calculus.
+</p>
+<!--l. 65--><p class="noindent" ><span class="paragraphHead"><a 
+ id="x1-40002.1"></a><span 
+class="cmbx-10">Example</span></span>
+   &#x00A0;<br 
+class="newline" />
+</p><!--tex4ht:inline--><!--l. 69--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+                      <mtr><mtd 
+columnalign="right" class="align-odd"><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi><mrow ><mo 
+class="MathClass-open">(</mo><mrow><mi 
+>w</mi></mrow><mo 
+class="MathClass-close">)</mo></mrow> <mo 
+class="MathClass-rel">=</mo> <mn>1</mn><mn>0</mn> <mo 
+class="MathClass-bin">-</mo> <mn>8</mn><mi 
+>w</mi> <mo 
+class="MathClass-bin">+</mo> <mn>2</mn><msup><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mtd>                      <mtd 
+class="align-even"><mspace width="2em"/></mtd>                      <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-4001r4"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(4)</mtext></mstyle>
+                      </mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><mfrac><mrow 
+><mi 
+>d</mi><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi></mrow>
+  <mrow 
+><mi 
+>d</mi><mi 
+>w</mi></mrow></mfrac>   <mo 
+class="MathClass-rel">=</mo> <mn>0</mn> <mo 
+class="MathClass-bin">-</mo> <mn>8</mn> <mo 
+class="MathClass-bin">+</mo> <mn>4</mn><mi 
+>w</mi></mtd>                           <mtd 
+class="align-even"><mspace width="2em"/></mtd>                      <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-4002r5"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(5)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+<!--l. 70--><p class="noindent" >Let the derivative equal zero then find the value of w where the RSS is a minimum
+value:
+</p><!--tex4ht:inline--><!--l. 75--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+                            <mtr><mtd 
+columnalign="right" class="align-odd"><mn>0</mn> <mo 
+class="MathClass-rel">=</mo> <mo 
+class="MathClass-bin">-</mo><mn>8</mn> <mo 
+class="MathClass-bin">+</mo> <mn>4</mn><mi 
+>w</mi></mtd>                            <mtd 
+class="align-even"><mspace width="2em"/></mtd>                            <mtd 
+columnalign="right" class="align-label">
+                            </mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><mn>4</mn><mi 
+>w</mi> <mo 
+class="MathClass-rel">=</mo> <mn>8</mn></mtd>                                <mtd 
+class="align-even"><mspace width="2em"/></mtd>                            <mtd 
+columnalign="right" class="align-label">
+                            </mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><mi 
+>w</mi> <mo 
+class="MathClass-rel">=</mo> <mn>2</mn></mtd>                                 <mtd 
+class="align-even"><mspace width="2em"/></mtd>                            <mtd 
+columnalign="right" class="align-label">
+   </mtd></mtr></mtable></math>
+
+<!--l. 76--><p class="noindent" >A quadratic function (like all convex functions) only has one minimum value
+and hence the solution is found. ( A convex function is any function that a
+straight line could only cross twice, e.g. logarithmic is converse but Sine is
+not)
+
+</p>
+   <h4 class="subsectionHead"><span class="titlemark">2.2   </span> <a 
+ id="x1-50002.2"></a>Least-squares Solution</h4>
+<!--l. 79--><p class="noindent" >Given that we now know that:<br 
+class="newline" />
+</p><!--tex4ht:inline--><!--l. 82--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+                   <mtr><mtd 
+columnalign="right" class="align-odd"><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi></mtd>                   <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>2</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                                      <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-5001r6"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(6)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+<!--l. 83--><p class="noindent" >In order to find an equation that describes the minimum we will first find both the
+partial derivatives:<br 
+class="newline" />
+</p><!--tex4ht:inline--><!--l. 89--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+              <mtr><mtd 
+columnalign="right" class="align-odd"><mfrac><mrow 
+><mi 
+>&#x2202;</mi><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi></mrow>
+ <mrow 
+><mi 
+>&#x2202;</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></mrow></mfrac>  </mtd>              <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo>   <mfrac><mrow 
+><mi 
+>&#x2202;</mi></mrow> 
+<mrow 
+><mi 
+>&#x2202;</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></mrow></mfrac><mrow ><mo 
+class="MathClass-open">[</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>2</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>                 <mtd 
+columnalign="right" class="align-label"></mtd>              <mtd 
+class="align-label">
+              <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                    <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle>  <mfrac><mrow 
+><mi 
+>&#x2202;</mi></mrow>
+<mrow 
+><mi 
+>&#x2202;</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></mrow></mfrac><mrow ><mo 
+class="MathClass-open">[</mo><mrow><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                 <mtd 
+columnalign="right" class="align-label"></mtd>              <mtd 
+class="align-label">
+              <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                    <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mn>2</mn> <mo 
+class="MathClass-bin">&#x00D7;</mo><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>1</mn></mrow></msup 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo><mo 
+class="MathClass-bin">-</mo><mn>1</mn><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>              <mtd 
+columnalign="right" class="align-label"></mtd>              <mtd 
+class="align-label">
+              <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                    <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mo 
+class="MathClass-bin">-</mo><mn>2</mn><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>1</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                                    <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-5002r7"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(7)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+<!--l. 91--><p class="noindent" >
+
+</p><!--tex4ht:inline--><!--l. 96--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+               <mtr><mtd 
+columnalign="right" class="align-odd"><mfrac><mrow 
+><mi 
+>&#x2202;</mi><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi></mrow>
+ <mrow 
+><mi 
+>&#x2202;</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></mrow></mfrac>  </mtd>               <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo>   <mfrac><mrow 
+><mi 
+>&#x2202;</mi></mrow> 
+<mrow 
+><mi 
+>&#x2202;</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></mrow></mfrac><mrow ><mo 
+class="MathClass-open">[</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>2</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>                 <mtd 
+columnalign="right" class="align-label"></mtd>               <mtd 
+class="align-label">
+               <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                    <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle>  <mfrac><mrow 
+><mi 
+>&#x2202;</mi></mrow>
+<mrow 
+><mi 
+>&#x2202;</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></mrow></mfrac><mrow ><mo 
+class="MathClass-open">[</mo><mrow><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                 <mtd 
+columnalign="right" class="align-label"></mtd>               <mtd 
+class="align-label">
+               <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                    <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mn>2</mn> <mo 
+class="MathClass-bin">&#x00D7;</mo><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>1</mn></mrow></msup 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>               <mtd 
+columnalign="right" class="align-label"></mtd>               <mtd 
+class="align-label">
+               <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                    <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mn>2</mn> <mo 
+class="MathClass-bin">&#x00D7;</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>1</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                                <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-5003r8"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(8)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+Now we will let both partial derivatives equal zero, the point at which the RSS is
+minimized:
+<!--tex4ht:inline--><!--l. 106--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+                  <mtr><mtd 
+columnalign="right" class="align-odd"><mn>0</mn></mtd>                    <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mfrac><mrow 
+><mi 
+>&#x2202;</mi><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi></mrow> 
+ <mrow 
+><mi 
+>&#x2202;</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></mrow></mfrac>  <mspace width="2em"/></mtd>                                                                  <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-5004r9"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(9)</mtext></mstyle>
+                  </mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><mn>0</mn></mtd>                    <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mo 
+class="MathClass-bin">-</mo><mn>2</mn><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>1</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                               <mtd 
+columnalign="right" class="align-label"></mtd>                  <mtd 
+class="align-label">
+                  <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                     <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msup><mrow 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle></mrow><mrow 
+><mn>1</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                                  <mtd 
+columnalign="right" class="align-label"></mtd>                  <mtd 
+class="align-label">
+                  <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                     <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+>
+<mn>0</mn></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">+</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+>
+<mn>1</mn></mrow></msub 
+><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>                  <mtd 
+columnalign="right" class="align-label"></mtd>                  <mtd 
+class="align-label">
+                  <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                     <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo> <mi 
+>n</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">+</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>                        <mtd 
+columnalign="right" class="align-label"></mtd>                  <mtd 
+class="align-label">
+                  <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><mi 
+>n</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></mtd>                  <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">+</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>                              <mtd 
+columnalign="right" class="align-label"></mtd>                  <mtd 
+class="align-label">
+                  <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></mtd>                   <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+      <mrow 
+><mi 
+>n</mi></mrow></mfrac>      <mo 
+class="MathClass-bin">+</mo> <mfrac><mrow 
+><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+        <mrow 
+><mi 
+>n</mi></mrow></mfrac>       <mspace width="2em"/></mtd>                                                <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-5005r10"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(10)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+
+<!--l. 107--><p class="noindent" ><span 
+class="cmr-9">Observe that in (</span><a 
+href="#x1-6002r15"><span 
+class="cmr-9">15</span><!--tex4ht:ref: valw0 --></a><span 
+class="cmr-9">) the left term is the average value of</span>
+<!--l. 107--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></math> <span 
+class="cmr-9">and the right term is</span>
+<span 
+class="cmr-9">the average value of </span><!--l. 107--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></math><span 
+class="cmr-9">.</span>
+</p><!--tex4ht:inline--><!--l. 114--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+            <mtr><mtd 
+columnalign="right" class="align-odd"><mn>0</mn></mtd>                         <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mfrac><mrow 
+><mi 
+>&#x2202;</mi><mi 
+>R</mi><mi 
+>S</mi><mi 
+>S</mi></mrow> 
+ <mrow 
+><mi 
+>&#x2202;</mi><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></mrow></mfrac>  <mspace width="2em"/></mtd>                                                            <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-5006r11"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(11)</mtext></mstyle>
+            </mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                          <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mn>2</mn> <mo 
+class="MathClass-bin">&#x00D7;</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo><mstyle mathsize="1.19em"><mfenced separators="" 
+open="("  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open=")"  close="" ><mrow></mrow></mfenced></mstyle><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                           <mtd 
+columnalign="right" class="align-label"></mtd>            <mtd 
+class="align-label">
+            <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                          <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mn>2</mn> <mo 
+class="MathClass-bin">&#x00D7;</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="["  close="" ><mrow></mrow></mfenced></mstyle><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">&#x00D7;</mo> <msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+> <mo 
+class="MathClass-bin">+</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+><mstyle mathsize="1.19em"><mfenced separators="" 
+open="]"  close="" ><mrow></mrow></mfenced></mstyle><mspace width="2em"/></mtd>                      <mtd 
+columnalign="right" class="align-label"></mtd>            <mtd 
+class="align-label">
+            <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                          <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+>
+<mn>0</mn></mrow></msub 
+><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+>
+<mn>1</mn></mrow></msub 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>            <mtd 
+columnalign="right" class="align-label"></mtd>            <mtd 
+class="align-label">
+            <mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mtd>            <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>                                        <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-5007r12"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(12)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+<!--l. 115--><p class="noindent" >Now we will substitute (<a 
+href="#x1-6002r15">15<!--tex4ht:ref: valw0 --></a>) into (<a 
+href="#x1-5007r12">12<!--tex4ht:ref: valw1 --></a>) such that the equation is only in terms of
+<!--l. 115--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></math> and
+<!--l. 115--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="inline" ><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></math>.<br 
+class="newline" />
+</p><!--l. 117--><p class="indent" >
+
+</p><!--tex4ht:inline--><!--l. 124--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+<mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mtd>                <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo> <mrow ><mo 
+class="MathClass-open">[</mo><mrow><mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow>
+      <mrow 
+><mi 
+>n</mi></mrow></mfrac>      <mo 
+class="MathClass-bin">+</mo> <mfrac><mrow 
+><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+        <mrow 
+><mi 
+>n</mi></mrow></mfrac>       </mrow><mo 
+class="MathClass-close">]</mo></mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><mspace width="2em"/></mtd>    <mtd 
+columnalign="right" class="align-label"></mtd><mtd 
+class="align-label">
+<mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"></mtd>                              <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo><mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+             <mrow 
+><mi 
+>n</mi></mrow></mfrac>            <mo 
+class="MathClass-bin">-</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><mfrac><mrow 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow> 
+          <mrow 
+><mi 
+>n</mi></mrow></mfrac>       <mspace width="2em"/></mtd>    <mtd 
+columnalign="right" class="align-label"></mtd><mtd 
+class="align-label">
+<mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">+</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+>
+<mn>1</mn></mrow></msub 
+><mfrac><mrow 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow> 
+          <mrow 
+><mi 
+>n</mi></mrow></mfrac>     </mtd><mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo><mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+             <mrow 
+><mi 
+>n</mi></mrow></mfrac>         <mspace width="2em"/></mtd>                    <mtd 
+columnalign="right" class="align-label"></mtd><mtd 
+class="align-label">
+<mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">+</mo> <mfrac><mrow 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow> 
+          <mrow 
+><mi 
+>n</mi></mrow></mfrac>       </mrow><mo 
+class="MathClass-close">]</mo></mrow></mtd>  <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo><mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+             <mrow 
+><mi 
+>n</mi></mrow></mfrac>            <mspace width="2em"/></mtd>                    <mtd 
+columnalign="right" class="align-label"></mtd><mtd 
+class="align-label">
+<mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></mtd>                            <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo>            <mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+<mrow 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">+</mo> <mfrac><mrow 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow> 
+         <mrow 
+><mi 
+>n</mi></mrow></mfrac>       </mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow></mfrac> <mo 
+class="MathClass-bin">-</mo>   <mfrac><mrow 
+><mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+</mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+              <mrow 
+><mi 
+>n</mi></mrow></mfrac>            </mrow> 
+<mrow 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">+</mo> <mfrac><mrow 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow> 
+         <mrow 
+><mi 
+>n</mi></mrow></mfrac>       </mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow></mfrac><mspace width="2em"/></mtd><mtd 
+columnalign="right" class="align-label"></mtd><mtd 
+class="align-label">
+<mspace width="2em"/></mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></mtd>                            <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo><mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>n</mi></mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+</mrow><mrow 
+><mi 
+>n</mi></mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+              <mrow 
+><mi 
+>n</mi></mrow></mfrac>            </mrow> 
+    <mrow 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">+</mo> <mfrac><mrow 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow> 
+         <mrow 
+><mi 
+>n</mi></mrow></mfrac>       </mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow></mfrac>    <mspace width="2em"/></mtd>                       <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-5008r13"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(13)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+<!--l. 127--><p class="noindent" >
+</p>
+   <h3 class="sectionHead"><span class="titlemark">3   </span> <a 
+ id="x1-60003"></a>Conclusion</h3>
+<!--l. 128--><p class="noindent" >A Linear Regression is a linear function that has the lowest Sum of Squared Error
+between the function values and the observed values and is given by the
+equation:<br 
+class="newline" />
+</p><!--tex4ht:inline--><!--l. 131--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+                          <mtr><mtd 
+columnalign="right" class="align-odd"><mi 
+>y</mi> <mo 
+class="MathClass-rel">=</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+> <mo 
+class="MathClass-bin">+</mo> <msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><mi 
+>x</mi> <mo 
+class="MathClass-bin">+</mo> <mi 
+>&#x03F5;</mi></mtd>                          <mtd 
+class="align-even"><mspace width="2em"/></mtd>                          <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-6001r14"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(14)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+<!--l. 132--><p class="noindent" >Such that the coefficients are provided by the equations:
+
+</p><!--tex4ht:inline--><!--l. 136--><math 
+ xmlns="http://www.w3.org/1998/Math/MathML"  
+display="block" ><mtable 
+columnalign="left" class="align">
+                  <mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>0</mn></mrow></msub 
+></mtd>                  <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+      <mrow 
+><mi 
+>n</mi></mrow></mfrac>      <mo 
+class="MathClass-bin">+</mo> <mfrac><mrow 
+><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+        <mrow 
+><mi 
+>n</mi></mrow></mfrac>       <mspace width="2em"/></mtd>                                          <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-6002r15"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(15)</mtext></mstyle>
+                  </mtd></mtr><mtr><mtd 
+columnalign="right" class="align-odd"><msub><mrow 
+><mi 
+>w</mi></mrow><mrow 
+><mn>1</mn></mrow></msub 
+></mtd>                  <mtd 
+class="align-even"> <mo 
+class="MathClass-rel">=</mo> <mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">-</mo><mfrac><mrow 
+><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>n</mi></mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+> &#x2211;</mo>
+</mrow><mrow 
+><mi 
+>n</mi></mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>y</mi></mrow><mrow 
+>
+<mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow> 
+              <mrow 
+><mi 
+>n</mi></mrow></mfrac>            </mrow> 
+    <mrow 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow> <mo 
+class="MathClass-bin">+</mo> <mfrac><mrow 
+><msup><mrow 
+><mrow ><mo 
+class="MathClass-open">(</mo><mrow><munderover accentunder="false" accent="false"><mrow  
+><mo mathsize="big" 
+>&#x2211;</mo>
+  </mrow><mrow 
+><mi 
+>i</mi><mo 
+class="MathClass-rel">=</mo><mn>1</mn></mrow><mrow 
+><mi 
+>n</mi></mrow></munderover 
+><mrow ><mo 
+class="MathClass-open">[</mo><mrow><msub><mrow 
+><mi 
+>x</mi></mrow><mrow 
+><mi 
+>i</mi></mrow></msub 
+></mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow><mo 
+class="MathClass-close">)</mo></mrow></mrow><mrow 
+><mn>2</mn></mrow></msup 
+></mrow> 
+         <mrow 
+><mi 
+>n</mi></mrow></mfrac>       </mrow><mo 
+class="MathClass-close">]</mo></mrow></mrow></mfrac>    <mspace width="2em"/></mtd>                                    <mtd 
+columnalign="right" class="align-label"><mstyle 
+   id="x1-6003r16"  class="label" ></mstyle><!--endlabel--><mstyle 
+class="maketag"><mtext  >(16)</mtext></mstyle>
+   </mtd></mtr></mtable></math>
+    
+</body></html> 
+
+
+

@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+rmse \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}model\PYG{p}{)\PYGZob{}}
+\PYG{c+c1}{\PYGZsh{} (sum(model\PYGZdl{}residuals**2)/length(model\PYGZdl{}residuals))**0.5}
+sd\PYG{p}{(}advModMultb1\PYG{o}{\PYGZdl{}}residuals\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+rse \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}model\PYG{p}{)\PYGZob{}}
+  var\PYG{p}{(}model\PYG{o}{\PYGZdl{}}residuals\PYG{p}{)}\PYG{o}{/}var\PYG{p}{(}model\PYG{o}{\PYGZdl{}}residuals \PYG{o}{\PYGZhy{}} model\PYG{o}{\PYGZdl{}}fitted.values\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k+kt}{data.frame}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}RMSE\PYGZdq{}} \PYG{o}{=} rmse\PYG{p}{(}advModMultb1\PYG{p}{)} \PYG{p}{,} \PYG{l+s}{\PYGZdq{}RSE\PYGZdq{}} \PYG{o}{=} rse\PYG{p}{(}advModMultb1\PYG{p}{)} \PYG{p}{)}
+\end{Verbatim}
