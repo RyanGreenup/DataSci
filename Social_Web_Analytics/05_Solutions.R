@@ -7,7 +7,6 @@ length(emptyCols)
 ex[,-emptyCols] 
 
 
-
 ex = matrix(c(1,2,3, 10,20,30, 4,5,6, 40,50,60), ncol=4)
 ex
 emptyCols = which(colSums(ex)==0)

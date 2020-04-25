@@ -9,6 +9,8 @@ if (require("pacman")) {
   library(pacman)
 }
 
+print("Hello World")
+
 pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, parallel,
                dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr, swirl,
                corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice, coin,
@@ -60,6 +62,7 @@ tweet_corpus <- tm::VCorpus(x = tweet_source)
 tweet_corpus[[1]]$content
 strwrap(tweet_corpus[[1]])
 
+
 # Create a WordCloud #########################################################
 
 ## Clean the Corpus
@@ -81,8 +84,8 @@ wordcloud(tweet_corpus)
 tweet_matrix <- as.matrix(DocumentTermMatrix(tweet_corpus))
 colnames(tweet_matrix)[1:3]
 
-## Remove Empty Tweets Any tweets rendered null by stopwords or Stemming Will 
-## cause problems (e.g. the cosine distance of an all zero vector is 
+## Remove Empty Tweets Any tweets rendered null by stopwords or Stemming Will
+## cause problems (e.g. the cosine distance of an all zero vector is
 ## meaningless)
 
 null = which(colSums(as.matrix(tweet_matrix)) == 0)
@@ -97,7 +100,8 @@ if(length(null)!=0){
 
 ## Use Term-Frequency and Inter-Document Frequency
 N  <- nrow(tweet_matrix)   # Number of Documents
-ft <- apply(tweet_matrix, 2, sum)
+ft <- colSums(tweet_matrix>0) ## Number of Documents containing t
+     ## See Lecture 4 [[~/Dropbox/Studies/2020Autumn/Social_Web_Analytics/04_slides.pdf]]
 
 TF  <- log(tweet_matrix + 1)
 IDF <- log(N / ft)
@@ -201,11 +205,11 @@ ggplot(data = pca_data,
   ## Scaling Fix
   ##  scale_x_continuous(limits = c(-quantile(pca_data$PC1, c(0.99)), quantile(pca_data$PC1, c(0.99)))) +
   ##  scale_y_continuous(limits = c(-quantile(pca_data$PC2, c(0.99)), quantile(pca_data$PC2, c(0.99))))
-  
+
 
 
 # Use MDSTo Visualise ----------------------------------------------------
- 
+
 # Create Unit Vectors ==========================================================
 U   <- tweet_matrix %*% diag(1/sqrt(colSums(tweet_matrix^2)))
 U_w <- tweet_weighted %*% diag(1/sqrt(colSums(tweet_weighted^2)))
@@ -214,3 +218,11 @@ U_w <- tweet_weighted %*% diag(1/sqrt(colSums(tweet_weighted^2)))
 ## Using the Identity described here
 
 ## [[pdf:~/Dropbox/Studies/2020Autumn/Social_Web_Analytics/05_slides.pdf::35++0.00][05_slides.pdf: Page 35; Quoting: pdf:~/Dropbox/Studies/2020Autumn/Social_Web_Analytics/05_slides.pdf::35++0.00]]
+
+                                          
+                                    
+                                                 
+                                    
+
+
+
