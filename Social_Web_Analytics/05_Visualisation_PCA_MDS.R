@@ -1,6 +1,6 @@
 
 
-# Load Packages -----------------------------------------------------------
+## * Load Packages -----------------------------------------------------------
 
 if (require("pacman")) {
   library(pacman)
@@ -8,8 +8,6 @@ if (require("pacman")) {
   install.packages("pacman")
   library(pacman)
 }
-
-print("Hello World")
 
 pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, parallel,
                dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr, swirl,
@@ -21,7 +19,7 @@ pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, parallel,
 mise()
 
 
-# Set up Tokens ===========================================================
+## ** Set up Tokens ===========================================================
 
 options(RCurlOptions = list(
   verbose = FALSE,
@@ -36,7 +34,7 @@ setup_twitter_oauth(
   access_secret = "HLBWzHcemHzYJnw5ZLvKpEhQ5KaWwK6Nsj6cxBjUf51NJ"
 )
 
-# rtweet ==================================================================
+## ** rtweet ==================================================================
 tk <-    rtweet::create_token(
   app = "SWA",
   consumer_key    = "dE7HNKhwHxMqqWdBl1qo9OAkN",
@@ -46,7 +44,7 @@ tk <-    rtweet::create_token(
   set_renv        = FALSE
 )
 
-# Political Tweets --------------------------------------------------------
+## * Political Tweets --------------------------------------------------------
 n <- 100
 
 # twitteR::userTimeline("billshortemp", n = n)
@@ -190,6 +188,7 @@ pol.km <-
 pca_data$kmeans <- as.factor(pol.km$cluster)
 head(pca_data)
 
+(ggpca <-
 ggplot(data = pca_data,
        aes(x = PC1, y = PC2, size = PC3, col = Party)) +
   geom_point(alpha = 0.3) +
@@ -205,24 +204,75 @@ ggplot(data = pca_data,
   ## Scaling Fix
   ##  scale_x_continuous(limits = c(-quantile(pca_data$PC1, c(0.99)), quantile(pca_data$PC1, c(0.99)))) +
   ##  scale_y_continuous(limits = c(-quantile(pca_data$PC2, c(0.99)), quantile(pca_data$PC2, c(0.99))))
-
-
+)
 
 # Use MDSTo Visualise ----------------------------------------------------
 
-# Create Unit Vectors ==========================================================
+# Euclidean Distance ===========================================================
+
+tweet_matrix[1:3, 1:3]
+tweet_dist          <- dist(tweet_weighted)
+mds_data            <- cmdscale(d = tweet_dist, k = 2)
+mds_data            <- as.data.frame(mds_data)
+names(mds_data)     <- c("MDX", "MDY")
+head(mds_data)
+
+mds_data$Party <- factor(c(rep("Greens", n), rep("Labor", n), rep("Liberal", n)))
+
+
+(ggmds <- ggplot(mds_data, aes(x = MDX, y = MDY, col = Party)) +
+  geom_point() +
+  scale_color_manual(values = c("Palegreen3", "DodgerBlue", "Palevioletred3")) +
+  theme_classic())
+
+# Compare to PCA ###############################################################
+compar_mat_pca <- -pca_data[,1:2] ## Rotate the PCA
+compar_mat_mds <- mds_data
+(comp_mat <- cbind(compar_mat_mds, compar_mat_pca)) %>% as_tibble()
+
+## Plot
+## comp_mat_tidy <- cbind(
+## comp_mat[,c(1,3)] %>%
+##   as_tibble() %>%
+##     pivot_longer(cols = c("MDX", "PC1"), names_to = "Technique", values_to = "xValues"),
+## comp_mat[,c(2,4)] %>%
+##   as_tibble() %>%
+##     pivot_longer(cols = c("MDY", "PC2"), names_to = "Technique2", values_to = "yValues") # %>%
+## )
+##
+## comp_mat_tidy$Technique <- substr(comp_mat_tidy$Technique, start = 1, stop = 2)
+## (comp_mat_tidy <- as_tibble(comp_mat_tidy[,-3]))
+##
+## ggplot(comp_mat_tidy, aes(x = xValues, y = yValues, col = Technique)) +
+##   geom_point() +
+##   facet_grid(. ~ Technique)
+
+# Binary Distance ==============================================================
+## Remember to use the weigted values though,
+## The weighted values are a good adjustment and is consistent with different
+## measures of distance
+dist_mat_bin <- dist(tweet_matrix, method = "binary")
+mds_data_bin <- cmdscale(dist_mat_bin, k = 2)
+plot(mds_data_bin[,1], mds_data_bin[,2], col = c("ForestGreen", "PowderBlue", "MediumVioletRed")[pca_data$Party])
+
+dist(rbind(c(1,1,1), c(3,4,1)), method = "binary")
+dist(rbind(c(1,1,1), c(3,4,1)), method = "euclidean")
+# Cosine Distance===============================================================
+## Using the Identity described here
+##
+
+# Create Unit Vectors ##########################################################
+## Recall that
 U   <- tweet_matrix %*% diag(1/sqrt(colSums(tweet_matrix^2)))
 U_w <- tweet_weighted %*% diag(1/sqrt(colSums(tweet_weighted^2)))
 
-# Cosine Distance===============================================================
-## Using the Identity described here
+# Create Distance Matrix #######################################################
 
-## [[pdf:~/Dropbox/Studies/2020Autumn/Social_Web_Analytics/05_slides.pdf::35++0.00][05_slides.pdf: Page 35; Quoting: pdf:~/Dropbox/Studies/2020Autumn/Social_Web_Analytics/05_slides.pdf::35++0.00]]
-
-                                          
-                                    
-                                                 
-                                    
-
-
+# Plot the MDS #################################################################
+## Make the Distance Matrix
+dist_mat_cos <-dist(U_w, method = "euclidean")^2/2
+## Make the MDS
+mds_data_cos <- (cmdscale(dist_mat_cos, k = 2)
+plot(mds_data_cos[,1], mds_data_cos[,2], col = pca_data$Party)
+## Make the Plot
 

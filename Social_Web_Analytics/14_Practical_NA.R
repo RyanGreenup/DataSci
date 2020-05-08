@@ -1,5 +1,5 @@
-## * Preamble
-## ** Load Packages -----------------------------------------------------------
+
+# Load Packages -----------------------------------------------------------
 
 if (require("pacman")) {
   library(pacman)
@@ -13,12 +13,12 @@ pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, parallel,
                corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice, coin,
                primes, epitools, maps, clipr, ggmap, twitteR, ROAuth, tm,
                rtweet, base64enc, httpuv, SnowballC, RColorBrewer, wordcloud,
-               ggwordcloud, igraph)
+               ggwordcloud)
 
 mise()
 
 
-## ** Set up Tokens ===========================================================
+# Set up Tokens ===========================================================
 
 options(RCurlOptions = list(
   verbose = FALSE,
@@ -43,19 +43,6 @@ tk <-    rtweet::create_token(
   set_renv        = FALSE
 )
 
-## * Creating a Graph -------------------------------------------------------------
-
-## * 3 Creating Random Graphs -----------------------------------------------------
-## * 4 Examining the Graphs -------------------------------------------------------
-## * 5 Small Graph ----------------------------------------------------------------
-## * 6 Twitter Graph Small --------------------------------------------------------
-## Refer to the manual
-## [[./SWA-Project/site/rtweet.pdf]]
-
-## ** Load Data
-## I just loaded his data because I didn't want to use up my access to twitter
-load("./chris2019.RData")
-(t <- rtweet::get_friends("chrishemsworth",  token = tk)) %>% head()
 
 # Political Tweets --------------------------------------------------------
 n <- 100

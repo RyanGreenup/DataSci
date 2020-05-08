@@ -18,7 +18,7 @@ editor_options:
 ## Preamble
 
 ```{r}
-# Preamble
+## Preamble
 
 ## Install Pacman
 load.pac <- function() {
@@ -234,6 +234,8 @@ sim <- replicate(10^4, {
 ```
 
 The probability
+
+```
 
 
 
