@@ -1,5 +1,5 @@
 ---
-title: "04 Smoking 2"
+title: "04 Smoking 2, Using the *Student*'s t-test"
 tags: [Notebooks/Thinking About Data]
 output: 
   html_document: 

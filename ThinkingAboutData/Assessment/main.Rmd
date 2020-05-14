@@ -85,6 +85,10 @@ if(sum(is.na(data)) > 0) {
 This data set has provides 400 observations with 4 features, one of which is categorical. There is no missing data in this data set.
 
 # Question 1
+> Assume that the number of new flu cases each day are independent over the set of days. Test if the mean
+> number of new flu cases over the set of days is different for each city, and if so determine which cities have a
+> statistically different mean.
+
 It is first necessary to get the data into a tidy format, so first encode the categorical variable as a `factor`:
 
 ```{r}
@@ -94,24 +98,26 @@ data$city  <- factor(data$city)
 Now aggregate the data:
 
 ```{r}
-mean_city <- aggregate(newFlu ~ city, mean_city, mean, na.rm = TRUE)
+mean_city <- aggregate(newFlu ~ city, data, mean, na.rm = TRUE)
 
 ## `element_blank()` has better spacing than + labs(x = "")
 ```
 
+USE ANOVA, make a boxplot, that's what w
 
 
 ## Plot
 This aggregated data can be plotted, illustrating the average number of new flu infections accross cities under the assumption that the rate of infection is independent of time.
 
 ```{r}
-ggplot(mean_city, aes(x = city, y = newFlu, fill = city)) +
-  geom_col() +
+p <- ggplot(data, aes(x = city, y = newFlu, fill = city)) +
   theme_classic() +
   labs(title = "Avereage Flu Cases Per Day",
        subtitle = "Under the Assumption of Time Independence",
-       y = "Average Flu Infections Per Day") +
+y = "Average Flu Infections Per Day") +
   theme(axis.title.x = element_blank())
+
+p + geom_boxplot() 
 ```
 
 
@@ -129,30 +135,64 @@ cities a hypothesis test will be established.
   * And hence we would expect the mean value to be the mean grand
 * $H_{a}: \quad$ There is a difference between the mean values across cities.
 
-### Rejection Region
+### Test statistic
 The $\chi^2$ statistic is given by equation \eqref{chi}:
 
 $$
 \chi^2 = \sum^n_{i= 0}\left[  \frac{(e-o)^2}{e}  \right] \label{chi}
 $$
 
+where:
 
+* $i$ is the city
+* $e$ is the expected value of the city (under the null hypothesis)
+* $o$ is the observed value of the city.
 
-The statistic of concern will be the probability of a Type I error ($\alpha$) which is
-essentially a false positive.
+This is a measurement of how different the observed data is from the null
+hypothesis.
+
+### Rejection Region
+Rather than using the $\chi^{2}$ statistic directly, the statistic of concern will be the
+probability of a Type I error ($\alpha$) which is essentially a false positive.
 
 The null hypothesis will be rejected for an $\alpha$ value less than 5%, this
 represents a low probability of a type I error which is good evidence for
 rejecting the null hypothesis.
 
 ### Statistic
+
 The $p$-value is the measured probability of a type I error, it can be measured
 by simulating the data under the assumption that the null hypothesis is true and
 measuring the frequency at which the null hypothesis would be rejected by mere
 chance, that frequency will be accepted as the probability of a type I error.
 
 In order to simulate the data, the observations can be permuted in order remove
-any difference between mean values, then the 
+any meaningful difference between mean values that would violate the null
+hypothesis and the $\chi^{2}$ statistic measured. The frequency at which a more
+extreme observation is observed is the $p$ value.
+
+```{r}
+filter <- dplyr::filter
+
+e  <- mean(mean_city$newFlu)
+o  <- mean_city$newFlu
+chi_sq <- sum((e-o)^2/e)
+
+chi_sim_vec <- replicate(10^3, {
+    city_perm <- sample(x = data$city)
+    Flu_sim   <- aggregate(newFlu ~ city_perm, data, mean) 
+    o_sim     <- Flu_sim$newFlu
+    
+    sum((e-o_sim)^2/e)
+  })
+
+```
+
+Now we simply need to ask the question, "*was there a False Positive?*":
+```{r}
+mean(chi_sim_vec > chi_sq)
+```
+
 
 ## Conclusion
 # Question 2
