@@ -40,7 +40,7 @@ Before beginning it is necessary to set the working directory, load any necessar
 
 ```{r}
 ## Preamble
-
+# setwd("~/Dropbox/Notes/DataSci/ThinkingAboutData/Assessment/")
 ## Install Pacman
 load.pac <- function() {
   
@@ -68,14 +68,92 @@ load(file = "./TAD.rdata")
 print("Success")
 ```
 
+The data can be inspected thusly:
+
 ```{r}
-data <- read.csv("../0datasets/project2020A.csv")
+(read.csv("../0datasets/project2020A.csv") -> data)  %>% head()
+str(data)
+summary(data)
+
+if(sum(is.na(data)) > 0) {
+  print("The data Needs to be Cleaned")
+} else {
+  print("The data does not require cleaning")
+}
 ```
 
-# question 1
+This data set has provides 400 observations with 4 features, one of which is categorical. There is no missing data in this data set.
+
+# Question 1
+It is first necessary to get the data into a tidy format, so first encode the categorical variable as a `factor`:
+
+```{r}
+data$city  <- factor(data$city)
+```
+
+Now aggregate the data:
+
+```{r}
+mean_city <- aggregate(newFlu ~ city, mean_city, mean, na.rm = TRUE)
+
+## `element_blank()` has better spacing than + labs(x = "")
+```
+
+
+
 ## Plot
+This aggregated data can be plotted, illustrating the average number of new flu infections accross cities under the assumption that the rate of infection is independent of time.
+
+```{r}
+ggplot(mean_city, aes(x = city, y = newFlu, fill = city)) +
+  geom_col() +
+  theme_classic() +
+  labs(title = "Avereage Flu Cases Per Day",
+       subtitle = "Under the Assumption of Time Independence",
+       y = "Average Flu Infections Per Day") +
+  theme(axis.title.x = element_blank())
+```
+
+
 ## Observations from Plot
+This strongly suggests that the number of infections in Sydney and Melbourne are
+higher than in Adelaide or Brisbane, it would be reasonable to expect that
+Sydney would have a statistically higher mean value of new cases.
+
 ## Analysis and Results
+In order to assess whether or not the mean value does differ accross these
+cities a hypothesis test will be established.
+
+### Hypothesis
+* $H_0: \quad$ The mean value accross populations does not change
+  * And hence we would expect the mean value to be the mean grand
+* $H_{a}: \quad$ There is a difference between the mean values across cities.
+
+### Rejection Region
+The $\chi^2$ statistic is given by equation \eqref{chi}:
+
+$$
+\chi^2 = \sum^n_{i= 0}\left[  \frac{(e-o)^2}{e}  \right] \label{chi}
+$$
+
+
+
+The statistic of concern will be the probability of a Type I error ($\alpha$) which is
+essentially a false positive.
+
+The null hypothesis will be rejected for an $\alpha$ value less than 5%, this
+represents a low probability of a type I error which is good evidence for
+rejecting the null hypothesis.
+
+### Statistic
+The $p$-value is the measured probability of a type I error, it can be measured
+by simulating the data under the assumption that the null hypothesis is true and
+measuring the frequency at which the null hypothesis would be rejected by mere
+chance, that frequency will be accepted as the probability of a type I error.
+
+In order to simulate the data, the observations can be permuted in order remove
+any difference between mean values, then the 
+
 ## Conclusion
 # Question 2
 ## Plot
