@@ -20,7 +20,59 @@ plagiarism checking).
 * I hereby certify that we have read and understand what the School of Computing and Mathematics
 defines as minor and substantial breaches of misconduct as outlined in the learning guide for this unit.
 
-# Question 1
+# Problem
+>  The health minister of Australia has been concerned about the increase in new cases of people infected with
+> the Tiara virus. They have hired you as a consultant to examine their data on the new cases of Tiara virus
+> and the flu. The data is provided to you in a CSV file called project2020A.csv containing observations of
+> the daily new cases of both the Tiara and flu viruses for each state in Australia over a 100 day period. The
+> variables are:
+> 
+> * `city`: The city in which the new cases of the virus is counted.
+> * `newTiara`: The number of new cases of the Tiara virus for the day.
+> * `newFlu`: The number of new cases of the flu virus for the day.
+> * `date`: the day number starting from 1 and ending at 100.
+> 
+> The health minister wants statistics measured from the data so that they can be reported to the public. The
+> five required pieces of analysis are presented below.
+# Preamble
+Before beginning it is necessary to set the working directory, load any necessary packages and load the data set.
+
+
+```{r}
+## Preamble
+
+## Install Pacman
+load.pac <- function() {
+  
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+    pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice,
+                 coin, primes, epitools, maps, clipr, ggmap, RColorBrewer)
+  
+  
+   mise()
+   select <- dplyr::select
+}
+
+load.pac()
+setwd(dir = "/home/ryan/Notes/DataSci/ThinkingAboutData/")
+load(file = "~/Notes/DataSci/ThinkingAboutData/TAD.rdata")
+load(file = "./TAD.rdata")
+print("Success")
+```
+
+```{r}
+data <- read.csv("../0datasets/project2020A.csv")
+```
+
+# question 1
 ## Plot
 ## Observations from Plot
 ## Analysis and Results
