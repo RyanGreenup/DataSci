@@ -1,0 +1,48 @@
+---
+title: "2020 Project"
+subtitle: "Thinking About Data"
+author: "Ryan G - 17805315"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+# Declaration
+* I hold a copy of this assignment that we can produce if the original is lost or damaged.
+* I hereby certify that no part of this assignment/product has been copied from any other student’s work
+or from any other source except where due acknowledgement is made in the assignment.
+* No part of this assignment/product has been written/produced for us by another person except where
+such collaboration has been authorised by the subject lecturer/tutor concerned.
+* I am aware that this work may be reproduced and submitted to plagiarism detection software programs
+for the purpose of detecting possible plagiarism (which may retain a copy on its database for future
+plagiarism checking).
+* I hereby certify that we have read and understand what the School of Computing and Mathematics
+defines as minor and substantial breaches of misconduct as outlined in the learning guide for this unit.
+
+# Question 1
+## Plot
+## Observations from Plot
+## Analysis and Results
+## Conclusion
+# Question 2
+## Plot
+## Observations from Plot
+## Analysis and Results
+## Conclusion
+# Question 3
+## Plot
+## Observations from Plot
+## Analysis and Results
+## Conclusion
+
+# Question 4
+## Plot
+## Observations from Plot
+## Analysis and Results
+## Conclusion
+# Question 5
+## Plot
+## Observations from Plot
+## Analysis and Results
+## Conclusion
