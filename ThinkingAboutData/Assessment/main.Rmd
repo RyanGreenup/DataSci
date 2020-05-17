@@ -394,7 +394,7 @@ The 95% confidence interval for the correlation coefficient provides a range of 
 > Compute the confidence interval for the parameter $\beta$ for the new infections in Sydney.
 
 ## Plot
-In order to produce a plot of the data it is necessary to produce a corresponding data frame. The `dplyr` package can be used to `select` the appropriate features:
+In order to produce a plot of the data it is necessary to produce a corresponding data frame. The `dplyr` package can be used to `select` the appropriate features and then `ggplot` can be used to produce a plot and a $\log$-transformed plot:
 
 ```{r}
 
@@ -433,7 +433,9 @@ grid.arrange(grobs = list(p_raw, p_log_trans), layout_matrix = matrix(1:2, nrow 
 ```
 
 ## Observations from Plot
-Following the transform the data is quite linear and this, in conjuction with mathematical reasoning, is good evidence to justify the use of a linear model, there does however appear to be a slight non linear trend in the data from adelaide following the transform. looking at the plot and taking the rise over run, the $\beta$ coefficient would appear to be about $\beta \approx \frac{7.5-0}{4-1} = 2.5$.
+Following the transform the data is quite linear and this, in conjuction with mathematical reasoning, is good evidence to justify the use of an exponential model, there does however appear to be a slight non linear trend in the data corresponding to Adelaide following the transform. 
+
+Looking at the plot and taking the rise over run, the $\beta$ coefficient would appear to be about $\beta \approx \frac{7.5-0}{4-1} = 2.5$.
 
 ## Analysis and Results
 In order to produce a confidence interval for the slope of the log transformed data it is necessary to first produce a corresponding data frame, this can be acheived by using `dplyr` to select the appropriate features, mutate the values and filter out any $-\infty$ values:
@@ -448,7 +450,14 @@ In order to produce a confidence interval for the slope of the log transformed d
 ```
 
 
-To produce a confidence interval for the slope value, assume that the population is composed of an infinite repetition of the sample, sample from this broader population (by resampling with repetition), calculate the slope value and repeat many times in order to produce a distribution. The quantile of the distribution is
+To produce a confidence interval for the slope value:
+
+1. Assume that the population is composed of an infinite repetition of the sample
+2. Sample from this broader population (by resampling with repetition)
+3. Calculate the slope value
+4. repeat many times in order to produce a distribution
+
+The quantile of the distribution is hence given by:
 
 ```{r}
 n = nrow(log_trans)
@@ -481,8 +490,8 @@ ggplot(tibble::enframe(beta), aes(x = value, y = after_stat(density))) +
        y = "Density")
          
 ```
-## Conclusione
-The bootstrap provides that a 95% confidence interval for $\beta$ is between 2.7 and 2, this is a good estimate for the range of the number of people an infected individual will spread the disease to.
+## Conclusion
+The bootstrap provides that a 95% confidence interval for $\beta$ is between 2 and 2.7, this is a good estimate for the rate at which the average number of transmissions per person changes (i.e. the acceleration of the spread or the second derivative of the number of infected).
 ### Note on Log Transforms
 # Question 5
 > The final piece of analysis wanted by the health minister is to determine if the Tiara virus is spreading at a
