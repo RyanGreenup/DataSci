@@ -2,8 +2,10 @@
 title: "2020 Project"
 author: "Ryan G - 17805315"
 output:
-  html_notebook: default
+  html_document: 
+    keep_md: yes
   pdf_document: default
+  html_notebook: default
 subtitle: Thinking About Data
 editor_options:
   chunk_output_type: inline
@@ -443,6 +445,7 @@ In order to produce a confidence interval for the slope of the log transformed d
 ```{r}
 (log_trans <- data %>%
   select(city, newTiara, date) %>%
+   filter(city == "Sydney") %>% 
   mutate(newTiara = log(newTiara),
          date     = log(date)) %>%
   filter(newTiara != -Inf )) %>%
@@ -491,8 +494,8 @@ ggplot(tibble::enframe(beta), aes(x = value, y = after_stat(density))) +
          
 ```
 ## Conclusion
-The bootstrap provides that a 95% confidence interval for $\beta$ is between 2
-and 2.7, this is a good estimate for the rate at which the average number of
+The bootstrap provides that a 95% confidence interval for $\beta$ is between 2.4
+and 3.7, this is a good estimate for the rate at which the average number of
 transmissions per person changes (i.e. the acceleration of the spread or the
 second derivative of the number of infected).
 ### Note on Log Transforms

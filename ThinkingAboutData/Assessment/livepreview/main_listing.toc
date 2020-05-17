@@ -1,0 +1,73 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {\S \nobreakspace {} A \nobreakspace {} }Declaration}{2}{section.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {\S \nobreakspace {} B \nobreakspace {} }Preliminary}{2}{section.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} B(1) \nobreakspace {} }Load Packages}{2}{subsection.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} B(2) \nobreakspace {} }Inspect and Clean Data}{3}{subsection.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {\S \nobreakspace {} 1 \nobreakspace {} }Comparison of Cities \normalsize \hskip 2em\relax (\textit {ANOVA})}{4}{section.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 1.1 \nobreakspace {} }Plot}{4}{subsection.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 1.2 \nobreakspace {} }Observations from Plot}{5}{subsection.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 1.3 \nobreakspace {} }Analysis and Results}{5}{subsection.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline { \nobreakspace {} 1.3.1 \nobreakspace {} }Hypothesis}{5}{subsubsection.1.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline { \nobreakspace {} 1.3.2 \nobreakspace {} }Test statistic}{6}{subsubsection.1.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline { \nobreakspace {} 1.3.3 \nobreakspace {} }Rejection Region}{6}{subsubsection.1.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline { \nobreakspace {} 1.3.4 \nobreakspace {} }Statistic}{6}{subsubsection.1.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 1.4 \nobreakspace {} }Conclusion}{7}{subsection.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {\S \nobreakspace {} 2 \nobreakspace {} }Comparison of Sydney and Melboure \normalsize \hskip 2em\relax ($t$-test)}{8}{section.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 2.1 \nobreakspace {} }Plot}{8}{subsection.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 2.2 \nobreakspace {} }Observations from Plot}{9}{subsection.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 2.3 \nobreakspace {} }Analysis and Results}{9}{subsection.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline { \nobreakspace {} 2.3.1 \nobreakspace {} }Student's \(t\)-distribution}{9}{subsubsection.2.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline { \nobreakspace {} 2.3.2 \nobreakspace {} }Simulation}{10}{subsubsection.2.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 2.4 \nobreakspace {} }Conclusion}{11}{subsection.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {\S \nobreakspace {} 3 \nobreakspace {} }Correlation of Sydney and Adelaide \normalsize \hskip 2em\relax (\texttt {bootstrap})}{11}{section.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 3.1 \nobreakspace {} }Plot}{11}{subsection.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 3.2 \nobreakspace {} }Observations from Plot}{12}{subsection.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 3.3 \nobreakspace {} }Analysis and Results}{12}{subsection.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 3.4 \nobreakspace {} }Conclusion}{13}{subsection.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {\S \nobreakspace {} 4 \nobreakspace {} }Rate of Change in Sydney \hskip 2em\relax \normalsize (\texttt {bootstrap}; \textit {Least-Squares Regression})}{13}{section.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 4.1 \nobreakspace {} }Plot}{14}{subsection.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 4.2 \nobreakspace {} }Observations from Plot}{15}{subsection.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 4.3 \nobreakspace {} }Analysis and Results}{15}{subsection.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {\S \nobreakspace {} 5 \nobreakspace {} }Comparison of Sydney and Melbourne Rates \normalsize \hskip 2em\relax (\texttt {bootstrap})}{17}{section.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 5.1 \nobreakspace {} }Plot}{17}{subsection.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 5.2 \nobreakspace {} }Observations from Plot}{20}{subsection.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 5.3 \nobreakspace {} }Analysis and Results}{20}{subsection.5.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline { \nobreakspace {} 5.3.1 \nobreakspace {} }Hypothesis}{21}{subsubsection.5.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline { \nobreakspace {} 5.3.2 \nobreakspace {} }Test Statistic}{21}{subsubsection.5.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 5.4 \nobreakspace {} }Conclusion}{22}{subsection.5.4}%
