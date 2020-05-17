@@ -489,37 +489,59 @@ The bootstrap provides that a 95% confidence interval for $\beta$ is between 2.7
 
 ```{r}
 
+## Relevant data
 rate_df <- data %>% 
   select(city, newTiara, date) %>% 
-  filter(city %in% c("Sydney", "Melbourne"))
+  filter(city %in% c("Sydney", "Melbourne")) %>% 
+  pivot_wider(names_from = city, values_from = newTiara)
 
-## What's the difference in slopes
+## Calculate the slope
+rate_diff <- function(data) {
+sydney_mod <- lm(Sydney ~ date, data)
+sydney_slope <- sydney_mod$coefficients["date"]
 
-    
+melbourne_mod <- lm(Melbourne ~ date, data)
+melbourne_slope <- melbourne_mod$coefficients["date"]
+
+(slope_diff <- sydney_slope-melbourne_slope)
+}
+
+rate_diff(rate_df)
+
+##H0 is that the b_0-b1 = 0
+start <- system.time()
+
+start <- Sys.time()
+fpos <- replicate(10^3, {
+## Combine the cities and randomly permut the cases between
    (rate_df_perm <- data %>% 
      group_by(date) %>% 
      select(city, newTiara, date) %>% 
      filter(city %in% c("Sydney", "Melbourne")) %>% 
      mutate(city = sample(city)) %>% 
      pivot_wider(names_from = city, values_from = newTiara))
-    
-    
-rate_diff <- function(data) {
-  da
-}
 
-##H0 is that the b_0-b1 = 0
-replicate(10^3, {
-  ## Assume the rates are equal by randomly creating the groups
-  
-  ## determine the difference in slopes
-  
+## Calculate the slope
+sim_diff <- rate_diff(rate_df_perm)
+
+## Is this difference greater than the observation?
+(sim_diff > slope_diff)
 })
 
+(p <- mean(fpos))
+Sys.time()-start
 ```
 
 
 ## Plot
+In order to plot the data it is necessary to selec
+
+```{r}
+ggplot(data %>% 
+         filter(city %in% c("Sydney", "Melbourne")), aes(x = date, y = newTiara, col = city)) +
+  geom_point()
+```
+
 ## Observations from Plot
 ## Analysis and Resultse
 ## Conclusion
