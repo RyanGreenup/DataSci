@@ -2,8 +2,8 @@
 title: "2020 Project"
 author: "Ryan G - 17805315"
 output:
-  html_notebook: default
   pdf_document: default
+  html_notebook: default
 subtitle: Thinking About Data
 editor_options:
   chunk_output_type: inline
@@ -387,7 +387,7 @@ The 95% confidence interval for the correlation coefficient provides a range of 
 > $$
 > which is now a linear model.
 >
-> Compute the confidence interval for the parameter β for the new infections in Sydney.
+> Compute the confidence interval for the parameter $\beta$ for the new infections in Sydney.
 
 ## Plot
 In order to produce a plot of the data it is necessary to produce a corresponding data frame. The `dplyr` package can be used to `select` the appropriate features:
@@ -585,7 +585,7 @@ melbourne_slope <- melbourne_mod$coefficients[2]
 (slope_diff <- sydney_slope-melbourne_slope)
 }
 
-rate_diff(rate_df)
+(slope_diff_obs <- rate_diff(rate_df))
 
 ```
 
@@ -611,31 +611,47 @@ To simulate the null hypothesis, combine the observations and randomly assign th
 start <- Sys.time()
 sim_diff_vec <- replicate(10^3, {
 ## Combine the cities and randomly permut the cases between
-  rate_df_perm <- rate_df
-  index <- sample(c(TRUE, FALSE), size = nrow(rate_df), replace = TRUE)
-  index <- as.logical(sample(1:nrow(rate_df)) %% 2)
-    rate_df_perm[index,1] <- rate_df[index,2]
-    rate_df_perm[index,2] <- rate_df[index,1]
+   (rate_df_perm <- data %>% 
+     group_by(date) %>% 
+     select(city, newTiara, date) %>% 
+     filter(city %in% c("Sydney", "Melbourne")) %>% 
+     mutate(city = sample(city)) %>% 
+     filter(newTiara > 0) %>% 
+     pivot_wider(names_from = city, values_from = newTiara))
   
-
 ## Calculate the slope
 sim_diff <- rate_diff(rate_df_perm)
 
 return(sim_diff)
 }) 
-hist(sim_diff_vec)
 
 ## Is this difference greater than the observation?
-fpos <-  (sim_diff_vec < slope_diff)
+fpos <-  (sim_diff_vec > slope_diff_obs)
 
 (p <- mean(fpos))
 Sys.time()-start
 
 ```
+This distribution can be plotted as a histogram in order to visualise the significance of the difference in rates:
+
+```{r}
+ggplot(tibble::enframe(sim_diff_vec), aes(x = value, y = after_stat(density))) +
+  geom_histogram(fill = "LightSkyBlue", col = "purple", bins = 20) +
+  geom_vline(xintercept = slope_diff_obs, lty = 2, col = "purple") +
+  theme_bw() +
+  labs(x = latex2exp::TeX('Difference in $\\beta$ Coefficient values'),
+       subtitle = "Regressed from log transform using least squares", 
+       main = "Distribution of Difference in new case rates between Sydney and Melbourne", 
+       y = "Density")
+
+
+```
 
 
 ## Conclusion
+Under the assumption that the rates of daily new cases are equivalent, the probability of detecting a change when there was no change is practically 0, this is good evidence to support rejecting the null hypothesis.
 
+It is hence conceded that the rate of new *Tiara* cases is greater in Sydney than in Melbourne.
 
 
 
