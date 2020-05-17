@@ -419,7 +419,7 @@ p_log_trans <- ggplot(data, aes(x = log(date), y = log(newTiara), col = city)) +
   scale_x_continuous(limits = c(0, log(max(data$date)))) +
   theme_classic() +
   guides(col = FALSE) +
-  labs(x = "Days Since First Case",
+  labs(x = "Natural log of Days Since First Case",
        y = "Number of New Tiara Cases",
        title = "New Tiara Cases, Log Transform",
          subtitle = "Using the natural log")
@@ -487,33 +487,132 @@ The bootstrap provides that a 95% confidence interval for $\beta$ is between 2.7
 > new Tiara virus cases b is lower in Melbourne when compared to Sydney.
 
 
+
+## Plot
+In order to plot the data it is necessary to filter the results for Sydney and Melbourne, this can be done using `dplyr`. This data is best described by an exponential model as justified by equation \eqref{expmod} and so the rate considered should be the rate coefficient ($\beta$) in the expoential model.
+
+In order to justify the expoenential model let $p$ be the number of people with the disease, we would expect the growth of this population to be proportional to the number of those infected:
+
+\begin{align}
+p &\propto \frac{\mathrm{d}p}{\mathrm{d}t} \notag \\
+\implies \int  \enspace \mathrm{d}t &\propto \int \frac{1}{p} \frac{\mathrm{d}p}{\mathrm{d}t} \enspace \mathrm{d}t \notag \\
+\text{using integration by parts:} \notag \\
+\implies \int  \enspace \mathrm{d}t &\propto \int \frac{1}{p} \enspace \mathrm{d}t \notag \\
+ t &\propto \ln{\mid p \mid } + C, \quad \exists C \in \mathbb{R} \notag \\
+ p \text{ is always positve and so } \mid p \mid \propto p: \notag \\
+ t &\propto \ln{ p  } + C, \quad \exists C \in \mathbb{R} \notag \\
+ \text{provide proportionality constant:} \notag \\
+ e^{\beta t} &= e^{\ln{ p  } + C}, \quad \exists \beta, C \in \mathbb{R}\notag \\
+ \implies p &= \gamma e^{\beta t}, \exists \beta, C \in \mathbb{R} \\
+\frac{\mathrm{d}p}{\mathrm{d}t} &= \alpha e^{\beta t}, \exists \beta, C \in \mathbb{R}\label{expmod} \\
+\end{align}
+
+$\therefore$ assuming that the rate of new cases is proportional to the number of infected, the number of daily cases would be described by an exponential model.
+
+Plots can be produces in a similar fashion as before:
+
+```{r}
+syd_mel_data <- data %>% 
+  filter(city %in% c("Sydney", "Melbourne"))
+
+p_raw <- ggplot(syd_mel_data, aes(x = date, y = newTiara, col = city)) +
+  geom_point() +
+  theme_classic() +
+  labs(x = "Days Since First Case",
+       y = "Number of New Tiara Cases",
+       title = "Melbourne and Sydney, Daily Tiara Cases, Log Transform") +
+  theme(legend.position = c(0.3, 0.7)) +
+  guides(col = guide_legend("City")) +
+  theme(legend.background = element_rect(fill="#f0f0f0",
+                                  size=0.6, linetype="solid",
+                                  colour ="darkblue"))
+
+p_log_trans <- ggplot(syd_mel_data, aes(x = log(date), y = log(newTiara), col = city)) +
+  geom_point(alpha = 0.7) +
+  stat_smooth(method = 'lm', se = TRUE) +
+  scale_y_continuous(limits = c(0, 10)) +
+  scale_x_continuous(limits = c(0, log(max(data$date)))) +
+  theme_classic() +
+  guides(col = FALSE) +
+  labs(x = "Natural log of Days Since First Case",
+       y = "Number of New Tiara Cases",
+       title = "Melbourne and Sydney, Daily Tiara Cases, Log Transform",
+         subtitle = "Using the natural log")
+
+
+library(gridExtra)
+grid.arrange(grobs = list(p_raw, p_log_trans), layout_matrix = matrix(1:2, nrow = 1))
+
+
+
+```
+
+## Observations from Plot
+The plot suggests that Melbourne has a higher number of new daily cases of *Tiara* Virus, the rate of increase of new cases in Sydney does however appear significantly (albeit slightly) greater than Melbourne.
+
+It appears that Sydney has a higher rate of new coronavirus cases.
+
+## Analysis and Results
+In order to consider the rate of change of new cases of *Tiara* virus the data must be filtered for results only pertaining to Sydney and Melbourne, this can be done with `dplyr`:
+
 ```{r}
 
 ## Relevant data
 rate_df <- data %>% 
+  ## Throw away other features
   select(city, newTiara, date) %>% 
+  ## Only use Melbourne and Sydney
   filter(city %in% c("Sydney", "Melbourne")) %>% 
+  ## Tage out zero values for the log transform
+  filter(newTiara > 0) %>% 
+  ## Make the DataFrame wider
   pivot_wider(names_from = city, values_from = newTiara)
+```
+
+Then that data can be used to compare the slope of the log transformed data between the two cities:
+
+```{r}
 
 ## Calculate the slope
 rate_diff <- function(data) {
-sydney_mod <- lm(Sydney ~ date, data)
-sydney_slope <- sydney_mod$coefficients["date"]
+  
+sydney_mod <- lm(log(Sydney) ~ log(date), data)
+sydney_slope <- sydney_mod$coefficients[2]
 
-melbourne_mod <- lm(Melbourne ~ date, data)
-melbourne_slope <- melbourne_mod$coefficients["date"]
+melbourne_mod <- lm(log(Melbourne) ~ log(date), data)
+melbourne_slope <- melbourne_mod$coefficients[2]
 
 (slope_diff <- sydney_slope-melbourne_slope)
 }
 
 rate_diff(rate_df)
 
+```
+
+This suggests that the rate of new cases in Sydney is higher than Melbourne, by a rate of about 0.44.
+
+### Hypothesis
+In order to perform a hypothesis test it is necessary to stipulate two hypothesis:
+
+1. $H_0: \quad$ The rate of change of daily new cases is equal in Sydney and Melbourne.
+    + $\beta_\mathrm{Syd} - \beta_\mathrm{Mel} = 0$
+2. $H_a: \quad$ Sydney has a higher rate of new daily cases than Melbourne.
+    + $\beta_\mathrm{Syd} - \beta_\mathrm{Mel} > 0$
+
+### Test Statistic
+In order to measure the $p$ value the data needs to be simulated under the assumption that the null hypothesis is true, the frequency at which the difference between the slope values is atleast as great as the observation is a good estimate for the probability of committing a type I error, this is the $p$ value. A low $p$-value is good evidence to support rejecting the null hypothesis.
+
+To simulate the null hypothesis, combine the observations and randomly assign them to either city, the $\beta$ values can then be measured, differenced and recorded.
+
+```{r}
+
 ##H0 is that the b_0-b1 = 0
 
 start <- Sys.time()
-fpos <- replicate(10^3, {
+sim_diff_vec <- replicate(10^3, {
 ## Combine the cities and randomly permut the cases between
   rate_df_perm <- rate_df
+  index <- sample(c(TRUE, FALSE), size = nrow(rate_df), replace = TRUE)
   index <- as.logical(sample(1:nrow(rate_df)) %% 2)
     rate_df_perm[index,1] <- rate_df[index,2]
     rate_df_perm[index,2] <- rate_df[index,1]
@@ -522,26 +621,19 @@ fpos <- replicate(10^3, {
 ## Calculate the slope
 sim_diff <- rate_diff(rate_df_perm)
 
+return(sim_diff)
+}) 
+hist(sim_diff_vec)
+
 ## Is this difference greater than the observation?
-(sim_diff > slope_diff)
-})
+fpos <-  (sim_diff_vec < slope_diff)
 
 (p <- mean(fpos))
 Sys.time()-start
+
 ```
 
 
-## Plot
-In order to plot the data it is necessary to selec
-
-```{r}
-ggplot(data %>% 
-         filter(city %in% c("Sydney", "Melbourne")), aes(x = date, y = newTiara, col = city)) +
-  geom_point()
-```
-
-## Observations from Plot
-## Analysis and Resultse
 ## Conclusion
 
 
