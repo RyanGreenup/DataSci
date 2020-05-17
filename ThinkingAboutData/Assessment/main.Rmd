@@ -2,8 +2,8 @@
 title: "2020 Project"
 author: "Ryan G - 17805315"
 output:
-  pdf_document: default
   html_notebook: default
+  pdf_document: default
 subtitle: Thinking About Data
 editor_options:
   chunk_output_type: inline
@@ -22,23 +22,10 @@ plagiarism checking).
 * I hereby certify that we have read and understand what the School of Computing and Mathematics
 defines as minor and substantial breaches of misconduct as outlined in the learning guide for this unit.
 
-# Problem
->  The health minister of Australia has been concerned about the increase in new cases of people infected with
-> the Tiara virus. They have hired you as a consultant to examine their data on the new cases of Tiara virus
-> and the flu. The data is provided to you in a CSV file called project2020A.csv containing observations of
-> the daily new cases of both the Tiara and flu viruses for each state in Australia over a 100 day period. The
-> variables are:
->
-> * `city`: The city in which the new cases of the virus is counted.
-> * `newTiara`: The number of new cases of the Tiara virus for the day.
-> * `newFlu`: The number of new cases of the flu virus for the day.
-> * `date`: the day number starting from 1 and ending at 100.
->
-> The health minister wants statistics measured from the data so that they can be reported to the public. The
-> five required pieces of analysis are presented below.
-# Preamble
+# Preliminary
 Before beginning it is necessary to set the working directory, load any necessary packages and load the data set.
 
+## Load Packages
 
 ```{r}
 ## Preamble
@@ -52,24 +39,25 @@ load.pac <- function() {
     install.packages("pacman")
     library(pacman)
   }
-
+  
+  ## Install packages
     pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
                  parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
                  swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice,
                  coin, primes, epitools, maps, clipr, ggmap, RColorBrewer, latex2exp)
-
-
+  
+  ## Clean up
    mise()
+   
+   ## Set Defaults
    select <- dplyr::select
+   filter <- dplyr::filter
 }
 
 load.pac()
-setwd(dir = "/home/ryan/Notes/DataSci/ThinkingAboutData/")
-load(file = "~/Notes/DataSci/ThinkingAboutData/TAD.rdata")
-load(file = "./TAD.rdata")
-print("Success")
 ```
 
+## Inspect and Clean Data
 The data can be inspected thusly:
 
 ```{r}
@@ -84,7 +72,7 @@ if(sum(is.na(data)) > 0) {
 }
 ```
 
-This data set has provides 400 observations with 4 features, one of which is categorical. There is no missing data in this data set.
+This data set provides 400 observations with 4 features, one of which is categorical. There is no missing data in this data set.
 
 # Question 1
 
@@ -100,12 +88,12 @@ data$city  <- factor(data$city)
 
 Now aggregate the data:
 
-```{r}
-mean_city <- aggregate(newFlu ~ city, data, mean, na.rm = TRUE)
+```{r, warning=FALSE}
+(mean_city <- aggregate(newFlu ~ city, data, mean, na.rm = TRUE)) 
 ```
 
 ## Plot
-This aggregated data can be plotted, illustrating the average number of new flu infections accross cities under the assumption that the rate of infection is independent of time.
+This aggregated data can be plotted, it is appropriate to use a boxplot. This plot is illustrative of the average number of new flu infections accross cities under the assumption that the rate of infection is independent of time.
 
 ```{r}
 p <- ggplot(data, aes(x = city, y = newFlu, fill = city)) +
@@ -120,9 +108,11 @@ p + geom_boxplot()
 
 
 ## Observations from Plot
-This strongly suggests that the number of infections in Sydney and Melbourne are
+The boxplot strongly suggests that the number of infections in Sydney and Melbourne are
 higher than in Adelaide or Brisbane, it would be reasonable to expect that
-Sydney would have a statistically higher mean value of new cases.
+Sydney would have a statistically higher mean value of new cases. 
+
+An *ANOVA* test can only measure whether or not there is difference between groups, it would be expected that this difference is statistically signifiant.
 
 ## Analysis and Results
 In order to assess whether or not the mean value does differ accross these
@@ -165,13 +155,15 @@ The null hypothesis will be rejected for an $\alpha$ value less than 5%, this
 represents a low probability of a type I error which is good evidence for
 rejecting the null hypothesis.
 
-This value was reported above by the `oneway.test` function but it will be derived from first principles for want of rigour.
+This value was reported above by the `oneway.test` function but will be derived from first principles below.
 
 ### Statistic
 The $p$-value is the measured probability of a type I error, it can be measured
-by simulating the data under the assumption that the null hypothesis is true and
-measuring the frequency at which the null hypothesis would be rejected by mere
-chance, that frequency will be accepted as the probability of a type I error.
+by:
+
+1. Simulating the data under the assumption that the null hypothesis is true
+2. Determining the frequency at which the null hypothesis would be rejected by mere chance
+    + This frequency will be accepted as the probability of a type I error.
 
 In order to simulate the data, the observations can be permuted in order remove
 any meaningful difference between mean values that would violate the null
@@ -214,6 +206,8 @@ The probability of rejecting the null hypothesis is very small, this is good evi
 
 This probability does not provide us sufficient information however, to determine the probability of correctly accepting the null hypothesis $(1-\beta)$.
 
+The hypothesis that the rates of infection across cities are equal should be rejected.
+
 # Question 2
 > After more investigation, it was found that the sample data was collected from the set of people who visitedthe major city hospital in the last year. The number of people involved in the study is provided below.Test if there is a difference in proportions of the total number of new cases (over the 100 days) between Melbourne and Sydney.
 
@@ -224,7 +218,6 @@ This probability does not provide us sufficient information however, to determin
 | Brisbane  | 20, 000      |
 | Adelaide  | 25, 000      |
 
-Because it's just sydney and melbourne we can do a t test
 
 ## Plot
 The proportion of new cases in Sydney and Melbourne may be determined by selecting the correct variables from the data, filtering out observations from Sydney and Melbourne and then dividing by the number of participants:
@@ -259,27 +252,24 @@ ggplot(prop_df, aes(x = city, y = newFlu, fill = city)) +
 
 
 ## Observations from Plot
-The plot does not suggest that there is any difference between the proportion of cases between Sydney and Melbourne.
+The plot does not suggest that there is any difference between the proportion of new cases between Sydney and Melbourne.
 
 ## Analysis and Results
 ### Student's $t$-distribution
-The *Central Limit Theorem* provides that the distribution of mean values from
-sample of a population will be normally distributed such that $\overline{X} \sim \mathcal{N}\left(0, \frac{s}{\sqrt{n}}\right)$ if:
+The *Central Limit Theorem* provides that the distribution of mean values from 
+samples of a population will be normally distributed such that $\overline{X} \sim \mathcal{N}\left(0, \frac{s}{\sqrt{n}}\right)$ if:
 
 * those samples are sufficiently large, or
 * the population is normally distributed
 
 This means that a standardised value for the distribution of mean values can be used to measure the $p$-value as shown in equation \eqref{ttest}.
 
-
-can be compared using a *Student's* $t$ test )
-
 \begin{align}
 z_{i}& = \frac{x_i - \overline{x}}{s}\\
 & \implies  t= \frac{\left( \overline{x_1} - \overline{x_2} \right) - 0}{s_p \times \sqrt{\frac{1}{n_1} +  \frac{1}{n_2}} } \label{ttest}
 \end{align}
 
-this is built into **_R_** and can be implemented with the `t.test` function:
+This sample is sufficiently large and so the use of the $t$-test is appropriate, this test is built into **_R_** and can be implemented with the `t.test` function:
 
 ```{r}
 t.test(newFlu ~ city, prop_df)
@@ -290,7 +280,14 @@ in the sample observations are a result of mere chance rather than indicative
 of a difference in population means.
 
 ### Simulation
-This result can also be simulated in order to
+This test can also be performed by simulation by:
+
+1. Assuming that there is no difference in the data
+2. Permuting the city to which the value corresponds in order remove any difference
+3. measuring the difference between the average of the two cities
+4. repeating this many times
+
+The frequency at which a difference more extreme that what was observed is detected is a measurement of the probability of committing a type I error under the assumption that the null hypothesis is true, this is the $p$-value.
 
 ```{r}
 set.seed(85284)
@@ -321,10 +318,10 @@ Hence it is *not* concluded that there is any difference.
 > The recent trend of people from Sydney spending their vacations in Adelaide has
 > lead to the belief that the trends in the tiara virus are related. Compute the
 > confidence interval for the correlation of new cases of tiara virus between
-> Sydney and Adelaide.## Plot
+> Sydney and Adelaide.
 
 ## Plot
-In order to assess the correlation between case rates across the two cities it is necessary to first transform the data. This can by done by using `dplyr` to select the appropriate features, filter based on the city and then transform the data into a wide format like so:
+In order to assess the correlation between case rates across the two cities it is necessary to first pivot the data frame into a different format. This can by done by using `dplyr` to select the appropriate features, filter based on the city and then transform the data into a wide format like so:
 
 ```{r}
 (cor_df <- data %>%
@@ -351,7 +348,14 @@ ggplot(cor_df, aes(x = Sydney, y = Adelaide)) +
 This plot suggests that there is a significant amount of correlation between the two variables. The relationship is a monotone positive one but it is non-linear and likely logarithmic.
 
 ## Analysis and Results
-In order to create a confidence interval of the data a boot strap simulation can be used. Assume that the population is an infinite repetition of the sample, take a sample from this population, compute the correlation and repeat. This will give a normally distributed range of values for the correlation coefficient that estimates the distribution of correlation coefficients for samples drawn from the population and hence the quantiles of this distribution can be used to provide an estimate for the confidence interval.
+In order to create a confidence interval of the data a boot strap simulation can be used:
+
+1. Assume that the population is an infinite repetition of the sample
+2. Take a sample from this population
+    + This can be acheived by resampling the sample with repetition.
+3. compute the correlation and repeat. 
+
+This will give a normally distributed range of values for the correlation coefficient ($\rho$). This distribution can be used to estimate the range of $\rho$ values for samples drawn from the population by taking the quantiles, this represents an estimate for the confidence interval.
 
 The confidence interval is a measure of the probability that any given sample from a population will contain the population mean, for example, a 95% confidence interval of some sample from a population will have a 95% probability of containing the population mean. In saying that however, that does not imply that there is a 95% probability of this confidence interval containing the population mean, $\mu$ is not a random variable and so it's not correct to talk about probabilities, rather it is expressed that there is a 95% confidence level that the the population mean is contained in that interval.
 
@@ -372,7 +376,7 @@ quantile(sim, c(0.025, 0.0975))
 This provides that a 95% confidence interval for the correlation coefficient is $\rho \in \left(0.668, 0.684\right)$
 
 ## Conclusion
-The 95% confidence interval for the correlation coefficient provides a range of values that is quite large, hence it may be concluded with a high degree of cerntainty that there is a moderate amount of correlation for the number of new cases of *Tiaria* between Sydney and Adelaide.
+The 95% confidence interval for the correlation coefficient provides a range of values that is reasonably large, hence it may be concluded with a high degree of certainty that there is a **moderate** amount of correlation for the number of new cases of *Tiaria* between Sydney and Adelaide.
 
 
 # Question 4
@@ -391,7 +395,6 @@ The 95% confidence interval for the correlation coefficient provides a range of 
 
 ## Plot
 In order to produce a plot of the data it is necessary to produce a corresponding data frame. The `dplyr` package can be used to `select` the appropriate features:
-T
 
 ```{r}
 
