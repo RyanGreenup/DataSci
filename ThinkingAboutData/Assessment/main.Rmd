@@ -482,6 +482,43 @@ ggplot(tibble::enframe(beta), aes(x = value, y = after_stat(density))) +
 The bootstrap provides that a 95% confidence interval for $\beta$ is between 2.7 and 2, this is a good estimate for the range of the number of people an infected individual will spread the disease to.
 ### Note on Log Transforms
 # Question 5
+> The final piece of analysis wanted by the health minister is to determine if the Tiara virus is spreading at a
+> slower rate in Melbourne when compared to Sydney. Perform a hypothesis test to test if the rate of increase of
+> new Tiara virus cases b is lower in Melbourne when compared to Sydney.
+
+
+```{r}
+
+rate_df <- data %>% 
+  select(city, newTiara, date) %>% 
+  filter(city %in% c("Sydney", "Melbourne"))
+
+## What's the difference in slopes
+
+    
+   (rate_df_perm <- data %>% 
+     group_by(date) %>% 
+     select(city, newTiara, date) %>% 
+     filter(city %in% c("Sydney", "Melbourne")) %>% 
+     mutate(city = sample(city)) %>% 
+     pivot_wider(names_from = city, values_from = newTiara))
+    
+    
+rate_diff <- function(data) {
+  da
+}
+
+##H0 is that the b_0-b1 = 0
+replicate(10^3, {
+  ## Assume the rates are equal by randomly creating the groups
+  
+  ## determine the difference in slopes
+  
+})
+
+```
+
+
 ## Plot
 ## Observations from Plot
 ## Analysis and Resultse
