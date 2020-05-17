@@ -509,17 +509,15 @@ melbourne_slope <- melbourne_mod$coefficients["date"]
 rate_diff(rate_df)
 
 ##H0 is that the b_0-b1 = 0
-start <- system.time()
 
 start <- Sys.time()
 fpos <- replicate(10^3, {
 ## Combine the cities and randomly permut the cases between
-   (rate_df_perm <- data %>% 
-     group_by(date) %>% 
-     select(city, newTiara, date) %>% 
-     filter(city %in% c("Sydney", "Melbourne")) %>% 
-     mutate(city = sample(city)) %>% 
-     pivot_wider(names_from = city, values_from = newTiara))
+  rate_df_perm <- rate_df
+  index <- as.logical(sample(1:nrow(rate_df)) %% 2)
+    rate_df_perm[index,1] <- rate_df[index,2]
+    rate_df_perm[index,2] <- rate_df[index,1]
+  
 
 ## Calculate the slope
 sim_diff <- rate_diff(rate_df_perm)
