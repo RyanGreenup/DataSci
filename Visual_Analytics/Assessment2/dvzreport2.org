@@ -1,0 +1,390 @@
+#+Title: Ananlysis of COVID Data
+# #+STARTUP: latexpreview
+ #+INFOJS_OPT: view:info toc:3 buttons:t
+#+PLOT: title:"Citas" ind:1 deps:(3) type:2d with:histograms set:"yrange [0:]"
+#+OPTIONS: tex:t
+#+LATEX_HEADER: \usepackage{/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle}
+# [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle.sty]]
+#+PROPERTY: header-args :eval never-export :session mainvisas2 :results output
+#+CSL_STYLE: /home/ryan/Templates/CSL/nature.csl
+#+CATEGORY: Visual
+# Not embedding the HTML is faster, enable toggle-org-custom-inline-style when
+    # you want that feature
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="style.css">
+
+* Preliminary
+** Load Packages and Data
+
+#+begin_src R
+ if (require("pacman")) {
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra, mise, latex2exp, tidyverse, xts, maptools, plyr, ggplot2, maps, viridis)
+
+mise()
+
+#+end_src
+
+#+RESULTS:
+
+** Load the Data
+#+begin_src R
+covid <- read.csv("/home/ryan/Notes/DataSci/Visual_Analytics/Assessment2/owid-covid-data.csv")
+
+#+end_src
+
+#+RESULTS:
+
+** Set Working Directory
+
+* Introduction
++ in December 2012 first cases of /COVID-19/ were reported, the disease has
+  since attributed to the /SARS-CoV2/ virus.
++ The disease became endemic throughout China before spreading throughout Europe
+  in an epidemic fashion and finally reaching the rest of the globe as a
+  pandemic outbreak.
+
+
+* Chloropleth Map
+A Chloropleth map of the number of deaths can offer an insight into the impact
+that the disease has had with respect to individual countries.
+
+The Total deaths should be scaled relative to the population of the country,
+that way countries with a smaller and sparser population will still be
+represented by the visualisation (this is quite important given that many
+countries such as Italy have a small population compared to the US and much of
+Asia cite:2020n).
+
+A worldwide Chloropleth map visualising the total number of deaths attributed to
+/COVID-19/ is shown in figure [[map1]] and a Europe-centric visualisation is shown
+in [[map2]].
+
+** Discussion
+*** Worldwide
+The first plot appears to show a very limited amount of difference in deaths
+attributable to /COVID-19/ across regions other than the North America and
+Europe. While first-world countries such as New Zealand and Australia are
+somewhat insulated from the disease by virtue of geography and population
+density, it's striking that much of Asia and Russia have such low levels of
+outbreak.
+
+This could be attributed to the fact that a more power-cetric regime such as in
+China, Russia, North Korea, etc. may have more capacity to:
+
+1. Diminish the spread of the diseasy by implementing
+   policy decisions,
+   1. whereas countries such as the US and Europe have a much higher expectation
+      of civil liberties.
+2. Control the spread of information for want of international reputation.
+
+A similar disease, /MERS/, emerged in 2012 in Middle-Eastern Regions
+cite:woodley2020 and a Korean outbreak of the /MERS/ disease occured in 2015
+cite:serrano2015, these outbreaks likely prepared Korea, the Middle East and
+other Asian Regions regions for an outbreak which helps explain the dichotomous
+nature of the deaths attributable to /COVID-19/ for those Countries.
+
+*** Europe
+A closer look at Europe shows that Belgium and Italy have been the most affected
+by this disease, it isn't very clear why those regions have been impacted so
+significantly but this could be indicative of policy decisions and warrants
+further research.
+
+** Technique
+*** Woldwide Map
+First the data must be aggregated in order to retrieve the total number of
+deaths, this can be acheived by taking the maximum of the total deaths across
+countries (the total number of death rates will be a strictly positive and
+monotone trend, otherwise the outbreak would be an entirely different type of
+pandemic!), this can be performed by using the =aggregate= function as
+demonstrated in figure [[agg]].
+
+#+NAME: agg
+#+CAPTION: Use Aggregate to aggregate total number of deaths
+#+begin_src R :results output
+fatalprop <- aggregate(total_deaths_per_million ~ location, covid, max)
+## Order the Values in Descending Order
+fatalprop <- fatalprop[order(-fatalprop$total_deaths_per_million),]
+## Rename USA
+covid$location[covid$location=="United States"] <- "USA"
+#+end_src
+
+#+RESULTS: agg
+
+
+It is next necessary to rename =location= to =region= so map data will be
+consistent with the provided data set, this is shown in listing [[rnm]].
+
+#+NAME: rnm
+#+CAPTION: Rename Features for consistency
+#+begin_src R
+## Rename to facilitate joining with map
+names(fatalprop) <- c("region", "total_deaths_per_million")
+#+end_src
+
+#+RESULTS: rnm
+
+For a broad overview of the data, small regions such as San Marino and Belgium
+will not be visible and will skew the colour pallete, so instead they should be removed
+and instead a seperate plot of Europe will be creted as shown in figure [[map2]], this removal is performed in
+listing [[smb]].
+
+#+NAME: smb
+#+CAPTION: Filter out small dense regions to prevent scale issues
+#+begin_src R
+## San Marino will be shown by italy and this skews the results
+## Belgium and San Marino are very hard to visualise from above
+## They skew the rsults and so will be removed.
+fatalprops <- fatalprop %>% filter(region!="San Marino")
+fatalprops <- fatalprop %>% filter(region!="Belgium")
+#+end_src
+
+#+RESULTS: smb
+
+
+Next it is necessary to retrieve map data, this can be done using the =map_data=
+function, this data may then be combined by region with the provided data set
+using the =left_join= function, this is shown in listing [[jn]].
+
+#+NAME: jn
+#+CAPTION: Combine Map Data with Provided Data
+#+begin_src R :results output
+## Retrieve the map data
+some.eu.maps <- map_data("world", region = fatalprops$location)
+
+## Join the Data Frames Together
+fatalmap <- left_join(fatalprops, some.eu.maps, by = "region")
+#+end_src
+
+#+RESULTS: jn
+
+Finally this data frame can be plotted by using =ggplot2= and the =geom_map=
+layer, modifying the =theme= layer will allow to provide a natural background,
+this is demonstrated in listing [[fggp]] and the output is provided in figure [[map1]].
+
+#+NAME: fggp
+#+CAPTION: use =ggplot2= to create a chloropleth map from data, output in figure [[map1]]
+#+BEGIN_SRC R :exports both :results output graphics file :file FirstChALL.png
+ ggplot(fatalmap, aes(map_id = region)) +
+  geom_map(map = fatalmap,  color = "grey", aes(fill = total_deaths_per_million), lwd = 0.1, alpha = 0.6)+
+  expand_limits(x = fatalmap$long, y = fatalmap$lat)+
+  scale_fill_gradient(high = "darkred", low = "white") +
+  guides(fill = guide_legend("Total Deats \n per Million")) +
+   # Change the colors of background
+   # and the color of grid lines to white
+   theme(
+     panel.background = element_rect(fill = "lightblue",
+                                     colour = "lightblue",
+                                     size = 0.5, linetype = "solid"),
+     legend.position = c(0.6, 0.1),
+     legend.direction = "horizontal",
+     legend.background = element_rect(fill = "white", size = 0.1, colour = "darkblue", linetype = "solid")) +
+   labs(x = "Longitude", y = "Latitude", title = TeX("Total Deaths Attributed to \\textit{COVID-19}"))
+#   geom_text(data = region_lab_df, aes(y = lat, x = long, label = region), size = 1)
+
+
+#+end_src
+
+
+# #+attr_html: :width 400px
+# #+attr_latex: :width 7cm
+#+NAME: map1
+#+CAPTION: Chloropleth map of total deaths attributed to /COVID-19/ (per Million people)
+#+RESULTS: fggp
+[[file:FirstChALL.png]]
+
+*** Europe Centric
+The chloropleth map clearly shows that the disease has caused more fatalities
+per capita in Europe and so the plot will be adjusted central to Europe.
+
+As before it is necessary to rename the features of the dataset, however in this
+instance small European countries such as Belgium should be retained (San marino
+is a very small italian provice that isn't detectable in the visualisation and
+skews the pallete, for this reason it will be removed), this is demonstrated in
+figure [[ren2]]
+
+#+NAME: ren2
+#+CAPTION: Rename the features of the data and remove San Marino
+#+begin_src R
+## Rename to facilitate joining with map
+names(fatalprop) <- c("region", "total_deaths_per_million")
+
+## San Marino will be shown by italy
+ fatalprop <- fatalprop %>% filter(region!="San Marino")
+#+end_src
+
+#+RESULTS: ren2
+
+#+RESULTS:
+
+In this map it will be desirable to have labels for the European countries
+(whereas this would have made the worldwide map too busy), so this will be
+implemented by using =dyplyr= to generate a second data set as shown in figure
+[[dpl]] which can then be used to generate a plot as shown in figure [[gg2]], this
+produces the output shown in figure [[map2]].
+
+#+NAME: dpl
+#+CAPTION: use =dplyr= to reduce the plot size and create a data frame of country labels
+#+begin_src R
+fatalmap <- left_join(fatalprop, some.eu.maps, by = "region")
+
+## Filter out only Europe
+fatalmap <-  fatalmap %>%
+  filter(30 <  lat & lat < 65) %>%
+  filter(-30 <  long & long < 35)
+
+## Create Label Data Frame
+region_lab_df <- fatalmap %>%
+  dplyr::group_by(region) %>%
+  dplyr::summarise(long = mean(long), lat = mean(lat))
+#+end_src
+
+#+RESULTS: dpl
+
+#+RESULTS:
+
+#+NAME: gg2
+#+CAPTION: Generate a Chloropleth map centred on Europe using =ggplot2=
+#+BEGIN_SRC R :exports both :results output graphics file :file SecChEur.png
+library(ggrepel)
+library(ggrepel)
+ggplot(fatalmap, aes(map_id = region, label = region)) +
+  geom_map(map = fatalmap,
+           aes(fill = total_deaths_per_million),
+           color = "white") +
+  expand_limits(x = fatalmap$long, y = fatalmap$lat) +
+  scale_fill_viridis_c(option = "C") +
+  scale_fill_gradient(high = "darkred", low = "white") +
+  guides(fill = guide_legend("Total Deats \n per Million")) +
+  # Change the colors of plot panel background to lightblue
+  # and the color of grid lines to white
+  theme(
+    panel.background = element_rect(
+      fill = "lightblue",
+      colour = "lightblue",
+      size = 0.5,
+      linetype = "solid"
+    ),
+    legend.position = c(0.1, 0.6),
+    legend.direction = "vertical",
+    legend.background = element_rect(
+      fill = "white",
+      size =
+        1.1,
+      colour = "darkblue",
+      linetype = "solid"
+    )
+  ) +
+  labs(
+    x = "Longitude",
+    y = "Latitude",
+    title = TeX("Total Deaths Attributed to \\textit{COVID-19}")
+  ) +
+  geom_text_repel(
+    data = region_lab_df,
+    aes(y = lat, x = long, label = region),
+    size = 2,
+    col = "black",
+    nudge_y = 0.7,
+    nudge_x = -0.5,
+    min.segment.length = 0.3,
+    force = 2
+  )
+#+end_src
+
+
+#+NAME: map2
+#+CAPTION: Europe Centred Chloropleth of Deaths Attributed to /COVID-19/
+#+RESULTS: gg2
+[[file:SecChEur.png]]
+
+
+* Time Series
+
+* Bar Chart
+
+* Pie Chart
+
+* Spider Chart / Star Plot
+
+* Multiple Line Charts
+
+* Parallell Co-ordinates
+each line is a country
+each column is a feature like testing, death and cases.
+
+[[https://stackoverflow.com/a/35206832/10593632][This Stack Post shows how to make them curvy]]
+
+* 3D Scatter Plot
+* Log Scaled from 100th case                                                    :ATTACH:
+:PROPERTIES:
+:ID:       fa4caf49-b6ea-4d8e-ac02-b101be54d15c
+:DIR:      /home/ryan/Dropbox/Notes/DataSci/Visual_Analytics/Assessment2/
+:END:
+
+#+attr_html: :width 400px
+[[./_20200518_184546screenshot.png]]
+
+* Bubble Plot                                                                   :ATTACH:
+:PROPERTIES:
+:ID:       ec1513a9-0d9b-440b-8e47-c8c3f39efd62
+:DIR:      /home/ryan/Dropbox/Notes/DataSci/Visual_Analytics/Assessment2/
+:END:
+[[https://www.theguardian.com/world/2020/may/18/coronavirus-world-map-which-countries-have-the-most-cases-and-deaths][Guardian]]
+
+
+#+attr_html: :width 400px
+#+attr_latex: :width 10cm
+[[./_20200518_184850screenshot.png]]
+
+
+
+
+* Animation of 3d Chloropleth heatmap
+
+visualisation
+
+The total number of deaths per country can be analysed using
+** Technical Details
+** Advantages compared to other methods
+** Disasadvantages
+** Discussion on analysis results
+** Discussion on other Aspects
+** Literature review of related work
+
+* For Each Visualisation
+
+** Technical Details
+** Advantages compared to other methods
+** Disasadvantages
+** Discussion on analysis results
+** Discussion on other Aspects
+** Literature review of related work
+
+* References
+# Remember, this is here for HTML, but latex uses biblatex for URL support
+# bibliography:/home/ryan/Dropbox/Studies/Papers/references.bib
+<<bibliography link>>
+bibliography:/home/ryan/Dropbox/Studies/Papers/references.bib
+
+<<bibliographystyle link>>
+ bibliographystyle:unsrt
+
+
+#+begin_comment
+# * Resources
+    :PROPERTIES:
+    :DIR:      Attachments/VisualAnalytics/1_Assignment/
+    :END:
+
+    Current work includes:
+
++ [[file:Attachments/VisualAnalytics/1_Assignment/Assignment1_2020Au.pdf][Assignment 1]] + [[attachment:sampleReport1blind(3).pdf][Sample 1]] + [[attachment:sampleReport2blind(4).pdf][Sample 2]] + [[attachment:sampleReport3blind(3).pdf][Sample 3]] + [[file:~/Dropbox/Notes/DataSci/Visual_Analytics/Assessment/the-marvel-universe-social-network/long_tc_small.gephi][Current Gephi File]] + [[file:~/Dropbox/Notes/DataSci/Visual_Analytics/Assessment/the-marvel-universe-social-network/adjmat.r][Data
+Cleaning and Adjacency Matrix]] + consider changing this to be the 30 characters
+most connected to the three most social characters, that would make more sense
+for a network graph. + [[file:~/Dropbox/Notes/DataSci/Visual_Analytics/Assessment/the-marvel-universe-social-network/sunburst.r][Sunbursts using Plotly]] + [[file:VisualAnalytics.org::*Assignment 1][Visual Analytics]]
+#+end_comment

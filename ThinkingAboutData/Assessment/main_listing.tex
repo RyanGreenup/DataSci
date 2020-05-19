@@ -1151,8 +1151,10 @@ ggplot(tibble::enframe(beta), aes(x = value, y = after_stat(density))) +
        y = "Density")
 \end{lstlisting}
 
-\includegraphics{main_files/figure-html/unnamed-chunk-18-1.png} \#\#
-Conclusion The bootstrap provides that a 95\% confidence interval for
+\includegraphics{main_files/figure-html/unnamed-chunk-18-1.png}
+
+\subsection{Conclusion}
+The bootstrap provides that a 95\% confidence interval for
 \(\beta\) is between 2.4 and 3.7, this is a good estimate for the rate at
 which the average number of transmissions per person changes (i.e.~the
 acceleration of the spread or the second derivative of the number of

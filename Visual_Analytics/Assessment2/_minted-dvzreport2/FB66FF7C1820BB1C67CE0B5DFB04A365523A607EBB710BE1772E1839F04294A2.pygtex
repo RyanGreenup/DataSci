@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Rename to facilitate joining with map}
+\PYG{n+nf}{names}\PYG{p}{(}\PYG{n}{fatalprop}\PYG{p}{)} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{c}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}region\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}total\PYGZus{}deaths\PYGZus{}per\PYGZus{}million\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

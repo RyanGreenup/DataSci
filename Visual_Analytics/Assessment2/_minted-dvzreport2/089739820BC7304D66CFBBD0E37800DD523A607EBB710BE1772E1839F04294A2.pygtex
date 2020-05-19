@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{fatalprop} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{aggregate}\PYG{p}{(}\PYG{n}{total\PYGZus{}deaths\PYGZus{}per\PYGZus{}million} \PYG{o}{\PYGZti{}} \PYG{n}{location}\PYG{p}{,} \PYG{n}{covid}\PYG{p}{,} \PYG{n}{max}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Order the Values in Descending Order}
+\PYG{n}{fatalprop} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{fatalprop}\PYG{n+nf}{[order}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{fatalprop}\PYG{o}{\PYGZdl{}}\PYG{n}{total\PYGZus{}deaths\PYGZus{}per\PYGZus{}million}\PYG{p}{),}\PYG{n}{]}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Rename USA}
+\PYG{n}{covid}\PYG{o}{\PYGZdl{}}\PYG{n}{location[covid}\PYG{o}{\PYGZdl{}}\PYG{n}{location}\PYG{o}{==}\PYG{l+s}{\PYGZdq{}United States\PYGZdq{}}\PYG{n}{]} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+s}{\PYGZdq{}USA\PYGZdq{}}
+\end{Verbatim}

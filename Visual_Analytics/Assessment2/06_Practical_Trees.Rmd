@@ -1,0 +1,56 @@
+---
+title: "06_Practical; Trees"
+author: "Ryan Greenup 17805315"
+date: "23 August 2019"
+output:
+  html_document:
+    code_folding: hide
+    keep_md: yes
+    theme: flatly
+    toc: yes
+    toc_depth: 4
+    toc_float: no
+  pdf_document: 
+    toc: yes
+always_allow_html: yes
+  ##Shiny can be good but {.tabset} will be more compatible with PDF
+    ##but you can submit HTML in turnitin so it doesn't really matter.
+    
+    ##If a floating toc is used in the document only use {.tabset} on more or less copy/pasted 
+        #sections with different datasets
+---
+
+<!--  https://github.com/rstudio/rmarkdown/issues/1453#issuecomment-425327570 How to use echo       --> 
+
+```{r setup, include=FALSE, include = FALSE, results = "hide", eval = TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+## Preamble
+# setwd("~/Dropbox/Notes/DataSci/ThinkingAboutData/Assessment/")
+## Install Pacman
+load.pac <- function() {
+
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+  ## Install packages
+    pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart, lattice,
+                 coin, primes, epitools, maps, clipr, ggmap, RColorBrewer, latex2exp)
+  
+  ## Clean up
+   mise()
+   
+   ## Set Defaults
+   select <- dplyr::select
+   filter <- dplyr::filter
+}
+
+load.pac()
+```
+

@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Retrieve the map data}
+\PYG{n}{some.eu.maps} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{map\PYGZus{}data}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}world\PYGZdq{}}\PYG{p}{,} \PYG{n}{region} \PYG{o}{=} \PYG{n}{fatalprops}\PYG{o}{\PYGZdl{}}\PYG{n}{location}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Join the Data Frames Together}
+\PYG{n}{fatalmap} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{left\PYGZus{}join}\PYG{p}{(}\PYG{n}{fatalprops}\PYG{p}{,} \PYG{n}{some.eu.maps}\PYG{p}{,} \PYG{n}{by} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}region\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

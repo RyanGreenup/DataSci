@@ -58,6 +58,8 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline { \nobreakspace {} 4.3 \nobreakspace {} }Analysis and Results}{15}{subsection.4.3}%
 \defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline { \nobreakspace {} 4.4 \nobreakspace {} }Conclusion}{17}{subsection.4.4}%
+\defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {\S \nobreakspace {} 5 \nobreakspace {} }Comparison of Sydney and Melbourne Rates \normalsize \hskip 2em\relax (\texttt {bootstrap})}{17}{section.5}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline { \nobreakspace {} 5.1 \nobreakspace {} }Plot}{17}{subsection.5.1}%

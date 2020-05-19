@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+ \PYG{n+nf}{if }\PYG{p}{(}\PYG{n+nf}{require}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}pacman\PYGZdq{}}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+    \PYG{n+nf}{library}\PYG{p}{(}\PYG{n}{pacman}\PYG{p}{)}
+  \PYG{p}{\PYGZcb{}}\PYG{n}{else}\PYG{p}{\PYGZob{}}
+    \PYG{n+nf}{install.packages}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}pacman\PYGZdq{}}\PYG{p}{)}
+    \PYG{n+nf}{library}\PYG{p}{(}\PYG{n}{pacman}\PYG{p}{)}
+  \PYG{p}{\PYGZcb{}}
+  \PYG{n}{pacman}\PYG{o}{::}\PYG{n+nf}{p\PYGZus{}load}\PYG{p}{(}\PYG{n}{xts}\PYG{p}{,} \PYG{n}{sp}\PYG{p}{,} \PYG{n}{gstat}\PYG{p}{,} \PYG{n}{ggplot2}\PYG{p}{,} \PYG{n}{rmarkdown}\PYG{p}{,} \PYG{n}{reshape2}\PYG{p}{,} \PYG{n}{ggmap}\PYG{p}{,}
+                 \PYG{n}{parallel}\PYG{p}{,} \PYG{n}{dplyr}\PYG{p}{,} \PYG{n}{plotly}\PYG{p}{,} \PYG{n}{tidyverse}\PYG{p}{,} \PYG{n}{reticulate}\PYG{p}{,} \PYG{n}{UsingR}\PYG{p}{,} \PYG{n}{Rmpfr}\PYG{p}{,}
+                 \PYG{n}{swirl}\PYG{p}{,} \PYG{n}{corrplot}\PYG{p}{,} \PYG{n}{gridExtra}\PYG{p}{,} \PYG{n}{mise}\PYG{p}{,} \PYG{n}{latex2exp}\PYG{p}{,} \PYG{n}{tidyverse}\PYG{p}{,} \PYG{n}{xts}\PYG{p}{,} \PYG{n}{maptools}\PYG{p}{,} \PYG{n}{plyr}\PYG{p}{,} \PYG{n}{ggplot2}\PYG{p}{,} \PYG{n}{maps}\PYG{p}{,} \PYG{n}{viridis}\PYG{p}{)}
+
+\PYG{n+nf}{mise}\PYG{p}{()}
+\end{Verbatim}

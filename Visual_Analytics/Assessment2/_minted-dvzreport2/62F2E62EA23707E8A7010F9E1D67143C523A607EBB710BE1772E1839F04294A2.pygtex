@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} San Marino will be shown by italy and this skews the results}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Belgium and San Marino are very hard to visualise from above}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} They skew the rsults and so will be removed.}
+\PYG{n}{fatalprops} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{fatalprop} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} \PYG{n+nf}{filter}\PYG{p}{(}\PYG{n}{region}\PYG{o}{!=}\PYG{l+s}{\PYGZdq{}San Marino\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{fatalprops} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{fatalprop} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}} \PYG{n+nf}{filter}\PYG{p}{(}\PYG{n}{region}\PYG{o}{!=}\PYG{l+s}{\PYGZdq{}Belgium\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}
