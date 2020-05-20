@@ -1,7 +1,7 @@
 ---
-title: "06_Practical; Trees"
+title: "Assessment 2"
 author: "Ryan Greenup 17805315"
-date: "23 August 2019"
+date: "19 May 2020"
 output:
   html_document:
     code_folding: hide
@@ -53,4 +53,917 @@ load.pac <- function() {
 
 load.pac()
 ```
+
+
+# Chloropleth map
+## World
+```{r}
+covid <- read.csv("/home/ryan/Notes/DataSci/Visual_Analytics/Assessment2/owid-covid-data.csv")
+
+covid$location[covid$location=="United States"] <- "USA"
+
+# Only Extreme Examples -----------------------------------------------------
+fatalprop <- aggregate(total_deaths_per_million ~ location, covid, max)
+fatalprop <- fatalprop[order(-fatalprop$total_deaths_per_million),]
+# fatalprop <- fatalprop[1:20,]
+
+## Rename to facilitate joining with map
+names(fatalprop) <- c("region", "total_deaths_per_million")
+
+## San Marino will be shown by italy and this skews the results
+## Belgium and San Marino are very hard to visualise from above
+## They skew the rsults and so will be removed.
+fatalprop <- fatalprop %>% filter(region!="San Marino")
+fatalprop <- fatalprop %>% filter(region!="Belgium")
+
+# Retrievethe map data
+some.eu.maps <- map_data("world", region = fatalprop$location)
+covid$total_deaths
+
+# Compute the centroid as the mean longitude and lattitude
+# Used as label coordinate for country's names
+region_lab_df <- some.eu.maps %>%
+  group_by(region) %>%
+  summarise(long = mean(long), lat = mean(lat))
+
+fatalmap <- left_join(fatalprop, some.eu.maps, by = "region")
+
+ ggplot(fatalmap, aes(map_id = region)) +
+  geom_map(map = fatalmap,  color = "grey", aes(fill = total_deaths_per_million), lwd = 0.1, alpha = 0.6)+
+  expand_limits(x = fatalmap$long, y = fatalmap$lat)+
+  scale_fill_gradient(high = "darkred", low = "white") +
+  guides(fill = guide_legend("Total Deaths \n per Million")) +
+   # Change the colors of plot panel background to lightblue
+   # and the color of grid lines to white
+   theme(
+     panel.background = element_rect(fill = "lightblue",
+                                     colour = "lightblue",
+                                     size = 0.5, linetype = "solid"),
+     legend.position = c(0.6, 0.1),
+     legend.direction = "horizontal",
+     legend.background = element_rect(fill = "white", size = 0.1, colour = "darkblue", linetype = "solid")) +
+   labs(x = "Longitude", y = "Latitude", title = TeX("Total Deaths Attributed to \\textit{COVID-19}"))
+#   geom_text(data = region_lab_df, aes(y = lat, x = long, label = region), size = 1)
+
+ 
+```
+
+## Europe
+### Set up
+
+```{r}
+
+# Only Extreme Examples -----------------------------------------------------
+fatalprop <- aggregate(total_deaths_per_million ~ location, covid, max)
+fatalprop <- fatalprop[order(-fatalprop$total_deaths_per_million),]
+ 
+
+## Rename to facilitate joining with map
+names(fatalprop) <- c("region", "total_deaths_per_million")
+
+## San Marino will be shown by italy
+ fatalprop <- fatalprop %>% filter(region!="San Marino")
+
+names(fatalprop)
+
+# Retrievethe map data
+some.eu.maps <- map_data("world", region = fatalprop$location)
+covid$total_deaths
+
+# Compute the centroid as the mean longitude and lattitude
+# Used as label coordinate for country's names
+fatalmap <- left_join(fatalprop, some.eu.maps, by = "region")
+
+fatalprop[order(fatalprop$total_deaths),]
+## Filter out only Europe 
+fatalmap <-  fatalmap %>% 
+  filter(30 <  lat & lat < 65) %>% 
+  filter(-30 <  long & long < 35) 
+
+(region_lab_df <- fatalmap %>%
+  dplyr::group_by(region) %>%
+  dplyr::summarise(long = mean(long), lat = mean(lat)))
+
+
+
+
+```
+
+
+### ggplot2
+
+
+```{r}
+library(ggrepel)
+ggplot(fatalmap, aes(map_id = region, label = region)) +
+  geom_map(map = fatalmap,
+           aes(fill = total_deaths_per_million),
+           color = "white") +
+  expand_limits(x = fatalmap$long, y = fatalmap$lat) +
+  scale_fill_viridis_c(option = "C") +
+  scale_fill_gradient(high = "darkred", low = "white") +
+  guides(fill = guide_legend("Total Deaths \n per Million")) +
+  # Change the colors of plot panel background to lightblue
+  # and the color of grid lines to white
+  theme(
+    panel.background = element_rect(
+      fill = "lightblue",
+      colour = "lightblue",
+      size = 0.5,
+      linetype = "solid"
+    ),
+    legend.position = c(0.1, 0.6),
+    legend.direction = "vertical",
+    legend.background = element_rect(
+      fill = "white",
+      size =
+        1.1,
+      colour = "darkblue",
+      linetype = "solid"
+    )
+  ) +
+  labs(
+    x = "Longitude",
+    y = "Latitude",
+    title = TeX("Total Deaths Attributed to \\textit{COVID-19}")
+  ) +
+  geom_text_repel(
+    data = region_lab_df,
+    aes(y = lat, x = long, label = region),
+    size = 2,
+    col = "black",
+    nudge_y = 0.7,
+    nudge_x = -0.5,
+    min.segment.length = 0.3,
+    force = 2
+  )
+
+```
+
+
+# Time Series
+## Basic Plot
+```{r}
+cv <- as_tibble(covid)
+
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases > 100)
+
+ggplot(cv, aes(y = total_cases, x = date, col = location, group = location)) +
+  geom_line() +
+  labs(x = element_blank(), y = "Total Cases", title = "Total Cases over Time") + 
+  theme_bw() +
+  guides(col = guide_legend("Location"))
+  
+```
+
+## Basic Plot
+### Total Cases
+```{r}
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "China", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases > 100) %>% 
+  mutate(total_cases = log10(total_cases))
+
+
+ggplot(fortify(cv) , aes(y = total_cases, x = date, col = location, group = location)) +
+  geom_line()  + 
+  theme_bw() +
+  theme(axis.title.x = element_blank()) + 
+  labs(y = "Total Number of Cases (Log-10 Scale)", title = "Log Scaled Cases over Time") +
+  guides(col = guide_legend("Location"))
+#  geom_smooth()
+```
+
+* Changing the cases relative to the population size shows that a much much smaller fraction of the Chinese Population contracted the disease compared to other countries with a relatively smaller population.
+
+### Per Capita
+```{r}
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "China", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 100) %>% 
+  mutate(total_cases_per_million = log10(total_cases_per_million))
+
+
+ggplot(fortify(cv) , aes(y = total_cases_per_million, x = date, col = location, group = location)) +
+  geom_line()  + 
+  theme_bw() +
+  theme(axis.title.x = element_blank()) + 
+  labs(y = "Total Number of Cases (Log-10 Scale)", title = "Log Scaled Countries over Time per Million") +
+  guides(col = guide_legend("Location"))
+#  geom_smooth()
+```
+
+### Days since first Infection
+
+This is difficult to read so instead we will use the number of days since the 100th infection
+
+```{r}
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_cases_per_million = log10(total_cases_per_million)) %>% 
+  dplyr::select(date, total_cases_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "total_cases_per_million")
+
+
+ggplot(cv , aes(y = total_cases_per_million, x = date, col = location, group = location)) +
+  geom_point(alpha = 0.3)  + 
+  geom_smooth() +
+  theme_bw() +
+  labs(y = "Total Number of Cases (Log-10 Scale)", title = "Log Scaled Total COVID-19 Cases per Million", x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location"))
+#  geom_smooth()
+```
+
+
+
+```{r}
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+# interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_deaths_per_million = log10(total_deaths_per_million)) %>% 
+  dplyr::select(date, total_deaths_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "total_deaths_per_million")
+
+
+ggplot(cv , aes(y = total_deaths_per_million, x = date)) +
+  geom_point(alpha = 0.3, aes(col = location, group = location))  + 
+  geom_smooth(aes(col = location, group = location)) +
+  theme_bw() +
+  labs(y = TeX("Total Number of deaths (log_{10} Scale)"), title = TeX("Log Scaled Total \\textit{COVID-19} deaths per Million"), x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location"))
+#  geom_smooth()
+covid
+```
+
+
+### Facet Grid
+
+Now I want to combine all of these into one big facet_grid:
+
+#### Only The Log Stuff
+
+
+```{r}
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+###### Number of Cases
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_cases_per_million = log10(total_cases_per_million)) %>% 
+  dplyr::select(date, total_cases_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "cases") %>% 
+  add_column(scale = "log")
+
+
+### Number of deaths
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_deaths_per_million = log10(total_deaths_per_million)) %>% 
+  dplyr::select(date, total_deaths_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "deaths") %>% 
+  add_column(scale = "log")
+
+
+### Number of Tests
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_tests_per_thousand = log10(total_tests_per_thousand)) %>% 
+  dplyr::select(date, total_tests_per_thousand, location) %>% 
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_tests_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "tests") %>% 
+  add_column(scale = "log")
+
+
+cv <- rbind(cv_cases_log, cv_deaths_log, cv_tests_log)
+
+cv %>% 
+  filter(subject == "deaths")
+
+ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.4, aes(col = location))  + 
+   geom_smooth(aes(col = location)) +
+  theme_bw() +
+  labs(y = TeX("Total Number of deaths (log_{10} Scale)"), title = TeX("Log Scaled Total \\textit{COVID-19} deaths per Million"), x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location")) +
+  facet_grid(. ~ subject)
+
+```
+
+#### All Togehter
+##### Define the Log Stuff
+
+```{r}
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+###### Number of Cases
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_cases_per_million = log10(total_cases_per_million)) %>% 
+  dplyr::select(date, total_cases_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "cases") %>% 
+  add_column(scale = "log")
+
+
+### Number of deaths
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_deaths_per_million = log10(total_deaths_per_million)) %>% 
+  dplyr::select(date, total_deaths_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "deaths") %>% 
+  add_column(scale = "log")
+
+
+### Number of Tests
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_tests_per_thousand = log10(total_tests_per_thousand)) %>% 
+  dplyr::select(date, total_tests_per_thousand, location) %>% 
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_tests_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "tests") %>% 
+  add_column(scale = "log")
+
+
+cv <- rbind(cv_cases_log, cv_deaths_log, cv_tests_log)
+
+cv %>% 
+  filter(subject == "deaths")
+
+ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.4, aes(col = location))  + 
+   geom_smooth(aes(col = location)) +
+  theme_bw() +
+  labs(y = TeX("Total Number of deaths (log_{10} Scale)"), title = TeX("Log Scaled Total \\textit{COVID-19} deaths per Million"), x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location")) +
+  facet_grid(rows = vars(subject), scales = "free_y")
+
+```
+
+
+##### Define the raw Stuff
+
+```{r}
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+###### Number of Cases
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  dplyr::select(date, total_cases_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_raw <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "cases") %>% 
+  add_column(scale = "raw")
+
+
+### Number of deaths
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  dplyr::select(date, total_deaths_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_raw <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "deaths") %>% 
+  add_column(scale = "raw")
+
+
+### Number of Tests
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+#  mutate(total_tests_per_thousand = 100*total_tests_per_thousand) %>% 
+  dplyr::select(date, total_tests_per_thousand, location) %>% 
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_tests_raw <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "tests") %>% 
+  add_column(scale = "raw")
+
+
+cv <- rbind(cv_cases_raw, cv_deaths_raw, cv_tests_raw)
+
+cv %>% 
+  filter(subject == "deaths")
+
+ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.4, aes(col = location))  + 
+   geom_smooth(aes(col = location)) +
+  theme_bw() +
+  labs(y = TeX("Total Number of deaths (raw_{10} Scale)"), title = TeX("raw Scaled Total \\textit{COVID-19} deaths per Million"), x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location")) +
+  facet_grid(rows = vars(subject), scales = "free_y")
+
+```
+
+##### Make the Combined Plot
+```{r}
+cv <- rbind(cv_cases_log, cv_deaths_log, cv_tests_log, cv_cases_raw, cv_deaths_raw, cv_tests_raw)
+
+cv %>% 
+  filter(subject == "deaths")
+
+ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.4, aes(col = location))  + 
+   geom_smooth(aes(col = location)) +
+  theme_bw() +
+  labs(y = TeX("Total Number of deaths (log_{10} Scale)"), title = TeX("Log Scaled Total \\textit{COVID-19} deaths per Million"), x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location")) +
+  facet_grid(cols = vars(subject), scales = "free", rows = vars(scale))
+
+```
+
+
+
+##### Expired
+```{r}
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  mutate(total_cases_per_million = log10(total_cases_per_million)) %>% 
+  dplyr::select(date, total_cases_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "cases") %>% 
+  add_column(scale = "log")
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_deaths_per_million > 1) %>% 
+  mutate(total_deaths_per_million = log10(total_cases_per_million)) %>% 
+  dplyr::select(date, total_deaths_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "deaths") %>% 
+  add_column(scale = "log")
+
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_tests_per_thousand > 1) %>% 
+  mutate(total_tests_per_thousand = log10(total_tests_per_thousand)) %>% 
+  dplyr::select(date, total_tests_per_thousand, location) %>% 
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_tests_log <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "tests") %>% 
+  add_column(scale = "log")
+
+
+
+###### Do it again without the log stuff
+
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_cases_per_million > 1) %>% 
+  dplyr::select(date, total_cases_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_raw <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "cases") %>% 
+  add_column(scale = "raw")
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_deaths_per_million > 1) %>% 
+  dplyr::select(date, total_deaths_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_raw <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "deaths") %>% 
+  add_column(scale = "raw")
+
+
+cv <- as_tibble(covid)
+cv <- cv %>% 
+  mutate(date = as.Date(date)) 
+cv <- cv[order(cv$date),]
+
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>% 
+  filter(location %in% interested_locations) %>% 
+  filter(total_tests_per_thousand > 1) %>% 
+  dplyr::select(date, total_tests_per_thousand, location) %>% 
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>% 
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_tests_raw <- cv %>% 
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
+  add_column(subject = "tests") %>% 
+  add_column(scale = "raw")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cv <- rbind(cv_cases_log, cv_deaths_log, cv_tests_log, cv_cases_raw, cv_deaths_raw, cv_tests_raw)
+
+ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.3, aes(col = location))  + 
+  geom_smooth(aes(col = location)) +
+  theme_bw() +
+  labs(y = TeX("Total Number of deaths (raw_{10} Scale)"), title = TeX("raw Scaled Total \\textit{COVID-19} deaths per Million"), x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location")) +
+  geom_smooth() +
+  facet_grid(cols = vars(scale), rows = vars(subject)) 
+  
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

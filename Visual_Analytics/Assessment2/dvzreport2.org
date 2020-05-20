@@ -81,6 +81,9 @@ China, Russia, North Korea, etc. may have more capacity to:
    1. whereas countries such as the US and Europe have a much higher expectation
       of civil liberties.
 2. Control the spread of information for want of international reputation.
+   1. In saying that though research suggests that under-reporting has even
+      occured in countries such as the US cite:sood2020 so such under-reporting
+      could merely be incidental.
 
 A similar disease, /MERS/, emerged in 2012 in Middle-Eastern Regions
 cite:woodley2020 and a Korean outbreak of the /MERS/ disease occured in 2015
@@ -173,7 +176,7 @@ this is demonstrated in listing [[fggp]] and the output is provided in figure [[
   geom_map(map = fatalmap,  color = "grey", aes(fill = total_deaths_per_million), lwd = 0.1, alpha = 0.6)+
   expand_limits(x = fatalmap$long, y = fatalmap$lat)+
   scale_fill_gradient(high = "darkred", low = "white") +
-  guides(fill = guide_legend("Total Deats \n per Million")) +
+  guides(fill = guide_legend("Total Deaths \n per Million")) +
    # Change the colors of background
    # and the color of grid lines to white
    theme(
