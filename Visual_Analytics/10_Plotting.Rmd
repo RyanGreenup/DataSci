@@ -1,0 +1,334 @@
+---
+title: "10 Tutorial"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: inline
+---
+
+# Preamble
+## Load Packages
+```{r}
+load.pac <- function() {
+  
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, wesanderson,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr, latex2exp,
+                 mise, GGally, usmap)
+  
+#  devtools::install_github("tidyverse/tidyverse")
+}
+
+load.pac()
+mise()
+
+```
+## Load Data
+
+```{r}
+(adult  <- read.csv(file = "./10_data/AdultDataSet/adult.data")) %>%  head()
+(aus    <- read.table(file = "./10_data/Australian/australian.dat",  header = TRUE)) %>%  head()
+(mob   <- read.csv(file = "./10_data/Datamobile Data Set/imports-85.data")) %>% head()
+(house <- read.table(file = "./10_data/Housing/housing.data", header = TRUE) ) %>% head()
+```
+
+# Question 1 and 2
+## Adult Data
+First investigate the Features
+
+```{r}
+names(adult)
+```
+
+
+Now plot the data relating to Income Threshold: 
+```{r}
+ggplot(adult, aes(x = Hours.Per.Week, y = Income.Threshold, fill = Sex)) +
+  geom_boxplot() + 
+  labs(x = "Hours per Week", y = "Income Threshold", title = "Income Threshold Given Hours per Week Across Genders")
+```
+
+this demonstrates that men tend to work longer hours and women need to work longer hours in order to earn above $50K.
+
+```{r}
+ggplot(adult, aes(y = Income.Threshold, fill = Sex, x = Wage)) +
+  geom_boxplot()
+```
+This demonstrates that wage has no bearing on Income Threshold, which is likely not true, there could be an issue with the data.
+
+```{r}
+ggplot(adult, aes(x = Occupation, fill = Occupation, y = Wage)) +
+  geom_col(position = 'dodge') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  guides(fill = FALSE) +
+  labs(title = "Occupation and Salary")
+```
+
+```{r}
+ggplot(adult, aes(x = Education, fill = Education, y = Wage)) +
+  geom_col(position = 'dodge') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  guides(fill = FALSE) + 
+  labs(title = "Education and Salary")
+```
+
+This plot suggests that the less college you complete, the more money you will earn, again, there may be something awry with this data.
+
+## Aus Data
+This data set has non descriptive features, for visual analytics this might be better because it allows for analysis without prejudice.
+
+The best thing to do is to use a correlation plot in order to determine which features are the most significant:
+
+```{r}
+library(corrplot)
+head(aus)
+cor(aus) %>% corrplot(method = 'ellipse', type = 'upper')
+```
+
+from this we can tell that `X0.3` and `X0` are highly correlated, as are `X0.1` and `X0.2`, there also appers to be weak negative correlation between `x100` and `X11.46`, these can be represented by a scatter plot to better understand the behaviour, for example:
+
+```{r}
+ggplot(aus, aes(x = X100, y = X11.46, col = factor(X1))) +
+  geom_point() +
+  guides(col = guide_legend(TeX("X_1"))) +
+  labs(x = TeX("X_{100}"), y = TeX("X_{11.46}"))
+
+```
+
+
+
+## DataMobile
+The data can be inspected using `str`:
+
+```{r}
+str(mob)
+```
+This reveals the data are car metrics, we can then visualise different aspects of the data that might be interesting:
+
+### Average Price per Manufacturer
+```{r}
+mob$price <- as.numeric(mob$price)
+
+
+ggplot(mob, aes(y = price, x = make, fill = make)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  guides(fill = FALSE)
+  
+
+```
+This provides that Toyota Mercedes and BMW produce some of the most expensive vehicles.
+
+### Vehicle Performance and Fuel Consumption
+
+
+```{r}
+
+mob$horsepower <- as.numeric(mob$horsepower)
+
+ggplot(mob, aes(x = city.mpg, y = horsepower/curb.weight, col = price)) +
+  geom_point() +
+  theme_bw() +
+  labs(x = TeX("Mileage (\\frac{mi}{gl})"), y = TeX("Power to Weight (\\frac{hp}{lbs})"),
+       title = "Vehicle Performance and Fuel Consumption")
+```
+
+This indicates that high performance (High Power to Weight) vehicles tend to consume more fuel, this fuel change in fuel consumption appears to scale linearly.
+
+The price appears not to change significantly accross fuel consumption or power to weight.
+
+## House Data
+The housing data can be inspected using the `str` function and the information relating to the data set can be found [here](https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/Boston.html)
+
+```{r}
+str(house)
+```
+
+In order to get an understanding of the relationship between the data a scatter plot matrix can be used:
+
+```{r}
+library(GGally)
+cor(house) %>% corrplot(method = "ellipse", type = 'upper')
+
+```
+
+This suggests that the median value of the house is signifanctly impacted by the number of rooms `RM` the  lower status of the population  `LSTAT`  and the contentration of nitrous oxides in the air `NOX`, this could be visualised by a scatterplot:
+
+```{r}
+ggplot(house, aes(x = NOX, y = MEDV, shape = factor(round(RM)), col = LSTAT))  +
+  geom_point() +
+  theme_bw() +
+  labs(x = TeX("Nitrogen Oxides Concentration (10^{-1} ppm)"),
+       y = "Median House Value",
+       title = " Housing Prices")
+```
+
+
+# Question 3
+
+```{r}
+library("readxl")
+(store <- read_excel("./10_data/10_data_Superstore.xls")) %>% str()
+names(store)
+```
+
+
+### Sales and Quantity
+A plot  of Sales vs Quantity can be produced:
+
+```{r}
+store$Quantity <- factor(store$Quantity, levels = 1:max(store$Quantity), ordered = TRUE)
+p <- ggplot(data = store, aes(x = factor(Quantity), y = Profit, col = Quantity))
+ 
+  
+  
+  p + geom_boxplot() +
+  guides(col = FALSE) +
+  labs(x = "Quantity Units", title = "Profit Given Quantity sold")
+```
+
+This suggests that 4/5 units of quantity produce the most variation in profit, for this reason it can be anticipated that higher quantities may be preferred because the profits will be more consistent.
+
+## 2 Post Code and Profits
+```{r}
+names(store)
+ggplot(store, aes(x = "", y = Profit, fill = Region)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar(theta = "y", start = 0)
+```
+This shows that the South Region earns the most profits.
+
+> Yeah, this is actually wrong, I'm not sure why TBH, I'm going to have to investigate Pie Charts in `ggplot2`, I didn't realise it would be so poorly implemented.
+
+## 3 "Region and Ship Mode"
+```{r}
+ggplot(store, aes(x = Region, y = Sales, fill = `Ship Mode`)) +
+  geom_col(position = 'dodge')
+```
+This indicates that most sales are made in the South and Central Regions and that the shipping method that produces the most profits is *Standard Class*.
+
+## 4 Segment and State
+
+```{r}
+ggplot(data = store, aes(x = State, y = Profit, fill = Segment)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+This provides that New York and and Arkansas were the states that had the biggest impact on profits, generally consumer purchases generate the most profits.
+
+
+## 5 Quantity and Discount
+
+```{r}
+ggplot(data = store, aes(x = Discount, y = Quantity)) +
+  geom_col(col = "royalblue")
+```
+
+This suggests that the largest discount is given for 2/3 items where as purchasing many items does not often involve a discount.
+
+## Trying to Map States
+This is as far as I got, the issue is that I'd need to convert the data to have lat/long or standard names which would take a bit of research, whereas *Tablaeu* can interpret US names in a way that hasn't been implemented in `ggplot2`.
+
+```{r}
+library(usmap)
+library(ggplot2)
+
+plot_usmap(data = statepop, values = "pop_2015", color = "red") + 
+  scale_fill_continuous(name = "Population (2015)", label = scales::comma) + 
+  theme(legend.position = "right") 
+```
+
+# Question 4
+Different colour pallettes could have been used in these visualisations, for example:
+
+## R Colour Brewer Discrete
+
+```{r}
+ggplot(store, aes(x = Region, y = Sales, fill = `Ship Mode`)) +
+  geom_col(position = 'dodge') +
+  scale_fill_brewer(palette = 'Dark2')
+
+
+```
+
+## Custom Discrete Pallete
+
+```{r}
+pt <- c("#AE60B8", "#ED2B78", "#B8E3B8", "#FA9F7B")
+ggplot(store, aes(x = Region, y = Sales, fill = `Ship Mode`)) +
+  geom_col(position = 'dodge') +
+  scale_fill_manual(values = pt)
+
+```
+
+## Continuous Pallete
+
+```{r}
+ggplot(house, aes(x = NOX, y = MEDV, shape = factor(round(RM)), col = LSTAT))  +
+  geom_point() +
+  theme_bw() +
+  labs(x = TeX("Nitrogen Oxides Concentration (10^{-1} ppm)"),
+       y = "Median House Value",
+       title = " Housing Prices") +
+  scale_colour_gradient(low = "green", high = "darkblue")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{fatalmap} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{left\PYGZus{}join}\PYG{p}{(}\PYG{n}{fatalprop}\PYG{p}{,} \PYG{n}{some.eu.maps}\PYG{p}{,} \PYG{n}{by} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}region\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Filter out only Europe}
+\PYG{n}{fatalmap} \PYG{o}{\PYGZlt{}\PYGZhy{}}  \PYG{n}{fatalmap} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{filter}\PYG{p}{(}\PYG{l+m}{30} \PYG{o}{\PYGZlt{}}  \PYG{n}{lat} \PYG{o}{\PYGZam{}} \PYG{n}{lat} \PYG{o}{\PYGZlt{}} \PYG{l+m}{65}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{filter}\PYG{p}{(}\PYG{l+m}{\PYGZhy{}30} \PYG{o}{\PYGZlt{}}  \PYG{n}{long} \PYG{o}{\PYGZam{}} \PYG{n}{long} \PYG{o}{\PYGZlt{}} \PYG{l+m}{35}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} Create Label Data Frame}
+\PYG{n}{region\PYGZus{}lab\PYGZus{}df} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{fatalmap} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n}{dplyr}\PYG{o}{::}\PYG{n+nf}{group\PYGZus{}by}\PYG{p}{(}\PYG{n}{region}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n}{dplyr}\PYG{o}{::}\PYG{n+nf}{summarise}\PYG{p}{(}\PYG{n}{long} \PYG{o}{=} \PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{long}\PYG{p}{),} \PYG{n}{lat} \PYG{o}{=} \PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{lat}\PYG{p}{))} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+   \PYG{n+nf}{full\PYGZus{}join}\PYG{p}{(}\PYG{n+nf}{aggregate}\PYG{p}{(}\PYG{n}{total\PYGZus{}deaths\PYGZus{}per\PYGZus{}million} \PYG{o}{\PYGZti{}} \PYG{n}{region}\PYG{p}{,} \PYG{n}{fatalmap}\PYG{p}{,} \PYG{n}{mean}\PYG{p}{))}
+\end{Verbatim}

@@ -62,7 +62,7 @@ Asia cite:2020n).
 
 A worldwide Chloropleth map visualising the total number of deaths attributed to
 /COVID-19/ is shown in figure [[map1]] and a Europe-centric visualisation is shown
-in [[map2]].
+in figure [[map2]].
 
 ** Discussion
 *** Worldwide
@@ -194,7 +194,7 @@ this is demonstrated in listing [[fggp]] and the output is provided in figure [[
 
 
 # #+attr_html: :width 400px
-# #+attr_latex: :width 7cm
+# #+attr_latex: :width 10cm
 #+NAME: map1
 #+CAPTION: Chloropleth map of total deaths attributed to /COVID-19/ (per Million people)
 #+RESULTS: fggp
@@ -226,9 +226,10 @@ names(fatalprop) <- c("region", "total_deaths_per_million")
 
 In this map it will be desirable to have labels for the European countries
 (whereas this would have made the worldwide map too busy), so this will be
-implemented by using =dyplyr= to generate a second data set as shown in figure
-[[dpl]] which can then be used to generate a plot as shown in figure [[gg2]], this
-produces the output shown in figure [[map2]].
+implemented by using =dyplyr= to generate a second data set as shown in listing
+[[dpl]] which can then be used to generate a plot with the =ggrepel= add on as shown in listing [[gg2]], this
+produces the output shown in figure [[map2]], for this plut bubbles were also implemented in order to help visualise the number of relative cases.
+thee inspiration for the use of bubbles was the /John Hopkins Coronavirus Dashboard/ cite:2020o where a similar strategy was implemented to visualise the number of cases, a screenshot of this is provided in the appendix at figure [[JHBub]].
 
 #+NAME: dpl
 #+CAPTION: use =dplyr= to reduce the plot size and create a data frame of country labels
@@ -243,10 +244,13 @@ fatalmap <-  fatalmap %>%
 ## Create Label Data Frame
 region_lab_df <- fatalmap %>%
   dplyr::group_by(region) %>%
-  dplyr::summarise(long = mean(long), lat = mean(lat))
-#+end_src
+  dplyr::summarise(long = mean(long), lat = mean(lat)) %>%
+   full_join(aggregate(total_deaths_per_million ~ region, fatalmap, mean))
+    #+end_src
 
 #+RESULTS: dpl
+:
+: Joining, by = "region"
 
 #+RESULTS:
 
@@ -254,15 +258,16 @@ region_lab_df <- fatalmap %>%
 #+CAPTION: Generate a Chloropleth map centred on Europe using =ggplot2=
 #+BEGIN_SRC R :exports both :results output graphics file :file SecChEur.png
 library(ggrepel)
-library(ggrepel)
 ggplot(fatalmap, aes(map_id = region, label = region)) +
   geom_map(map = fatalmap,
            aes(fill = total_deaths_per_million),
            color = "white") +
+  geom_point(data = region_lab_df, aes(y = lat, x = long, size = total_deaths_per_million), alpha = 0.45, colour = "blue", stroke = 1, fill = "white", shape = 21) +  scale_size_continuous(range = c(1, 25), name = "Total Number \n of Deaths") +
+  guides(size = FALSE) +
   expand_limits(x = fatalmap$long, y = fatalmap$lat) +
   scale_fill_viridis_c(option = "C") +
   scale_fill_gradient(high = "darkred", low = "white") +
-  guides(fill = guide_legend("Total Deats \n per Million")) +
+  guides(fill = guide_legend("Total Deaths \n per Million")) +
   # Change the colors of plot panel background to lightblue
   # and the color of grid lines to white
   theme(
@@ -294,7 +299,7 @@ ggplot(fatalmap, aes(map_id = region, label = region)) +
     col = "black",
     nudge_y = 0.7,
     nudge_x = -0.5,
-    min.segment.length = 0.3,
+    min.segment.length = 0.6,
     force = 2
   )
 #+end_src
@@ -302,11 +307,44 @@ ggplot(fatalmap, aes(map_id = region, label = region)) +
 
 #+NAME: map2
 #+CAPTION: Europe Centred Chloropleth of Deaths Attributed to /COVID-19/
+#+attr_html: :width 400px
+#+attr_latex: :width 10cm
 #+RESULTS: gg2
 [[file:SecChEur.png]]
 
 
 * Time Series
+The spread of disease over time can often be modelled by exponential model as demonstrated in equations eqref:exp1 and eqref:exp2, for this reason the use of a $\log$-scale will linearise trends and so the use of a $\log$-scale will make it easier to compare the rates of population change between different countries.
+
+
+
+\begin{align}
+  \frac{\mathrm{d} p}{\mathrm{d} t} \propto p &\implies p = Ce^{kt} \quad \exists k,c \in \mathbb{R} \label{exp1} \\
+  \frac{\mathrm{d} p}{\mathrm{d} t} \propto p \wedge    \frac{\mathrm{d} p}{\mathrm{d} t} \propto (N-p) &\implies p = \frac{ke^{Nt}}{1-ke^{Nt}} \quad \exists k \in \mathbb{R}, N \in \mathbb{R^+} \label{exp1} \label{exp2}
+\end{align}
+
+In addition to a $\log-$ scale, /sliding/ the data to be relative to the number of days since the first case can allow the trends of the data to be compared, this was implemented by /John Hopkins University/ in a visualisation published in the /Guardian/ cite:gutierrez2020. <<tssec>>
+
+** Technical Details
+
+** Advantages compared to other methods
++ The advantage to a log-scaled plot is that it allows rates of change to be
+  compared between countries
++ Making the Data Relative to the day of the first infection allows individual
+  countries to be compared in terms of there response
+** Disasadvantages
++ A log-scaled plot can be misleading if it is not made clear, his particularly
+  true for readers who have limited mathematical training.
+  + For this reason a plot without log-scaling was included and the axis were
+    labelled accordingly
++ Making Data relative to the day of the first infection may not make clear that
+  certain countries had //forewarning/ of the disease by virtue of the delay.
+** Discussion on analysis results
+** Discussion on other Aspects
+** Literature review of related work
+As mentioned in section [[tssec]] the use of the log-scaled and date-adjusted plot was implemented by /John Hopkins University/ in a visualisation published in /The Guardian/ newspaper cite:gutierrez2020.
+
+
 
 * Bar Chart
 
@@ -367,6 +405,15 @@ The total number of deaths per country can be analysed using
 ** Discussion on analysis results
 ** Discussion on other Aspects
 ** Literature review of related work
+
+* Apendix                                                                       :ATTACH:
+:PROPERTIES:
+:ID:       84c19d03-8ab7-4793-a86d-e861e1bffe2b
+:END:
+
+#+NAME: JHBub
+#+CAPTION: John Hopkins Bubble Chart cite:2020o
+[[attachment:_20200521_140312screenshot.png]]
 
 * References
 # Remember, this is here for HTML, but latex uses biblatex for URL support

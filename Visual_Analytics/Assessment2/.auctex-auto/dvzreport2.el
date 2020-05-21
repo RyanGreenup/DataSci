@@ -6,13 +6,13 @@
    (TeX-add-to-alist 'LaTeX-provided-package-options
                      '(("inputenc" "utf8") ("fontenc" "T1") ("ulem" "normalem")))
    (add-to-list 'LaTeX-verbatim-environments-local "minted")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperref")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "href")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperref")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "path")
    (TeX-run-style-hooks
     "latex2e"
@@ -34,54 +34,65 @@
     "minted"
     "/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle")
    (LaTeX-add-labels
-    "sec:orga05d9d0"
-    "sec:org52451a6"
-    "sec:org1cf5590"
-    "sec:orgab0a512"
-    "sec:orga58e60f"
-    "sec:org0b00a1e"
-    "sec:org656195d"
-    "sec:org659db8c"
-    "sec:orgc5e9a94"
-    "sec:orga71b4b8"
-    "sec:org2387bb0"
-    "orga9c42ef"
-    "org26e6ca5"
-    "orgd95fccc"
-    "org0d2cbb1"
-    "orgf44bd0b"
-    "fig:org186877f"
-    "sec:org02053d1"
-    "org05eca33"
-    "org11df32b"
-    "org9e9e29a"
-    "fig:org819d68a"
-    "sec:org416bd07"
-    "sec:org21a3513"
-    "sec:orgcababeb"
-    "sec:orge275014"
-    "sec:org782b77f"
-    "sec:org84f8ded"
-    "sec:org342f127"
-    "sec:org910e724"
-    "sec:org2b0c0e7"
-    "sec:org89448c5"
-    "sec:orgc22965a"
-    "sec:orgf9a369f"
-    "sec:org9ac1292"
-    "sec:org434bc6c"
-    "sec:orgf2078a4"
-    "sec:orged132ee"
-    "sec:org12d11b8"
-    "sec:org0d9140c"
-    "sec:org992d220"
-    "sec:orgbc36f7f"
-    "sec:org2de2d93"
-    "sec:org05f63f6"
-    "sec:orgdcaf953"
-    "sec:orged456ea"
-    "org98acb60"
-    "org0b1333d")
+    "sec:org65e16aa"
+    "sec:org32a0c5d"
+    "sec:orgb2f25d9"
+    "sec:org8c24a48"
+    "sec:org78c2c85"
+    "sec:org41a2a34"
+    "sec:org83a8edb"
+    "sec:org7accacb"
+    "sec:orge18402f"
+    "sec:org7a533fc"
+    "sec:org9ad7bb1"
+    "org250a22c"
+    "org70648f3"
+    "org75f40f0"
+    "org7ccb826"
+    "orgbde88c8"
+    "fig:org7e64dfd"
+    "sec:org70b837a"
+    "orga5bd32f"
+    "org181dd8d"
+    "org8902b95"
+    "fig:org223d165"
+    "sec:orgd18e079"
+    "exp1"
+    "exp2"
+    "orgda7745e"
+    "sec:org190a922"
+    "sec:orgd3a1d68"
+    "sec:org09b797c"
+    "sec:org32481c2"
+    "sec:org5cd481d"
+    "sec:orgdb93e1d"
+    "sec:org574a540"
+    "sec:org7a659d1"
+    "sec:org1cd00da"
+    "sec:org086c831"
+    "sec:org246372d"
+    "sec:orgef591b1"
+    "sec:orgb998fb8"
+    "sec:org03453be"
+    "sec:org0f605b9"
+    "sec:orgda0a6ca"
+    "sec:org62ec7d4"
+    "sec:orgd1d052a"
+    "sec:org6b274e8"
+    "sec:org68719b3"
+    "sec:org99999c8"
+    "sec:org51b751c"
+    "sec:orge59d4df"
+    "sec:orgcf32daa"
+    "sec:org9c68d96"
+    "sec:org805633b"
+    "sec:org2c67c23"
+    "sec:orgfc48c02"
+    "sec:org077d0b0"
+    "fig:org615a27a"
+    "sec:org2fdbae4"
+    "org89765da"
+    "org655b7fa")
    (LaTeX-add-bibliographies
     "../../../../Studies/Papers/references"))
  :latex)
