@@ -49,7 +49,6 @@ covid <- read.csv("/home/ryan/Notes/DataSci/Visual_Analytics/Assessment2/owid-co
   in an epidemic fashion and finally reaching the rest of the globe as a
   pandemic outbreak.
 
-
 * Chloropleth Map
 A Chloropleth map of the number of deaths can offer an insight into the impact
 that the disease has had with respect to individual countries.
@@ -193,8 +192,8 @@ this is demonstrated in listing [[fggp]] and the output is provided in figure [[
 #+end_src
 
 
-# #+attr_html: :width 400px
-# #+attr_latex: :width 10cm
+#+attr_html: :width 400px
+#+attr_latex: :width 10cm
 #+NAME: map1
 #+CAPTION: Chloropleth map of total deaths attributed to /COVID-19/ (per Million people)
 #+RESULTS: fggp
@@ -312,7 +311,6 @@ ggplot(fatalmap, aes(map_id = region, label = region)) +
 #+RESULTS: gg2
 [[file:SecChEur.png]]
 
-
 * Time Series
 The spread of disease over time can often be modelled by exponential model as demonstrated in equations eqref:exp1 and eqref:exp2, for this reason the use of a $\log$-scale will linearise trends and so the use of a $\log$-scale will make it easier to compare the rates of population change between different countries.
 
@@ -326,6 +324,355 @@ The spread of disease over time can often be modelled by exponential model as de
 In addition to a $\log-$ scale, /sliding/ the data to be relative to the number of days since the first case can allow the trends of the data to be compared, this was implemented by /John Hopkins University/ in a visualisation published in the /Guardian/ cite:gutierrez2020. <<tssec>>
 
 ** Technical Details
+*** Preliminary
+In order to log scale the data the =mutate= function from the =dplyr= package was used on data transformed into /wide/ format by using the =pivot_wider= function, this is shown in listing [[fts]].
+
+Sliding the date back to the number of cases however was a little more difficult
+and required the use of a =for= loop to iterate the =lead= function over each
+column (where each column, after transformation with =dplyr=, represented the
+value for a country), this is demonstrated in listing [[fts]] with an example of the
+produced /tidy/ data provided in table [[ftst]]; the code to produce the plot is
+demonstrated in listing [[ftsg]], the output of which is provided in figure [[ftsp]].
+
+Rather than using a line plot or a scatter plot, a =loess= model was placed ontop of semi-opaque points, this is to enhance the continuity of the visualisation. The /Gestalt Laws/ provide that continuous shapes are easier for readers to interpret cite:staudinger2011 and for this reason the the overlay was implemented, to aid the reader in delineating between the different countries in a plot.
+
+Plots with many colours mapped to categorical variables can be difficult to interpret cite:wilson2017,rost2018, for this reason less than 10 countries were compared on the same plot.
+
+#+NAME: fts
+#+CAPTION: Use = dplyr= to transform the data as shown in table [[ftst]], this can then be passed to ggplot as shown in listing [[ftsg]]
+#+begin_src R
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+# interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases_per_million > 1) %>%
+  mutate(total_cases_per_million = log10(total_cases_per_million)) %>%
+  dplyr::select(date, total_cases_per_million, location) %>%
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "total_cases_per_million")
+#+end_src
+
+#+RESULTS: fts
+
+#+RESULTS: fts :exports none :results none
+
+#+NAME: ftst
+#+CAPTION: Top few rows of the /tidy/ data set created from listing [[fts]].
+| /*Date*/ | /*Location*/       | /*Total Cases Per Million*/ |
+|    1 | South Korea    |                           0.193 |
+|    1 | Italy          |                           0.116 |
+|    1 | Australia      |                         0.00860 |
+|    1 | Germany        |                           0.122 |
+|    1 | United Kingdom |                          0.0976 |
+|    1 | USA            |                         0.00903 |
+|    1 | Russia         |                         0.00303 |
+|    2 | South Korea    |                           0.480 |
+|    2 | Italy          |                           0.339 |
+|    2 | Australia      |                          0.0558 |
+
+#+NAME: ftsg
+#+CAPTION: Use =dplyr= to transform the data before plotting with =ggplot=
+#+BEGIN_SRC R :exports both :results output graphics file :file FirstTS.png
+ggplot(cv , aes(y = total_cases_per_million, x = date, col = location, group = location)) +
+  geom_point(alpha = 0.3)  +
+  geom_smooth() +
+  theme_bw() +
+  labs(y = "Total Number of Cases (Log-10 Scale)", title = "Log Scaled Total COVID-19 Cases per Million", x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location"))
+#  geom_smooth()
+#+end_src
+
+
+#+attr_html: :width 400px
+#+attr_latex: :width 10cm
+#+NAME: ftsp
+#+CAPTION: Chloropleth map of total deaths attributed to /COVID-19/ (per Million people)
+#+RESULTS: ftsg
+[[file:FirstTS.png]]
+
+
+*** Facet Grid
+This plot however does not show all the data made available, the data set also includes information on the number of tests,cases and deaths resulting from /COVID-19/, in order to visualise this the =fact_grid= layer can be used to create a multi-scatterplot. first it is necessary to create a data frame, this can be implemented by repeating the process in listing [[fts]] for each different metric but it will also be necessary to add a feature corresponding to that metric's description, we will also create non-log scaled data as well, this is demonstrated in listings [[mkdtl1]] through [[mkdt3]], finally the dataframes are merged in listing [[mgdt]], the corresponding plot is shown in figure [[mdpt]].
+
+#+NAME: mkdtl1
+#+CAPTION: Use =dplyr= to create a data frame of log scaled cases
+#+begin_src R :results none
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+###### Number of Cases
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+  mutate(total_cases_per_million = log10(total_cases_per_million)) %>%
+  dplyr::select(date, total_cases_per_million, location) %>%
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_log <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Cases") %>%
+  add_column(scale = "Log-10 Scale")
+
+#+end_src
+
+#+NAME: mkdtl2
+#+CAPTION: Use =dplyr= to create a data frame of log scaled deaths
+#+begin_src R :results none
+
+### Number of deaths
+
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+   mutate(total_deaths_per_million = log10(total_deaths_per_million)) %>%
+  dplyr::select(date, total_deaths_per_million, location) %>%
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_log <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Deaths") %>%
+  add_column(scale = "Log-10 Scale")
+
+
+#+end_src
+
+
+#+NAME: mkdtl3
+#+CAPTION: Use =dplyr= to create a data frame of log scaled deaths
+#+begin_src R :results none
+### Number of Tests
+
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+  mutate(total_tests_per_thousand = log10(total_tests_per_thousand)) %>%
+  dplyr::select(date, total_tests_per_thousand, location) %>%
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_tests_log <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Tests") %>%
+  add_column(scale = "Log-10")
+
+
+cv <- rbind(cv_cases_log, cv_deaths_log, cv_tests_log)
+
+cv %>%
+  filter(subject == "deaths")
+
+p_per_cap <- ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.3, aes(col = location))  +
+   geom_smooth(aes(col = location), size = 0.5) +
+  theme_bw() +
+  labs(y = TeX("Count (log_{10} Scale)"), title = TeX("log_{10} Scale; Value of \\textit{COVID-19} Statistics over Time"), x = TeX("Days since Case \\textit{#1}"), subtitle = "Counts Per Million of population") +
+  guides(col = guide_legend("Location")) +
+  facet_grid(rows = vars(subject), scales = "free_y")
+p_per_cap
+#+end_src
+
+#+NAME: mkdt1
+#+CAPTION: use =dplyr= to create a data frame of non-log scaled cases
+#+begin_src R :results none
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+###### Number of Cases
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+# mutate(total_cases = log10(total_cases)) %>%
+  dplyr::select(date, total_cases, location) %>%
+  pivot_wider(names_from = location, values_from = total_cases)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_raw <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Cases") %>%
+  add_column(scale = "Count")
+
+#+END_SRC
+
+#+NAME: mkdt2
+#+CAPTION: use =dplyr= to create a data frame of non-log scaled deaths
+#+begin_src R :results none
+### Number of deaths
+
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+#  mutate(total_deaths = log10(total_deaths_)) %>%
+  dplyr::select(date, total_deaths, location) %>%
+  pivot_wider(names_from = location, values_from = total_deaths)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_raw <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Deaths") %>%
+  add_column(scale = "Count")
+
+
+#+end_src
+
+#+NAME: mkdt3
+#+CAPTION: use =dplyr= to create a data frame of non-log scaled tests
+#+begin_src R :results none
+
+### Number of Tests
+
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+ # mutate(total_testsd = log10(total_testsd)) %>%
+  dplyr::select(date, total_tests, location) %>%
+  pivot_wider(names_from = location, values_from = total_tests)
+
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_tests_raw <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Tests") %>%
+  add_column(scale = "Count")
+
+
+cv <- rbind(cv_cases_raw, cv_deaths_raw, cv_tests_raw)
+
+cv %>%
+  filter(subject == "deaths")
+
+p_total <- ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.3, aes(col = location))  +
+   geom_smooth(aes(col = location), size = 0.5) +
+  theme_bw() +
+  labs(y = TeX("Total Count"), title = TeX("Total Count of \\textit{COVID-19} Statistics over Time"), x = TeX("Days since Case \\textit{#1}")) +
+  guides(col = guide_legend("Location"), subtitle = "Per Million of Population") +
+  facet_grid(rows = vars(subject), scales = "free_y")
+p_total
+#+end_src
+
+#+NAME: mgdt
+#+CAPTION: Merge the plots in order to create a single visualisation
+#+BEGIN_SRC R :exports both :results output graphics file :file fgrid.png
+plots <- list(p_per_cap + guides(col = FALSE), p_total+ theme(legend.position="bottom") )
+# plots <- list(p_per_cap + theme(legend.position="bottom"), p_total+ theme(legend.position="bottom") )
+library(gridExtra)
+
+gridExtra::grid.arrange(grobs = plots, layout_matrix = matrix(1:2, nrow = 1))
+#+end_src
+
+#+attr_html: :width 400px
+#+attr_latex: :width 16cm
+#+NAME: mdpt
+#+CAPTION: Multi Scatter Plot of /COVID-19/ Metrics.
+#+RESULTS: mgdt
+[[file:fgrid.png]]
+
 
 ** Advantages compared to other methods
 + The advantage to a log-scaled plot is that it allows rates of change to be
@@ -340,27 +687,20 @@ In addition to a $\log-$ scale, /sliding/ the data to be relative to the number 
 + Making Data relative to the day of the first infection may not make clear that
   certain countries had //forewarning/ of the disease by virtue of the delay.
 ** Discussion on analysis results
+This plot demonstrates that
 ** Discussion on other Aspects
++ A potential improvement to this plot would be to plot many countries, say 30 but greyscale those countries and only apply colour to countries of interest, this would provide background information relative to those observations but not overwhelm the reader, this is a suggestion made by Andy Kirk in his /Visualising Data/ blog  cite:kirk2015.
 ** Literature review of related work
 As mentioned in section [[tssec]] the use of the log-scaled and date-adjusted plot was implemented by /John Hopkins University/ in a visualisation published in /The Guardian/ newspaper cite:gutierrez2020.
 
 
 
-* Bar Chart
-
-* Pie Chart
-
-* Spider Chart / Star Plot
-
-* Multiple Line Charts
-
-* Parallell Co-ordinates
+* TODO Parallell Co-ordinates
 each line is a country
 each column is a feature like testing, death and cases.
 
 [[https://stackoverflow.com/a/35206832/10593632][This Stack Post shows how to make them curvy]]
 
-* 3D Scatter Plot
 * Log Scaled from 100th case                                                    :ATTACH:
 :PROPERTIES:
 :ID:       fa4caf49-b6ea-4d8e-ac02-b101be54d15c
