@@ -78,7 +78,7 @@ China, Russia, North Korea, etc. may have more capacity to:
 1. Diminish the spread of the diseasy by implementing
    policy decisions,
    1. whereas countries such as the US and Europe have a much higher expectation
-      of civil liberties.
+      of civil liberties and hence much lower tolerance for government intervention.
 2. Control the spread of information for want of international reputation.
    1. In saying that though research suggests that under-reporting has even
       occured in countries such as the US cite:sood2020 so such under-reporting
@@ -87,13 +87,14 @@ China, Russia, North Korea, etc. may have more capacity to:
 A similar disease, /MERS/, emerged in 2012 in Middle-Eastern Regions
 cite:woodley2020 and a Korean outbreak of the /MERS/ disease occured in 2015
 cite:serrano2015, these outbreaks likely prepared Korea, the Middle East and
-other Asian Regions regions for an outbreak which helps explain the dichotomous
+other Asian regions for an outbreak which helps explain the dichotomous
 nature of the deaths attributable to /COVID-19/ for those Countries.
 
 *** Europe
 A closer look at Europe shows that Belgium and Italy have been the most affected
 by this disease, it isn't very clear why those regions have been impacted so
-significantly but this could be indicative of policy decisions and warrants
+significantly, particularly considering the comparatively permissive borders
+within the /EU/, but this could be indicative of policy decisions and warrants
 further research.
 
 ** Technique
@@ -171,7 +172,7 @@ this is demonstrated in listing [[fggp]] and the output is provided in figure [[
 #+NAME: fggp
 #+CAPTION: use =ggplot2= to create a chloropleth map from data, output in figure [[map1]]
 #+BEGIN_SRC R :exports both :results output graphics file :file FirstChALL.png
- ggplot(fatalmap, aes(map_id = region)) +
+wmp <- ggplot(fatalmap, aes(map_id = region)) +
   geom_map(map = fatalmap,  color = "grey", aes(fill = total_deaths_per_million), lwd = 0.1, alpha = 0.6)+
   expand_limits(x = fatalmap$long, y = fatalmap$lat)+
   scale_fill_gradient(high = "darkred", low = "white") +
@@ -187,7 +188,7 @@ this is demonstrated in listing [[fggp]] and the output is provided in figure [[
      legend.background = element_rect(fill = "white", size = 0.1, colour = "darkblue", linetype = "solid")) +
    labs(x = "Longitude", y = "Latitude", title = TeX("Total Deaths Attributed to \\textit{COVID-19}"))
 #   geom_text(data = region_lab_df, aes(y = lat, x = long, label = region), size = 1)
-
+wmp
 
 #+end_src
 
@@ -198,6 +199,36 @@ this is demonstrated in listing [[fggp]] and the output is provided in figure [[
 #+CAPTION: Chloropleth map of total deaths attributed to /COVID-19/ (per Million people)
 #+RESULTS: fggp
 [[file:FirstChALL.png]]
+
+A bubble overlay may also be implemented in order make clearer the spread of cases, it is necessary however to adjust the /USA/ to represent the population centre to make the visualisation more effective. This is demonstrated in listing [[fggb]] and shown in figure [[mapbub]]
+
+#+NAME: fggb
+#+CAPTION: use =ggplot2= to create a chloropleth map from data, output in figure [[map1]]
+#+BEGIN_SRC R :results none
+
+# Compute the centroid as the mean longitude and lattitude
+# Used as label coordinate for country's names
+region_lab_df <- some.eu.maps %>%
+  group_by(region) %>%
+  summarise(long = mean(long), lat = mean(lat)) %>%
+    full_join(aggregate(total_deaths_per_million ~ region, fatalmap, mean))
+# Manually Adjust US to be population Centre
+region_lab_df[region_lab_df$region == "USA",]$long <- -92.47
+region_lab_df[region_lab_df$region == "USA",]$lat <- 37.37
+
+
+wmp +
+  scale_size_continuous(range = c(1, 9), name = "Total Number \n of Deaths") +
+   guides(size = FALSE) +
+   geom_point(data = region_lab_df, aes(y = lat, x = long, size = total_deaths_per_million), alpha = 0.5, col = "purple")
+#+end_src
+
+#+attr_html: :width 400px
+#+attr_latex: :width 14cm
+#+CAPTION: Chloropleth map with bubble overlay to aid in case visualisation
+#+RESULTS: fggb
+#+NAME: mapbub
+[[file:FirstChAllbub.png]]
 
 *** Europe Centric
 The chloropleth map clearly shows that the disease has caused more fatalities
@@ -310,6 +341,34 @@ ggplot(fatalmap, aes(map_id = region, label = region)) +
 #+attr_latex: :width 10cm
 #+RESULTS: gg2
 [[file:SecChEur.png]]
+
+** Advantages compared to other methods
++ A Chloropleth map provides a very clear way to visualise the occurence of
+  disease in a geographical sense.
++ Trends across regions can easily be identified, e.g. figure [[map2]] shows how
+  severe the outbreak is in /Europe/ relative to other regions
+** Disasadvantages
++ Maps, when projected into a 2D plane are distorted, this distortion can impact
+  how spread the data appears to be.
++ A chloropleth map can make it hard to compare metrics between to regions in
+  any specific sense, for this a more appropriate visualization would be a bar
+  chart.
+** Literature review of related work
+In his blog, Kenneth Field produced chloropleth and bubble-map chart focused on
+China, cite:field2020 these plots were very similar to those produced in this
+report, however the legend for the bubble plot was very nicely implemented and
+can be seen in figure [[bblg]] of the appendix. He also produces an example
+illustrating why the use of a heatmap or contour map can make for a poor
+visualisation of cases due to the difficulty in interpreting the visualization
+compared to a bubble chart, for this reason a bubble chart was used in this
+report and a heatmap was not implemented.
+
+A paper published in the publication /Environment & Planning A/ suggested using
+a cartogram to visualise the spread of disease, this is provided in figure [[ctg]]
+of the appendix. cite:gao2020 Although the cartogram is visually quite appealing
+and easy to read, it is difficult to interpret for quickly, the visualisation
+does not promote pre-attentive processing, for this reason the visualisation
+strategy was not implemented.
 
 * Time Series
 The spread of disease over time can often be modelled by exponential model as demonstrated in equations eqref:exp1 and eqref:exp2, for this reason the use of a $\log$-scale will linearise trends and so the use of a $\log$-scale will make it easier to compare the rates of population change between different countries.
@@ -489,20 +548,16 @@ cv_deaths_log <- cv %>%
 #+CAPTION: Use =dplyr= to create a data frame of log scaled deaths
 #+begin_src R :results none
 ### Number of Tests
-
 cv <- as_tibble(covid)
 cv <- cv %>%
   mutate(date = as.Date(date))
 cv <- cv[order(cv$date),]
-
 cv <- cv %>%
   filter(location %in% interested_locations) %>%
   filter(total_cases > 1) %>%
   mutate(total_tests_per_thousand = log10(total_tests_per_thousand)) %>%
   dplyr::select(date, total_tests_per_thousand, location) %>%
   pivot_wider(names_from = location, values_from = total_tests_per_thousand)
-
-
 
 for (i in 2:ncol(cv)) {
   ## Slide the Columns up and put the NA at the end
@@ -513,15 +568,12 @@ cv[,i] <-   pull(cv, i) %>%
  ## Replace the date with the number of days
 cv$date <- seq_len(nrow(cv))
 }
-
 cv_tests_log <- cv %>%
  pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
   add_column(subject = "No. of Tests") %>%
   add_column(scale = "Log-10")
 
-
 cv <- rbind(cv_cases_log, cv_deaths_log, cv_tests_log)
-
 cv %>%
   filter(subject == "deaths")
 
@@ -608,22 +660,17 @@ cv_deaths_raw <- cv %>%
 #+NAME: mkdt3
 #+CAPTION: use =dplyr= to create a data frame of non-log scaled tests
 #+begin_src R :results none
-
 ### Number of Tests
-
 cv <- as_tibble(covid)
 cv <- cv %>%
   mutate(date = as.Date(date))
 cv <- cv[order(cv$date),]
-
 cv <- cv %>%
   filter(location %in% interested_locations) %>%
   filter(total_cases > 1) %>%
  # mutate(total_testsd = log10(total_testsd)) %>%
   dplyr::select(date, total_tests, location) %>%
   pivot_wider(names_from = location, values_from = total_tests)
-
-
 
 for (i in 2:ncol(cv)) {
   ## Slide the Columns up and put the NA at the end
@@ -634,15 +681,11 @@ cv[,i] <-   pull(cv, i) %>%
  ## Replace the date with the number of days
 cv$date <- seq_len(nrow(cv))
 }
-
 cv_tests_raw <- cv %>%
  pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
   add_column(subject = "No. of Tests") %>%
   add_column(scale = "Count")
-
-
 cv <- rbind(cv_cases_raw, cv_deaths_raw, cv_tests_raw)
-
 cv %>%
   filter(subject == "deaths")
 
@@ -694,6 +737,37 @@ This plot demonstrates that
 As mentioned in section [[tssec]] the use of the log-scaled and date-adjusted plot was implemented by /John Hopkins University/ in a visualisation published in /The Guardian/ newspaper cite:gutierrez2020.
 
 
+NSW Health created a visualisation of cases acquired over time using a barchart
+in a way that resembles a histogram, cite:nswhealth2020 this plot is very easy
+to interpret and clearly demonstrates the success of NSW in /flattening the
+curve/, this visualisation could have been implemented for this data as demonstrated in listing [[bar]] shown in figure [[barp]] for different countries in a similar fashion, this however was not effective for comparing countries and so was not pursued.
+
+
+#+NAME: bar
+#+CAPTION: Use =ggplot= to create a bar chart
+#+BEGIN_SRC R :exports both :results output graphics file :file barex.png
+#+begin_src
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+cv <- covid %>%
+  dplyr::filter(location %in% interested_locations)
+
+ggplot(fortify(cv), aes(x = as.Date(date), y = new_cases_per_million, fill = location)) +
+  geom_col(col = "grey") +
+  labs(x = "Date", y = "New Cases Per Million") +
+   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme_bw()
+#+end_src
+
+
+#+attr_html: :width 400px
+#+attr_latex: :width 10cm
+#+NAME: barp
+#+CAPTION: Bar Chart of cases over time for various locations
+#+RESULTS: bar
+[[file:barex.png]]
+
+
+
 
 * TODO Parallell Co-ordinates
 each line is a country
@@ -701,35 +775,6 @@ each column is a feature like testing, death and cases.
 
 [[https://stackoverflow.com/a/35206832/10593632][This Stack Post shows how to make them curvy]]
 
-* Log Scaled from 100th case                                                    :ATTACH:
-:PROPERTIES:
-:ID:       fa4caf49-b6ea-4d8e-ac02-b101be54d15c
-:DIR:      /home/ryan/Dropbox/Notes/DataSci/Visual_Analytics/Assessment2/
-:END:
-
-#+attr_html: :width 400px
-[[./_20200518_184546screenshot.png]]
-
-* Bubble Plot                                                                   :ATTACH:
-:PROPERTIES:
-:ID:       ec1513a9-0d9b-440b-8e47-c8c3f39efd62
-:DIR:      /home/ryan/Dropbox/Notes/DataSci/Visual_Analytics/Assessment2/
-:END:
-[[https://www.theguardian.com/world/2020/may/18/coronavirus-world-map-which-countries-have-the-most-cases-and-deaths][Guardian]]
-
-
-#+attr_html: :width 400px
-#+attr_latex: :width 10cm
-[[./_20200518_184850screenshot.png]]
-
-
-
-
-* Animation of 3d Chloropleth heatmap
-
-visualisation
-
-The total number of deaths per country can be analysed using
 ** Technical Details
 ** Advantages compared to other methods
 ** Disasadvantages
@@ -746,14 +791,31 @@ The total number of deaths per country can be analysed using
 ** Discussion on other Aspects
 ** Literature review of related work
 
-* Apendix                                                                       :ATTACH:
+* Appendix                                                                      :ATTACH:
 :PROPERTIES:
 :ID:       84c19d03-8ab7-4793-a86d-e861e1bffe2b
 :END:
 
+
+#+attr_html: :width 400px
+#+attr_latex: :width 8cm
 #+NAME: JHBub
 #+CAPTION: John Hopkins Bubble Chart cite:2020o
 [[attachment:_20200521_140312screenshot.png]]
+
+
+#+attr_html: :width 400px
+#+attr_latex: :width 10cm
+#+NAME: bblg
+#+CAPTION: Bubble Plot Chart produced by Field in his blog cite:field2020
+[[file:proppymap2.png]]
+
+
+#+attr_html: :width 400px
+#+attr_latex: :width 10cm
+#+NAME: bblg
+#+CAPTION: Cartogram of /COVID-19/ spread cite:gao2020
+[[file:cartogramStudy.jpg]]
 
 * References
 # Remember, this is here for HTML, but latex uses biblatex for URL support
