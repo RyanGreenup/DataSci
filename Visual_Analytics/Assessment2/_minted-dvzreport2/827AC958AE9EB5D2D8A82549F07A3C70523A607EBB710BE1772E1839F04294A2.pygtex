@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}+begin\PYGZus{}src}
+\PYG{n}{interested\PYGZus{}locations} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{c}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Australia\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}USA\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Italy\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Germany\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Russia\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}South Korea\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}United Kingdom\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{covid} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n}{dplyr}\PYG{o}{::}\PYG{n+nf}{filter}\PYG{p}{(}\PYG{n}{location} \PYG{o}{\PYGZpc{}in\PYGZpc{}} \PYG{n}{interested\PYGZus{}locations}\PYG{p}{)}
+
+\PYG{n+nf}{ggplot}\PYG{p}{(}\PYG{n+nf}{fortify}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{),} \PYG{n+nf}{aes}\PYG{p}{(}\PYG{n}{x} \PYG{o}{=} \PYG{n+nf}{as.Date}\PYG{p}{(}\PYG{n}{date}\PYG{p}{),} \PYG{n}{y} \PYG{o}{=} \PYG{n}{new\PYGZus{}cases\PYGZus{}per\PYGZus{}million}\PYG{p}{,} \PYG{n}{fill} \PYG{o}{=} \PYG{n}{location}\PYG{p}{))} \PYG{o}{+}
+  \PYG{n+nf}{geom\PYGZus{}col}\PYG{p}{(}\PYG{n}{col} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}grey\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+  \PYG{n+nf}{labs}\PYG{p}{(}\PYG{n}{x} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Date\PYGZdq{}}\PYG{p}{,} \PYG{n}{y} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}New Cases Per Million\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+   \PYG{n+nf}{theme}\PYG{p}{(}\PYG{n}{axis.text.x} \PYG{o}{=} \PYG{n+nf}{element\PYGZus{}text}\PYG{p}{(}\PYG{n}{angle} \PYG{o}{=} \PYG{l+m}{90}\PYG{p}{,} \PYG{n}{hjust} \PYG{o}{=} \PYG{l+m}{1}\PYG{p}{))} \PYG{o}{+}
+  \PYG{n+nf}{theme\PYGZus{}bw}\PYG{p}{()}
+\end{Verbatim}

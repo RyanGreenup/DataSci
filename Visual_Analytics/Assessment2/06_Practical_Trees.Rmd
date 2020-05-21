@@ -175,7 +175,7 @@ ggplot(fatalmap, aes(map_id = region, label = region)) +
   geom_map(map = fatalmap,
            aes(fill = total_deaths_per_million),
            color = "white") +
-   geom_point(data = region_lab_df, aes(y = lat, x = long, size = total_deaths_per_million), alpha = 0.5, col = "purple") +
+  geom_point(data = region_lab_df, aes(y = lat, x = long, size = total_deaths_per_million), alpha = 0.45, colour = "blue", stroke = 1, fill = "white", shape = 21) +
   scale_size_continuous(range = c(1, 25), name = "Total Number \n of Deaths") +
   guides(size = FALSE) +
   expand_limits(x = fatalmap$long, y = fatalmap$lat) +
@@ -304,7 +304,7 @@ cv <- cv %>%
   mutate(date = as.Date(date)) 
 cv <- cv[order(cv$date),]
 
-interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+# interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
 interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
 
 cv <- cv %>% 
@@ -683,8 +683,8 @@ cv <- cv %>%
   filter(location %in% interested_locations) %>% 
   filter(total_cases > 1) %>% 
  # mutate(total_testsd = log10(total_testsd)) %>% 
-  dplyr::select(date, total_testsd, location) %>% 
-  pivot_wider(names_from = location, values_from = total_testsd)
+  dplyr::select(date, total_tests, location) %>% 
+  pivot_wider(names_from = location, values_from = total_tests)
 
 
 
@@ -714,7 +714,7 @@ p_total <- ggplot(cv , aes(y = value, x = date)) +
    geom_smooth(aes(col = location), size = 0.5) +
   theme_bw() +
   labs(y = TeX("Total Count"), title = TeX("Total Count of \\textit{COVID-19} Statistics over Time"), x = TeX("Days since Case \\textit{#1}")) +
-  guides(col = guide_legend("Location"), subtitle = "Per Million of Population"") +
+  guides(col = guide_legend("Location"), subtitle = "Per Million of Population") +
   facet_grid(rows = vars(subject), scales = "free_y")
 p_total
 ```
@@ -726,6 +726,20 @@ plots <- list(p_per_cap + guides(col = FALSE), p_total+ theme(legend.position="b
 library(gridExtra)
 
 gridExtra::grid.arrange(grobs = plots, layout_matrix = matrix(1:2, nrow = 1))
+
+```
+
+## Boxplots
+```{r}
+cv <- covid %>% 
+  dplyr::filter(location %in% interested_locations)
+
+ggplot(fortify(cv), aes(x = as.Date(date), y = new_cases_per_million, fill = location)) +
+  geom_col(col = "grey") + 
+  labs(x = "Date", y = "New Cases Per Million")
+   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme_bw()
+  
 
 ```
 

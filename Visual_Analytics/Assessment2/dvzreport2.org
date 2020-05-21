@@ -43,11 +43,19 @@ covid <- read.csv("/home/ryan/Notes/DataSci/Visual_Analytics/Assessment2/owid-co
 ** Set Working Directory
 
 * Introduction
-+ in December 2012 first cases of /COVID-19/ were reported, the disease has
-  since attributed to the /SARS-CoV2/ virus.
-+ The disease became endemic throughout China before spreading throughout Europe
-  in an epidemic fashion and finally reaching the rest of the globe as a
-  pandemic outbreak.
+On December 31st 2019 a viral pneumonia was reported in Wuhan, China, this was
+  later found to be a result of a new strain of virus named /Sars-CoV2/, the
+  diseased caused by such an infection, usually resulting in viral pneumonia, is
+  known as /Corona Virus Disease 2019/ (/COVID-19/). The outbreak of this disease was declared a Public Health Emergency of International Concern on the 30th January 2020.
+  cite:worldhealthorganization2020 December 2012 first cases of /COVID-19/ were
+  reported, the disease has since attributed to the /SARS-CoV2/ virus.
+
+  A data set detailing the location, deaths, tests and cases related to the
+  /COVID-19/ pandemic has been made available through the website /Our World in
+  Data/cite:ritchie2020, documented in this report is a visual anylisis
+  performed entirely using the /Free Software/ [fn:fr] */R/* cite:rcoreteam2020
+  primarily with the =ggplot2= package cite:wickham2016 (see listing [[ref]] in the
+  appendix).
 
 * Chloropleth Map
 A Chloropleth map of the number of deaths can offer an insight into the impact
@@ -66,11 +74,13 @@ in figure [[map2]].
 ** Discussion
 *** Worldwide
 The first plot appears to show a very limited amount of difference in deaths
-attributable to /COVID-19/ across regions other than the North America and
-Europe. While first-world countries such as New Zealand and Australia are
+attributable to /COVID-19/ across regions other than North America and
+Europe.
+
+While first-world countries such as New Zealand and Australia are
 somewhat insulated from the disease by virtue of geography and population
 density, it's striking that much of Asia and Russia have such low levels of
-outbreak.
+disease incidence.
 
 This could be attributed to the fact that a more power-cetric regime such as in
 China, Russia, North Korea, etc. may have more capacity to:
@@ -99,12 +109,12 @@ further research.
 
 ** Technique
 *** Woldwide Map
-First the data must be aggregated in order to retrieve the total number of
+In order to produce a chloropleth map the data must be aggregated in order to retrieve the total number of
 deaths, this can be acheived by taking the maximum of the total deaths across
 countries (the total number of death rates will be a strictly positive and
 monotone trend, otherwise the outbreak would be an entirely different type of
 pandemic!), this can be performed by using the =aggregate= function as
-demonstrated in figure [[agg]].
+demonstrated in listing [[agg]].
 
 #+NAME: agg
 #+CAPTION: Use Aggregate to aggregate total number of deaths
@@ -157,16 +167,16 @@ using the =left_join= function, this is shown in listing [[jn]].
 #+CAPTION: Combine Map Data with Provided Data
 #+begin_src R :results output
 ## Retrieve the map data
-some.eu.maps <- map_data("world", region = fatalprops$location)
+some_maps <- map_data("world", region = fatalprops$location)
 
 ## Join the Data Frames Together
-fatalmap <- left_join(fatalprops, some.eu.maps, by = "region")
+fatalmap <- left_join(fatalprops, some_maps, by = "region")
 #+end_src
 
 #+RESULTS: jn
 
 Finally this data frame can be plotted by using =ggplot2= and the =geom_map=
-layer, modifying the =theme= layer will allow to provide a natural background,
+layer, modifying the =theme= layer will allow for a natural background to be implemented,
 this is demonstrated in listing [[fggp]] and the output is provided in figure [[map1]].
 
 #+NAME: fggp
@@ -200,7 +210,7 @@ wmp
 #+RESULTS: fggp
 [[file:FirstChALL.png]]
 
-A bubble overlay may also be implemented in order make clearer the spread of cases, it is necessary however to adjust the /USA/ to represent the population centre to make the visualisation more effective. This is demonstrated in listing [[fggb]] and shown in figure [[mapbub]]
+A bubble overlay may also be implemented in order make clearer the spread of cases (see section [[lvbub]] for a brief literature review), it is necessary however to adjust the /USA/ location to represent the mainland population centre in order make the visualisation more effective. This is demonstrated in listing [[fggb]] and shown in figure [[mapbub]]
 
 #+NAME: fggb
 #+CAPTION: use =ggplot2= to create a chloropleth map from data, output in figure [[map1]]
@@ -231,14 +241,14 @@ wmp +
 [[file:FirstChAllbub.png]]
 
 *** Europe Centric
-The chloropleth map clearly shows that the disease has caused more fatalities
+The chloropleth map clearly shows that the disease has caused significiantly more fatalities
 per capita in Europe and so the plot will be adjusted central to Europe.
 
 As before it is necessary to rename the features of the dataset, however in this
 instance small European countries such as Belgium should be retained (San marino
 is a very small italian provice that isn't detectable in the visualisation and
 skews the pallete, for this reason it will be removed), this is demonstrated in
-figure [[ren2]]
+listing [[ren2]]
 
 #+NAME: ren2
 #+CAPTION: Rename the features of the data and remove San Marino
@@ -258,8 +268,7 @@ In this map it will be desirable to have labels for the European countries
 (whereas this would have made the worldwide map too busy), so this will be
 implemented by using =dyplyr= to generate a second data set as shown in listing
 [[dpl]] which can then be used to generate a plot with the =ggrepel= add on as shown in listing [[gg2]], this
-produces the output shown in figure [[map2]], for this plut bubbles were also implemented in order to help visualise the number of relative cases.
-thee inspiration for the use of bubbles was the /John Hopkins Coronavirus Dashboard/ cite:2020o where a similar strategy was implemented to visualise the number of cases, a screenshot of this is provided in the appendix at figure [[JHBub]].
+produces the output shown in figure [[map2]], bubbles were also implemented in order to help visualise the number of relative cases.
 
 #+NAME: dpl
 #+CAPTION: use =dplyr= to reduce the plot size and create a data frame of country labels
@@ -279,10 +288,7 @@ region_lab_df <- fatalmap %>%
     #+end_src
 
 #+RESULTS: dpl
-:
-: Joining, by = "region"
 
-#+RESULTS:
 
 #+NAME: gg2
 #+CAPTION: Generate a Chloropleth map centred on Europe using =ggplot2=
@@ -344,34 +350,59 @@ ggplot(fatalmap, aes(map_id = region, label = region)) +
 
 ** Advantages compared to other methods
 + A Chloropleth map provides a very clear way to visualise the occurence of
-  disease in a geographical sense.
-+ Trends across regions can easily be identified, e.g. figure [[map2]] shows how
-  severe the outbreak is in /Europe/ relative to other regions
-** Disasadvantages
-+ Maps, when projected into a 2D plane are distorted, this distortion can impact
-  how spread the data appears to be.
-+ A chloropleth map can make it hard to compare metrics between to regions in
-  any specific sense, for this a more appropriate visualization would be a bar
-  chart.
-** Literature review of related work
-In his blog, Kenneth Field produced chloropleth and bubble-map chart focused on
-China, cite:field2020 these plots were very similar to those produced in this
-report, however the legend for the bubble plot was very nicely implemented and
-can be seen in figure [[bblg]] of the appendix. He also produces an example
-illustrating why the use of a heatmap or contour map can make for a poor
-visualisation of cases due to the difficulty in interpreting the visualization
-compared to a bubble chart, for this reason a bubble chart was used in this
-report and a heatmap was not implemented.
+  disease in a geographical sense, in contrast to other methods such as scatter
+  plots, heatmaps and bar charts, the chloropleth map provides a clear way to
+  distinguish the impact of the disease on individual countries.
 
-A paper published in the publication /Environment & Planning A/ suggested using
-a cartogram to visualise the spread of disease, this is provided in figure [[ctg]]
-of the appendix. cite:gao2020 Although the cartogram is visually quite appealing
-and easy to read, it is difficult to interpret for quickly, the visualisation
-does not promote pre-attentive processing, for this reason the visualisation
-strategy was not implemented.
+  The discrete distinction between countries, a fundamental component of a
+  chloropleth map, is desirable because it is consistent with the independent
+  legislatures accross countries, this allows for a comparison of the impact
+  that policy decisions may or may not have on a region.
+
+Chloropleth maps also allow trends across regions to be easily identified, e.g.
+figure [[map2]] shows how severe the outbreak is in /Europe/ relative to other
+regions, this might be lost in abstraction when using other visualization methods.
+
+** Disasadvantages
+When maps are projected into a 2D plane they are necessarily distorted, this
+  distortion can impact how spread the data appears to be.
+
+A chloropleth map can make it hard to compare metrics between to regions in any
+specific sense, for this a more appropriate visualization would be a bar chart.
+** Literature review of related work
+The /John Hopkins Coronavirus Dashboard/ cite:2020o implemented bubbles to
+visualise the number of cases, a screenshot of this is provided in the appendix
+at figure [[JHBub]], this was a part of the motivation for implementing bubbles in
+the chloropleth map because the visualization was so much more /striking/ and
+promoted pre-attentive processing of the information.
+
+<<lvbub>> In his blog, Kenneth Field produced chloropleth and bubble-map charts
+detailing the spread of /COVID-19/, with however, a focuse on China, cite:field2020 these
+plots were very similar to those produced in this report, however the legend for
+the bubble plot was very nicely implemented and can be seen in figure [[bblg]] of
+the appendix. He also produced an example illustrating why the use of a heatmap
+or contour map can make for a poor visualisation of cases due to the difficulty
+in interpreting the visualization compared to a bubble chart, for this reason a
+bubble chart was used in this report and a heatmap was not implemented.
+
+A paper in the publication /Environment & Planning A/ suggested using a
+cartogram to visualise the spread of disease, there example is provided in
+figure [[ctg]] of the appendix. cite:gao2020 Although the cartogram is visually
+quite appealing and easy to read, it is difficult to interpret quickly, the
+visualisation does not promote pre-attentive processing, for this reason the
+visualisation strategy was not implemented.
 
 * Time Series
-The spread of disease over time can often be modelled by exponential model as demonstrated in equations eqref:exp1 and eqref:exp2, for this reason the use of a $\log$-scale will linearise trends and so the use of a $\log$-scale will make it easier to compare the rates of population change between different countries.
+** Implementation
+Time series charts can be an effective way to visualise the behaviour of a value
+over time, for this dataset however, two modifications will be implemented in
+order to make the trends more distinct.
+
+*** Log Scale
+The spread of disease over time can often be described by an exponential model as
+demonstrated in equations eqref:exp1 and eqref:exp2, for this reason the use of
+a $\log$-scale will linearise trends and so the use of a $\log$-scale will make
+it easier to compare the rates of population change between different countries.
 
 
 
@@ -380,11 +411,17 @@ The spread of disease over time can often be modelled by exponential model as de
   \frac{\mathrm{d} p}{\mathrm{d} t} \propto p \wedge    \frac{\mathrm{d} p}{\mathrm{d} t} \propto (N-p) &\implies p = \frac{ke^{Nt}}{1-ke^{Nt}} \quad \exists k \in \mathbb{R}, N \in \mathbb{R^+} \label{exp1} \label{exp2}
 \end{align}
 
-In addition to a $\log-$ scale, /sliding/ the data to be relative to the number of days since the first case can allow the trends of the data to be compared, this was implemented by /John Hopkins University/ in a visualisation published in the /Guardian/ cite:gutierrez2020. <<tssec>>
+*** Adjust Zero
+In addition to a $\log-$ scale, /sliding/ the data to be relative to the number
+of days since the first case can allow the trends of the data to be compared,
+this was implemented by /John Hopkins University/ in a visualisation published
+in the /Guardian/ cite:gutierrez2020. <<tssec>>
 
 ** Technical Details
 *** Preliminary
-In order to log scale the data the =mutate= function from the =dplyr= package was used on data transformed into /wide/ format by using the =pivot_wider= function, this is shown in listing [[fts]].
+In order to log scale the data the =mutate= function from the =dplyr= package
+was used on data transformed into /wide/ format by using the =pivot_wider=
+function, this is shown in listing [[fts]].
 
 Sliding the date back to the number of cases however was a little more difficult
 and required the use of a =for= loop to iterate the =lead= function over each
@@ -768,7 +805,6 @@ ggplot(fortify(cv), aes(x = as.Date(date), y = new_cases_per_million, fill = loc
 
 
 
-
 * TODO Parallell Co-ordinates
 each line is a country
 each column is a feature like testing, death and cases.
@@ -813,9 +849,82 @@ each column is a feature like testing, death and cases.
 
 #+attr_html: :width 400px
 #+attr_latex: :width 10cm
-#+NAME: bblg
+#+NAME: ctg
 #+CAPTION: Cartogram of /COVID-19/ spread cite:gao2020
 [[file:cartogramStudy.jpg]]
+
+  #+NAME: ref
+  #+CAPTION: Generate Citation for */R/* programming Language
+  #+begin_src R
+citation()
+citation("ggplot2")
+  #+end_src
+
+  #+RESULTS: ref
+  #+begin_example
+
+  To cite R in publications use:
+
+    R Core Team (2020). R: A language and environment for statistical
+    computing. R Foundation for Statistical Computing, Vienna, Austria.
+    URL https://www.R-project.org/.
+
+  A BibTeX entry for LaTeX users is
+
+    @Manual{,
+      title = {R: A Language and Environment for Statistical Computing},
+      author = {{R Core Team}},
+      organization = {R Foundation for Statistical Computing},
+      address = {Vienna, Austria},
+      year = {2020},
+      url = {https://www.R-project.org/},
+    }
+
+  We have invested a lot of time and effort in creating R, please cite it
+  when using it for data analysis. See also ‘citation("pkgname")’ for
+  citing R packages.
+
+  To cite ggplot2 in publications, please use:
+
+    H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
+    Springer-Verlag New York, 2016.
+
+  A BibTeX entry for LaTeX users is
+
+    @Book{,
+      author = {Hadley Wickham},
+      title = {ggplot2: Elegant Graphics for Data Analysis},
+      publisher = {Springer-Verlag New York},
+      year = {2016},
+      isbn = {978-3-319-24277-4},
+      url = {https://ggplot2.tidyverse.org},
+    }
+  #+end_example
+
+  #+RESULTS:
+  #+begin_example
+
+  To cite R in publications use:
+
+    R Core Team (2020). R: A language and environment for statistical
+    computing. R Foundation for Statistical Computing, Vienna, Austria.
+    URL https://www.R-project.org/.
+
+  A BibTeX entry for LaTeX users is
+
+    @Manual{,
+      title = {R: A Language and Environment for Statistical Computing},
+      author = {{R Core Team}},
+      organization = {R Foundation for Statistical Computing},
+      address = {Vienna, Austria},
+      year = {2020},
+      url = {https://www.R-project.org/},
+    }
+
+  We have invested a lot of time and effort in creating R, please cite it
+  when using it for data analysis. See also ‘citation("pkgname")’ for
+  citing R packages.
+  #+end_example
 
 * References
 # Remember, this is here for HTML, but latex uses biblatex for URL support
@@ -840,3 +949,7 @@ Cleaning and Adjacency Matrix]] + consider changing this to be the 30 characters
 most connected to the three most social characters, that would make more sense
 for a network graph. + [[file:~/Dropbox/Notes/DataSci/Visual_Analytics/Assessment/the-marvel-universe-social-network/sunburst.r][Sunbursts using Plotly]] + [[file:VisualAnalytics.org::*Assignment 1][Visual Analytics]]
 #+end_comment
+
+* Footnotes
+
+[fn:fr] Free as in Speech and beer

@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{plots} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{list}\PYG{p}{(}\PYG{n}{p\PYGZus{}per\PYGZus{}cap} \PYG{o}{+} \PYG{n+nf}{guides}\PYG{p}{(}\PYG{n}{col} \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{),} \PYG{n}{p\PYGZus{}total}\PYG{o}{+} \PYG{n+nf}{theme}\PYG{p}{(}\PYG{n}{legend.position}\PYG{o}{=}\PYG{l+s}{\PYGZdq{}bottom\PYGZdq{}}\PYG{p}{)} \PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} plots \PYGZlt{}\PYGZhy{} list(p\PYGZus{}per\PYGZus{}cap + theme(legend.position=\PYGZdq{}bottom\PYGZdq{}), p\PYGZus{}total+ theme(legend.position=\PYGZdq{}bottom\PYGZdq{}) )}
+\PYG{n+nf}{library}\PYG{p}{(}\PYG{n}{gridExtra}\PYG{p}{)}
+
+\PYG{n}{gridExtra}\PYG{o}{::}\PYG{n+nf}{grid.arrange}\PYG{p}{(}\PYG{n}{grobs} \PYG{o}{=} \PYG{n}{plots}\PYG{p}{,} \PYG{n}{layout\PYGZus{}matrix} \PYG{o}{=} \PYG{n+nf}{matrix}\PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}\PYG{l+m}{2}\PYG{p}{,} \PYG{n}{nrow} \PYG{o}{=} \PYG{l+m}{1}\PYG{p}{))}
+\end{Verbatim}

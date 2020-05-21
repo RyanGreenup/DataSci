@@ -1,0 +1,40 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{} Number of Tests}
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{as\PYGZus{}tibble}\PYG{p}{(}\PYG{n}{covid}\PYG{p}{)}
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{cv} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{mutate}\PYG{p}{(}\PYG{n}{date} \PYG{o}{=} \PYG{n+nf}{as.Date}\PYG{p}{(}\PYG{n}{date}\PYG{p}{))}
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{cv}\PYG{n+nf}{[order}\PYG{p}{(}\PYG{n}{cv}\PYG{o}{\PYGZdl{}}\PYG{n}{date}\PYG{p}{),}\PYG{n}{]}
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{cv} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{filter}\PYG{p}{(}\PYG{n}{location} \PYG{o}{\PYGZpc{}in\PYGZpc{}} \PYG{n}{interested\PYGZus{}locations}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{filter}\PYG{p}{(}\PYG{n}{total\PYGZus{}cases} \PYG{o}{\PYGZgt{}} \PYG{l+m}{1}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{mutate}\PYG{p}{(}\PYG{n}{total\PYGZus{}tests\PYGZus{}per\PYGZus{}thousand} \PYG{o}{=} \PYG{n+nf}{log10}\PYG{p}{(}\PYG{n}{total\PYGZus{}tests\PYGZus{}per\PYGZus{}thousand}\PYG{p}{))} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n}{dplyr}\PYG{o}{::}\PYG{n+nf}{select}\PYG{p}{(}\PYG{n}{date}\PYG{p}{,} \PYG{n}{total\PYGZus{}tests\PYGZus{}per\PYGZus{}thousand}\PYG{p}{,} \PYG{n}{location}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{pivot\PYGZus{}wider}\PYG{p}{(}\PYG{n}{names\PYGZus{}from} \PYG{o}{=} \PYG{n}{location}\PYG{p}{,} \PYG{n}{values\PYGZus{}from} \PYG{o}{=} \PYG{n}{total\PYGZus{}tests\PYGZus{}per\PYGZus{}thousand}\PYG{p}{)}
+
+\PYG{n+nf}{for }\PYG{p}{(}\PYG{n}{i} \PYG{n}{in} \PYG{l+m}{2}\PYG{o}{:}\PYG{n+nf}{ncol}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+  \PYG{c+c1}{\PYGZsh{}\PYGZsh{} Slide the Columns up and put the NA at the end}
+\PYG{n}{cv[}\PYG{p}{,}\PYG{n}{i]} \PYG{o}{\PYGZlt{}\PYGZhy{}}   \PYG{n+nf}{pull}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{,} \PYG{n}{i}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{lead}\PYG{p}{(}\PYG{n}{cv[}\PYG{p}{,}\PYG{n}{i]} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+         \PYG{n+nf}{is.na}\PYG{p}{()} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+         \PYG{n+nf}{sum}\PYG{p}{())}
+ \PYG{c+c1}{\PYGZsh{}\PYGZsh{} Replace the date with the number of days}
+\PYG{n}{cv}\PYG{o}{\PYGZdl{}}\PYG{n}{date} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{seq\PYGZus{}len}\PYG{p}{(}\PYG{n+nf}{nrow}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{))}
+\PYG{p}{\PYGZcb{}}
+\PYG{n}{cv\PYGZus{}tests\PYGZus{}log} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{cv} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+ \PYG{n+nf}{pivot\PYGZus{}longer}\PYG{p}{(}\PYG{n+nf}{names}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{)}\PYG{n}{[}\PYG{l+m}{\PYGZhy{}1}\PYG{n}{]}\PYG{p}{,} \PYG{n}{names\PYGZus{}to} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}location\PYGZdq{}}\PYG{p}{,} \PYG{n}{values\PYGZus{}to} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}value\PYGZdq{}}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{add\PYGZus{}column}\PYG{p}{(}\PYG{n}{subject} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}No. of Tests\PYGZdq{}}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{add\PYGZus{}column}\PYG{p}{(}\PYG{n}{scale} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Log\PYGZhy{}10\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{rbind}\PYG{p}{(}\PYG{n}{cv\PYGZus{}cases\PYGZus{}log}\PYG{p}{,} \PYG{n}{cv\PYGZus{}deaths\PYGZus{}log}\PYG{p}{,} \PYG{n}{cv\PYGZus{}tests\PYGZus{}log}\PYG{p}{)}
+\PYG{n}{cv} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{filter}\PYG{p}{(}\PYG{n}{subject} \PYG{o}{==} \PYG{l+s}{\PYGZdq{}deaths\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{p\PYGZus{}per\PYGZus{}cap} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{ggplot}\PYG{p}{(}\PYG{n}{cv} \PYG{p}{,} \PYG{n+nf}{aes}\PYG{p}{(}\PYG{n}{y} \PYG{o}{=} \PYG{n}{value}\PYG{p}{,} \PYG{n}{x} \PYG{o}{=} \PYG{n}{date}\PYG{p}{))} \PYG{o}{+}
+  \PYG{n+nf}{geom\PYGZus{}point}\PYG{p}{(}\PYG{n}{alpha} \PYG{o}{=} \PYG{l+m}{0.3}\PYG{p}{,} \PYG{n+nf}{aes}\PYG{p}{(}\PYG{n}{col} \PYG{o}{=} \PYG{n}{location}\PYG{p}{))}  \PYG{o}{+}
+   \PYG{n+nf}{geom\PYGZus{}smooth}\PYG{p}{(}\PYG{n+nf}{aes}\PYG{p}{(}\PYG{n}{col} \PYG{o}{=} \PYG{n}{location}\PYG{p}{),} \PYG{n}{size} \PYG{o}{=} \PYG{l+m}{0.5}\PYG{p}{)} \PYG{o}{+}
+  \PYG{n+nf}{theme\PYGZus{}bw}\PYG{p}{()} \PYG{o}{+}
+  \PYG{n+nf}{labs}\PYG{p}{(}\PYG{n}{y} \PYG{o}{=} \PYG{n+nf}{TeX}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Count (log\PYGZus{}\PYGZob{}10\PYGZcb{} Scale)\PYGZdq{}}\PYG{p}{),} \PYG{n}{title} \PYG{o}{=} \PYG{n+nf}{TeX}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}log\PYGZus{}\PYGZob{}10\PYGZcb{} Scale; Value of \PYGZbs{}\PYGZbs{}textit\PYGZob{}COVID\PYGZhy{}19\PYGZcb{} Statistics over Time\PYGZdq{}}\PYG{p}{),} \PYG{n}{x} \PYG{o}{=} \PYG{n+nf}{TeX}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Days since Case \PYGZbs{}\PYGZbs{}textit\PYGZob{}\PYGZsh{}1\PYGZcb{}\PYGZdq{}}\PYG{p}{),} \PYG{n}{subtitle} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Counts Per Million of population\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+  \PYG{n+nf}{guides}\PYG{p}{(}\PYG{n}{col} \PYG{o}{=} \PYG{n+nf}{guide\PYGZus{}legend}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Location\PYGZdq{}}\PYG{p}{))} \PYG{o}{+}
+  \PYG{n+nf}{facet\PYGZus{}grid}\PYG{p}{(}\PYG{n}{rows} \PYG{o}{=} \PYG{n+nf}{vars}\PYG{p}{(}\PYG{n}{subject}\PYG{p}{),} \PYG{n}{scales} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}free\PYGZus{}y\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{p\PYGZus{}per\PYGZus{}cap}
+\end{Verbatim}

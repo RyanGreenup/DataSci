@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{wmp} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{ggplot}\PYG{p}{(}\PYG{n}{fatalmap}\PYG{p}{,} \PYG{n+nf}{aes}\PYG{p}{(}\PYG{n}{map\PYGZus{}id} \PYG{o}{=} \PYG{n}{region}\PYG{p}{))} \PYG{o}{+}
+  \PYG{n+nf}{geom\PYGZus{}map}\PYG{p}{(}\PYG{n}{map} \PYG{o}{=} \PYG{n}{fatalmap}\PYG{p}{,}  \PYG{n}{color} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}grey\PYGZdq{}}\PYG{p}{,} \PYG{n+nf}{aes}\PYG{p}{(}\PYG{n}{fill} \PYG{o}{=} \PYG{n}{total\PYGZus{}deaths\PYGZus{}per\PYGZus{}million}\PYG{p}{),} \PYG{n}{lwd} \PYG{o}{=} \PYG{l+m}{0.1}\PYG{p}{,} \PYG{n}{alpha} \PYG{o}{=} \PYG{l+m}{0.6}\PYG{p}{)}\PYG{o}{+}
+  \PYG{n+nf}{expand\PYGZus{}limits}\PYG{p}{(}\PYG{n}{x} \PYG{o}{=} \PYG{n}{fatalmap}\PYG{o}{\PYGZdl{}}\PYG{n}{long}\PYG{p}{,} \PYG{n}{y} \PYG{o}{=} \PYG{n}{fatalmap}\PYG{o}{\PYGZdl{}}\PYG{n}{lat}\PYG{p}{)}\PYG{o}{+}
+  \PYG{n+nf}{scale\PYGZus{}fill\PYGZus{}gradient}\PYG{p}{(}\PYG{n}{high} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}darkred\PYGZdq{}}\PYG{p}{,} \PYG{n}{low} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}white\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+  \PYG{n+nf}{guides}\PYG{p}{(}\PYG{n}{fill} \PYG{o}{=} \PYG{n+nf}{guide\PYGZus{}legend}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Total Deaths \PYGZbs{}n per Million\PYGZdq{}}\PYG{p}{))} \PYG{o}{+}
+   \PYG{c+c1}{\PYGZsh{} Change the colors of background}
+   \PYG{c+c1}{\PYGZsh{} and the color of grid lines to white}
+   \PYG{n+nf}{theme}\PYG{p}{(}
+     \PYG{n}{panel.background} \PYG{o}{=} \PYG{n+nf}{element\PYGZus{}rect}\PYG{p}{(}\PYG{n}{fill} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}lightblue\PYGZdq{}}\PYG{p}{,}
+                                     \PYG{n}{colour} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}lightblue\PYGZdq{}}\PYG{p}{,}
+                                     \PYG{n}{size} \PYG{o}{=} \PYG{l+m}{0.5}\PYG{p}{,} \PYG{n}{linetype} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}solid\PYGZdq{}}\PYG{p}{),}
+     \PYG{n}{legend.position} \PYG{o}{=} \PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{0.6}\PYG{p}{,} \PYG{l+m}{0.1}\PYG{p}{),}
+     \PYG{n}{legend.direction} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}horizontal\PYGZdq{}}\PYG{p}{,}
+     \PYG{n}{legend.background} \PYG{o}{=} \PYG{n+nf}{element\PYGZus{}rect}\PYG{p}{(}\PYG{n}{fill} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}white\PYGZdq{}}\PYG{p}{,} \PYG{n}{size} \PYG{o}{=} \PYG{l+m}{0.1}\PYG{p}{,} \PYG{n}{colour} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}darkblue\PYGZdq{}}\PYG{p}{,} \PYG{n}{linetype} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}solid\PYGZdq{}}\PYG{p}{))} \PYG{o}{+}
+   \PYG{n+nf}{labs}\PYG{p}{(}\PYG{n}{x} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Longitude\PYGZdq{}}\PYG{p}{,} \PYG{n}{y} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Latitude\PYGZdq{}}\PYG{p}{,} \PYG{n}{title} \PYG{o}{=} \PYG{n+nf}{TeX}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Total Deaths Attributed to \PYGZbs{}\PYGZbs{}textit\PYGZob{}COVID\PYGZhy{}19\PYGZcb{}\PYGZdq{}}\PYG{p}{))}
+\PYG{c+c1}{\PYGZsh{}   geom\PYGZus{}text(data = region\PYGZus{}lab\PYGZus{}df, aes(y = lat, x = long, label = region), size = 1)}
+\PYG{n}{wmp}
+\end{Verbatim}

@@ -1,4 +1,4 @@
-% Created 2020-05-21 Thu 14:22
+% Created 2020-05-21 Thu 19:36
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -33,9 +33,9 @@
 
 
 \section{Preliminary}
-\label{sec:org65e16aa}
+\label{sec:org4df1a26}
 \subsection{Load Packages and Data}
-\label{sec:org32a0c5d}
+\label{sec:org3fd505b}
 
 \begin{minted}[]{r}
  if (require("pacman")) {
@@ -53,28 +53,33 @@ mise()
 \end{minted}
 
 \subsection{Load the Data}
-\label{sec:orgb2f25d9}
+\label{sec:org225660a}
 \begin{minted}[]{r}
 covid <- read.csv("/home/ryan/Notes/DataSci/Visual_Analytics/Assessment2/owid-covid-data.csv")
 
 \end{minted}
 
 \subsection{Set Working Directory}
-\label{sec:org8c24a48}
+\label{sec:org00c0e47}
 
 \section{Introduction}
-\label{sec:org78c2c85}
-\begin{itemize}
-\item in December 2012 first cases of \emph{COVID-19} were reported, the disease has
-since attributed to the \emph{SARS-CoV2} virus.
-\item The disease became endemic throughout China before spreading throughout Europe
-in an epidemic fashion and finally reaching the rest of the globe as a
-pandemic outbreak.
-\end{itemize}
+\label{sec:org8153164}
+On December 31st 2019 a viral pneumonia was reported in Wuhan, China, this was
+  later found to be a result of a new strain of virus named \emph{Sars-CoV2}, the
+  diseased caused by such an infection, usually resulting in viral pneumonia, is
+  known as \emph{Corona Virus Disease 2019} (\emph{COVID-19}). The outbreak of this disease was declared a Public Health Emergency of International Concern on the 30th January 2020.
+  \cite{worldhealthorganization2020} December 2012 first cases of \emph{COVID-19} were
+  reported, the disease has since attributed to the \emph{SARS-CoV2} virus.
 
+A data set detailing the location, deaths, tests and cases related to the
+\emph{COVID-19} pandemic has been made available through the website /Our World in
+Data/\cite{ritchie2020}, documented in this report is a visual anylisis
+performed entirely using the \emph{Free Software} \footnote{Free as in Speech and beer} \textbf{\emph{R}} \cite{rcoreteam2020}
+primarily with the \texttt{ggplot2} package \cite{wickham2016} (see listing \ref{orgf1b0f83} in the
+appendix).
 
 \section{Chloropleth Map}
-\label{sec:org41a2a34}
+\label{sec:orgb778a6e}
 A Chloropleth map of the number of deaths can offer an insight into the impact
 that the disease has had with respect to individual countries.
 
@@ -85,19 +90,21 @@ countries such as Italy have a small population compared to the US and much of
 Asia \cite{2020n}).
 
 A worldwide Chloropleth map visualising the total number of deaths attributed to
-\emph{COVID-19} is shown in figure \ref{fig:org7e64dfd} and a Europe-centric visualisation is shown
-in figure \ref{fig:org223d165}.
+\emph{COVID-19} is shown in figure \ref{fig:orgb9d1c6a} and a Europe-centric visualisation is shown
+in figure \ref{fig:org2f71c00}.
 
 \subsection{Discussion}
-\label{sec:org83a8edb}
+\label{sec:org1f4bcf8}
 \subsubsection{Worldwide}
-\label{sec:org7accacb}
+\label{sec:orga81a162}
 The first plot appears to show a very limited amount of difference in deaths
-attributable to \emph{COVID-19} across regions other than the North America and
-Europe. While first-world countries such as New Zealand and Australia are
+attributable to \emph{COVID-19} across regions other than North America and
+Europe.
+
+While first-world countries such as New Zealand and Australia are
 somewhat insulated from the disease by virtue of geography and population
 density, it's striking that much of Asia and Russia have such low levels of
-outbreak.
+disease incidence.
 
 This could be attributed to the fact that a more power-cetric regime such as in
 China, Russia, North Korea, etc. may have more capacity to:
@@ -107,7 +114,7 @@ China, Russia, North Korea, etc. may have more capacity to:
 policy decisions,
 \begin{enumerate}
 \item whereas countries such as the US and Europe have a much higher expectation
-of civil liberties.
+of civil liberties and hence much lower tolerance for government intervention.
 \end{enumerate}
 \item Control the spread of information for want of international reputation.
 \begin{enumerate}
@@ -120,26 +127,27 @@ could merely be incidental.
 A similar disease, \emph{MERS}, emerged in 2012 in Middle-Eastern Regions
 \cite{woodley2020} and a Korean outbreak of the \emph{MERS} disease occured in 2015
 \cite{serrano2015}, these outbreaks likely prepared Korea, the Middle East and
-other Asian Regions regions for an outbreak which helps explain the dichotomous
+other Asian regions for an outbreak which helps explain the dichotomous
 nature of the deaths attributable to \emph{COVID-19} for those Countries.
 
 \subsubsection{Europe}
-\label{sec:orge18402f}
+\label{sec:org86bbed3}
 A closer look at Europe shows that Belgium and Italy have been the most affected
 by this disease, it isn't very clear why those regions have been impacted so
-significantly but this could be indicative of policy decisions and warrants
+significantly, particularly considering the comparatively permissive borders
+within the \emph{EU}, but this could be indicative of policy decisions and warrants
 further research.
 
 \subsection{Technique}
-\label{sec:org7a533fc}
+\label{sec:orgcbda394}
 \subsubsection{Woldwide Map}
-\label{sec:org9ad7bb1}
-First the data must be aggregated in order to retrieve the total number of
+\label{sec:org2fa4c82}
+In order to produce a chloropleth map the data must be aggregated in order to retrieve the total number of
 deaths, this can be acheived by taking the maximum of the total deaths across
 countries (the total number of death rates will be a strictly positive and
 monotone trend, otherwise the outbreak would be an entirely different type of
 pandemic!), this can be performed by using the \texttt{aggregate} function as
-demonstrated in figure \ref{org250a22c}.
+demonstrated in listing \ref{org347d4df}.
 
 \begin{listing}[htbp]
 \begin{minted}[]{r}
@@ -149,25 +157,25 @@ fatalprop <- fatalprop[order(-fatalprop$total_deaths_per_million),]
 ## Rename USA
 covid$location[covid$location=="United States"] <- "USA"
 \end{minted}
-\caption{\label{org250a22c}Use Aggregate to aggregate total number of deaths}
+\caption{\label{org347d4df}Use Aggregate to aggregate total number of deaths}
 \end{listing}
 
 
 It is next necessary to rename \texttt{location} to \texttt{region} so map data will be
-consistent with the provided data set, this is shown in listing \ref{org70648f3}.
+consistent with the provided data set, this is shown in listing \ref{orgefdab1b}.
 
 \begin{listing}[htbp]
 \begin{minted}[]{r}
 ## Rename to facilitate joining with map
 names(fatalprop) <- c("region", "total_deaths_per_million")
 \end{minted}
-\caption{\label{org70648f3}Rename Features for consistency}
+\caption{\label{orgefdab1b}Rename Features for consistency}
 \end{listing}
 
 For a broad overview of the data, small regions such as San Marino and Belgium
 will not be visible and will skew the colour pallete, so instead they should be removed
-and instead a seperate plot of Europe will be creted as shown in figure \ref{fig:org223d165}, this removal is performed in
-listing \ref{org75f40f0}.
+and instead a seperate plot of Europe will be creted as shown in figure \ref{fig:org2f71c00}, this removal is performed in
+listing \ref{org16dd651}.
 
 \begin{listing}[htbp]
 \begin{minted}[]{r}
@@ -177,32 +185,32 @@ listing \ref{org75f40f0}.
 fatalprops <- fatalprop %>% filter(region!="San Marino")
 fatalprops <- fatalprop %>% filter(region!="Belgium")
 \end{minted}
-\caption{\label{org75f40f0}Filter out small dense regions to prevent scale issues}
+\caption{\label{org16dd651}Filter out small dense regions to prevent scale issues}
 \end{listing}
 
 
 Next it is necessary to retrieve map data, this can be done using the \texttt{map\_data}
 function, this data may then be combined by region with the provided data set
-using the \texttt{left\_join} function, this is shown in listing \ref{org7ccb826}.
+using the \texttt{left\_join} function, this is shown in listing \ref{org19102a6}.
 
 \begin{listing}[htbp]
 \begin{minted}[]{r}
 ## Retrieve the map data
-some.eu.maps <- map_data("world", region = fatalprops$location)
+some_maps <- map_data("world", region = fatalprops$location)
 
 ## Join the Data Frames Together
-fatalmap <- left_join(fatalprops, some.eu.maps, by = "region")
+fatalmap <- left_join(fatalprops, some_maps, by = "region")
 \end{minted}
-\caption{\label{org7ccb826}Combine Map Data with Provided Data}
+\caption{\label{org19102a6}Combine Map Data with Provided Data}
 \end{listing}
 
 Finally this data frame can be plotted by using \texttt{ggplot2} and the \texttt{geom\_map}
-layer, modifying the \texttt{theme} layer will allow to provide a natural background,
-this is demonstrated in listing \ref{orgbde88c8} and the output is provided in figure \ref{fig:org7e64dfd}.
+layer, modifying the \texttt{theme} layer will allow for a natural background to be implemented,
+this is demonstrated in listing \ref{orga811027} and the output is provided in figure \ref{fig:orgb9d1c6a}.
 
 \begin{listing}[htbp]
 \begin{minted}[]{r}
- ggplot(fatalmap, aes(map_id = region)) +
+wmp <- ggplot(fatalmap, aes(map_id = region)) +
   geom_map(map = fatalmap,  color = "grey", aes(fill = total_deaths_per_million), lwd = 0.1, alpha = 0.6)+
   expand_limits(x = fatalmap$long, y = fatalmap$lat)+
   scale_fill_gradient(high = "darkred", low = "white") +
@@ -218,29 +226,59 @@ this is demonstrated in listing \ref{orgbde88c8} and the output is provided in f
      legend.background = element_rect(fill = "white", size = 0.1, colour = "darkblue", linetype = "solid")) +
    labs(x = "Longitude", y = "Latitude", title = TeX("Total Deaths Attributed to \\textit{COVID-19}"))
 #   geom_text(data = region_lab_df, aes(y = lat, x = long, label = region), size = 1)
-
+wmp
 
 \end{minted}
-\caption{\label{orgbde88c8}use \texttt{ggplot2} to create a chloropleth map from data, output in figure \ref{fig:org7e64dfd}}
+\caption{\label{orga811027}use \texttt{ggplot2} to create a chloropleth map from data, output in figure \ref{fig:orgb9d1c6a}}
 \end{listing}
 
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.9\linewidth]{FirstChALL.png}
-\caption{\label{fig:org7e64dfd}Chloropleth map of total deaths attributed to \emph{COVID-19} (per Million people)}
+\includegraphics[width=10cm]{FirstChALL.png}
+\caption{\label{fig:orgb9d1c6a}Chloropleth map of total deaths attributed to \emph{COVID-19} (per Million people)}
+\end{figure}
+
+A bubble overlay may also be implemented in order make clearer the spread of cases (see section \ref{orgb5455b6} for a brief literature review), it is necessary however to adjust the \emph{USA} location to represent the mainland population centre in order make the visualisation more effective. This is demonstrated in listing \ref{org85a4e90} and shown in figure \ref{fig:org9c4f0e3}
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+
+# Compute the centroid as the mean longitude and lattitude
+# Used as label coordinate for country's names
+region_lab_df <- some.eu.maps %>%
+  group_by(region) %>%
+  summarise(long = mean(long), lat = mean(lat)) %>%
+    full_join(aggregate(total_deaths_per_million ~ region, fatalmap, mean))
+# Manually Adjust US to be population Centre
+region_lab_df[region_lab_df$region == "USA",]$long <- -92.47
+region_lab_df[region_lab_df$region == "USA",]$lat <- 37.37
+
+
+wmp +
+  scale_size_continuous(range = c(1, 9), name = "Total Number \n of Deaths") +
+   guides(size = FALSE) +
+   geom_point(data = region_lab_df, aes(y = lat, x = long, size = total_deaths_per_million), alpha = 0.5, col = "purple")
+\end{minted}
+\caption{\label{org85a4e90}use \texttt{ggplot2} to create a chloropleth map from data, output in figure \ref{fig:orgb9d1c6a}}
+\end{listing}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=14cm]{FirstChAllbub.png}
+\caption{\label{fig:org9c4f0e3}Chloropleth map with bubble overlay to aid in case visualisation}
 \end{figure}
 
 \subsubsection{Europe Centric}
-\label{sec:org70b837a}
-The chloropleth map clearly shows that the disease has caused more fatalities
+\label{sec:orgd9124fe}
+The chloropleth map clearly shows that the disease has caused significiantly more fatalities
 per capita in Europe and so the plot will be adjusted central to Europe.
 
 As before it is necessary to rename the features of the dataset, however in this
 instance small European countries such as Belgium should be retained (San marino
 is a very small italian provice that isn't detectable in the visualisation and
 skews the pallete, for this reason it will be removed), this is demonstrated in
-figure \ref{orga5bd32f}
+listing \ref{org889a8f2}
 
 \begin{listing}[htbp]
 \begin{minted}[]{r}
@@ -250,15 +288,14 @@ names(fatalprop) <- c("region", "total_deaths_per_million")
 ## San Marino will be shown by italy
  fatalprop <- fatalprop %>% filter(region!="San Marino")
 \end{minted}
-\caption{\label{orga5bd32f}Rename the features of the data and remove San Marino}
+\caption{\label{org889a8f2}Rename the features of the data and remove San Marino}
 \end{listing}
 
 In this map it will be desirable to have labels for the European countries
 (whereas this would have made the worldwide map too busy), so this will be
 implemented by using \texttt{dyplyr} to generate a second data set as shown in listing
-\ref{org181dd8d} which can then be used to generate a plot with the \texttt{ggrepel} add on as shown in listing \ref{org8902b95}, this
-produces the output shown in figure \ref{fig:org223d165}, for this plut bubbles were also implemented in order to help visualise the number of relative cases.
-thee inspiration for the use of bubbles was the \emph{John Hopkins Coronavirus Dashboard} \cite{2020o} where a similar strategy was implemented to visualise the number of cases, a screenshot of this is provided in the appendix at figure \ref{fig:org615a27a}.
+\ref{orgd09529d} which can then be used to generate a plot with the \texttt{ggrepel} add on as shown in listing \ref{org72a9cb4}, this
+produces the output shown in figure \ref{fig:org2f71c00}, bubbles were also implemented in order to help visualise the number of relative cases.
 
 \begin{listing}[htbp]
 \begin{minted}[]{r}
@@ -275,8 +312,9 @@ region_lab_df <- fatalmap %>%
   dplyr::summarise(long = mean(long), lat = mean(lat)) %>%
    full_join(aggregate(total_deaths_per_million ~ region, fatalmap, mean))
 \end{minted}
-\caption{\label{org181dd8d}use \texttt{dplyr} to reduce the plot size and create a data frame of country labels}
+\caption{\label{orgd09529d}use \texttt{dplyr} to reduce the plot size and create a data frame of country labels}
 \end{listing}
+
 
 \begin{listing}[htbp]
 \begin{minted}[]{r}
@@ -326,20 +364,79 @@ ggplot(fatalmap, aes(map_id = region, label = region)) +
     force = 2
   )
 \end{minted}
-\caption{\label{org8902b95}Generate a Chloropleth map centred on Europe using \texttt{ggplot2}}
+\caption{\label{org72a9cb4}Generate a Chloropleth map centred on Europe using \texttt{ggplot2}}
 \end{listing}
 
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=10cm]{SecChEur.png}
-\caption{\label{fig:org223d165}Europe Centred Chloropleth of Deaths Attributed to \emph{COVID-19}}
+\caption{\label{fig:org2f71c00}Europe Centred Chloropleth of Deaths Attributed to \emph{COVID-19}}
 \end{figure}
 
+\subsection{Advantages compared to other methods}
+\label{sec:org577682a}
+\begin{itemize}
+\item A Chloropleth map provides a very clear way to visualise the occurence of
+disease in a geographical sense, in contrast to other methods such as scatter
+plots, heatmaps and bar charts, the chloropleth map provides a clear way to
+distinguish the impact of the disease on individual countries.
+
+The discrete distinction between countries, a fundamental component of a
+chloropleth map, is desirable because it is consistent with the independent
+legislatures accross countries, this allows for a comparison of the impact
+that policy decisions may or may not have on a region.
+\end{itemize}
+
+Chloropleth maps also allow trends across regions to be easily identified, e.g.
+figure \ref{fig:org2f71c00} shows how severe the outbreak is in \emph{Europe} relative to other
+regions, this might be lost in abstraction when using other visualization methods.
+
+\subsection{Disasadvantages}
+\label{sec:org16f816a}
+When maps are projected into a 2D plane they are necessarily distorted, this
+  distortion can impact how spread the data appears to be.
+
+A chloropleth map can make it hard to compare metrics between to regions in any
+specific sense, for this a more appropriate visualization would be a bar chart.
+\subsection{Literature review of related work}
+\label{sec:orgb25c76e}
+The \emph{John Hopkins Coronavirus Dashboard} \cite{2020o} implemented bubbles to
+visualise the number of cases, a screenshot of this is provided in the appendix
+at figure \ref{fig:org412dc19}, this was a part of the motivation for implementing bubbles in
+the chloropleth map because the visualization was so much more \emph{striking} and
+promoted pre-attentive processing of the information.
+
+\label{orgb5455b6} In his blog, Kenneth Field produced chloropleth and bubble-map charts
+detailing the spread of \emph{COVID-19}, with however, a focuse on China, \cite{field2020} these
+plots were very similar to those produced in this report, however the legend for
+the bubble plot was very nicely implemented and can be seen in figure \ref{fig:org9f1e565} of
+the appendix. He also produced an example illustrating why the use of a heatmap
+or contour map can make for a poor visualisation of cases due to the difficulty
+in interpreting the visualization compared to a bubble chart, for this reason a
+bubble chart was used in this report and a heatmap was not implemented.
+
+A paper in the publication \emph{Environment \& Planning A} suggested using a
+cartogram to visualise the spread of disease, there example is provided in
+figure \ref{fig:orgd058160} of the appendix. \cite{gao2020} Although the cartogram is visually
+quite appealing and easy to read, it is difficult to interpret quickly, the
+visualisation does not promote pre-attentive processing, for this reason the
+visualisation strategy was not implemented.
 
 \section{Time Series}
-\label{sec:orgd18e079}
-The spread of disease over time can often be modelled by exponential model as demonstrated in equations \eqref{exp1} and \eqref{exp2}, for this reason the use of a \$\(\log\)\$-scale will linearise trends and so the use of a \$\(\log\)\$-scale will make it easier to compare the rates of population change between different countries.
+\label{sec:org7b8838c}
+\subsection{Implementation}
+\label{sec:org28b5403}
+Time series charts can be an effective way to visualise the behaviour of a value
+over time, for this dataset however, two modifications will be implemented in
+order to make the trends more distinct.
+
+\subsubsection{Log Scale}
+\label{sec:org9371c0f}
+The spread of disease over time can often be described by an exponential model as
+demonstrated in equations \eqref{exp1} and \eqref{exp2}, for this reason the use of
+a \$\(\log\)\$-scale will linearise trends and so the use of a \$\(\log\)\$-scale will make
+it easier to compare the rates of population change between different countries.
 
 
 
@@ -348,13 +445,362 @@ The spread of disease over time can often be modelled by exponential model as de
   \frac{\mathrm{d} p}{\mathrm{d} t} \propto p \wedge    \frac{\mathrm{d} p}{\mathrm{d} t} \propto (N-p) &\implies p = \frac{ke^{Nt}}{1-ke^{Nt}} \quad \exists k \in \mathbb{R}, N \in \mathbb{R^+} \label{exp1} \label{exp2}
 \end{align}
 
-In addition to a \(\log-\) scale, scaling the data to be relative to the number of days since the first case can allow the trends of the data to be compared, this was implemented by \emph{John Hopkins University} in a visualisation published in the \emph{Guardian} \cite{gutierrez2020}. \label{orgda7745e}
+\subsubsection{Adjust Zero}
+\label{sec:orga62083c}
+In addition to a \(\log-\) scale, \emph{sliding} the data to be relative to the number
+of days since the first case can allow the trends of the data to be compared,
+this was implemented by \emph{John Hopkins University} in a visualisation published
+in the \emph{Guardian} \cite{gutierrez2020}. \label{orgaa3f855}
 
 \subsection{Technical Details}
-\label{sec:org190a922}
+\label{sec:org5b1072b}
+\subsubsection{Preliminary}
+\label{sec:org8718a60}
+In order to log scale the data the \texttt{mutate} function from the \texttt{dplyr} package
+was used on data transformed into \emph{wide} format by using the \texttt{pivot\_wider}
+function, this is shown in listing \ref{org469b4d6}.
+
+Sliding the date back to the number of cases however was a little more difficult
+and required the use of a \texttt{for} loop to iterate the \texttt{lead} function over each
+column (where each column, after transformation with \texttt{dplyr}, represented the
+value for a country), this is demonstrated in listing \ref{org469b4d6} with an example of the
+produced \emph{tidy} data provided in table \ref{tab:org5cf6def}; the code to produce the plot is
+demonstrated in listing \ref{org19be2d1}, the output of which is provided in figure \ref{fig:orgbc8ceb4}.
+
+Rather than using a line plot or a scatter plot, a \texttt{loess} model was placed ontop of semi-opaque points, this is to enhance the continuity of the visualisation. The \emph{Gestalt Laws} provide that continuous shapes are easier for readers to interpret \cite{staudinger2011} and for this reason the the overlay was implemented, to aid the reader in delineating between the different countries in a plot.
+
+Plots with many colours mapped to categorical variables can be difficult to interpret \cite{wilson2017,rost2018}, for this reason less than 10 countries were compared on the same plot.
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+# interested_locations <- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases_per_million > 1) %>%
+  mutate(total_cases_per_million = log10(total_cases_per_million)) %>%
+  dplyr::select(date, total_cases_per_million, location) %>%
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "total_cases_per_million")
+\end{minted}
+\caption{\label{org469b4d6}Use = dplyr= to transform the data as shown in table \ref{tab:org5cf6def}, this can then be passed to ggplot as shown in listing \ref{org19be2d1}}
+\end{listing}
+
+\begin{table}[htbp]
+\caption{\label{tab:org5cf6def}Top few rows of the \emph{tidy} data set created from listing \ref{org469b4d6}.}
+\centering
+\begin{tabular}{rlr}
+\emph{\textbf{Date}} & \emph{\textbf{Location}} & \emph{\textbf{Total Cases Per Million}}\\
+1 & South Korea & 0.193\\
+1 & Italy & 0.116\\
+1 & Australia & 0.00860\\
+1 & Germany & 0.122\\
+1 & United Kingdom & 0.0976\\
+1 & USA & 0.00903\\
+1 & Russia & 0.00303\\
+2 & South Korea & 0.480\\
+2 & Italy & 0.339\\
+2 & Australia & 0.0558\\
+\end{tabular}
+\end{table}
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+ggplot(cv , aes(y = total_cases_per_million, x = date, col = location, group = location)) +
+  geom_point(alpha = 0.3)  +
+  geom_smooth() +
+  theme_bw() +
+  labs(y = "Total Number of Cases (Log-10 Scale)", title = "Log Scaled Total COVID-19 Cases per Million", x = TeX("Days since Case \\textit{#100}")) +
+  guides(col = guide_legend("Location"))
+#  geom_smooth()
+\end{minted}
+\caption{\label{org19be2d1}Use \texttt{dplyr} to transform the data before plotting with \texttt{ggplot}}
+\end{listing}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=10cm]{FirstTS.png}
+\caption{\label{fig:orgbc8ceb4}Chloropleth map of total deaths attributed to \emph{COVID-19} (per Million people)}
+\end{figure}
+
+
+\subsubsection{Facet Grid}
+\label{sec:org82df0c5}
+This plot however does not show all the data made available, the data set also includes information on the number of tests,cases and deaths resulting from \emph{COVID-19}, in order to visualise this the \texttt{fact\_grid} layer can be used to create a multi-scatterplot. first it is necessary to create a data frame, this can be implemented by repeating the process in listing \ref{org469b4d6} for each different metric but it will also be necessary to add a feature corresponding to that metric's description, we will also create non-log scaled data as well, this is demonstrated in listings \ref{org1e3ed66} through \ref{orge990e83}, finally the dataframes are merged in listing \ref{org200144a}, the corresponding plot is shown in figure \ref{fig:org54b906e}.
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+###### Number of Cases
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+  mutate(total_cases_per_million = log10(total_cases_per_million)) %>%
+  dplyr::select(date, total_cases_per_million, location) %>%
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_log <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Cases") %>%
+  add_column(scale = "Log-10 Scale")
+
+\end{minted}
+\caption{\label{org1e3ed66}Use \texttt{dplyr} to create a data frame of log scaled cases}
+\end{listing}
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+
+### Number of deaths
+
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+   mutate(total_deaths_per_million = log10(total_deaths_per_million)) %>%
+  dplyr::select(date, total_deaths_per_million, location) %>%
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_log <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Deaths") %>%
+  add_column(scale = "Log-10 Scale")
+
+
+\end{minted}
+\caption{\label{org0a5a4ee}Use \texttt{dplyr} to create a data frame of log scaled deaths}
+\end{listing}
+
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+### Number of Tests
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+  mutate(total_tests_per_thousand = log10(total_tests_per_thousand)) %>%
+  dplyr::select(date, total_tests_per_thousand, location) %>%
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+cv_tests_log <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Tests") %>%
+  add_column(scale = "Log-10")
+
+cv <- rbind(cv_cases_log, cv_deaths_log, cv_tests_log)
+cv %>%
+  filter(subject == "deaths")
+
+p_per_cap <- ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.3, aes(col = location))  +
+   geom_smooth(aes(col = location), size = 0.5) +
+  theme_bw() +
+  labs(y = TeX("Count (log_{10} Scale)"), title = TeX("log_{10} Scale; Value of \\textit{COVID-19} Statistics over Time"), x = TeX("Days since Case \\textit{#1}"), subtitle = "Counts Per Million of population") +
+  guides(col = guide_legend("Location")) +
+  facet_grid(rows = vars(subject), scales = "free_y")
+p_per_cap
+\end{minted}
+\caption{\label{org7695401}Use \texttt{dplyr} to create a data frame of log scaled deaths}
+\end{listing}
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+
+###### Number of Cases
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+# mutate(total_cases = log10(total_cases)) %>%
+  dplyr::select(date, total_cases, location) %>%
+  pivot_wider(names_from = location, values_from = total_cases)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_cases_raw <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Cases") %>%
+  add_column(scale = "Count")
+
+\end{minted}
+\caption{\label{orge0f142a}use \texttt{dplyr} to create a data frame of non-log scaled cases}
+\end{listing}
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+### Number of deaths
+
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+#  mutate(total_deaths = log10(total_deaths_)) %>%
+  dplyr::select(date, total_deaths, location) %>%
+  pivot_wider(names_from = location, values_from = total_deaths)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+
+cv_deaths_raw <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Deaths") %>%
+  add_column(scale = "Count")
+
+
+\end{minted}
+\caption{\label{orgf2506c6}use \texttt{dplyr} to create a data frame of non-log scaled deaths}
+\end{listing}
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+### Number of Tests
+cv <- as_tibble(covid)
+cv <- cv %>%
+  mutate(date = as.Date(date))
+cv <- cv[order(cv$date),]
+cv <- cv %>%
+  filter(location %in% interested_locations) %>%
+  filter(total_cases > 1) %>%
+ # mutate(total_testsd = log10(total_testsd)) %>%
+  dplyr::select(date, total_tests, location) %>%
+  pivot_wider(names_from = location, values_from = total_tests)
+
+for (i in 2:ncol(cv)) {
+  ## Slide the Columns up and put the NA at the end
+cv[,i] <-   pull(cv, i) %>%
+  lead(cv[,i] %>%
+         is.na() %>%
+         sum())
+ ## Replace the date with the number of days
+cv$date <- seq_len(nrow(cv))
+}
+cv_tests_raw <- cv %>%
+ pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>%
+  add_column(subject = "No. of Tests") %>%
+  add_column(scale = "Count")
+cv <- rbind(cv_cases_raw, cv_deaths_raw, cv_tests_raw)
+cv %>%
+  filter(subject == "deaths")
+
+p_total <- ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = 0.3, aes(col = location))  +
+   geom_smooth(aes(col = location), size = 0.5) +
+  theme_bw() +
+  labs(y = TeX("Total Count"), title = TeX("Total Count of \\textit{COVID-19} Statistics over Time"), x = TeX("Days since Case \\textit{#1}")) +
+  guides(col = guide_legend("Location"), subtitle = "Per Million of Population") +
+  facet_grid(rows = vars(subject), scales = "free_y")
+p_total
+\end{minted}
+\caption{\label{orge990e83}use \texttt{dplyr} to create a data frame of non-log scaled tests}
+\end{listing}
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+plots <- list(p_per_cap + guides(col = FALSE), p_total+ theme(legend.position="bottom") )
+# plots <- list(p_per_cap + theme(legend.position="bottom"), p_total+ theme(legend.position="bottom") )
+library(gridExtra)
+
+gridExtra::grid.arrange(grobs = plots, layout_matrix = matrix(1:2, nrow = 1))
+\end{minted}
+\caption{\label{org200144a}Merge the plots in order to create a single visualisation}
+\end{listing}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm]{fgrid.png}
+\caption{\label{fig:org54b906e}Multi Scatter Plot of \emph{COVID-19} Metrics.}
+\end{figure}
+
 
 \subsection{Advantages compared to other methods}
-\label{sec:orgd3a1d68}
+\label{sec:org456bcd3}
 \begin{itemize}
 \item The advantage to a log-scaled plot is that it allows rates of change to be
 compared between countries
@@ -362,7 +808,7 @@ compared between countries
 countries to be compared in terms of there response
 \end{itemize}
 \subsection{Disasadvantages}
-\label{sec:org09b797c}
+\label{sec:orga4092e5}
 \begin{itemize}
 \item A log-scaled plot can be misleading if it is not made clear, his particularly
 true for readers who have limited mathematical training.
@@ -374,102 +820,144 @@ labelled accordingly
 certain countries had \emph{/forewarning} of the disease by virtue of the delay.
 \end{itemize}
 \subsection{Discussion on analysis results}
-\label{sec:org32481c2}
+\label{sec:org1c13b30}
+This plot demonstrates that
 \subsection{Discussion on other Aspects}
-\label{sec:org5cd481d}
+\label{sec:orgff928f4}
+\begin{itemize}
+\item A potential improvement to this plot would be to plot many countries, say 30 but greyscale those countries and only apply colour to countries of interest, this would provide background information relative to those observations but not overwhelm the reader, this is a suggestion made by Andy Kirk in his \emph{Visualising Data} blog  \cite{kirk2015}.
+\end{itemize}
 \subsection{Literature review of related work}
-\label{sec:orgdb93e1d}
-As mentioned in section \ref{orgda7745e} the use of the log-scaled and date-adjusted plot was implemented by \emph{John Hopkins University} in a visualisation published in \emph{The Guardian} newspaper \cite{gutierrez2020}.
+\label{sec:org6b4f9b5}
+As mentioned in section \ref{orgaa3f855} the use of the log-scaled and date-adjusted plot was implemented by \emph{John Hopkins University} in a visualisation published in \emph{The Guardian} newspaper \cite{gutierrez2020}.
+
+
+NSW Health created a visualisation of cases acquired over time using a barchart
+in a way that resembles a histogram, \cite{nswhealth2020} this plot is very easy
+to interpret and clearly demonstrates the success of NSW in \emph{flattening the
+curve}, this visualisation could have been implemented for this data as demonstrated in listing \ref{orgbc3815c} shown in figure \ref{fig:org523e75a} for different countries in a similar fashion, this however was not effective for comparing countries and so was not pursued.
+
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+#+begin_src
+interested_locations <- c("Australia", "USA", "Italy", "Germany", "Russia", "South Korea", "United Kingdom")
+cv <- covid %>%
+  dplyr::filter(location %in% interested_locations)
+
+ggplot(fortify(cv), aes(x = as.Date(date), y = new_cases_per_million, fill = location)) +
+  geom_col(col = "grey") +
+  labs(x = "Date", y = "New Cases Per Million") +
+   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme_bw()
+\end{minted}
+\caption{\label{orgbc3815c}Use \texttt{ggplot} to create a bar chart}
+\end{listing}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=10cm]{barex.png}
+\caption{\label{fig:org523e75a}Bar Chart of cases over time for various locations}
+\end{figure}
 
 
 
-\section{Bar Chart}
-\label{sec:org574a540}
-
-\section{Pie Chart}
-\label{sec:org7a659d1}
-
-\section{Spider Chart / Star Plot}
-\label{sec:org1cd00da}
-
-\section{Multiple Line Charts}
-\label{sec:org086c831}
-
-\section{Parallell Co-ordinates}
-\label{sec:org246372d}
+\section{{\bfseries\sffamily TODO} Parallell Co-ordinates}
+\label{sec:orgaf89db0}
 each line is a country
 each column is a feature like testing, death and cases.
 
 \href{https://stackoverflow.com/a/35206832/10593632}{This Stack Post shows how to make them curvy}
 
-\section{3D Scatter Plot}
-\label{sec:orgef591b1}
-\section{Log Scaled from 100th case\hfill{}\textsc{ATTACH}}
-\label{sec:orgb998fb8}
-\begin{center}
-\includegraphics[width=.9\linewidth]{./_20200518_184546screenshot.png}
-\end{center}
-
-\section{Bubble Plot\hfill{}\textsc{ATTACH}}
-\label{sec:org03453be}
-\href{https://www.theguardian.com/world/2020/may/18/coronavirus-world-map-which-countries-have-the-most-cases-and-deaths}{Guardian}
-
-
-\begin{center}
-\includegraphics[width=10cm]{./_20200518_184850screenshot.png}
-\end{center}
-
-
-
-
-\section{Animation of 3d Chloropleth heatmap}
-\label{sec:org0f605b9}
-
-visualisation
-
-The total number of deaths per country can be analysed using
 \subsection{Technical Details}
-\label{sec:orgda0a6ca}
+\label{sec:org4c354d5}
 \subsection{Advantages compared to other methods}
-\label{sec:org62ec7d4}
+\label{sec:orgc174a83}
 \subsection{Disasadvantages}
-\label{sec:orgd1d052a}
+\label{sec:orgb378527}
 \subsection{Discussion on analysis results}
-\label{sec:org6b274e8}
+\label{sec:org9116196}
 \subsection{Discussion on other Aspects}
-\label{sec:org68719b3}
+\label{sec:org32ecb94}
 \subsection{Literature review of related work}
-\label{sec:org99999c8}
+\label{sec:orgcd93f11}
 
 \section{For Each Visualisation}
-\label{sec:org51b751c}
+\label{sec:org4a6cb1a}
 
 \subsection{Technical Details}
-\label{sec:orge59d4df}
+\label{sec:org7edf61a}
 \subsection{Advantages compared to other methods}
-\label{sec:orgcf32daa}
+\label{sec:org46ae5e6}
 \subsection{Disasadvantages}
-\label{sec:org9c68d96}
+\label{sec:org7de1a69}
 \subsection{Discussion on analysis results}
-\label{sec:org805633b}
+\label{sec:orgb39d760}
 \subsection{Discussion on other Aspects}
-\label{sec:org2c67c23}
+\label{sec:org8810b40}
 \subsection{Literature review of related work}
-\label{sec:orgfc48c02}
+\label{sec:org73d522d}
 
-\section{Apendix\hfill{}\textsc{ATTACH}}
-\label{sec:org077d0b0}
+\section{Appendix\hfill{}\textsc{ATTACH}}
+\label{sec:orgaf7bf29}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.9\linewidth]{/home/ryan/Notes/Org/.attach/84/c19d03-8ab7-4793-a86d-e861e1bffe2b/_20200521_140312screenshot.png}
-\caption{\label{fig:org615a27a}John Hopkins Bubble Chart \cite{2020o}}
+\includegraphics[width=8cm]{/home/ryan/Notes/Org/.attach/84/c19d03-8ab7-4793-a86d-e861e1bffe2b/_20200521_140312screenshot.png}
+\caption{\label{fig:org412dc19}John Hopkins Bubble Chart \cite{2020o}}
 \end{figure}
 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=10cm]{proppymap2.png}
+\caption{\label{fig:org9f1e565}Bubble Plot Chart produced by Field in his blog \cite{field2020}}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=10cm]{cartogramStudy.jpg}
+\caption{\label{fig:orgd058160}Cartogram of \emph{COVID-19} spread \cite{gao2020}}
+\end{figure}
+
+\begin{listing}[htbp]
+\begin{minted}[]{r}
+citation()
+citation("ggplot2")
+\end{minted}
+\caption{\label{orgf1b0f83}Generate Citation for \textbf{\emph{R}} programming Language}
+\end{listing}
+
+\begin{verbatim}
+
+  To cite R in publications use:
+
+    R Core Team (2020). R: A language and environment for statistical
+    computing. R Foundation for Statistical Computing, Vienna, Austria.
+    URL https://www.R-project.org/.
+
+  A BibTeX entry for LaTeX users is
+
+    @Manual{,
+      title = {R: A Language and Environment for Statistical Computing},
+      author = {{R Core Team}},
+      organization = {R Foundation for Statistical Computing},
+      address = {Vienna, Austria},
+      year = {2020},
+      url = {https://www.R-project.org/},
+    }
+
+  We have invested a lot of time and effort in creating R, please cite it
+  when using it for data analysis. See also ‘citation("pkgname")’ for
+  citing R packages.
+\end{verbatim}
+
 \section{References}
-\label{sec:org2fdbae4}
-\label{org89765da}
+\label{sec:org94fe7ac}
+\label{orgfe4e1ed}
 \bibliography{../../../../Studies/Papers/references}
 
-\label{org655b7fa}
+\label{orgbdec600}
  \bibliographystyle{unsrt}
 \end{document}

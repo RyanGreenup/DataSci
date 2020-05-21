@@ -1,0 +1,17 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Compute the centroid as the mean longitude and lattitude}
+\PYG{c+c1}{\PYGZsh{} Used as label coordinate for country\PYGZsq{}s names}
+\PYG{n}{region\PYGZus{}lab\PYGZus{}df} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{some.eu.maps} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{group\PYGZus{}by}\PYG{p}{(}\PYG{n}{region}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{summarise}\PYG{p}{(}\PYG{n}{long} \PYG{o}{=} \PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{long}\PYG{p}{),} \PYG{n}{lat} \PYG{o}{=} \PYG{n+nf}{mean}\PYG{p}{(}\PYG{n}{lat}\PYG{p}{))} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+    \PYG{n+nf}{full\PYGZus{}join}\PYG{p}{(}\PYG{n+nf}{aggregate}\PYG{p}{(}\PYG{n}{total\PYGZus{}deaths\PYGZus{}per\PYGZus{}million} \PYG{o}{\PYGZti{}} \PYG{n}{region}\PYG{p}{,} \PYG{n}{fatalmap}\PYG{p}{,} \PYG{n}{mean}\PYG{p}{))}
+\PYG{c+c1}{\PYGZsh{} Manually Adjust US to be population Centre}
+\PYG{n}{region\PYGZus{}lab\PYGZus{}df[region\PYGZus{}lab\PYGZus{}df}\PYG{o}{\PYGZdl{}}\PYG{n}{region} \PYG{o}{==} \PYG{l+s}{\PYGZdq{}USA\PYGZdq{}}\PYG{p}{,}\PYG{n}{]}\PYG{o}{\PYGZdl{}}\PYG{n}{long} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{\PYGZhy{}92.47}
+\PYG{n}{region\PYGZus{}lab\PYGZus{}df[region\PYGZus{}lab\PYGZus{}df}\PYG{o}{\PYGZdl{}}\PYG{n}{region} \PYG{o}{==} \PYG{l+s}{\PYGZdq{}USA\PYGZdq{}}\PYG{p}{,}\PYG{n}{]}\PYG{o}{\PYGZdl{}}\PYG{n}{lat} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{37.37}
+
+
+\PYG{n}{wmp} \PYG{o}{+}
+  \PYG{n+nf}{scale\PYGZus{}size\PYGZus{}continuous}\PYG{p}{(}\PYG{n}{range} \PYG{o}{=} \PYG{n+nf}{c}\PYG{p}{(}\PYG{l+m}{1}\PYG{p}{,} \PYG{l+m}{9}\PYG{p}{),} \PYG{n}{name} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}Total Number \PYGZbs{}n of Deaths\PYGZdq{}}\PYG{p}{)} \PYG{o}{+}
+   \PYG{n+nf}{guides}\PYG{p}{(}\PYG{n}{size} \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{)} \PYG{o}{+}
+   \PYG{n+nf}{geom\PYGZus{}point}\PYG{p}{(}\PYG{n}{data} \PYG{o}{=} \PYG{n}{region\PYGZus{}lab\PYGZus{}df}\PYG{p}{,} \PYG{n+nf}{aes}\PYG{p}{(}\PYG{n}{y} \PYG{o}{=} \PYG{n}{lat}\PYG{p}{,} \PYG{n}{x} \PYG{o}{=} \PYG{n}{long}\PYG{p}{,} \PYG{n}{size} \PYG{o}{=} \PYG{n}{total\PYGZus{}deaths\PYGZus{}per\PYGZus{}million}\PYG{p}{),} \PYG{n}{alpha} \PYG{o}{=} \PYG{l+m}{0.5}\PYG{p}{,} \PYG{n}{col} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}purple\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

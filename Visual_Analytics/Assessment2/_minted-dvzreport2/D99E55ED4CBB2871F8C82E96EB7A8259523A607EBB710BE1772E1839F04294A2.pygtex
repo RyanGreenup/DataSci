@@ -1,0 +1,30 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{as\PYGZus{}tibble}\PYG{p}{(}\PYG{n}{covid}\PYG{p}{)}
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{cv} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{mutate}\PYG{p}{(}\PYG{n}{date} \PYG{o}{=} \PYG{n+nf}{as.Date}\PYG{p}{(}\PYG{n}{date}\PYG{p}{))}
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{cv}\PYG{n+nf}{[order}\PYG{p}{(}\PYG{n}{cv}\PYG{o}{\PYGZdl{}}\PYG{n}{date}\PYG{p}{),}\PYG{n}{]}
+
+\PYG{c+c1}{\PYGZsh{} interested\PYGZus{}locations \PYGZlt{}\PYGZhy{} c(\PYGZdq{}Australia\PYGZdq{}, \PYGZdq{}USA\PYGZdq{}, \PYGZdq{}Italy\PYGZdq{}, \PYGZdq{}Germany\PYGZdq{}, \PYGZdq{}Belgium\PYGZdq{}, \PYGZdq{}United Kingdom\PYGZdq{}, \PYGZdq{}New Zealand\PYGZdq{}, \PYGZdq{}Japan\PYGZdq{}, \PYGZdq{}China\PYGZdq{})}
+\PYG{n}{interested\PYGZus{}locations} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{c}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Australia\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}USA\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Italy\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Germany\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}Russia\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}South Korea\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}United Kingdom\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{cv} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{filter}\PYG{p}{(}\PYG{n}{location} \PYG{o}{\PYGZpc{}in\PYGZpc{}} \PYG{n}{interested\PYGZus{}locations}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{filter}\PYG{p}{(}\PYG{n}{total\PYGZus{}cases\PYGZus{}per\PYGZus{}million} \PYG{o}{\PYGZgt{}} \PYG{l+m}{1}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{mutate}\PYG{p}{(}\PYG{n}{total\PYGZus{}cases\PYGZus{}per\PYGZus{}million} \PYG{o}{=} \PYG{n+nf}{log10}\PYG{p}{(}\PYG{n}{total\PYGZus{}cases\PYGZus{}per\PYGZus{}million}\PYG{p}{))} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n}{dplyr}\PYG{o}{::}\PYG{n+nf}{select}\PYG{p}{(}\PYG{n}{date}\PYG{p}{,} \PYG{n}{total\PYGZus{}cases\PYGZus{}per\PYGZus{}million}\PYG{p}{,} \PYG{n}{location}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{pivot\PYGZus{}wider}\PYG{p}{(}\PYG{n}{names\PYGZus{}from} \PYG{o}{=} \PYG{n}{location}\PYG{p}{,} \PYG{n}{values\PYGZus{}from} \PYG{o}{=} \PYG{n}{total\PYGZus{}cases\PYGZus{}per\PYGZus{}million}\PYG{p}{)}
+
+
+\PYG{n+nf}{for }\PYG{p}{(}\PYG{n}{i} \PYG{n}{in} \PYG{l+m}{2}\PYG{o}{:}\PYG{n+nf}{ncol}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+  \PYG{c+c1}{\PYGZsh{}\PYGZsh{} Slide the Columns up and put the NA at the end}
+\PYG{n}{cv[}\PYG{p}{,}\PYG{n}{i]} \PYG{o}{\PYGZlt{}\PYGZhy{}}   \PYG{n+nf}{pull}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{,} \PYG{n}{i}\PYG{p}{)} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+  \PYG{n+nf}{lead}\PYG{p}{(}\PYG{n}{cv[}\PYG{p}{,}\PYG{n}{i]} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+         \PYG{n+nf}{is.na}\PYG{p}{()} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+         \PYG{n+nf}{sum}\PYG{p}{())}
+ \PYG{c+c1}{\PYGZsh{}\PYGZsh{} Replace the date with the number of days}
+\PYG{n}{cv}\PYG{o}{\PYGZdl{}}\PYG{n}{date} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n+nf}{seq\PYGZus{}len}\PYG{p}{(}\PYG{n+nf}{nrow}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{))}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{cv} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{cv} \PYG{o}{\PYGZpc{}\PYGZgt{}\PYGZpc{}}
+ \PYG{n+nf}{pivot\PYGZus{}longer}\PYG{p}{(}\PYG{n+nf}{names}\PYG{p}{(}\PYG{n}{cv}\PYG{p}{)}\PYG{n}{[}\PYG{l+m}{\PYGZhy{}1}\PYG{n}{]}\PYG{p}{,} \PYG{n}{names\PYGZus{}to} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}location\PYGZdq{}}\PYG{p}{,} \PYG{n}{values\PYGZus{}to} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}total\PYGZus{}cases\PYGZus{}per\PYGZus{}million\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}
