@@ -31,6 +31,8 @@ mise()
 #+end_src
 
 #+RESULTS:
+:
+: Loading required package: pacman
 
 ** Load the Data
 #+begin_src R
@@ -288,6 +290,9 @@ region_lab_df <- fatalmap %>%
     #+end_src
 
 #+RESULTS: dpl
+: Error in tbl_vars_dispatch(x) : object 'some.eu.maps' not found
+:
+: Joining, by = "region"
 
 
 #+NAME: gg2
@@ -349,15 +354,15 @@ ggplot(fatalmap, aes(map_id = region, label = region)) +
 [[file:SecChEur.png]]
 
 ** Advantages compared to other methods
-+ A Chloropleth map provides a very clear way to visualise the occurence of
-  disease in a geographical sense, in contrast to other methods such as scatter
-  plots, heatmaps and bar charts, the chloropleth map provides a clear way to
-  distinguish the impact of the disease on individual countries.
+A Chloropleth map provides a very clear way to visualise the occurence of
+disease in a geographical sense, in contrast to other methods such as scatter
+plots, heatmaps and bar charts, the chloropleth map provides a clear way to
+distinguish the impact of the disease on individual countries.
 
-  The discrete distinction between countries, a fundamental component of a
-  chloropleth map, is desirable because it is consistent with the independent
-  legislatures accross countries, this allows for a comparison of the impact
-  that policy decisions may or may not have on a region.
+The discrete distinction between countries, a fundamental component of a
+chloropleth map, is desirable because it is consistent with the independent
+legislatures accross countries, this allows for a comparison of the impact
+that policy decisions may or may not have on a region.
 
 Chloropleth maps also allow trends across regions to be easily identified, e.g.
 figure [[map2]] shows how severe the outbreak is in /Europe/ relative to other
@@ -365,7 +370,7 @@ regions, this might be lost in abstraction when using other visualization method
 
 ** Disasadvantages
 When maps are projected into a 2D plane they are necessarily distorted, this
-  distortion can impact how spread the data appears to be.
+distortion can impact how spread the data appears to be.
 
 A chloropleth map can make it hard to compare metrics between to regions in any
 specific sense, for this a more appropriate visualization would be a bar chart.
@@ -401,7 +406,7 @@ order to make the trends more distinct.
 *** Log Scale
 The spread of disease over time can often be described by an exponential model as
 demonstrated in equations eqref:exp1 and eqref:exp2, for this reason the use of
-a $\log$-scale will linearise trends and so the use of a $\log$-scale will make
+a $\log$ -scale will linearise trends and so the use of a $\log$ -scale will make
 it easier to compare the rates of population change between different countries.
 
 
@@ -416,7 +421,6 @@ In addition to a $\log-$ scale, /sliding/ the data to be relative to the number
 of days since the first case can allow the trends of the data to be compared,
 this was implemented by /John Hopkins University/ in a visualisation published
 in the /Guardian/ cite:gutierrez2020. <<tssec>>
-
 ** Technical Details
 *** Preliminary
 In order to log scale the data the =mutate= function from the =dplyr= package
@@ -507,7 +511,15 @@ ggplot(cv , aes(y = total_cases_per_million, x = date, col = location, group = l
 
 
 *** Facet Grid
-This plot however does not show all the data made available, the data set also includes information on the number of tests,cases and deaths resulting from /COVID-19/, in order to visualise this the =fact_grid= layer can be used to create a multi-scatterplot. first it is necessary to create a data frame, this can be implemented by repeating the process in listing [[fts]] for each different metric but it will also be necessary to add a feature corresponding to that metric's description, we will also create non-log scaled data as well, this is demonstrated in listings [[mkdtl1]] through [[mkdt3]], finally the dataframes are merged in listing [[mgdt]], the corresponding plot is shown in figure [[mdpt]].
+This plot however does not show all the data made available, the data set also
+includes information on the number of tests,cases and deaths resulting from
+/COVID-19/, in order to visualise this the =fact_grid= layer can be used to
+create a multi-scatterplot. first it is necessary to create a data frame, this
+can be implemented by repeating the process in listing [[fts]] for each different
+metric but it will also be necessary to add a feature corresponding to that
+metric's description, we will also create non-log scaled data as well, this is
+demonstrated in listings [[mkdtl1]] through [[mkdt3]], finally the dataframes are merged
+in listing [[mgdt]], the corresponding plot is shown in figure [[mdpt]].
 
 #+NAME: mkdtl1
 #+CAPTION: Use =dplyr= to create a data frame of log scaled cases
@@ -582,7 +594,7 @@ cv_deaths_log <- cv %>%
 
 
 #+NAME: mkdtl3
-#+CAPTION: Use =dplyr= to create a data frame of log scaled deaths
+#+CAPTION: Use =dplyr= to create a data frame of log scaled deaths, observe thousands is scaled to millions.
 #+begin_src R :results none
 ### Number of Tests
 cv <- as_tibble(covid)
@@ -592,7 +604,7 @@ cv <- cv[order(cv$date),]
 cv <- cv %>%
   filter(location %in% interested_locations) %>%
   filter(total_cases > 1) %>%
-  mutate(total_tests_per_thousand = log10(total_tests_per_thousand)) %>%
+  mutate(total_tests_per_thousand = log10(total_tests_per_thousand)-3) %>%
   dplyr::select(date, total_tests_per_thousand, location) %>%
   pivot_wider(names_from = location, values_from = total_tests_per_thousand)
 
@@ -639,8 +651,8 @@ cv <- cv %>%
   filter(location %in% interested_locations) %>%
   filter(total_cases > 1) %>%
 # mutate(total_cases = log10(total_cases)) %>%
-  dplyr::select(date, total_cases, location) %>%
-  pivot_wider(names_from = location, values_from = total_cases)
+  dplyr::select(date, total_cases_per_million, location) %>%
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
 
 for (i in 2:ncol(cv)) {
   ## Slide the Columns up and put the NA at the end
@@ -672,9 +684,9 @@ cv <- cv[order(cv$date),]
 cv <- cv %>%
   filter(location %in% interested_locations) %>%
   filter(total_cases > 1) %>%
-#  mutate(total_deaths = log10(total_deaths_)) %>%
-  dplyr::select(date, total_deaths, location) %>%
-  pivot_wider(names_from = location, values_from = total_deaths)
+#  mutate(total_deaths_per_million = log10(total_deaths_per_million_)) %>%
+  dplyr::select(date, total_deaths_per_million, location) %>%
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
 
 for (i in 2:ncol(cv)) {
   ## Slide the Columns up and put the NA at the end
@@ -705,9 +717,10 @@ cv <- cv[order(cv$date),]
 cv <- cv %>%
   filter(location %in% interested_locations) %>%
   filter(total_cases > 1) %>%
- # mutate(total_testsd = log10(total_testsd)) %>%
-  dplyr::select(date, total_tests, location) %>%
-  pivot_wider(names_from = location, values_from = total_tests)
+ # mutate(total_tests_per_thousandd = log10(total_tests_per_thousand)) %>%
+  mutate(total_tests_per_thousandd = total_tests_per_thousand/1000) %>%
+  dplyr::select(date, total_tests_per_thousand, location) %>%
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
 
 for (i in 2:ncol(cv)) {
   ## Slide the Columns up and put the NA at the end
@@ -767,7 +780,7 @@ gridExtra::grid.arrange(grobs = plots, layout_matrix = matrix(1:2, nrow = 1))
 + Making Data relative to the day of the first infection may not make clear that
   certain countries had //forewarning/ of the disease by virtue of the delay.
 ** Discussion on analysis results
-This plot demonstrates that
+This plot demonstrates that general
 ** Discussion on other Aspects
 + A potential improvement to this plot would be to plot many countries, say 30 but greyscale those countries and only apply colour to countries of interest, this would provide background information relative to those observations but not overwhelm the reader, this is a suggestion made by Andy Kirk in his /Visualising Data/ blog  cite:kirk2015.
 ** Literature review of related work
