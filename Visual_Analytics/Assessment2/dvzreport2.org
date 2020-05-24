@@ -780,7 +780,41 @@ gridExtra::grid.arrange(grobs = plots, layout_matrix = matrix(1:2, nrow = 1))
 + Making Data relative to the day of the first infection may not make clear that
   certain countries had //forewarning/ of the disease by virtue of the delay.
 ** Discussion on analysis results
+Although the plots have been adjusted to reflect the date that the first cases were observed, it is possible that the disease began spreading before the first official case was reported, thisis a belief held by some health officials in Italy.cite:godin2020
+
 This plot demonstrates that general
+
+Countries like south korea where testing 1000 times more than for example the US at the date when they had there first case. This is perhaps why the number of south korean cases and deaths flattend so sharply compared to other countries.
+
+The plots have been adjusted to reflect the days from the first case, it is interesting to see that italy had such a large number of deaths beginning from the first day of infection compared to outher countries, for example Australias number of deaths increased at a much lower rate.
+
+to reflect the date of the first
+*** Number of Cases
+This plot clearly suggests that the spread of the disease was the greatest both in rate and magnitude in Italy, some researchers belive that this is due simply to the fact that Italy has performed more tests. cite:godin2020
+*** Number of Deaths
+Italy has had the highest amount of deaths despite it's higher rates of testing,
+it is not clear why this is the case though. A study by /IQAir/ found that 25% of the
+most air-polluted European countries were located within Italy cite:iqair2019
+and such pollution has been found to be correlated with higher rates of death
+resulting from viral respiratory infection,
+cite:ciencewicki2007,croft2019,zhang2019 this could help explain some of the discrepancy but more research into the unique vulnerabilities of Italy is certainly warranted.
+
+Russia has had the fewest number of deaths related to /COVID-19/, however Moscow's Mayor, Sergei Sobyanin suggested that the official number of infections is likely much lower than reality, a sentiment echoed by Russia's /Doctor's Alliance/ ( which is essentially a doctors union). cite:dole2020
+
+Dispensing with The view that Russia's figures are reliable it is clear that
+Australia and South Korea have the lowest number of cases overall, while
+Australia's success can be attributed to it's relative isolation and unique
+quarantine requirements,
+cite:departmentofagrigulturewaterandtheenvironmentaustralia2019 combined with
+lockdown's implemented early in the pandemic (with respect to Australia's first
+case) cite:willis2020 the success of South Korea Appears to be related more
+appropriatley with the aggressive action taken by the country to contact trace the spread of the disease. cite:thompson2020
+
+It appears that the number of deaths is more closely correlated with the number of cases than the number of tests, however it is not clear what the effect of testing is on the number of new cases.
+*** Number of Tests
+Italy and the US have undertaken the highest rates of testing, per capita, this
+however does not appear to have influeced the rates of death or spread of cases significantly indicating that measuring a countries response to the disease cannot be meaured merely by considering the rate of testing.
+
 ** Discussion on other Aspects
 + A potential improvement to this plot would be to plot many countries, say 30 but greyscale those countries and only apply colour to countries of interest, this would provide background information relative to those observations but not overwhelm the reader, this is a suggestion made by Andy Kirk in his /Visualising Data/ blog  cite:kirk2015.
 ** Literature review of related work
