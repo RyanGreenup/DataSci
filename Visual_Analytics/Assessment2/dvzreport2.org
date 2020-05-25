@@ -361,14 +361,14 @@ disease in a geographical sense, in contrast to other methods such as scatter
 plots, heatmaps and bar charts, the chloropleth map provides a clear way to
 distinguish the impact of the disease on individual countries.
 
+Chloropleth maps also allow trends across regions to be easily identified, e.g.
+figure [[map2]] shows how severe the outbreak is in /Europe/ relative to other
+regions, this might be lost in abstraction when using other visualization methods.
+
 The discrete distinction between countries, a fundamental component of a
 chloropleth map, is desirable because it is consistent with the independent
 legislatures accross countries, this allows for a comparison of the impact
 that policy decisions may or may not have on a region.
-
-Chloropleth maps also allow trends across regions to be easily identified, e.g.
-figure [[map2]] shows how severe the outbreak is in /Europe/ relative to other
-regions, this might be lost in abstraction when using other visualization methods.
 
 ** Disasadvantages
 When maps are projected into a 2D plane they are necessarily distorted, this
@@ -377,9 +377,9 @@ distortion can impact how spread the data appears to be.
 A chloropleth map can make it hard to compare metrics between to regions in any
 specific sense, for this a more appropriate visualization could be for instance a bar chart.
 ** Literature review of related work
-The /John Hopkins Coronavirus Dashboard/ cite:2020o implemented bubbles to
+The /John Hopkins Coronavirus Dashboard/  cite:2020o implemented bubbles to
 visualise the number of cases, a screenshot of this is provided in the appendix
-at figure [[JHBub]], this was a part of the motivation for implementing bubbles in
+at figure [[jhb]], this was a part of the motivation for implementing bubbles in
 the chloropleth map because the visualization was so much more /striking/ and
 promoted pre-attentive processing of the information.
 
@@ -420,9 +420,12 @@ it easier to compare the rates of population change between different countries.
 
 *** Adjust Zero
 In addition to a $\log-$ scale, /sliding/ the data to be relative to the number
-of days since the first case can allow the trends of the data to be compared,
-A similar technique was implemented by /John Hopkins University/ in a visualisation published
-in /The Guardian/ cite:gutierrez2020. <<tssec>>
+of days since the first case can allow the trends of the data to be compared, A
+similar technique was implemented by /John Hopkins University/ in a
+visualisation published in /The Guardian/ cite:gutierrez2020. <<tssec>> Here the
+number of cases has been considered from the date of the first case, however,
+figure [[ftsp]] shows the trend from the date of the 100th case, while it appears to
+line the countries up better the loss of information was undesirable.
 ** Technical Details
 *** Preliminary
 In order to log scale the data the =mutate= function from the =dplyr= package
@@ -780,15 +783,8 @@ gridExtra::grid.arrange(grobs = plots, layout_matrix = matrix(1:2, nrow = 1))
 + Making Data relative to the day of the first infection may not make clear that
   certain countries had /forewarning/ of the disease by virtue of the delay.
 ** Discussion on analysis results
-Although the plots have been adjusted to reflect the date that the first cases were observed, it is possible that the disease began spreading before the first official case was reported, thisis a belief held by some health officials in Italy.cite:godin2020
+Although the plots have been adjusted to reflect the date that the first cases were observed, it is possible that the disease began spreading before the first official case was reported, this is a belief held by some health officials in Italy.cite:godin2020
 
-This plot demonstrates that general
-
-Countries like south korea where testing 1000 times more than for example the US at the date when they had there first case. This is perhaps why the number of south korean cases and deaths flattend so sharply compared to other countries.
-
-The plots have been adjusted to reflect the days from the first case, it is interesting to see that italy had such a large number of deaths beginning from the first day of infection compared to outher countries, for example Australias number of deaths increased at a much lower rate.
-
-to reflect the date of the first
 *** Number of Cases
 This plot clearly suggests that the spread of the disease was the greatest both in rate and magnitude in Italy, some researchers belive that this is due simply to the fact that Italy has performed more tests. cite:godin2020
 *** Number of Deaths
@@ -799,7 +795,7 @@ and such pollution has been found to be correlated with higher rates of death
 resulting from viral respiratory infection,
 cite:ciencewicki2007,croft2019,zhang2019 this could help explain some of the discrepancy but more research into the unique vulnerabilities of Italy is certainly warranted.
 
-Russia has had the fewest number of deaths related to /COVID-19/, however Moscow's Mayor, Sergei Sobyanin suggested that the official number of infections is likely much lower than reality, a sentiment echoed by Russia's /Doctor's Alliance/ ( which is essentially a doctors union). cite:dole2020
+The Visualisation suggests that Russia has had the fewest number of deaths related to /COVID-19/, however Moscow's Mayor, Sergei Sobyanin suggested that the official number of infections is likely much lower than reality, a sentiment echoed by Russia's /Doctor's Alliance/ ( which is essentially a doctors union). cite:dole2020
 
 Dispensing with The view that Russia's figures are reliable it is clear that
 Australia and South Korea have the lowest number of cases overall, while
@@ -812,19 +808,22 @@ appropriatley with the aggressive action taken by the country to contact trace t
 
 It appears that the number of deaths is more closely correlated with the number of cases than the number of tests, however it is not clear what the effect of testing is on the number of new cases.
 *** Number of Tests
-Italy and the US have undertaken the highest rates of testing, per capita, this
+The visualisation also suggests that Italy and the US have undertaken the highest rates of testing, per capita, this
 however does not appear to have influeced the rates of death or spread of cases significantly, indicating that measuring a countries response to the disease cannot be meaured merely by considering the rate of testing.
+
 
 ** Discussion on other Aspects
 + A potential improvement to this visualisation would be to plot many countries, say 30 but greyscale those countries and only apply colour to countries of interest, this would provide background information relative to those observations but not overwhelm the reader, this is a suggestion made by Andy Kirk in his /Visualising Data/ blog  cite:kirk2015.
 ** Literature review of related work
-As mentioned in section [[tssec]] the use of the log-scaled and date-adjusted plot was implemented by /John Hopkins University/ in a visualisation published in /The Guardian/ newspaper cite:gutierrez2020.
+As mentioned in section [[tssec]] the use of the log-scaled and date-adjusted plot
+was implemented by /John Hopkins University/ in a visualisation published in
+/The Guardian/ newspaper cite:gutierrez2020.
 
 
 NSW Health created a visualisation of cases acquired over time using a barchart
 in a way that resembles a histogram, cite:nswhealth2020 this plot is very easy
 to interpret and clearly demonstrates the success of NSW in /flattening the
-curve/, this visualisation could have been implemented for this data as demonstrated in listing [[bar]] shown in figure [[barp]] for different countries in a similar fashion, this however was not effective for comparing countries and so was not pursued.
+curve/, this visualisation could have been implemented for this data as demonstrated in listing [[bar]] and shown in figure [[barp]] for different countries in a similar fashion, this however was not effective for comparing countries and so was not pursued.
 
 
 #+NAME: bar
@@ -851,30 +850,7 @@ ggplot(fortify(cv), aes(x = as.Date(date), y = new_cases_per_million, fill = loc
 [[file:barex.png]]
 
 
-
-* TODO Parallell Co-ordinates
-each line is a country
-each column is a feature like testing, death and cases.
-
-[[https://stackoverflow.com/a/35206832/10593632][This Stack Post shows how to make them curvy]]
-
-** Technical Details
-** Advantages compared to other methods
-** Disasadvantages
-** Discussion on analysis results
-** Discussion on other Aspects
-** Literature review of related work
-
-* For Each Visualisation
-
-** Technical Details
-** Advantages compared to other methods
-** Disasadvantages
-** Discussion on analysis results
-** Discussion on other Aspects
-** Literature review of related work
-
-* Appendix                                                                      :ATTACH:
+* Appendix
 PROPERTIES:
 :ID:       84c19d03-8ab7-4793-a86d-e861e1bffe2b
 :END:
@@ -882,9 +858,9 @@ PROPERTIES:
 
 #+attr_html: :width 400px
 #+attr_latex: :width 8cm
-#+NAME: JHBub
+#+NAME: jhb
 #+CAPTION: John Hopkins Bubble Chart cite:2020o
-[[attachment:_20200521_140312screenshot.png]]
+[[file:hopinScreen.png]]
 
 
 #+attr_html: :width 400px
@@ -973,4 +949,4 @@ for a network graph. + [[file:~/Dropbox/Notes/DataSci/Visual_Analytics/Assessmen
 
 * Footnotes
 
-[fn:fr] Free as in Speech and beer
+[fn:fr] Free as in speech and beer
