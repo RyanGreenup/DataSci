@@ -132,26 +132,32 @@ boot_vals <- replicate(100, {
 Each Column of the output matrix corresponds to a seperate sample, so in order to get the mean and sd of each sample the `apply` function can be used, specifying the `MARGIN` argument as `2` in order to denote function operating column-wise.
 
 ```{r}
-
 ## Collumns correspond to the sample number and the rows to obsevations
-
+## 
 ## Calculate the mean values
 sample_means <- apply(boot_vals, 2, mean)
 
 ## Calculate the STD Dev
 sample_sd    <- apply(boot_vals, 2, sd)
+```
 
+In order to plot the histograms it is first necessary to manipulate the data such that it is in a `tidy` format, this can be done by using the `tidyr` package, then the histograms can be plotted using `ggplot2`.
+
+```{r}
 data <- data.frame(means = sample_means, sds = sample_sd)
 tidy_data <- tidyr::pivot_longer(cols = c(means, sds), data = data, names_to = "Parameter")
 tidy_data$Parameter <- factor(tidy_data$Parameter, labels = c("Mean", "SD"), ordered = FALSE)
 tidy_data
 
-ggplot(tidy_data, aes(x = value, fill = Parameter)) +
+ggplot(tidy_data, aes(x = value, fill = Parameter, y = ..density..)) +
   geom_histogram(col = "black", binwidth = 0.1) +
   facet_grid(. ~ Parameter, scales = "free_x") +
-  theme_bw() 
+  theme_bw()  +
+  labs(x = "Value", y = "Density",
+       title = TeX('Bootstrapped Descriptive statistics from $X \\sim \\textit{N} (2,1)$'))
 ##  stat_function(fun = dnorm, args = list(mean = mean(data$means),
 ##                                         sd = sd(data$means)))
+
 ```
 
 # Question 3
