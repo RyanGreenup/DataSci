@@ -1,0 +1,1667 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-05-24 Sun 11:36 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Analysis of COVID Data</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Ryan Greenup" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src="https://orgmode.org/org-info.js">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license-end
+</script>
+
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "1");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "3");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+// @license-end
+</script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.cacheClassElem = elem.className;
+         elem.cacheClassTarget = target.className;
+         target.className = "code-highlighted";
+         elem.className   = "code-highlighted";
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(elem.cacheClassElem)
+         elem.className = elem.cacheClassElem;
+       if(elem.cacheClassTarget)
+         target.className = elem.cacheClassTarget;
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Analysis of COVID Data</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org9bab871">1. Preliminary</a>
+<ul>
+<li><a href="#orgfefb8ff">1.1. Load Packages and Data</a></li>
+<li><a href="#orgbd92fb4">1.2. Load the Data</a></li>
+<li><a href="#org6f9c07f">1.3. Set Working Directory</a></li>
+</ul>
+</li>
+<li><a href="#org983bf84">2. Introduction</a></li>
+<li><a href="#org2329573">3. Chloropleth Map</a>
+<ul>
+<li><a href="#org33f4748">3.1. Discussion</a>
+<ul>
+<li><a href="#orgfbd77f3">3.1.1. Worldwide</a></li>
+<li><a href="#org2d46cd2">3.1.2. Europe</a></li>
+</ul>
+</li>
+<li><a href="#orge60cec0">3.2. Technique</a>
+<ul>
+<li><a href="#org3929378">3.2.1. Woldwide Map</a></li>
+<li><a href="#org5b19ba2">3.2.2. Europe Centric</a></li>
+</ul>
+</li>
+<li><a href="#orga7474d3">3.3. Advantages compared to other methods</a></li>
+<li><a href="#orgbfc8039">3.4. Disasadvantages</a></li>
+<li><a href="#orgc158546">3.5. Literature review of related work</a></li>
+</ul>
+</li>
+<li><a href="#org353dca0">4. Time Series</a>
+<ul>
+<li><a href="#org4282d8d">4.1. Implementation</a>
+<ul>
+<li><a href="#orge1f96d8">4.1.1. Log Scale</a></li>
+<li><a href="#org8dc5311">4.1.2. Adjust Zero</a></li>
+</ul>
+</li>
+<li><a href="#orga0794c2">4.2. Technical Details</a>
+<ul>
+<li><a href="#org50c93d9">4.2.1. Preliminary</a></li>
+<li><a href="#org27bf501">4.2.2. Facet Grid</a></li>
+</ul>
+</li>
+<li><a href="#org8a38ec5">4.3. Advantages compared to other methods</a></li>
+<li><a href="#orge459ef0">4.4. Disasadvantages</a></li>
+<li><a href="#org464ac76">4.5. Discussion on analysis results</a>
+<ul>
+<li><a href="#orgcaf1b87">4.5.1. Number of Cases</a></li>
+<li><a href="#org1da4ed5">4.5.2. Number of Deaths</a></li>
+<li><a href="#org2b084ab">4.5.3. Number of Tests</a></li>
+</ul>
+</li>
+<li><a href="#org14a01e5">4.6. Discussion on other Aspects</a></li>
+<li><a href="#org3f9ec97">4.7. Literature review of related work</a></li>
+</ul>
+</li>
+<li><a href="#org6ff559f">5. <span class="todo TODO">TODO</span> Parallell Co-ordinates</a>
+<ul>
+<li><a href="#org4d60849">5.1. Technical Details</a></li>
+<li><a href="#org96f12ca">5.2. Advantages compared to other methods</a></li>
+<li><a href="#orgb1e6359">5.3. Disasadvantages</a></li>
+<li><a href="#orge766c1c">5.4. Discussion on analysis results</a></li>
+<li><a href="#orge66e63b">5.5. Discussion on other Aspects</a></li>
+<li><a href="#orgbee8e54">5.6. Literature review of related work</a></li>
+</ul>
+</li>
+<li><a href="#org1415fcf">6. For Each Visualisation</a>
+<ul>
+<li><a href="#orgd84f701">6.1. Technical Details</a></li>
+<li><a href="#org85e06ff">6.2. Advantages compared to other methods</a></li>
+<li><a href="#orgd0a07ef">6.3. Disasadvantages</a></li>
+<li><a href="#org50ad99d">6.4. Discussion on analysis results</a></li>
+<li><a href="#orga23d211">6.5. Discussion on other Aspects</a></li>
+<li><a href="#orgbf9b32b">6.6. Literature review of related work</a></li>
+</ul>
+</li>
+<li><a href="#org528859f">7. Appendix&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span></a></li>
+<li><a href="#org8240601">8. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org9bab871" class="outline-2">
+<h2 id="org9bab871"><span class="section-number-2">1</span> Preliminary</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orgfefb8ff" class="outline-3">
+<h3 id="orgfefb8ff"><span class="section-number-3">1.1</span> Load Packages and Data</h3>
+<div class="outline-text-3" id="text-1-1">
+<div class="org-src-container">
+<pre class="src src-R"> <span style="color: #e45649;">if</span> (<span style="color: #b751b6;">require</span>(<span style="color: #50a14f;">"pacman"</span>)) {
+    <span style="color: #b751b6;">library</span>(pacman)
+  }<span style="color: #e45649;">else</span>{
+    install.packages(<span style="color: #50a14f;">"pacman"</span>)
+    <span style="color: #b751b6;">library</span>(pacman)
+  }
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra, mise, latex2exp, tidyverse, xts, maptools, plyr, ggplot2, maps, viridis)
+
+mise()
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbd92fb4" class="outline-3">
+<h3 id="orgbd92fb4"><span class="section-number-3">1.2</span> Load the Data</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+<pre class="src src-R">covid <span style="color: #b751b6;">&lt;-</span> read.csv(<span style="color: #50a14f;">"/home/ryan/Notes/DataSci/Visual_Analytics/Assessment2/owid-covid-data.csv"</span>)
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6f9c07f" class="outline-3">
+<h3 id="org6f9c07f"><span class="section-number-3">1.3</span> Set Working Directory</h3>
+</div>
+</div>
+
+<div id="outline-container-org983bf84" class="outline-2">
+<h2 id="org983bf84"><span class="section-number-2">2</span> Introduction</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+On December 31st 2019 a viral pneumonia was reported in Wuhan, China, this was
+  later found to be a result of a new strain of virus named <i>Sars-CoV2</i>, the
+  diseased caused by such an infection, usually resulting in viral pneumonia, is
+  known as <i>Corona Virus Disease 2019</i> (<i>COVID-19</i>). The outbreak of this disease was declared a Public Health Emergency of International Concern on the 30th January 2020.
+  <sup><a href="#citeproc_bib_item_1">1</a></sup> December 2012 first cases of <i>COVID-19</i> were
+  reported, the disease has since attributed to the <i>SARS-CoV2</i> virus.
+</p>
+
+<p>
+A data set detailing the location, deaths, tests and cases related to the
+<i>COVID-19</i> pandemic has been made available through the website /Our World in
+Data/<sup><a href="#citeproc_bib_item_2">2</a></sup>, documented in this report is a visual anylisis
+performed entirely using the <i>Free Software</i> <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> <b><i>R</i></b> <sup><a href="#citeproc_bib_item_3">3</a></sup>
+primarily with the <code>ggplot2</code> package <sup><a href="#citeproc_bib_item_4">4</a></sup> (see listing <a href="#org6a16dd5">20</a> in the
+appendix).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2329573" class="outline-2">
+<h2 id="org2329573"><span class="section-number-2">3</span> Chloropleth Map</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+A Chloropleth map of the number of deaths can offer an insight into the impact
+that the disease has had with respect to individual countries.
+</p>
+
+<p>
+The Total deaths should be scaled relative to the population of the country,
+that way countries with a smaller and sparser population will still be
+represented by the visualisation (this is quite important given that many
+countries such as Italy have a small population compared to the US and much of
+Asia <sup><a href="#citeproc_bib_item_5">5</a></sup>).
+</p>
+
+<p>
+A worldwide Chloropleth map visualising the total number of deaths attributed to
+<i>COVID-19</i> is shown in figure <a href="#orga404ad9">1</a> and a Europe-centric visualisation is shown
+in figure <a href="#orgbfbd1c8">3</a>.
+</p>
+</div>
+
+<div id="outline-container-org33f4748" class="outline-3">
+<h3 id="org33f4748"><span class="section-number-3">3.1</span> Discussion</h3>
+<div class="outline-text-3" id="text-3-1">
+</div>
+<div id="outline-container-orgfbd77f3" class="outline-4">
+<h4 id="orgfbd77f3"><span class="section-number-4">3.1.1</span> Worldwide</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+The first plot appears to show a very limited amount of difference in deaths
+attributable to <i>COVID-19</i> across regions other than North America and
+Europe.
+</p>
+
+<p>
+While first-world countries such as New Zealand and Australia are
+somewhat insulated from the disease by virtue of geography and population
+density, it&rsquo;s striking that much of Asia and Russia have such low levels of
+disease incidence.
+</p>
+
+<p>
+This could be attributed to the fact that a more power-cetric regime such as in
+China, Russia, North Korea, etc. may have more capacity to:
+</p>
+
+<ol class="org-ol">
+<li>Diminish the spread of the diseasy by implementing
+policy decisions,
+<ol class="org-ol">
+<li>whereas countries such as the US and Europe have a much higher expectation
+of civil liberties and hence much lower tolerance for government intervention.</li>
+</ol></li>
+<li>Control the spread of information for want of international reputation.
+<ol class="org-ol">
+<li>In saying that though research suggests that under-reporting has even
+occured in countries such as the US <sup><a href="#citeproc_bib_item_6">6</a></sup> so such under-reporting
+could merely be incidental.</li>
+</ol></li>
+</ol>
+
+<p>
+A similar disease, <i>MERS</i>, emerged in 2012 in Middle-Eastern Regions
+<sup><a href="#citeproc_bib_item_7">7</a></sup> and a Korean outbreak of the <i>MERS</i> disease occured in 2015
+<sup><a href="#citeproc_bib_item_8">8</a></sup>, these outbreaks likely prepared Korea, the Middle East and
+other Asian regions for an outbreak which helps explain the dichotomous
+nature of the deaths attributable to <i>COVID-19</i> for those Countries.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2d46cd2" class="outline-4">
+<h4 id="org2d46cd2"><span class="section-number-4">3.1.2</span> Europe</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<p>
+A closer look at Europe shows that Belgium and Italy have been the most affected
+by this disease, it isn&rsquo;t very clear why those regions have been impacted so
+significantly, particularly considering the comparatively permissive borders
+within the <i>EU</i>, but this could be indicative of policy decisions and warrants
+further research.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge60cec0" class="outline-3">
+<h3 id="orge60cec0"><span class="section-number-3">3.2</span> Technique</h3>
+<div class="outline-text-3" id="text-3-2">
+</div>
+<div id="outline-container-org3929378" class="outline-4">
+<h4 id="org3929378"><span class="section-number-4">3.2.1</span> Woldwide Map</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+In order to produce a chloropleth map the data must be aggregated in order to retrieve the total number of
+deaths, this can be acheived by taking the maximum of the total deaths across
+countries (the total number of death rates will be a strictly positive and
+monotone trend, otherwise the outbreak would be an entirely different type of
+pandemic!), this can be performed by using the <code>aggregate</code> function as
+demonstrated in listing <a href="#orgee7fcd9">1</a>.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 1: </span>Use Aggregate to aggregate total number of deaths</label><pre class="src src-R" id="orgee7fcd9">fatalprop <span style="color: #b751b6;">&lt;-</span> aggregate(total_deaths_per_million ~ location, covid, max)
+<span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Order the Values in Descending Order</span>
+fatalprop <span style="color: #b751b6;">&lt;-</span> fatalprop[order(-fatalprop$total_deaths_per_million),]
+<span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Rename USA</span>
+covid$location[covid$location==<span style="color: #50a14f;">"United States"</span>] <span style="color: #b751b6;">&lt;-</span> <span style="color: #50a14f;">"USA"</span>
+</pre>
+</div>
+
+
+<p>
+It is next necessary to rename <code>location</code> to <code>region</code> so map data will be
+consistent with the provided data set, this is shown in listing <a href="#org524ca16">2</a>.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 2: </span>Rename Features for consistency</label><pre class="src src-R" id="org524ca16"><span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Rename to facilitate joining with map</span>
+names(fatalprop) <span style="color: #b751b6;">&lt;-</span> c(<span style="color: #50a14f;">"region"</span>, <span style="color: #50a14f;">"total_deaths_per_million"</span>)
+</pre>
+</div>
+
+<p>
+For a broad overview of the data, small regions such as San Marino and Belgium
+will not be visible and will skew the colour pallete, so instead they should be removed
+and instead a seperate plot of Europe will be creted as shown in figure <a href="#orgbfbd1c8">3</a>, this removal is performed in
+listing <a href="#org62087db">3</a>.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 3: </span>Filter out small dense regions to prevent scale issues</label><pre class="src src-R" id="org62087db"><span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">San Marino will be shown by italy and this skews the results</span>
+<span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Belgium and San Marino are very hard to visualise from above</span>
+<span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">They skew the rsults and so will be removed.</span>
+fatalprops <span style="color: #b751b6;">&lt;-</span> fatalprop <span style="color: #b751b6;">%&gt;%</span> filter(region!=<span style="color: #50a14f;">"San Marino"</span>)
+fatalprops <span style="color: #b751b6;">&lt;-</span> fatalprop <span style="color: #b751b6;">%&gt;%</span> filter(region!=<span style="color: #50a14f;">"Belgium"</span>)
+</pre>
+</div>
+
+
+<p>
+Next it is necessary to retrieve map data, this can be done using the <code>map_data</code>
+function, this data may then be combined by region with the provided data set
+using the <code>left_join</code> function, this is shown in listing <a href="#org3e1efe5">4</a>.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 4: </span>Combine Map Data with Provided Data</label><pre class="src src-R" id="org3e1efe5"><span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Retrieve the map data</span>
+some_maps <span style="color: #b751b6;">&lt;-</span> map_data(<span style="color: #50a14f;">"world"</span>, region = fatalprops$location)
+
+<span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Join the Data Frames Together</span>
+fatalmap <span style="color: #b751b6;">&lt;-</span> left_join(fatalprops, some_maps, by = <span style="color: #50a14f;">"region"</span>)
+</pre>
+</div>
+
+<p>
+Finally this data frame can be plotted by using <code>ggplot2</code> and the <code>geom_map</code>
+layer, modifying the <code>theme</code> layer will allow for a natural background to be implemented,
+this is demonstrated in listing <a href="#orgc21c2f1">5</a> and the output is provided in figure <a href="#orga404ad9">1</a>.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 5: </span>use <code>ggplot2</code> to create a chloropleth map from data, output in figure <a href="#orga404ad9">1</a></label><pre class="src src-R" id="orgc21c2f1">wmp <span style="color: #b751b6;">&lt;-</span> ggplot(fatalmap, aes(map_id = region)) +
+  geom_map(map = fatalmap,  color = <span style="color: #50a14f;">"grey"</span>, aes(fill = total_deaths_per_million), lwd = <span style="color: #da8548; font-weight: bold;">0.1</span>, alpha = <span style="color: #da8548; font-weight: bold;">0.6</span>)+
+  expand_limits(x = fatalmap$long, y = fatalmap$lat)+
+  scale_fill_gradient(high = <span style="color: #50a14f;">"darkred"</span>, low = <span style="color: #50a14f;">"white"</span>) +
+  guides(fill = guide_legend(<span style="color: #50a14f;">"Total Deaths \n per Million"</span>)) +
+   <span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">Change the colors of background</span>
+   <span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">and the color of grid lines to white</span>
+   theme(
+     panel.background = element_rect(fill = <span style="color: #50a14f;">"lightblue"</span>,
+                                     colour = <span style="color: #50a14f;">"lightblue"</span>,
+                                     size = <span style="color: #da8548; font-weight: bold;">0.5</span>, linetype = <span style="color: #50a14f;">"solid"</span>),
+     legend.position = c(<span style="color: #da8548; font-weight: bold;">0.6</span>, <span style="color: #da8548; font-weight: bold;">0.1</span>),
+     legend.direction = <span style="color: #50a14f;">"horizontal"</span>,
+     legend.background = element_rect(fill = <span style="color: #50a14f;">"white"</span>, size = <span style="color: #da8548; font-weight: bold;">0.1</span>, colour = <span style="color: #50a14f;">"darkblue"</span>, linetype = <span style="color: #50a14f;">"solid"</span>)) +
+   labs(x = <span style="color: #50a14f;">"Longitude"</span>, y = <span style="color: #50a14f;">"Latitude"</span>, title = TeX(<span style="color: #50a14f;">"Total Deaths Attributed to \\textit{COVID-19}"</span>))
+<span style="color: #9ca0a4;">#   </span><span style="color: #9ca0a4;">geom_text(data = region_lab_df, aes(y = lat, x = long, label = region), size = 1)</span>
+wmp
+
+</pre>
+</div>
+
+
+
+<div id="orga404ad9" class="figure">
+<p><img src="FirstChALL.png" alt="FirstChALL.png" width="400px" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Chloropleth map of total deaths attributed to <i>COVID-19</i> (per Million people)</p>
+</div>
+
+<p>
+A bubble overlay may also be implemented in order make clearer the spread of cases (see section <a href="#org8a57d42">3.5</a> for a brief literature review), it is necessary however to adjust the <i>USA</i> location to represent the mainland population centre in order make the visualisation more effective. This is demonstrated in listing <a href="#org396f5bc">6</a> and shown in figure <a href="#org9882b3d">2</a>
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 6: </span>use <code>ggplot2</code> to create a chloropleth map from data, output in figure <a href="#orga404ad9">1</a></label><pre class="src src-R" id="org396f5bc">
+<span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">Compute the centroid as the mean longitude and lattitude</span>
+<span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">Used as label coordinate for country's names</span>
+region_lab_df <span style="color: #b751b6;">&lt;-</span> some.eu.maps <span style="color: #b751b6;">%&gt;%</span>
+  group_by(region) <span style="color: #b751b6;">%&gt;%</span>
+  summarise(long = mean(long), lat = mean(lat)) <span style="color: #b751b6;">%&gt;%</span>
+    full_join(aggregate(total_deaths_per_million ~ region, fatalmap, mean))
+<span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">Manually Adjust US to be population Centre</span>
+region_lab_df[region_lab_df$region == <span style="color: #50a14f;">"USA"</span>,]$long <span style="color: #b751b6;">&lt;-</span> -<span style="color: #da8548; font-weight: bold;">92.47</span>
+region_lab_df[region_lab_df$region == <span style="color: #50a14f;">"USA"</span>,]$lat <span style="color: #b751b6;">&lt;-</span> <span style="color: #da8548; font-weight: bold;">37.37</span>
+
+
+wmp +
+  scale_size_continuous(range = c(<span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">9</span>), name = <span style="color: #50a14f;">"Total Number \n of Deaths"</span>) +
+   guides(size = <span style="color: #986801;">FALSE</span>) +
+   geom_point(data = region_lab_df, aes(y = lat, x = long, size = total_deaths_per_million), alpha = <span style="color: #da8548; font-weight: bold;">0.5</span>, col = <span style="color: #50a14f;">"purple"</span>)
+</pre>
+</div>
+
+
+<div id="org9882b3d" class="figure">
+<p><img src="FirstChAllbub.png" alt="FirstChAllbub.png" width="400px" />
+</p>
+<p><span class="figure-number">Figure 2: </span>Chloropleth map with bubble overlay to aid in case visualisation</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5b19ba2" class="outline-4">
+<h4 id="org5b19ba2"><span class="section-number-4">3.2.2</span> Europe Centric</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+The chloropleth map clearly shows that the disease has caused significiantly more fatalities
+per capita in Europe and so the plot will be adjusted central to Europe.
+</p>
+
+<p>
+As before it is necessary to rename the features of the dataset, however in this
+instance small European countries such as Belgium should be retained (San marino
+is a very small italian provice that isn&rsquo;t detectable in the visualisation and
+skews the pallete, for this reason it will be removed), this is demonstrated in
+listing <a href="#org87744bd">7</a>
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 7: </span>Rename the features of the data and remove San Marino</label><pre class="src src-R" id="org87744bd"><span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Rename to facilitate joining with map</span>
+names(fatalprop) <span style="color: #b751b6;">&lt;-</span> c(<span style="color: #50a14f;">"region"</span>, <span style="color: #50a14f;">"total_deaths_per_million"</span>)
+
+<span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">San Marino will be shown by italy</span>
+ fatalprop <span style="color: #b751b6;">&lt;-</span> fatalprop <span style="color: #b751b6;">%&gt;%</span> filter(region!=<span style="color: #50a14f;">"San Marino"</span>)
+</pre>
+</div>
+
+<p>
+In this map it will be desirable to have labels for the European countries
+(whereas this would have made the worldwide map too busy), so this will be
+implemented by using <code>dyplyr</code> to generate a second data set as shown in listing
+<a href="#org6d581e5">8</a> which can then be used to generate a plot with the <code>ggrepel</code> add on as shown in listing <a href="#org67f2888">9</a>, this
+produces the output shown in figure <a href="#orgbfbd1c8">3</a>, bubbles were also implemented in order to help visualise the number of relative cases.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 8: </span>use <code>dplyr</code> to reduce the plot size and create a data frame of country labels</label><pre class="src src-R" id="org6d581e5">fatalmap <span style="color: #b751b6;">&lt;-</span> left_join(fatalprop, some.eu.maps, by = <span style="color: #50a14f;">"region"</span>)
+
+<span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Filter out only Europe</span>
+fatalmap <span style="color: #b751b6;">&lt;-</span>  fatalmap <span style="color: #b751b6;">%&gt;%</span>
+  filter(<span style="color: #da8548; font-weight: bold;">30</span> &lt;  lat &amp; lat &lt; <span style="color: #da8548; font-weight: bold;">65</span>) <span style="color: #b751b6;">%&gt;%</span>
+  filter(-<span style="color: #da8548; font-weight: bold;">30</span> &lt;  long &amp; long &lt; <span style="color: #da8548; font-weight: bold;">35</span>)
+
+<span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Create Label Data Frame</span>
+region_lab_df <span style="color: #b751b6;">&lt;-</span> fatalmap <span style="color: #b751b6;">%&gt;%</span>
+  dplyr::group_by(region) <span style="color: #b751b6;">%&gt;%</span>
+  dplyr::summarise(long = mean(long), lat = mean(lat)) <span style="color: #b751b6;">%&gt;%</span>
+   full_join(aggregate(total_deaths_per_million ~ region, fatalmap, mean))
+</pre>
+</div>
+
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 9: </span>Generate a Chloropleth map centred on Europe using <code>ggplot2</code></label><pre class="src src-R" id="org67f2888"><span style="color: #b751b6;">library</span>(ggrepel)
+ggplot(fatalmap, aes(map_id = region, label = region)) +
+  geom_map(map = fatalmap,
+           aes(fill = total_deaths_per_million),
+           color = <span style="color: #50a14f;">"white"</span>) +
+  geom_point(data = region_lab_df, aes(y = lat, x = long, size = total_deaths_per_million), alpha = <span style="color: #da8548; font-weight: bold;">0.45</span>, colour = <span style="color: #50a14f;">"blue"</span>, stroke = <span style="color: #da8548; font-weight: bold;">1</span>, fill = <span style="color: #50a14f;">"white"</span>, shape = <span style="color: #da8548; font-weight: bold;">21</span>) +  scale_size_continuous(range = c(<span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">25</span>), name = <span style="color: #50a14f;">"Total Number \n of Deaths"</span>) +
+  guides(size = <span style="color: #986801;">FALSE</span>) +
+  expand_limits(x = fatalmap$long, y = fatalmap$lat) +
+  scale_fill_viridis_c(option = <span style="color: #50a14f;">"C"</span>) +
+  scale_fill_gradient(high = <span style="color: #50a14f;">"darkred"</span>, low = <span style="color: #50a14f;">"white"</span>) +
+  guides(fill = guide_legend(<span style="color: #50a14f;">"Total Deaths \n per Million"</span>)) +
+  <span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">Change the colors of plot panel background to lightblue</span>
+  <span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">and the color of grid lines to white</span>
+  theme(
+    panel.background = element_rect(
+      fill = <span style="color: #50a14f;">"lightblue"</span>,
+      colour = <span style="color: #50a14f;">"lightblue"</span>,
+      size = <span style="color: #da8548; font-weight: bold;">0.5</span>,
+      linetype = <span style="color: #50a14f;">"solid"</span>
+    ),
+    legend.position = c(<span style="color: #da8548; font-weight: bold;">0.1</span>, <span style="color: #da8548; font-weight: bold;">0.6</span>),
+    legend.direction = <span style="color: #50a14f;">"vertical"</span>,
+    legend.background = element_rect(
+      fill = <span style="color: #50a14f;">"white"</span>,
+      size =
+        <span style="color: #da8548; font-weight: bold;">1.1</span>,
+      colour = <span style="color: #50a14f;">"darkblue"</span>,
+      linetype = <span style="color: #50a14f;">"solid"</span>
+    )
+  ) +
+  labs(
+    x = <span style="color: #50a14f;">"Longitude"</span>,
+    y = <span style="color: #50a14f;">"Latitude"</span>,
+    title = TeX(<span style="color: #50a14f;">"Total Deaths Attributed to \\textit{COVID-19}"</span>)
+  ) +
+  geom_text_repel(
+    data = region_lab_df,
+    aes(y = lat, x = long, label = region),
+    size = <span style="color: #da8548; font-weight: bold;">2</span>,
+    col = <span style="color: #50a14f;">"black"</span>,
+    nudge_y = <span style="color: #da8548; font-weight: bold;">0.7</span>,
+    nudge_x = -<span style="color: #da8548; font-weight: bold;">0.5</span>,
+    min.segment.length = <span style="color: #da8548; font-weight: bold;">0.6</span>,
+    force = <span style="color: #da8548; font-weight: bold;">2</span>
+  )
+</pre>
+</div>
+
+
+
+<div id="orgbfbd1c8" class="figure">
+<p><img src="SecChEur.png" alt="SecChEur.png" width="400px" />
+</p>
+<p><span class="figure-number">Figure 3: </span>Europe Centred Chloropleth of Deaths Attributed to <i>COVID-19</i></p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga7474d3" class="outline-3">
+<h3 id="orga7474d3"><span class="section-number-3">3.3</span> Advantages compared to other methods</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+A Chloropleth map provides a very clear way to visualise the occurence of
+disease in a geographical sense, in contrast to other methods such as scatter
+plots, heatmaps and bar charts, the chloropleth map provides a clear way to
+distinguish the impact of the disease on individual countries.
+</p>
+
+<p>
+The discrete distinction between countries, a fundamental component of a
+chloropleth map, is desirable because it is consistent with the independent
+legislatures accross countries, this allows for a comparison of the impact
+that policy decisions may or may not have on a region.
+</p>
+
+<p>
+Chloropleth maps also allow trends across regions to be easily identified, e.g.
+figure <a href="#orgbfbd1c8">3</a> shows how severe the outbreak is in <i>Europe</i> relative to other
+regions, this might be lost in abstraction when using other visualization methods.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbfc8039" class="outline-3">
+<h3 id="orgbfc8039"><span class="section-number-3">3.4</span> Disasadvantages</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+When maps are projected into a 2D plane they are necessarily distorted, this
+distortion can impact how spread the data appears to be.
+</p>
+
+<p>
+A chloropleth map can make it hard to compare metrics between to regions in any
+specific sense, for this a more appropriate visualization would be a bar chart.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc158546" class="outline-3">
+<h3 id="orgc158546"><span class="section-number-3">3.5</span> Literature review of related work</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+The <i>John Hopkins Coronavirus Dashboard</i> <sup><a href="#citeproc_bib_item_9">9</a></sup> implemented bubbles to
+visualise the number of cases, a screenshot of this is provided in the appendix
+at figure <a href="#orga7c75cd">7</a>, this was a part of the motivation for implementing bubbles in
+the chloropleth map because the visualization was so much more <i>striking</i> and
+promoted pre-attentive processing of the information.
+</p>
+
+<p>
+<a id="org8a57d42"></a> In his blog, Kenneth Field produced chloropleth and bubble-map charts
+detailing the spread of <i>COVID-19</i>, with however, a focuse on China, <sup><a href="#citeproc_bib_item_10">10</a></sup> these
+plots were very similar to those produced in this report, however the legend for
+the bubble plot was very nicely implemented and can be seen in figure <a href="#org2d5a2cd">8</a> of
+the appendix. He also produced an example illustrating why the use of a heatmap
+or contour map can make for a poor visualisation of cases due to the difficulty
+in interpreting the visualization compared to a bubble chart, for this reason a
+bubble chart was used in this report and a heatmap was not implemented.
+</p>
+
+<p>
+A paper in the publication <i>Environment &amp; Planning A</i> suggested using a
+cartogram to visualise the spread of disease, there example is provided in
+figure <a href="#orgd9af4d2">9</a> of the appendix. <sup><a href="#citeproc_bib_item_11">11</a></sup> Although the cartogram is visually
+quite appealing and easy to read, it is difficult to interpret quickly, the
+visualisation does not promote pre-attentive processing, for this reason the
+visualisation strategy was not implemented.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org353dca0" class="outline-2">
+<h2 id="org353dca0"><span class="section-number-2">4</span> Time Series</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org4282d8d" class="outline-3">
+<h3 id="org4282d8d"><span class="section-number-3">4.1</span> Implementation</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Time series charts can be an effective way to visualise the behaviour of a value
+over time, for this dataset however, two modifications will be implemented in
+order to make the trends more distinct.
+</p>
+</div>
+
+<div id="outline-container-orge1f96d8" class="outline-4">
+<h4 id="orge1f96d8"><span class="section-number-4">4.1.1</span> Log Scale</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<p>
+The spread of disease over time can often be described by an exponential model as
+demonstrated in equations \eqref{exp1} and \eqref{exp2}, for this reason the use of
+a \(\log\) -scale will linearise trends and so the use of a \(\log\) -scale will make
+it easier to compare the rates of population change between different countries.
+</p>
+
+
+
+\begin{align}
+  \frac{\mathrm{d} p}{\mathrm{d} t} \propto p &\implies p = Ce^{kt} \quad \exists k,c \in \mathbb{R} \label{exp1} \\
+  \frac{\mathrm{d} p}{\mathrm{d} t} \propto p \wedge    \frac{\mathrm{d} p}{\mathrm{d} t} \propto (N-p) &\implies p = \frac{ke^{Nt}}{1-ke^{Nt}} \quad \exists k \in \mathbb{R}, N \in \mathbb{R^+} \label{exp1} \label{exp2}
+\end{align}
+</div>
+</div>
+
+<div id="outline-container-org8dc5311" class="outline-4">
+<h4 id="org8dc5311"><span class="section-number-4">4.1.2</span> Adjust Zero</h4>
+<div class="outline-text-4" id="text-4-1-2">
+<p>
+In addition to a \(\log-\) scale, <i>sliding</i> the data to be relative to the number
+of days since the first case can allow the trends of the data to be compared,
+this was implemented by <i>John Hopkins University</i> in a visualisation published
+in the <i>Guardian</i> <sup><a href="#citeproc_bib_item_12">12</a></sup>. <a id="orge6276de"></a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orga0794c2" class="outline-3">
+<h3 id="orga0794c2"><span class="section-number-3">4.2</span> Technical Details</h3>
+<div class="outline-text-3" id="text-4-2">
+</div>
+<div id="outline-container-org50c93d9" class="outline-4">
+<h4 id="org50c93d9"><span class="section-number-4">4.2.1</span> Preliminary</h4>
+<div class="outline-text-4" id="text-4-2-1">
+<p>
+In order to log scale the data the <code>mutate</code> function from the <code>dplyr</code> package
+was used on data transformed into <i>wide</i> format by using the <code>pivot_wider</code>
+function, this is shown in listing <a href="#orgb4dd857">10</a>.
+</p>
+
+<p>
+Sliding the date back to the number of cases however was a little more difficult
+and required the use of a <code>for</code> loop to iterate the <code>lead</code> function over each
+column (where each column, after transformation with <code>dplyr</code>, represented the
+value for a country), this is demonstrated in listing <a href="#orgb4dd857">10</a> with an example of the
+produced <i>tidy</i> data provided in table <a href="#orga112752">1</a>; the code to produce the plot is
+demonstrated in listing <a href="#org716f9fc">11</a>, the output of which is provided in figure <a href="#org3f60506">4</a>.
+</p>
+
+<p>
+Rather than using a line plot or a scatter plot, a <code>loess</code> model was placed ontop of semi-opaque points, this is to enhance the continuity of the visualisation. The <i>Gestalt Laws</i> provide that continuous shapes are easier for readers to interpret <sup><a href="#citeproc_bib_item_13">13</a></sup> and for this reason the the overlay was implemented, to aid the reader in delineating between the different countries in a plot.
+</p>
+
+<p>
+Plots with many colours mapped to categorical variables can be difficult to interpret <sup><a href="#citeproc_bib_item_14">14</a>,<a href="#citeproc_bib_item_15">15</a></sup>, for this reason less than 10 countries were compared on the same plot.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 10: </span>Use = dplyr= to transform the data as shown in table <a href="#orga112752">1</a>, this can then be passed to ggplot as shown in listing <a href="#org716f9fc">11</a></label><pre class="src src-R" id="orgb4dd857">cv <span style="color: #b751b6;">&lt;-</span> as_tibble(covid)
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  mutate(date = as.Date(date))
+cv <span style="color: #b751b6;">&lt;-</span> cv[order(cv$date),]
+
+<span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">interested_locations &lt;- c("Australia", "USA", "Italy", "Germany", "Belgium", "United Kingdom", "New Zealand", "Japan", "China")</span>
+interested_locations <span style="color: #b751b6;">&lt;-</span> c(<span style="color: #50a14f;">"Australia"</span>, <span style="color: #50a14f;">"USA"</span>, <span style="color: #50a14f;">"Italy"</span>, <span style="color: #50a14f;">"Germany"</span>, <span style="color: #50a14f;">"Russia"</span>, <span style="color: #50a14f;">"South Korea"</span>, <span style="color: #50a14f;">"United Kingdom"</span>)
+
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(location <span style="color: #b751b6;">%in%</span> interested_locations) <span style="color: #b751b6;">%&gt;%</span>
+  filter(total_cases_per_million &gt; <span style="color: #da8548; font-weight: bold;">1</span>) <span style="color: #b751b6;">%&gt;%</span>
+  mutate(total_cases_per_million = log10(total_cases_per_million)) <span style="color: #b751b6;">%&gt;%</span>
+  dplyr::select(date, total_cases_per_million, location) <span style="color: #b751b6;">%&gt;%</span>
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+
+<span style="color: #e45649;">for</span> (i <span style="color: #e45649;">in</span> <span style="color: #da8548; font-weight: bold;">2</span>:ncol(cv)) {
+  <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Slide the Columns up and put the NA at the end</span>
+cv[,i] <span style="color: #b751b6;">&lt;-</span>   pull(cv, i) <span style="color: #b751b6;">%&gt;%</span>
+  lead(cv[,i] <span style="color: #b751b6;">%&gt;%</span>
+         is.na() <span style="color: #b751b6;">%&gt;%</span>
+         sum())
+ <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Replace the date with the number of days</span>
+cv$date <span style="color: #b751b6;">&lt;-</span> seq_len(nrow(cv))
+}
+
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+ pivot_longer(names(cv)[-<span style="color: #da8548; font-weight: bold;">1</span>], names_to = <span style="color: #50a14f;">"location"</span>, values_to = <span style="color: #50a14f;">"total_cases_per_million"</span>)
+</pre>
+</div>
+
+<table id="orga112752" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 1:</span> Top few rows of the <i>tidy</i> data set created from listing <a href="#orgb4dd857">10</a>.</caption>
+
+<colgroup>
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-right"><i><b>Date</b></i></td>
+<td class="org-left"><i><b>Location</b></i></td>
+<td class="org-right"><i><b>Total Cases Per Million</b></i></td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">South Korea</td>
+<td class="org-right">0.193</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">Italy</td>
+<td class="org-right">0.116</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">Australia</td>
+<td class="org-right">0.00860</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">Germany</td>
+<td class="org-right">0.122</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">United Kingdom</td>
+<td class="org-right">0.0976</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">USA</td>
+<td class="org-right">0.00903</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-left">Russia</td>
+<td class="org-right">0.00303</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">South Korea</td>
+<td class="org-right">0.480</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">Italy</td>
+<td class="org-right">0.339</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-left">Australia</td>
+<td class="org-right">0.0558</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 11: </span>Use <code>dplyr</code> to transform the data before plotting with <code>ggplot</code></label><pre class="src src-R" id="org716f9fc">ggplot(cv , aes(y = total_cases_per_million, x = date, col = location, group = location)) +
+  geom_point(alpha = <span style="color: #da8548; font-weight: bold;">0.3</span>)  +
+  geom_smooth() +
+  theme_bw() +
+  labs(y = <span style="color: #50a14f;">"Total Number of Cases (Log-10 Scale)"</span>, title = <span style="color: #50a14f;">"Log Scaled Total COVID-19 Cases per Million"</span>, x = TeX(<span style="color: #50a14f;">"Days since Case \\textit{#100}"</span>)) +
+  guides(col = guide_legend(<span style="color: #50a14f;">"Location"</span>))
+<span style="color: #9ca0a4;">#  </span><span style="color: #9ca0a4;">geom_smooth()</span>
+</pre>
+</div>
+
+
+
+<div id="org3f60506" class="figure">
+<p><img src="FirstTS.png" alt="FirstTS.png" width="400px" />
+</p>
+<p><span class="figure-number">Figure 4: </span>Chloropleth map of total deaths attributed to <i>COVID-19</i> (per Million people)</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org27bf501" class="outline-4">
+<h4 id="org27bf501"><span class="section-number-4">4.2.2</span> Facet Grid</h4>
+<div class="outline-text-4" id="text-4-2-2">
+<p>
+This plot however does not show all the data made available, the data set also
+includes information on the number of tests,cases and deaths resulting from
+<i>COVID-19</i>, in order to visualise this the <code>fact_grid</code> layer can be used to
+create a multi-scatterplot. first it is necessary to create a data frame, this
+can be implemented by repeating the process in listing <a href="#orgb4dd857">10</a> for each different
+metric but it will also be necessary to add a feature corresponding to that
+metric&rsquo;s description, we will also create non-log scaled data as well, this is
+demonstrated in listings <a href="#org0adaa99">12</a> through <a href="#orgf283ff7">17</a>, finally the dataframes are merged
+in listing <a href="#org0e9d67c">18</a>, the corresponding plot is shown in figure <a href="#orgf62fbb1">5</a>.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 12: </span>Use <code>dplyr</code> to create a data frame of log scaled cases</label><pre class="src src-R" id="org0adaa99">interested_locations <span style="color: #b751b6;">&lt;-</span> c(<span style="color: #50a14f;">"Australia"</span>, <span style="color: #50a14f;">"USA"</span>, <span style="color: #50a14f;">"Italy"</span>, <span style="color: #50a14f;">"Germany"</span>, <span style="color: #50a14f;">"Russia"</span>, <span style="color: #50a14f;">"South Korea"</span>, <span style="color: #50a14f;">"United Kingdom"</span>)
+
+<span style="color: #9ca0a4;">###### </span><span style="color: #9ca0a4;">Number of Cases</span>
+cv <span style="color: #b751b6;">&lt;-</span> as_tibble(covid)
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  mutate(date = as.Date(date))
+cv <span style="color: #b751b6;">&lt;-</span> cv[order(cv$date),]
+
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(location <span style="color: #b751b6;">%in%</span> interested_locations) <span style="color: #b751b6;">%&gt;%</span>
+  filter(total_cases &gt; <span style="color: #da8548; font-weight: bold;">1</span>) <span style="color: #b751b6;">%&gt;%</span>
+  mutate(total_cases_per_million = log10(total_cases_per_million)) <span style="color: #b751b6;">%&gt;%</span>
+  dplyr::select(date, total_cases_per_million, location) <span style="color: #b751b6;">%&gt;%</span>
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+<span style="color: #e45649;">for</span> (i <span style="color: #e45649;">in</span> <span style="color: #da8548; font-weight: bold;">2</span>:ncol(cv)) {
+  <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Slide the Columns up and put the NA at the end</span>
+cv[,i] <span style="color: #b751b6;">&lt;-</span>   pull(cv, i) <span style="color: #b751b6;">%&gt;%</span>
+  lead(cv[,i] <span style="color: #b751b6;">%&gt;%</span>
+         is.na() <span style="color: #b751b6;">%&gt;%</span>
+         sum())
+ <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Replace the date with the number of days</span>
+cv$date <span style="color: #b751b6;">&lt;-</span> seq_len(nrow(cv))
+}
+
+cv_cases_log <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+ pivot_longer(names(cv)[-<span style="color: #da8548; font-weight: bold;">1</span>], names_to = <span style="color: #50a14f;">"location"</span>, values_to = <span style="color: #50a14f;">"value"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(subject = <span style="color: #50a14f;">"No. of Cases"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(scale = <span style="color: #50a14f;">"Log-10 Scale"</span>)
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 13: </span>Use <code>dplyr</code> to create a data frame of log scaled deaths</label><pre class="src src-R" id="orgbe3fa47">
+<span style="color: #9ca0a4;">### </span><span style="color: #9ca0a4;">Number of deaths</span>
+
+cv <span style="color: #b751b6;">&lt;-</span> as_tibble(covid)
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  mutate(date = as.Date(date))
+cv <span style="color: #b751b6;">&lt;-</span> cv[order(cv$date),]
+
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(location <span style="color: #b751b6;">%in%</span> interested_locations) <span style="color: #b751b6;">%&gt;%</span>
+  filter(total_cases &gt; <span style="color: #da8548; font-weight: bold;">1</span>) <span style="color: #b751b6;">%&gt;%</span>
+   mutate(total_deaths_per_million = log10(total_deaths_per_million)) <span style="color: #b751b6;">%&gt;%</span>
+  dplyr::select(date, total_deaths_per_million, location) <span style="color: #b751b6;">%&gt;%</span>
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+<span style="color: #e45649;">for</span> (i <span style="color: #e45649;">in</span> <span style="color: #da8548; font-weight: bold;">2</span>:ncol(cv)) {
+  <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Slide the Columns up and put the NA at the end</span>
+cv[,i] <span style="color: #b751b6;">&lt;-</span>   pull(cv, i) <span style="color: #b751b6;">%&gt;%</span>
+  lead(cv[,i] <span style="color: #b751b6;">%&gt;%</span>
+         is.na() <span style="color: #b751b6;">%&gt;%</span>
+         sum())
+ <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Replace the date with the number of days</span>
+cv$date <span style="color: #b751b6;">&lt;-</span> seq_len(nrow(cv))
+}
+
+cv_deaths_log <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+ pivot_longer(names(cv)[-<span style="color: #da8548; font-weight: bold;">1</span>], names_to = <span style="color: #50a14f;">"location"</span>, values_to = <span style="color: #50a14f;">"value"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(subject = <span style="color: #50a14f;">"No. of Deaths"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(scale = <span style="color: #50a14f;">"Log-10 Scale"</span>)
+
+
+</pre>
+</div>
+
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 14: </span>Use <code>dplyr</code> to create a data frame of log scaled deaths, observe thousands is scaled to millions.</label><pre class="src src-R" id="org7b89c1c"><span style="color: #9ca0a4;">### </span><span style="color: #9ca0a4;">Number of Tests</span>
+cv <span style="color: #b751b6;">&lt;-</span> as_tibble(covid)
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  mutate(date = as.Date(date))
+cv <span style="color: #b751b6;">&lt;-</span> cv[order(cv$date),]
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(location <span style="color: #b751b6;">%in%</span> interested_locations) <span style="color: #b751b6;">%&gt;%</span>
+  filter(total_cases &gt; <span style="color: #da8548; font-weight: bold;">1</span>) <span style="color: #b751b6;">%&gt;%</span>
+  mutate(total_tests_per_thousand = log10(total_tests_per_thousand)-<span style="color: #da8548; font-weight: bold;">3</span>) <span style="color: #b751b6;">%&gt;%</span>
+  dplyr::select(date, total_tests_per_thousand, location) <span style="color: #b751b6;">%&gt;%</span>
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+<span style="color: #e45649;">for</span> (i <span style="color: #e45649;">in</span> <span style="color: #da8548; font-weight: bold;">2</span>:ncol(cv)) {
+  <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Slide the Columns up and put the NA at the end</span>
+cv[,i] <span style="color: #b751b6;">&lt;-</span>   pull(cv, i) <span style="color: #b751b6;">%&gt;%</span>
+  lead(cv[,i] <span style="color: #b751b6;">%&gt;%</span>
+         is.na() <span style="color: #b751b6;">%&gt;%</span>
+         sum())
+ <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Replace the date with the number of days</span>
+cv$date <span style="color: #b751b6;">&lt;-</span> seq_len(nrow(cv))
+}
+cv_tests_log <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+ pivot_longer(names(cv)[-<span style="color: #da8548; font-weight: bold;">1</span>], names_to = <span style="color: #50a14f;">"location"</span>, values_to = <span style="color: #50a14f;">"value"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(subject = <span style="color: #50a14f;">"No. of Tests"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(scale = <span style="color: #50a14f;">"Log-10"</span>)
+
+cv <span style="color: #b751b6;">&lt;-</span> rbind(cv_cases_log, cv_deaths_log, cv_tests_log)
+cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(subject == <span style="color: #50a14f;">"deaths"</span>)
+
+p_per_cap <span style="color: #b751b6;">&lt;-</span> ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = <span style="color: #da8548; font-weight: bold;">0.3</span>, aes(col = location))  +
+   geom_smooth(aes(col = location), size = <span style="color: #da8548; font-weight: bold;">0.5</span>) +
+  theme_bw() +
+  labs(y = TeX(<span style="color: #50a14f;">"Count (log_{10} Scale)"</span>), title = TeX(<span style="color: #50a14f;">"log_{10} Scale; Value of \\textit{COVID-19} Statistics over Time"</span>), x = TeX(<span style="color: #50a14f;">"Days since Case \\textit{#1}"</span>), subtitle = <span style="color: #50a14f;">"Counts Per Million of population"</span>) +
+  guides(col = guide_legend(<span style="color: #50a14f;">"Location"</span>)) +
+  facet_grid(rows = vars(subject), scales = <span style="color: #50a14f;">"free_y"</span>)
+p_per_cap
+</pre>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 15: </span>use <code>dplyr</code> to create a data frame of non-log scaled cases</label><pre class="src src-R" id="org89f7d36">interested_locations <span style="color: #b751b6;">&lt;-</span> c(<span style="color: #50a14f;">"Australia"</span>, <span style="color: #50a14f;">"USA"</span>, <span style="color: #50a14f;">"Italy"</span>, <span style="color: #50a14f;">"Germany"</span>, <span style="color: #50a14f;">"Russia"</span>, <span style="color: #50a14f;">"South Korea"</span>, <span style="color: #50a14f;">"United Kingdom"</span>)
+
+<span style="color: #9ca0a4;">###### </span><span style="color: #9ca0a4;">Number of Cases</span>
+cv <span style="color: #b751b6;">&lt;-</span> as_tibble(covid)
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  mutate(date = as.Date(date))
+cv <span style="color: #b751b6;">&lt;-</span> cv[order(cv$date),]
+
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(location <span style="color: #b751b6;">%in%</span> interested_locations) <span style="color: #b751b6;">%&gt;%</span>
+  filter(total_cases &gt; <span style="color: #da8548; font-weight: bold;">1</span>) <span style="color: #b751b6;">%&gt;%</span>
+<span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">mutate(total_cases = log10(total_cases)) %&gt;%</span>
+  dplyr::select(date, total_cases_per_million, location) <span style="color: #b751b6;">%&gt;%</span>
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
+
+<span style="color: #e45649;">for</span> (i <span style="color: #e45649;">in</span> <span style="color: #da8548; font-weight: bold;">2</span>:ncol(cv)) {
+  <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Slide the Columns up and put the NA at the end</span>
+cv[,i] <span style="color: #b751b6;">&lt;-</span>   pull(cv, i) <span style="color: #b751b6;">%&gt;%</span>
+  lead(cv[,i] <span style="color: #b751b6;">%&gt;%</span>
+         is.na() <span style="color: #b751b6;">%&gt;%</span>
+         sum())
+ <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Replace the date with the number of days</span>
+cv$date <span style="color: #b751b6;">&lt;-</span> seq_len(nrow(cv))
+}
+
+cv_cases_raw <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+ pivot_longer(names(cv)[-<span style="color: #da8548; font-weight: bold;">1</span>], names_to = <span style="color: #50a14f;">"location"</span>, values_to = <span style="color: #50a14f;">"value"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(subject = <span style="color: #50a14f;">"No. of Cases"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(scale = <span style="color: #50a14f;">"Count"</span>)
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 16: </span>use <code>dplyr</code> to create a data frame of non-log scaled deaths</label><pre class="src src-R" id="orgc297c83"><span style="color: #9ca0a4;">### </span><span style="color: #9ca0a4;">Number of deaths</span>
+
+cv <span style="color: #b751b6;">&lt;-</span> as_tibble(covid)
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  mutate(date = as.Date(date))
+cv <span style="color: #b751b6;">&lt;-</span> cv[order(cv$date),]
+
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(location <span style="color: #b751b6;">%in%</span> interested_locations) <span style="color: #b751b6;">%&gt;%</span>
+  filter(total_cases &gt; <span style="color: #da8548; font-weight: bold;">1</span>) <span style="color: #b751b6;">%&gt;%</span>
+<span style="color: #9ca0a4;">#  </span><span style="color: #9ca0a4;">mutate(total_deaths_per_million = log10(total_deaths_per_million_)) %&gt;%</span>
+  dplyr::select(date, total_deaths_per_million, location) <span style="color: #b751b6;">%&gt;%</span>
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
+
+<span style="color: #e45649;">for</span> (i <span style="color: #e45649;">in</span> <span style="color: #da8548; font-weight: bold;">2</span>:ncol(cv)) {
+  <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Slide the Columns up and put the NA at the end</span>
+cv[,i] <span style="color: #b751b6;">&lt;-</span>   pull(cv, i) <span style="color: #b751b6;">%&gt;%</span>
+  lead(cv[,i] <span style="color: #b751b6;">%&gt;%</span>
+         is.na() <span style="color: #b751b6;">%&gt;%</span>
+         sum())
+ <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Replace the date with the number of days</span>
+cv$date <span style="color: #b751b6;">&lt;-</span> seq_len(nrow(cv))
+}
+
+cv_deaths_raw <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+ pivot_longer(names(cv)[-<span style="color: #da8548; font-weight: bold;">1</span>], names_to = <span style="color: #50a14f;">"location"</span>, values_to = <span style="color: #50a14f;">"value"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(subject = <span style="color: #50a14f;">"No. of Deaths"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(scale = <span style="color: #50a14f;">"Count"</span>)
+
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 17: </span>use <code>dplyr</code> to create a data frame of non-log scaled tests</label><pre class="src src-R" id="orgf283ff7"><span style="color: #9ca0a4;">### </span><span style="color: #9ca0a4;">Number of Tests</span>
+cv <span style="color: #b751b6;">&lt;-</span> as_tibble(covid)
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  mutate(date = as.Date(date))
+cv <span style="color: #b751b6;">&lt;-</span> cv[order(cv$date),]
+cv <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(location <span style="color: #b751b6;">%in%</span> interested_locations) <span style="color: #b751b6;">%&gt;%</span>
+  filter(total_cases &gt; <span style="color: #da8548; font-weight: bold;">1</span>) <span style="color: #b751b6;">%&gt;%</span>
+ <span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">mutate(total_tests_per_thousandd = log10(total_tests_per_thousand)) %&gt;%</span>
+  mutate(total_tests_per_thousandd = total_tests_per_thousand/<span style="color: #da8548; font-weight: bold;">1000</span>) <span style="color: #b751b6;">%&gt;%</span>
+  dplyr::select(date, total_tests_per_thousand, location) <span style="color: #b751b6;">%&gt;%</span>
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
+
+<span style="color: #e45649;">for</span> (i <span style="color: #e45649;">in</span> <span style="color: #da8548; font-weight: bold;">2</span>:ncol(cv)) {
+  <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Slide the Columns up and put the NA at the end</span>
+cv[,i] <span style="color: #b751b6;">&lt;-</span>   pull(cv, i) <span style="color: #b751b6;">%&gt;%</span>
+  lead(cv[,i] <span style="color: #b751b6;">%&gt;%</span>
+         is.na() <span style="color: #b751b6;">%&gt;%</span>
+         sum())
+ <span style="color: #9ca0a4;">## </span><span style="color: #9ca0a4;">Replace the date with the number of days</span>
+cv$date <span style="color: #b751b6;">&lt;-</span> seq_len(nrow(cv))
+}
+cv_tests_raw <span style="color: #b751b6;">&lt;-</span> cv <span style="color: #b751b6;">%&gt;%</span>
+ pivot_longer(names(cv)[-<span style="color: #da8548; font-weight: bold;">1</span>], names_to = <span style="color: #50a14f;">"location"</span>, values_to = <span style="color: #50a14f;">"value"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(subject = <span style="color: #50a14f;">"No. of Tests"</span>) <span style="color: #b751b6;">%&gt;%</span>
+  add_column(scale = <span style="color: #50a14f;">"Count"</span>)
+cv <span style="color: #b751b6;">&lt;-</span> rbind(cv_cases_raw, cv_deaths_raw, cv_tests_raw)
+cv <span style="color: #b751b6;">%&gt;%</span>
+  filter(subject == <span style="color: #50a14f;">"deaths"</span>)
+
+p_total <span style="color: #b751b6;">&lt;-</span> ggplot(cv , aes(y = value, x = date)) +
+  geom_point(alpha = <span style="color: #da8548; font-weight: bold;">0.3</span>, aes(col = location))  +
+   geom_smooth(aes(col = location), size = <span style="color: #da8548; font-weight: bold;">0.5</span>) +
+  theme_bw() +
+  labs(y = TeX(<span style="color: #50a14f;">"Total Count"</span>), title = TeX(<span style="color: #50a14f;">"Total Count of \\textit{COVID-19} Statistics over Time"</span>), x = TeX(<span style="color: #50a14f;">"Days since Case \\textit{#1}"</span>)) +
+  guides(col = guide_legend(<span style="color: #50a14f;">"Location"</span>), subtitle = <span style="color: #50a14f;">"Per Million of Population"</span>) +
+  facet_grid(rows = vars(subject), scales = <span style="color: #50a14f;">"free_y"</span>)
+p_total
+</pre>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 18: </span>Merge the plots in order to create a single visualisation</label><pre class="src src-R" id="org0e9d67c">plots <span style="color: #b751b6;">&lt;-</span> list(p_per_cap + guides(col = <span style="color: #986801;">FALSE</span>), p_total+ theme(legend.position=<span style="color: #50a14f;">"bottom"</span>) )
+<span style="color: #9ca0a4;"># </span><span style="color: #9ca0a4;">plots &lt;- list(p_per_cap + theme(legend.position="bottom"), p_total+ theme(legend.position="bottom") )</span>
+<span style="color: #b751b6;">library</span>(gridExtra)
+
+gridExtra::grid.arrange(grobs = plots, layout_matrix = matrix(<span style="color: #da8548; font-weight: bold;">1</span>:<span style="color: #da8548; font-weight: bold;">2</span>, nrow = <span style="color: #da8548; font-weight: bold;">1</span>))
+</pre>
+</div>
+
+
+<div id="orgf62fbb1" class="figure">
+<p><img src="fgrid.png" alt="fgrid.png" width="400px" />
+</p>
+<p><span class="figure-number">Figure 5: </span>Multi Scatter Plot of <i>COVID-19</i> Metrics.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org8a38ec5" class="outline-3">
+<h3 id="org8a38ec5"><span class="section-number-3">4.3</span> Advantages compared to other methods</h3>
+<div class="outline-text-3" id="text-4-3">
+<ul class="org-ul">
+<li>The advantage to a log-scaled plot is that it allows rates of change to be
+compared between countries</li>
+<li>Making the Data Relative to the day of the first infection allows individual
+countries to be compared in terms of there response</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orge459ef0" class="outline-3">
+<h3 id="orge459ef0"><span class="section-number-3">4.4</span> Disasadvantages</h3>
+<div class="outline-text-3" id="text-4-4">
+<ul class="org-ul">
+<li>A log-scaled plot can be misleading if it is not made clear, his particularly
+true for readers who have limited mathematical training.
+<ul class="org-ul">
+<li>For this reason a plot without log-scaling was included and the axis were
+labelled accordingly</li>
+</ul></li>
+<li>Making Data relative to the day of the first infection may not make clear that
+certain countries had <i>/forewarning</i> of the disease by virtue of the delay.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org464ac76" class="outline-3">
+<h3 id="org464ac76"><span class="section-number-3">4.5</span> Discussion on analysis results</h3>
+<div class="outline-text-3" id="text-4-5">
+<p>
+Although the plots have been adjusted to reflect the date that the first cases were observed, it is possible that the disease began spreading before the first official case was reported, thisis a belief held by some health officials in Italy.<sup><a href="#citeproc_bib_item_16">16</a></sup>
+</p>
+
+<p>
+This plot demonstrates that general
+</p>
+
+<p>
+Countries like south korea where testing 1000 times more than for example the US at the date when they had there first case. This is perhaps why the number of south korean cases and deaths flattend so sharply compared to other countries.
+</p>
+
+<p>
+The plots have been adjusted to reflect the days from the first case, it is interesting to see that italy had such a large number of deaths beginning from the first day of infection compared to outher countries, for example Australias number of deaths increased at a much lower rate.
+</p>
+
+<p>
+to reflect the date of the first
+</p>
+</div>
+<div id="outline-container-orgcaf1b87" class="outline-4">
+<h4 id="orgcaf1b87"><span class="section-number-4">4.5.1</span> Number of Cases</h4>
+<div class="outline-text-4" id="text-4-5-1">
+<p>
+This plot clearly suggests that the spread of the disease was the greatest both in rate and magnitude in Italy, some researchers belive that this is due simply to the fact that Italy has performed more tests. <sup><a href="#citeproc_bib_item_16">16</a></sup>
+</p>
+</div>
+</div>
+<div id="outline-container-org1da4ed5" class="outline-4">
+<h4 id="org1da4ed5"><span class="section-number-4">4.5.2</span> Number of Deaths</h4>
+<div class="outline-text-4" id="text-4-5-2">
+<p>
+Italy has had the highest amount of deaths despite it&rsquo;s higher rates of testing,
+it is not clear why this is the case though. A study by <i>IQAir</i> found that 25% of the
+most air-polluted European countries were located within Italy <sup><a href="#citeproc_bib_item_17">17</a></sup>
+and such pollution has been found to be correlated with higher rates of death
+resulting from viral respiratory infection,
+<sup><a href="#citeproc_bib_item_18">18</a>–<a href="#citeproc_bib_item_20">20</a></sup> this could help explain some of the discrepancy but more research into the unique vulnerabilities of Italy is certainly warranted.
+</p>
+
+<p>
+Russia has had the fewest number of deaths related to <i>COVID-19</i>, however Moscow&rsquo;s Mayor, Sergei Sobyanin suggested that the official number of infections is likely much lower than reality, a sentiment echoed by Russia&rsquo;s <i>Doctor&rsquo;s Alliance</i> ( which is essentially a doctors union). <sup><a href="#citeproc_bib_item_21">21</a></sup>
+</p>
+
+<p>
+Dispensing with The view that Russia&rsquo;s figures are reliable it is clear that
+Australia and South Korea have the lowest number of cases overall, while
+Australia&rsquo;s success can be attributed to it&rsquo;s relative isolation and unique
+quarantine requirements,
+<sup><a href="#citeproc_bib_item_22">22</a></sup> combined with
+lockdown&rsquo;s implemented early in the pandemic (with respect to Australia&rsquo;s first
+case) <sup><a href="#citeproc_bib_item_23">23</a></sup> the success of South Korea Appears to be related more
+appropriatley with the aggressive action taken by the country to contact trace the spread of the disease. <sup><a href="#citeproc_bib_item_24">24</a></sup>
+</p>
+
+<p>
+It appears that the number of deaths is more closely correlated with the number of cases than the number of tests, however it is not clear what the effect of testing is on the number of new cases.
+</p>
+</div>
+</div>
+<div id="outline-container-org2b084ab" class="outline-4">
+<h4 id="org2b084ab"><span class="section-number-4">4.5.3</span> Number of Tests</h4>
+<div class="outline-text-4" id="text-4-5-3">
+<p>
+Italy and the US have undertaken the highest rates of testing, per capita, this
+however does not appear to have influeced the rates of death or spread of cases significantly, indicating that measuring a countries response to the disease cannot be meaured merely by considering the rate of testing.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org14a01e5" class="outline-3">
+<h3 id="org14a01e5"><span class="section-number-3">4.6</span> Discussion on other Aspects</h3>
+<div class="outline-text-3" id="text-4-6">
+<ul class="org-ul">
+<li>A potential improvement to this visualisation would be to plot many countries, say 30 but greyscale those countries and only apply colour to countries of interest, this would provide background information relative to those observations but not overwhelm the reader, this is a suggestion made by Andy Kirk in his <i>Visualising Data</i> blog  <sup><a href="#citeproc_bib_item_25">25</a></sup>.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org3f9ec97" class="outline-3">
+<h3 id="org3f9ec97"><span class="section-number-3">4.7</span> Literature review of related work</h3>
+<div class="outline-text-3" id="text-4-7">
+<p>
+As mentioned in section <a href="#orge6276de">4.1.2</a> the use of the log-scaled and date-adjusted plot was implemented by <i>John Hopkins University</i> in a visualisation published in <i>The Guardian</i> newspaper <sup><a href="#citeproc_bib_item_12">12</a></sup>.
+</p>
+
+
+<p>
+NSW Health created a visualisation of cases acquired over time using a barchart
+in a way that resembles a histogram, <sup><a href="#citeproc_bib_item_26">26</a></sup> this plot is very easy
+to interpret and clearly demonstrates the success of NSW in <i>flattening the
+curve</i>, this visualisation could have been implemented for this data as demonstrated in listing <a href="#orgfbe01fc">19</a> shown in figure <a href="#orgf77a483">6</a> for different countries in a similar fashion, this however was not effective for comparing countries and so was not pursued.
+</p>
+
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 19: </span>Use <code>ggplot</code> to create a bar chart</label><pre class="src src-R" id="orgfbe01fc"><span style="color: #9ca0a4;">#</span><span style="color: #9ca0a4;">+begin_src</span>
+interested_locations <span style="color: #b751b6;">&lt;-</span> c(<span style="color: #50a14f;">"Australia"</span>, <span style="color: #50a14f;">"USA"</span>, <span style="color: #50a14f;">"Italy"</span>, <span style="color: #50a14f;">"Germany"</span>, <span style="color: #50a14f;">"Russia"</span>, <span style="color: #50a14f;">"South Korea"</span>, <span style="color: #50a14f;">"United Kingdom"</span>)
+cv <span style="color: #b751b6;">&lt;-</span> covid <span style="color: #b751b6;">%&gt;%</span>
+  dplyr::filter(location <span style="color: #b751b6;">%in%</span> interested_locations)
+
+ggplot(fortify(cv), aes(x = as.Date(date), y = new_cases_per_million, fill = location)) +
+  geom_col(col = <span style="color: #50a14f;">"grey"</span>) +
+  labs(x = <span style="color: #50a14f;">"Date"</span>, y = <span style="color: #50a14f;">"New Cases Per Million"</span>) +
+   theme(axis.text.x = element_text(angle = <span style="color: #da8548; font-weight: bold;">90</span>, hjust = <span style="color: #da8548; font-weight: bold;">1</span>)) +
+  theme_bw()
+</pre>
+</div>
+
+
+
+<div id="orgf77a483" class="figure">
+<p><img src="barex.png" alt="barex.png" width="400px" />
+</p>
+<p><span class="figure-number">Figure 6: </span>Bar Chart of cases over time for various locations</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org6ff559f" class="outline-2">
+<h2 id="org6ff559f"><span class="section-number-2">5</span> <span class="todo TODO">TODO</span> Parallell Co-ordinates</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+each line is a country
+each column is a feature like testing, death and cases.
+</p>
+
+<p>
+<a href="https://stackoverflow.com/a/35206832/10593632">This Stack Post shows how to make them curvy</a>
+</p>
+</div>
+
+<div id="outline-container-org4d60849" class="outline-3">
+<h3 id="org4d60849"><span class="section-number-3">5.1</span> Technical Details</h3>
+</div>
+<div id="outline-container-org96f12ca" class="outline-3">
+<h3 id="org96f12ca"><span class="section-number-3">5.2</span> Advantages compared to other methods</h3>
+</div>
+<div id="outline-container-orgb1e6359" class="outline-3">
+<h3 id="orgb1e6359"><span class="section-number-3">5.3</span> Disasadvantages</h3>
+</div>
+<div id="outline-container-orge766c1c" class="outline-3">
+<h3 id="orge766c1c"><span class="section-number-3">5.4</span> Discussion on analysis results</h3>
+</div>
+<div id="outline-container-orge66e63b" class="outline-3">
+<h3 id="orge66e63b"><span class="section-number-3">5.5</span> Discussion on other Aspects</h3>
+</div>
+<div id="outline-container-orgbee8e54" class="outline-3">
+<h3 id="orgbee8e54"><span class="section-number-3">5.6</span> Literature review of related work</h3>
+</div>
+</div>
+
+<div id="outline-container-org1415fcf" class="outline-2">
+<h2 id="org1415fcf"><span class="section-number-2">6</span> For Each Visualisation</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-orgd84f701" class="outline-3">
+<h3 id="orgd84f701"><span class="section-number-3">6.1</span> Technical Details</h3>
+</div>
+<div id="outline-container-org85e06ff" class="outline-3">
+<h3 id="org85e06ff"><span class="section-number-3">6.2</span> Advantages compared to other methods</h3>
+</div>
+<div id="outline-container-orgd0a07ef" class="outline-3">
+<h3 id="orgd0a07ef"><span class="section-number-3">6.3</span> Disasadvantages</h3>
+</div>
+<div id="outline-container-org50ad99d" class="outline-3">
+<h3 id="org50ad99d"><span class="section-number-3">6.4</span> Discussion on analysis results</h3>
+</div>
+<div id="outline-container-orga23d211" class="outline-3">
+<h3 id="orga23d211"><span class="section-number-3">6.5</span> Discussion on other Aspects</h3>
+</div>
+<div id="outline-container-orgbf9b32b" class="outline-3">
+<h3 id="orgbf9b32b"><span class="section-number-3">6.6</span> Literature review of related work</h3>
+</div>
+</div>
+
+<div id="outline-container-org528859f" class="outline-2">
+<h2 id="org528859f"><span class="section-number-2">7</span> Appendix&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span></h2>
+<div class="outline-text-2" id="text-7">
+
+<div id="orga7c75cd" class="figure">
+<p><img src="file:///home/ryan/Notes/Org/.attach/84/c19d03-8ab7-4793-a86d-e861e1bffe2b/_20200521_140312screenshot.png" alt="_20200521_140312screenshot.png" width="400px" />
+</p>
+<p><span class="figure-number">Figure 7: </span>John Hopkins Bubble Chart <a class='org-ref-reference' href="#2020o">2020o</a></p>
+</div>
+
+
+
+<div id="org2d5a2cd" class="figure">
+<p><img src="proppymap2.png" alt="proppymap2.png" width="400px" />
+</p>
+<p><span class="figure-number">Figure 8: </span>Bubble Plot Chart produced by Field in his blog <a class='org-ref-reference' href="#field2020">field2020</a></p>
+</div>
+
+
+
+<div id="orgd9af4d2" class="figure">
+<p><img src="cartogramStudy.jpg" alt="cartogramStudy.jpg" width="400px" />
+</p>
+<p><span class="figure-number">Figure 9: </span>Cartogram of <i>COVID-19</i> spread <a class='org-ref-reference' href="#gao2020">gao2020</a></p>
+</div>
+
+<div class="org-src-container">
+<label class="org-src-name"><span class="listing-number">Listing 20: </span>Generate Citation for <b><i>R</i></b> programming Language</label><pre class="src src-R" id="org6a16dd5">citation()
+citation(<span style="color: #50a14f;">"ggplot2"</span>)
+</pre>
+</div>
+
+<pre class="example">
+
+  To cite R in publications use:
+
+    R Core Team (2020). R: A language and environment for statistical
+    computing. R Foundation for Statistical Computing, Vienna, Austria.
+    URL https://www.R-project.org/.
+
+  A BibTeX entry for LaTeX users is
+
+    @Manual{,
+      title = {R: A Language and Environment for Statistical Computing},
+      author = {{R Core Team}},
+      organization = {R Foundation for Statistical Computing},
+      address = {Vienna, Austria},
+      year = {2020},
+      url = {https://www.R-project.org/},
+    }
+
+  We have invested a lot of time and effort in creating R, please cite it
+  when using it for data analysis. See also ‘citation("pkgname")’ for
+  citing R packages.
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org8240601" class="outline-2">
+<h2 id="org8240601"><span class="section-number-2">8</span> References</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+## <a id="orgc3cce26"></a>
+## 
+</p>
+<style>.csl-left-margin{float: left; padding-right: 0em;} .csl-right-inline{margin: 0 0 0 1.7999999999999998em;}</style><h2 class='citeproc-org-bib-h2'>Bibliography</h2>
+<div class="csl-bib-body">
+  <div class="csl-entry"><a name="citeproc_bib_item_1"></a>
+    <div class="csl-left-margin">1.</div><div class="csl-right-inline">Organization, W. H. Coronavirus Disease (COVID-19) - Events as They Happen. (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_2"></a>
+    <div class="csl-left-margin">2.</div><div class="csl-right-inline">Ritchie, H. Coronavirus Source Data. <i>Our World in Data</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_3"></a>
+    <div class="csl-left-margin">3.</div><div class="csl-right-inline">Team, R. C. R: A Language and Environment for Statistical Computing. (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_4"></a>
+    <div class="csl-left-margin">4.</div><div class="csl-right-inline">Wickham, H. <i>Ggplot2: Elegant Graphics for Data Analysis</i>. (Springer-Verlag, 2016).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_5"></a>
+    <div class="csl-left-margin">5.</div><div class="csl-right-inline">Europe : Italy textemdash The World Factbook - Central Intelligence Agency. (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_6"></a>
+    <div class="csl-left-margin">6.</div><div class="csl-right-inline">Sood, N. <i>et al.</i> Seroprevalence of SARS-CoV-2textendashSpecific Antibodies Among Adults in Los Angeles County, California, on April 10-11, 2020. <i>JAMA</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_7"></a>
+    <div class="csl-left-margin">7.</div><div class="csl-right-inline">Woodley, M. How Does Coronavirus Compare with Previous Global Outbreaks? <i>Royal Australian College of General Practitioners</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_8"></a>
+    <div class="csl-left-margin">8.</div><div class="csl-right-inline">Serrano, R. Intensified Public Health Measures Help Control MERS-CoV Outbreak in the Republic of Korea. (2015).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_9"></a>
+    <div class="csl-left-margin">9.</div><div class="csl-right-inline">COVID-19 Map. <i>Johns Hopkins Coronavirus Resource Center</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_10"></a>
+    <div class="csl-left-margin">10.</div><div class="csl-right-inline">Field, K. Mapping Coronavirus, Responsibly. <i>ArcGIS Blog</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_11"></a>
+    <div class="csl-left-margin">11.</div><div class="csl-right-inline">Gao, P., Zhang, H., Wu, Z. &#38; Wang, J. Visualising the Expansion and Spread of Coronavirus Disease 2019 by Cartograms. <i>Environment &#38; Planning a</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_12"></a>
+    <div class="csl-left-margin">12.</div><div class="csl-right-inline">Gutiérrez, P. World news. <i>The Guardian</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_13"></a>
+    <div class="csl-left-margin">13.</div><div class="csl-right-inline">Staudinger, M. R., Fink, G. R., Mackay, C. E. &#38; Lux, S. Gestalt Perception and the Decline of Global Precedence in Older Subjects. <i>Cortex</i> <b>47</b>, 854–862 (2011).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_14"></a>
+    <div class="csl-left-margin">14.</div><div class="csl-right-inline">Wilson, A. Creative Inspirations &#38; Trends. <i>Adobe Blog</i> (2017).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_15"></a>
+    <div class="csl-left-margin">15.</div><div class="csl-right-inline">Rost, L. Choosing Colors for Data Visualization. <i>Dataquest</i> (2018).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_16"></a>
+    <div class="csl-left-margin">16.</div><div class="csl-right-inline">Godin, M. Why Is the Coronavirus Outbreak So Bad in Italy? <i>Time</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_17"></a>
+    <div class="csl-left-margin">17.</div><div class="csl-right-inline">IQAir. World’s Most Polluted Cities in 2019 - PM2.5 Ranking | AirVisual. (2019).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_18"></a>
+    <div class="csl-left-margin">18.</div><div class="csl-right-inline">Ciencewicki, J. &#38; Jaspers, I. Air Pollution and Respiratory Viral Infection. <i>Inhalation Toxicology</i> <b>19</b>, 1135–1146 (2007).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_19"></a>
+    <div class="csl-left-margin">19.</div><div class="csl-right-inline">Croft, D. P. <i>et al.</i> The Association between Respiratory Infection and Air Pollution in the Setting of Air Quality Policy and Economic Change. <i>Annals of the American Thoracic Society</i> <b>16</b>, 321–330 (2019).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_20"></a>
+    <div class="csl-left-margin">20.</div><div class="csl-right-inline">Zhang, D. <i>et al.</i> The Relationship between Air Quality and Respiratory Pathogens among Children in Suzhou City. <i>Italian Journal of Pediatrics</i> <b>45</b>, 123 (2019).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_21"></a>
+    <div class="csl-left-margin">21.</div><div class="csl-right-inline">Dole. If Coronavirus Explodes in Russia, Putin’s Political Survival Could Be on the Line. (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_22"></a>
+    <div class="csl-left-margin">22.</div><div class="csl-right-inline">Department of Agrigulture, W. &#38; Environment, A. the. Fact Sheet - Travelling or Returning to Australia - Department of Agriculture. (2019).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_23"></a>
+    <div class="csl-left-margin">23.</div><div class="csl-right-inline">Willis, O. The Coronavirus Emergency Plan Has Been Activated. Here’s What That Means for You. (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_24"></a>
+    <div class="csl-left-margin">24.</div><div class="csl-right-inline">Thompson, D. Ideas. <i>The Atlantic</i> (2020).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_25"></a>
+    <div class="csl-left-margin">25.</div><div class="csl-right-inline">Kirk, A. articles. <i>Visualising Data</i> (2015).</div>
+  </div>
+  <div class="csl-entry"><a name="citeproc_bib_item_26"></a>
+    <div class="csl-left-margin">26.</div><div class="csl-right-inline">Health, N. NSW COVID-19 Case Statistics - COVID-19 (Coronavirus). (2020).</div>
+  </div>
+</div>
+
+<p>
+##
+## <a id="org153a612"></a>
+##  
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+Free as in Speech and beer
+</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Ryan Greenup</p>
+<p class="date">Created: 2020-05-24 Sun 11:36</p>
+</div>
+</body>
+</html>

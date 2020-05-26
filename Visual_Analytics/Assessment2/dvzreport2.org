@@ -3,7 +3,7 @@
  #+INFOJS_OPT: view:info toc:3 buttons:t
 #+PLOT: title:"Citas" ind:1 deps:(3) type:2d with:histograms set:"yrange [0:]"
 #+OPTIONS: tex:t
-#+LATEX_HEADER: \usepackage{/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle}
+#+LATEX_HEADER: \usepackage{/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyleDV}
 # [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle.sty]]
 #+PROPERTY: header-args :eval never-export :session mainvisas2 :results output
 #+CSL_STYLE: /home/ryan/Templates/CSL/nature.csl

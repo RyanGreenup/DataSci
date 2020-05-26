@@ -1,0 +1,96 @@
+---
+title: "Analytics Programming Assessment"
+author: "Ryan Greenup - 17805315"
+output:
+  pdf_document:
+    toc: yes
+  html_notebook:
+    toc: yes
+## output:
+##   bookdown::pdf_document2: default
+##   bookdown::html_document2: default
+---
+
+# Preamble
+## Load Packages
+```{r, results = FALSE}
+## (01) Clean up the Iris Data
+
+# Preamble
+## Install Pacman
+load.pac <- function() {
+  
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
+                 swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart, knitr,
+                 bookdown)
+  
+}
+
+load.pac()
+```
+
+## Knitr Configuration
+### Make Chunks verbose
+```{r, results = FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+```
+
+### Set Figure Locations
+```{r opts, results = FALSE}
+knitr::opts_chunk$set(
+  fig.path = "figure/"
+)
+```
+
+
+# Question 1
+## d. Submission Receipt
+The submission receipt for the preliminary assessment is provided as a screenshot at figure \ref{fig:chunk-label} and the recipt number is:
+
+>`95d652b5-e2e7-4f43-b7e5-3290b9e4ef0b`
+
+```{r chunk-label, out.width="80%", fig.cap="Hi"}
+include_graphics("./Receipt.png")
+```
+
+## e. Set Variables
+
+```{r}
+studentname <- "Ryan Greenup"
+studentno   <- 17805315 
+```
+
+## f. Print Variables
+### i. Show the Code Without the Results
+Will produce the corresponding output:
+
+```{r results=FALSE, eval = FALSE}
+print(studentname)
+print(studentno)
+```
+
+### ii. Show the Evaluated Output in the Document
+
+```{r results=TRUE, echo = FALSE, eval = TRUE}
+print(studentname)
+print(studentno)
+```
+
+### ii. Show the Evaluated Output and corresponding code in the Document
+
+```{r results=TRUE, echo = TRUE, eval = TRUE}
+print(studentname)
+print(studentno)
+```
+
+# Question 2 
+# Question 3
+# Question 4

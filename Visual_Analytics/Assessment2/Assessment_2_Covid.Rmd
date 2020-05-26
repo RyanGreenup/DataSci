@@ -461,6 +461,7 @@ cv <- cv %>%
   filter(total_cases_per_million > 1) %>% 
   mutate(total_tests_per_thousand = log10(total_tests_per_thousand)) %>% 
   dplyr::select(date, total_tests_per_thousand, location) %>% 
+  mutate(total_tests_per_thousand = total_tests_per_thousand/1000) %>% 
   pivot_wider(names_from = location, values_from = total_tests_per_thousand)
 
 
@@ -624,8 +625,8 @@ cv <- cv %>%
   filter(location %in% interested_locations) %>% 
   filter(total_cases > 1) %>% 
 # mutate(total_cases = log10(total_cases)) %>% 
-  dplyr::select(date, total_cases, location) %>% 
-  pivot_wider(names_from = location, values_from = total_cases)
+  dplyr::select(date, total_cases_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_cases_per_million)
 
 for (i in 2:ncol(cv)) {
   ## Slide the Columns up and put the NA at the end
@@ -653,8 +654,8 @@ cv <- cv %>%
   filter(location %in% interested_locations) %>% 
   filter(total_cases > 1) %>% 
 #  mutate(total_deaths = log10(total_deaths_)) %>% 
-  dplyr::select(date, total_deaths, location) %>% 
-  pivot_wider(names_from = location, values_from = total_deaths)
+  dplyr::select(date, total_deaths_per_million, location) %>% 
+  pivot_wider(names_from = location, values_from = total_deaths_per_million)
 
 for (i in 2:ncol(cv)) {
   ## Slide the Columns up and put the NA at the end
@@ -683,8 +684,9 @@ cv <- cv %>%
   filter(location %in% interested_locations) %>% 
   filter(total_cases > 1) %>% 
  # mutate(total_testsd = log10(total_testsd)) %>% 
-  dplyr::select(date, total_tests, location) %>% 
-  pivot_wider(names_from = location, values_from = total_tests)
+  mutate(total_tests_per_thousand = total_tests_per_thousand/1000) %>% 
+  dplyr::select(date, total_tests_per_thousand, location) %>% 
+  pivot_wider(names_from = location, values_from = total_tests_per_thousand)
 
 
 
@@ -702,7 +704,6 @@ cv_tests_raw <- cv %>%
  pivot_longer(names(cv)[-1], names_to = "location", values_to = "value") %>% 
   add_column(subject = "No. of Tests") %>% 
   add_column(scale = "Count")
-
 
 cv <- rbind(cv_cases_raw, cv_deaths_raw, cv_tests_raw)
 
