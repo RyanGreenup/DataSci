@@ -1,6 +1,10 @@
 ---
 title: "02 Quizz 1; Chi Dist"
-output: html_notebook
+output: 
+  html_document: 
+    keep_md: yes
+editor_options: 
+  chunk_output_type: inline
 ---
 
 # Quizz 1
@@ -167,11 +171,11 @@ $$
 
 ```
 ## 
-## 	Pearson's Chi-squared test with simulated p-value
-## 	(based on 10000 replicates)
+## 	Pearson's Chi-squared test with simulated p-value (based on 10000
+## 	replicates)
 ## 
 ## data:  eye_Mat
-## X-squared = 13.194, df = NA, p-value = 0.0017
+## X-squared = 13.194, df = NA, p-value = 0.0019
 ```
 
 Hence the probability of there detecting a difference between the two populations, under the assumption that the populations are identical is 0.002

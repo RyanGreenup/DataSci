@@ -95,7 +95,7 @@ str(iraqi)
 barplot(iraqi)
 ```
 
-![](./figure/unnamed-chunk-3-1.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-3-1.png)<!-- -->
 
 #### GGPlot2
 
@@ -158,7 +158,7 @@ ggplot(data = iraqi.tidy, mapping = aes(x = Distress, y = Count)) +
   geom_col()
 ```
 
-![](./figure/unnamed-chunk-4-1.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-4-1.png)<!-- -->
 
 ##### Fix the Order of the Plot
 In making this plot you may observe that the order of the plot has been made to be alphabetical, the order of the data frame has been disregarded. 
@@ -188,7 +188,7 @@ fillCols <- RColorBrewer::brewer.pal(nrow(iraqi.tidy), name = "Pastel1")
 barplot(height = iraqi.tidy$Count, names.arg = c("Low", "Moderate", "High", "Very High"), col = fillCols, main = "Distress Levels of Iraqi Refugees", xlab = "Distress Level", ylab = "Count")
 ```
 
-![](./figure/unnamed-chunk-5-1.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-5-1.png)<!-- -->
 
 ```r
 # GGPlot2
@@ -199,7 +199,7 @@ ggplot(data = iraqi.tidy, mapping = aes(x = Distress, y = Count)) +
   guides(col = FALSE)
 ```
 
-![](./figure/unnamed-chunk-5-2.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-5-2.png)<!-- -->
 
 ### (02) Enter the AIHW Data
 
@@ -280,7 +280,7 @@ fillCols <- RColorBrewer::brewer.pal(nrow(iraqi.tidy), name = "Pastel2")
 barplot(height = all.wide$Australia, names.arg = c("Low", "Moderate", "High", "Very High"), col = fillCols, main = "Distress Levels of Iraqi Refugees", xlab = "Distress Level", ylab = "Count")
 ```
 
-![](./figure/unnamed-chunk-8-1.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-8-1.png)<!-- -->
 
 ```r
 ## ggplot2
@@ -291,7 +291,7 @@ ggplot(data = all.tidy, mapping = aes(x = Distress, y = Count, fill = Region, co
   labs(title = "Distress of Refugees", subtitle = "", y = "Frequency")
 ```
 
-![](./figure/unnamed-chunk-8-2.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-8-2.png)<!-- -->
 
 ### (03) Determine Expected Frequency
 
@@ -384,10 +384,10 @@ rmultinom(n = 1, size = 443, prob = aihw/100)
 
 ```
 ##          [,1]
-## low       294
-## moderate   96
+## low       316
+## moderate   75
 ## high       34
-## veryHigh   19
+## veryHigh   18
 ```
 
 ```r
@@ -402,8 +402,8 @@ all.wide
 ##   Distress IraqObserved Australia IraqExpected ChiDist IraqSimulated
 ##   <ord>           <dbl>     <dbl>        <dbl>   <dbl>         <dbl>
 ## 1 low               123     70.6         313.   115.           313. 
-## 2 moderate           70     18.5          82.0    1.74          82.0
-## 3 high               93      7.41         32.8  110.            32.9
+## 2 moderate           70     18.5          82.0    1.74          81.9
+## 3 high               93      7.41         32.8  110.            32.8
 ## 4 veryHigh          157      3.43         15.2 1323.            15.2
 ```
 
@@ -427,12 +427,12 @@ data.frame(
 
 ```
 ##          averageSimCount sdSimCount lowerConfidenceForMean
-## low             312.8671   9.625521                    312
-## moderate         82.0428   8.326730                     82
-## high             32.8985   5.549175                     33
-## veryHigh         15.1916   3.750165                     15
+## low             313.1236   9.658799                    313
+## moderate         81.8791   8.427415                     81
+## high             32.8071   5.599525                     33
+## veryHigh         15.1902   3.724980                     15
 ##          upperConfidenceForMean
-## low                         313
+## low                         314
 ## moderate                     82
 ## high                         33
 ## veryHigh                     15
@@ -455,10 +455,10 @@ frequency
 ## # A tibble: 4 x 2
 ##   Distress Count  
 ##   <chr>    <table>
-## 1 low      323    
-## 2 moderate  68    
-## 3 high      40    
-## 4 veryHigh  12
+## 1 low      306    
+## 2 moderate  81    
+## 3 high      39    
+## 4 veryHigh  17
 ```
 
 ### (06) Put Everything together
@@ -706,7 +706,7 @@ eel_DF_Tidy <- pivot_longer(data = eel_DF,
                             names_to = "Location",
                             values_to = "Count") 
 
-eel_DF_Tidy$Species <- factor(eel_DF$Species)
+eel_DF_Tidy$Species <- factor(eel_DF_Tidy$Species)
 eel_DF_Tidy$Location <- factor(eel_DF_Tidy$Location)
 
 ## Using Melt from `reshape2`
@@ -746,7 +746,7 @@ ggplot(data = eel_DF_Tidy,
   scale_fill_manual(values=violetBluePallet)
 ```
 
-![](./figure/unnamed-chunk-19-1.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-19-1.png)<!-- -->
 
 
 ### (2) Expected Values
@@ -923,8 +923,8 @@ rmultinom(n = 1, size = sum(eel_Mat), prob = overall_proportion) %>% matrix(ncol
 
 ```
 ##      [,1] [,2] [,3]
-## [1,]  260  145   94
-## [2,]  164  110   61
+## [1,]  238  141  105
+## [2,]  167  102   81
 ```
 
 ```r
@@ -939,13 +939,13 @@ print(list(obs_sim, e_sim), 1)
 ```
 ## [[1]]
 ##      [,1] [,2] [,3]
-## [1,]  263  139  102
-## [2,]  173   97   60
+## [1,]  246  134  100
+## [2,]  185   97   72
 ## 
 ## [[2]]
 ##      [,1] [,2] [,3]
-## [1,]  220  119   82
-## [2,]  144   78   53
+## [1,]  207  111   83
+## [2,]  153   82   61
 ```
 
 ```r
@@ -1046,7 +1046,7 @@ paste("The Probability of rejecting the null hypothesis, assuming that it was tr
 ```
 
 ```
-## [1] "The Probability of rejecting the null hypothesis, assuming that it was true (i.e. detecting a false positive assuming there is no difference between species) is 0.0425"
+## [1] "The Probability of rejecting the null hypothesis, assuming that it was true (i.e. detecting a false positive assuming there is no difference between species) is 0.0403"
 ```
 
 ```r
@@ -1070,7 +1070,7 @@ This can be visualised in a histogram:
   myhist <- hist(sim_chi_vec, breaks = 50) 
 ```
 
-![](./figure/unnamed-chunk-27-1.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-27-1.png)<!-- -->
 
 ```r
   plot(myhist, col = ifelse(myhist$mid<6, "white", "lightblue"), 
@@ -1080,7 +1080,7 @@ This can be visualised in a histogram:
   abline(v = chi_obs, col = "Indianred", lty = 2, lwd = 3)
 ```
 
-![](./figure/unnamed-chunk-27-2.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-27-2.png)<!-- -->
 
 ```r
     # Conditional Colour: # https://stat.ethz.ch/pipermail/r-help/2008-July/167936.html
@@ -1113,7 +1113,7 @@ This can be visualised in a histogram:
 ## Warning: Removed 4 rows containing missing values (geom_bar).
 ```
 
-![](./figure/unnamed-chunk-27-3.png)<!-- -->
+![](./figure/02_Chi/unnamed-chunk-27-3.png)<!-- -->
 
 
 
@@ -1140,7 +1140,7 @@ chisq.test(x = eel_Mat, simulate.p.value = TRUE, B = 10^4)
 ## 	replicates)
 ## 
 ## data:  eel_Mat
-## X-squared = 6.2621, df = NA, p-value = 0.0449
+## X-squared = 6.2621, df = NA, p-value = 0.0457
 ```
 
 #### Analytic Function

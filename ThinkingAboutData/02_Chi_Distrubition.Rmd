@@ -39,7 +39,7 @@ mise()
 
 ```{r opts, echo = FALSE}
 knitr::opts_chunk$set(
-  fig.path = "./figure/"
+  fig.path = "./figure/02_Chi/"
 )
 ```
 
@@ -500,7 +500,7 @@ eel_DF_Tidy <- pivot_longer(data = eel_DF,
                             names_to = "Location",
                             values_to = "Count") 
 
-eel_DF_Tidy$Species <- factor(eel_DF$Species)
+eel_DF_Tidy$Species <- factor(eel_DF_Tidy$Species)
 eel_DF_Tidy$Location <- factor(eel_DF_Tidy$Location)
 
 ## Using Melt from `reshape2`

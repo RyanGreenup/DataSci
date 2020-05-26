@@ -1,6 +1,10 @@
 ---
 title: "02 Quizz 1; Chi Dist"
-output: html_notebook
+output: 
+  html_document: 
+    keep_md: yes
+editor_options: 
+  chunk_output_type: inline
 ---
 
 # Quizz 1
