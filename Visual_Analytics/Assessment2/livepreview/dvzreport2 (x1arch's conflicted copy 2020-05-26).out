@@ -1,0 +1,43 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Chloropleth Map}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Technical Details}{section.2}% 3
+\BOOKMARK [3][-]{subsubsection.2.1.1}{Preliminary}{subsection.2.1}% 4
+\BOOKMARK [3][-]{subsubsection.2.1.2}{Woldwide Map}{subsection.2.1}% 5
+\BOOKMARK [3][-]{subsubsection.2.1.3}{Europe Centric}{subsection.2.1}% 6
+\BOOKMARK [2][-]{subsection.2.2}{Discussion}{section.2}% 7
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Worldwide}{subsection.2.2}% 8
+\BOOKMARK [3][-]{subsubsection.2.2.2}{Europe}{subsection.2.2}% 9
+\BOOKMARK [2][-]{subsection.2.3}{Advantages compared to other methods}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.4}{Disasadvantages}{section.2}% 11
+\BOOKMARK [2][-]{subsection.2.5}{Literature review of related work}{section.2}% 12
+\BOOKMARK [1][-]{section.3}{Time Series}{}% 13
+\BOOKMARK [2][-]{subsection.3.1}{Implementation}{section.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Log Scale}{subsection.3.1}% 15
+\BOOKMARK [3][-]{subsubsection.3.1.2}{Adjust Zero}{subsection.3.1}% 16
+\BOOKMARK [2][-]{subsection.3.2}{Technical Details}{section.3}% 17
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Preliminary}{subsection.3.2}% 18
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Facet Grid}{subsection.3.2}% 19
+\BOOKMARK [2][-]{subsection.3.3}{Advantages compared to other methods}{section.3}% 20
+\BOOKMARK [2][-]{subsection.3.4}{Disasadvantages}{section.3}% 21
+\BOOKMARK [2][-]{subsection.3.5}{Discussion on analysis results}{section.3}% 22
+\BOOKMARK [3][-]{subsubsection.3.5.1}{Number of Cases}{subsection.3.5}% 23
+\BOOKMARK [3][-]{subsubsection.3.5.2}{Number of Deaths}{subsection.3.5}% 24
+\BOOKMARK [3][-]{subsubsection.3.5.3}{Number of Tests}{subsection.3.5}% 25
+\BOOKMARK [2][-]{subsection.3.6}{Discussion on other Aspects}{section.3}% 26
+\BOOKMARK [2][-]{subsection.3.7}{Literature review of related work}{section.3}% 27
+\BOOKMARK [1][-]{section.4}{TODO Parallell Co-ordinates}{}% 28
+\BOOKMARK [2][-]{subsection.4.1}{Technical Details}{section.4}% 29
+\BOOKMARK [2][-]{subsection.4.2}{Advantages compared to other methods}{section.4}% 30
+\BOOKMARK [2][-]{subsection.4.3}{Disasadvantages}{section.4}% 31
+\BOOKMARK [2][-]{subsection.4.4}{Discussion on analysis results}{section.4}% 32
+\BOOKMARK [2][-]{subsection.4.5}{Discussion on other Aspects}{section.4}% 33
+\BOOKMARK [2][-]{subsection.4.6}{Literature review of related work}{section.4}% 34
+\BOOKMARK [1][-]{section.5}{For Each Visualisation}{}% 35
+\BOOKMARK [2][-]{subsection.5.1}{Technical Details}{section.5}% 36
+\BOOKMARK [2][-]{subsection.5.2}{Advantages compared to other methods}{section.5}% 37
+\BOOKMARK [2][-]{subsection.5.3}{Disasadvantages}{section.5}% 38
+\BOOKMARK [2][-]{subsection.5.4}{Discussion on analysis results}{section.5}% 39
+\BOOKMARK [2][-]{subsection.5.5}{Discussion on other Aspects}{section.5}% 40
+\BOOKMARK [2][-]{subsection.5.6}{Literature review of related work}{section.5}% 41
+\BOOKMARK [1][-]{section.6}{AppendixATTACH}{}% 42
+\BOOKMARK [1][-]{section.7}{References}{}% 43

@@ -31,7 +31,7 @@ load.pac <- function() {
   pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap,
                  parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr,
                  swirl, corrplot, gridExtra, mise, latex2exp, tree, rpart, knitr,
-                 bookdown, tidyverse, tidyr)
+                 bookdown, tidyverse, tidyr, jpeg, grid)
   
 }
 
@@ -162,16 +162,232 @@ ggplot(tidy_data, aes(x = value, fill = Parameter, y = ..density..)) +
 
 # Question 3
 ## 1. Display the image in a plot.
+
+First load the JPEG file into **_R_** using the `readJPEG` function:
+```{r}
+## read in the JPEG File
+img <- readJPEG("./figure/mandrill.jpg")
+### could also use native format
+img.n <- readJPEG("./figure/mandrill.jpg", native = TRUE)
+```
+
+Now the image can be plotted by using the `grid.raster` function:
+
+```{r}
+## Without the plot/axis
+grid.raster(img)
+## grid.raster(img.n)
+```
+
+If however we desired to use a plot window we could first create one using `plot` and instead use the `rasterImage` function:
+```{r}
+## With the axis
+plot(x = 0:1, y = 0:1, type = "n")
+## grid.raster(img)
+rasterImage(img, 0, 0, 1, 1)
+## grid.raster(img.n)
+```
+
 ## 2. Plot only the red colour plane.
 > The JPEG image comprises separate images (or “planes”) in the three primary colours, Red, Greenand Blue. Plot only the Red colour plane.
+
+```{r}
+library(RColorBrewer)
+reds   <- img[,,1]
+  reds <- t(reds[rev(1:nrow(reds)),])
+greens <- img[,,2]
+  greens <- t(greens[rev(1:nrow(greens)),])
+blues  <- img[,,3]
+  blues <- t(blues[rev(1:nrow(blues)),])
+
+## Make a Red Pallete
+cols <- rgb(red = 0:10, green = 0, blue = 0, maxColorValue = 10)
+
+## Preview the Pallete
+barplot(seq(1, length.out = length(cols)), col = cols)
+# cols <- rgb(1:255, 1:255, 1:255, maxColorValue = 255)
+
+## Make a broader spectrum
+cols <- rgb(red = 0:255, green = 0, blue = 0, maxColorValue = 255)
+
+## Plot the red layer using the pallete
+plot(x = 0:1, y = 0:1, type = "n")
+image(reds, col = cols)
+
+```
+
+This unfourtunately produces artifacts when exporting the plot, so a seuperior option is to use `raster.image` and modify the channels green and blue channels to be zero:
+
+
+```{r}
+plot(x = 0:1, y = 0:1, type = "n")
+img_r <- img
+img_r[,,2:3] <- 0
+rasterImage(img_r, 0, 0, 1, 1)
+```
+
+
+
 ## 3. Plot a histogram of the Red values of all the pixels in the image.
+A histogram of the values may be plotted by passing them to `ggplot` (`barplot` or `hist` could also have been used):
+
+```{r}
+## hist(reds)
+
+ggplot(data = data.frame(reds = as.vector(reds)), aes(x = reds, y = ..density..)) +
+  geom_histogram(fill = "indianred", col = "pink")+
+  theme_bw() +
+  labs(x = "Intensity of Red Channel", y = "Density", title = "Histogram of Red Values from Image")
+```
+
 ## 4. Plot the red, green and blue pixel values of all the pixels in a horizontal line across the middle of theimage (i.e. all pixels with a vertical index of 256).
+
+```{r}
+## Extract the values from centre horizontal line
+rel_vals <- img[, 256, ]
+
+## Make a Tibble from the DAta
+rel_vals_tb <- as_tibble(rel_vals)
+names(rel_vals_tb) <- c("Red", "Green", "Blue")
+rel_vals_tb$index <- 1:nrow(rel_vals)
+
+
+## Make the Data Frame Tidy
+rel_vals_tb_tidy <-
+  pivot_longer(data = rel_vals_tb,
+               cols = c(Red, Green, Blue),
+               names_to = "Colour")
+
+## Preserve the order of RGB
+rel_vals_tb_tidy$Colour <-
+  factor(
+    rel_vals_tb_tidy$Colour,
+    levels = c("Red", "Green", "Blue"),
+    ordered = TRUE
+  )
+
+
+## Remember that ggplot2 uses alpha
+ggplot(data = rel_vals_tb_tidy, aes(x = index, y = value, col = Colour)) +
+  geom_smooth(se = FALSE, size = 2) +
+  scale_color_manual(values = c("Indianred3", "Palegreen3", "Deepskyblue3")) +
+  theme_bw() +
+  labs(
+    x = "Index",
+    y = "Value",
+    title = "RGB Values Across Centre Horizontal Line",
+    subtitle = "Corresponding to Mandril Image "
+  )
+```
+
+
 # Question 4
+
 ## a.Imimtate a sequence of Dice Rolls
-> Try to imitate a sequence of dice rolls. Create a vector of numbers (1, 2, 3, 4, 5, 6), of length 51. Beas random as you can. Do this before you read the rest of the question. (Or, get someone else to doit.) Print your sequence.My fake sequence: 132654544213651245523511251656545222161524366215433
+> Try to imitate a sequence of dice rolls. Create a vector of numbers (1, 2, 3, 4, 5, 6), of length 51. Beas random as you can. Do this before you read the rest of the question. (Or, get someone else to doit.) Print your sequence.
+
+```{r}
+(my_seq <- c(1,2,2,2,1,2,3,4,1,4,4,5,1,4,6,3,4,5,6,1,1,1,1,2,
+            3,4,2,1,3,6,1,3,4,1,3,3,3,5,6,6,6,5,3,2,6,4,3,1,6,1,3))
+length(my_seq)
+```
+
+
 ## b. Devise a test to real dice-rolling, 
 > Can we devise a test to distinguish between the fake dice-rolling and real dice-rolling, i.e. a trulyrandom process? One method is based on the observation that people tend to put fewer runs ofnumbers in their sequences than you find in random sequences. Write code to count the number ofruns of 1 (i.e. each number that is not followed by the same number), 2 (i.e. 2 consecutive numbersthe same), 3 and 4.
+
+```{r}
+runs <- rle(my_seq)
+tab <- table(runs$lengths)
+
+## The question asks for lengths 1 to 4, so to be precice
+tab <- table(runs$lengths) %>% append(values = seq(0, 0, length.out = 4))
+tab <- tab[1:4]
+```
+
+
 ## c.How many runs of each length would we get if the data were truly random? 
 > How many runs of each length would we get if the data were truly random? Write a loop to simulate105sets of 51 tosses, storing the number of runs of each length (1, 2, 3, 4). Plot the histogram of runs(i.e. total number of runs of each length added up over al
+
+```{r}
+n <- 10
+# sim_seq <- 
+replicate(n, {
+  ## Sample a Dice throw
+  s_dice <- sample(1:6, size = 51, replace = TRUE)
+  
+  ## Count the Runs
+  s_runs <- rle(s_dice)
+  
+  ## Tabulate the Counts but pad the end with zeroe's so length=4
+  s_runs_tb <- table(s_runs$lengths) %>% append(values = seq(0, 0, length.out = 4))
+  
+  ## Make it a Matrix
+  s_runs_tb[1:4] %>% unlist() %>% matrix(ncol = 4)
+}) %>% unlist() #TODO How to Turn from list into vector 
+
+sim_seq
+```
+
+### Plot the Histogram of Runs
+
+```{r}
+col_names_run_count <- c("One", "Two", "Three", "Four")
+sim_seq_tib <- as_tibble(sim_seq)
+names(sim_seq_tib) <- col_names_run_count
+
+sim_seq_tib %>%
+  pivot_longer(cols = c(One, Two, Three, Four)) %>% 
+  mutate(name = factor(name, labels = col_names_run_count), ordered = TRUE) %>% 
+  ggplot(aes(fill = name, x = value, y = ..density..)) +
+    geom_histogram(binwidth = 5, col = "black") +
+    facet_grid(. ~ name) +
+    theme_bw() + 
+    labs(x = "Run Count",
+         title = "Simulated Runs",
+         subtitle = TeX("Histogram of Runs \\textit{streaks} for 51 rolls of a fair die"),
+         y = "Density")
+
+```
+
+### Print the Totals
+The total number of runs that occured over the simulations can be returned by using `apply`:
+
+```{r}
+apply(sim_seq_tib, 2, sum)
+```
+
+It may however be more instructive to inspect the average number of runs over the simulations compared to the human generated sequence:
+
+```{r}
+data.frame("Simulated" = apply(sim_seq_tib, 2, mean),
+           "Human" = as.vector(tab)) %>% 
+  kable()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 [^1]: `replicate` is a wrapper for `sapply` and is usually quicker than using a loop, loops using a dynamic vector are often slow, `replicate` has the added benefit that it is not necessary to define a static vector either.

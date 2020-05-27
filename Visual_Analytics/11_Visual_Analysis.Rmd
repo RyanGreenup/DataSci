@@ -1,0 +1,357 @@
+---
+title: "11 Tutorial"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: inline
+---
+
+# Preamble
+## Load Packages
+```{r}
+load.pac <- function() {
+  
+  if(require("pacman")){
+    library(pacman)
+  }else{
+    install.packages("pacman")
+    library(pacman)
+  }
+  
+  pacman::p_load(xts, sp, gstat, ggplot2, rmarkdown, reshape2, ggmap, wesanderson,
+                 parallel, dplyr, plotly, tidyverse, reticulate, UsingR, Rmpfr, latex2exp,
+                 mise, GGally, usmap, gridExtra)
+  
+#  devtools::install_github("tidyverse/tidyverse")
+}
+
+load.pac()
+mise()
+
+```
+## Load Data
+I couldn't get `read_xls` to work so I just used *Libre Office* to export them.
+
+```{r}
+(orders  <- read.csv(file = "./11_Data_Orders.csv"))  %>% head()
+(returns <- read.csv(file = "./11_Data_Returns.csv")) %>% head()
+(peopl   <- read.csv(file = "./11_Data_People.csv"))  %>% head()
+```
+
+# Question 1
+> Visualise the Data
+
+```{r}
+orders$Ship.Date <- as.Date(orders$Ship.Date, format = "%d/%m/%Y")
+orders$Order.Date <- as.Date(orders$Order.Date, format = "%d/%m/%Y")
+## ggplot(orders, aes(x = Order.Date, y = Sales, col = Sub.Category)) +
+##   geom_col()
+
+
+ppt <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.3) +
+  theme_bw() +
+  geom_smooth() +
+  guides(col = guide_legend("")) +
+  labs(title = "Profit given Sales amount accross categories")
+
+ppl <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.3) +
+  theme_bw() +
+  guides(col = FALSE) +
+  labs(title = "Profit given Sales amount accross categories")
+  
+
+grid.arrange(grobs = list(ppt, ppl), layout_matrix = matrix(2:1, nrow = 1))
+
+  
+```
+
+
+## (a) Change the Mark Size
+The size of the points can be increased by specifying the `size` parameter in the `geom_point` layer:
+
+```{r}
+ppt <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.3, size = 6) +
+  theme_bw() +
+  geom_smooth() +
+  guides(col = guide_legend("")) +
+  labs(title = "Profit given Sales amount accross categories")
+
+ppl <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.3, size = 6) +
+  theme_bw() +
+  guides(col = FALSE) +
+  labs(title = "Profit given Sales amount accross categories")
+  
+
+grid.arrange(grobs = list(ppt, ppl), layout_matrix = matrix(2:1, nrow = 1))
+
+```
+
+The size could even be mapped to another variable, say for example the Discount
+
+```{r}
+ppt <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.3, aes(size = Discount)) +
+  theme_bw() +
+  geom_smooth() +
+  guides(col = guide_legend(""), size = FALSE) +
+  labs(title = "Profit given Sales amount accross categories")
+
+ppl <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.3, aes(size = Discount)) +
+  theme_bw() +
+  guides(col = FALSE) +
+  labs(title = "Profit given Sales amount accross categories")
+  
+
+grid.arrange(grobs = list(ppt, ppl), layout_matrix = matrix(2:1, nrow = 1))
+```
+
+This indicates that discounts hurt profits.
+
+
+## (b) Customise the Shapes
+The shapes could be mapped to anything, even to say unicode:
+
+```{r}
+ppt <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.6, aes(size = Discount), shape = "𝚺") +
+  theme_bw() +
+  geom_smooth() +
+  guides(col = guide_legend(""), size = FALSE) +
+  labs(title = "Profit given Sales amount accross categories")
+
+ppl <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.6, aes(size = Discount), shape = "𝚺") +
+  theme_bw() +
+  guides(col = FALSE) +
+  labs(title = "Profit given Sales amount accross categories")
+  
+
+grid.arrange(grobs = list(ppt, ppl), layout_matrix = matrix(2:1, nrow = 1))
+```
+It would be preferable however to map shape to some variable, say for example above/below average quantity:
+
+```{r}
+orders$Quantity_cat <- factor(ifelse(orders$Quantity > mean(orders$Quantity), "High", "Low"), levels = c("High", "Low"), ordered = FALSE)
+
+ppt <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.6, aes(size = Discount, shape = Quantity_cat)) +
+  theme_bw() +
+  geom_smooth() +
+  guides(col = guide_legend(""), size = FALSE) +
+  labs(title = "Profit given Sales amount accross categories")
+
+ppl <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.6, aes(size = Discount, shape = Quantity_cat)) +
+  theme_bw() +
+  guides(col = FALSE) +
+  labs(title = "Profit given Sales amount accross categories")
+  
+
+grid.arrange(grobs = list(ppt, ppl), layout_matrix = matrix(2:1, nrow = 1))
+```
+
+## (c) Customise the Mark Labels
+The axis and title labels can be adjusted arbitrarily, the `latex2exp` function will even allow $\LaTeX$ syntax to be used:
+
+```{r}
+library(ggrepel)
+orders$Quantity_cat <- factor(ifelse(orders$Quantity > mean(orders$Quantity), "High", "Low"), levels = c("High", "Low"), ordered = FALSE)
+
+ppt <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.6, aes(size = Discount, shape = Quantity_cat)) +
+  theme_bw() +
+  geom_smooth() +
+  guides(col = guide_legend(""), size = FALSE) +
+  labs(title = "Profit given Sales amount accross categories") 
+
+ppl <- ggplot(orders, aes(x = Sales, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.6, aes(size = Discount, shape = Quantity_cat)) +
+  theme_bw() +
+  guides(col = FALSE) +
+  labs(title = TeX("f( a ) = \\frac{1}{2 π i}  ∲_Ύ \\frac{f( z ) }{z - a} dz"),
+       x = "𝑺ales")
+  
+
+grid.arrange(grobs = list(ppt, ppl), layout_matrix = matrix(2:1, nrow = 1))
+
+```
+# Question 2
+> Include Multiple measures into the visualisation
+
+## Using Multiple Rows / Columns
+This can be implemented readily by using `geom_facet`, it will however, require coercing the data into *tidy* format:
+
+```{r}
+orders_tidy <- pivot_longer(orders, cols = c(Quantity, Discount, Sales))
+
+
+ggplot(orders_tidy, aes(x = value, y = Profit, col = Sub.Category)) +
+  geom_point(alpha = 0.3) +
+  facet_grid(. ~ name, scales = "free_x") +
+  theme_bw() +
+  geom_smooth() +
+  guides(col = guide_legend("")) +
+  labs(title = "Profit given Sales amount accross categories", x = "")
+
+```
+
+##  Sharing the y-axis
+Sharing y-axis is a little bit more work, first look at the the ratio between the data ranges, playing around with this will reveal that 20, 000 is a good ratio.
+
+```{r}
+range(orders$Sales)
+range(orders$Profit)
+```
+
+Now the data can be modified, rescaled and a custom y-axis implemented:
+
+```{r}
+orders_tidy <- pivot_longer(orders %>% mutate(Discount = Discount*20000), cols = c(Discount, Profit))
+ggplot(orders_tidy, aes(x = Sales, y = value, col = name)) +
+  geom_line() +
+  scale_y_continuous(
+    
+    # Features of the first axis
+    name = "Profit",
+    
+    # Add a second axis and specify its features
+    sec.axis = sec_axis( trans=~.*(1/20000), name="Discount")
+  ) +
+  scale_x_continuous(limits = c(0, 12000)) +
+  theme_bw()
+```
+
+
+# Question 3
+> Implement a Dual-Axis Chart
+
+A dual axis chart can be implemented by specifying a second axis as before:
+
+
+```{r}
+r <- 500
+
+orders_tidy <- pivot_longer(orders %>% mutate(Quantity = Quantity*r), cols = c(Quantity, Profit))
+
+ggplot(orders_tidy, aes(x = Sales, y = value, col = name)) +
+  geom_line() +
+  scale_y_continuous(
+    
+    # Features of the first axis
+    name = "Profit",
+    
+    # Add a second axis and specify its features
+    sec.axis = sec_axis( trans=~.*(1/r), name="Quantity")
+  ) +
+  scale_x_continuous(limits = c(0, 12000)) +
+  theme_bw()
+```
+
+
+# Question 4
+> Implement a visualisation on the map
+
+To generate a choropleth map, match names to map names:
+
+```{r}
+## state_names <- map("state", plot = FALSE)$name
+## only_names  <- sapply(strsplit(state_names, ":"), "[", 1)
+## index    <- match(only_names, tolower(state.name))
+## index[8] <- 47
+```
+
+Then assign some colours:
+
+```{r}
+col_vec <- function(x, lowcol = "white", highcol = "red") {
+  rgb(colorRamp(c(lowcol, highcol))((x-min(x))/(max(x)-min(x))),
+      maxColorValue = 255)[index]
+}
+```
+
+Then draw the map 
+
+```{r}
+
+## profits_vec <- orders$Profit
+## names(profits_vec) <- orders$State
+## 
+## maps::map('state', fill = TRUE, col = col_vec(profits_vec, "white", "green"))
+
+```
+
+(There is a bug in `knitr` that prevents this from compiling) so
+Alternatively the `usmap` allows us to use the `usmap` library through the much more robust `ggplot2`:
+```{r}
+library(usmap)
+names(orders)[names(orders)=="State"] <- "state"
+prof_df <- aggregate(Profit ~ state, orders, mean)
+
+
+plot_usmap(regions = "state", data = prof_df, values = "Profit", col = "white") + 
+  labs(title = "Profits",
+       subtitle = "Aggregated Mean Value by State")  +
+  theme(legend.position = "right") +
+  guides(fill = guide_legend("Profits"))
+```
+
+
+
+# <h1> Question 5 </h1>Qxplore Tablaue
+
+This doesn't translate to **_R_** and *GGPlot2* so I've left it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

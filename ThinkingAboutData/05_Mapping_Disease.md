@@ -13,7 +13,7 @@ output:
 ## Preamble
 
 
-  ```r
+```r
   ## Preamble
 
   ## Install Pacman
@@ -36,7 +36,7 @@ output:
   }
 
   load.pac()
-  ```
+```
 
   ~~~
   ## Loading required package: pacman
@@ -44,49 +44,49 @@ output:
 
 
 
-  ```r
+ ```r
   load(file = "~/Notes/DataSci/ThinkingAboutData/TAD.rdata")
   ## load(file = "./TAD.rdata")
-  ```
+ ```
 
 
-  ```r
+ ```r
   knitr::opts_chunk$set(
     fig.path = "./figure/"
   )
-  ```
+ ```
 ## Binomial Distribution
 A random variable is Binomial if it represents the count of the number of
 successes from $n$ trials and $p$ is the probability of success.
 ### Simulation and Probabilities
 In order to simulate, for example, a coin toss:
 
-  ```r
+ ```r
   library(tidyverse)
   sample(c("H", "T"), size = 3, replace = TRUE, prob = c(1,1))
-  ```
+ ```
 
-  ```
+ ```
   ## [1] "H" "T" "T"
-  ```
+ ```
 
-  ```r
+ ```r
   ## Count the number of heads
   sum(sample(c("H", "T"), size = 3, replace = TRUE, prob = c(1,1))=="H")
-  ```
+ ```
 
-  ```
+ ```
   ## [1] 2
-  ```
+ ```
 
-  ```r
+ ```r
   ## This can be automated with `rbinom`
   rbinom(n = 2,size = 3, prob = 0.5)
-  ```
+ ```
 
-  ```
+ ```
   ## [1] 2 1
-  ```
+ ```
 
 where:
 
@@ -106,13 +106,13 @@ So for example the probability of getting 0, 1, 2 or 3 heads out of 3 coin
 tosses is:
 
 
-  ```r
+ ```r
   dbinom(x = 1:3, size = 3, prob = 0.5)
-  ```
+ ```
 
-  ```
+ ```
   ## [1] 0.375 0.375 0.125
-  ```
+ ```
 ### Mean and Variance
 In theory the summary statistics of a binomial distribution are:
 
@@ -129,33 +129,33 @@ Where:
 This can be verified by doing:
 
 
-  ```r
+ ```r
   primes::generate_primes(min = 12, max = 99) # Two primes ensures p, n and (1-p)
-  ```
+ ```
 
-  ```
+ ```
   ##  [1] 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97
-  ```
+ ```
 
-  ```r
+ ```r
                                           # are relatively prime
   n <- 29
   p <- 0.43
 
   (rbinom(n = 100000, size = n, prob = p) %>% mean() /p) %>% signif(2)
-  ```
+ ```
 
-  ```
+ ```
   ## [1] 29
-  ```
+ ```
 
-  ```r
+ ```r
   (rbinom(n = 10000, size = n, prob = p) %>% var()  / (n * (1-p)))  %>% signif(2)
-  ```
+ ```
 
-  ```
+ ```
   ## [1] 0.44
-  ```
+ ```
 ### Hypothesis test for a Difference in Proportional
 
 Let's say that we make the following observation:
@@ -166,7 +166,7 @@ Let's say that we make the following observation:
 A Chi-Square Distribution can be used to compare the proportions.
 
 
-  ```r
+ ```r
   ## Make a Table
   dis_df <- data.frame("Trump" = c(12, 100-12), "Clinton" = c(188, 1000-188))
   dis_mat <- as.matrix(dis_df)
@@ -176,38 +176,38 @@ A Chi-Square Distribution can be used to compare the proportions.
       c("Trump", "Clinton")
   )
   dis_mat
-  ```
+ ```
 
-  ```
+ ```
   ##            Trump Clinton
   ## Disease       12     188
   ## No Disease    88     812
-  ```
+ ```
 
-  ```r
+ ```r
   ## Perform the Chi Test
   chisq.test(dis_mat)
-  ```
+ ```
 
-  ```
+ ```
   ##
   ## 	Pearson's Chi-squared test with Yates' continuity correction
   ##
   ## data:  dis_mat
   ## X-squared = 2.3872, df = 1, p-value = 0.1223
-  ```
+ ```
 
-  ```r
+ ```r
   chisq.test(t(dis_mat))
-  ```
+ ```
 
-  ```
+ ```
   ##
   ## 	Pearson's Chi-squared test with Yates' continuity correction
   ##
   ## data:  t(dis_mat)
   ## X-squared = 2.3872, df = 1, p-value = 0.1223
-  ```
+ ```
 
 This shows the probability of rejecting the null hypothesis when it is true
 (i.e. asserting that there is a difference between counties when there is in
@@ -226,32 +226,32 @@ If a type of pesticide:
    different for each gender?
 
 
-  ```r
+ ```r
   male <- c(13, 20-13)
   female <- c(10, 20-10)
 
   bug <- matrix(c(male, female), ncol = 2)
   dimnames(bug) <- list(c("dead", "alive"), c("male", "female"))
   bug
-  ```
+ ```
 
-  ```
+ ```
   ##       male female
   ## dead    13     10
   ## alive    7     10
-  ```
+ ```
 
-  ```r
+ ```r
   chisq.test(bug)
-  ```
+ ```
 
-  ```
+ ```
   ##
   ## 	Pearson's Chi-squared test with Yates' continuity correction
   ##
   ## data:  bug
   ## X-squared = 0.40921, df = 1, p-value = 0.5224
-  ```
+ ```
 
 
 1. The Proportion of Male Budworms killed is:
@@ -292,24 +292,24 @@ The number of deaths caused by a horse kick in a given regiment per year is
 This can be plotted in **_R_**:
 
 
-  ```r
+ ```r
   horsekick        <- c(109, 65, 22, 3, 1)
   names(horsekick) <- 0:4
   print(horsekick)
-  ```
+ ```
 
-  ```
+ ```
   ##   0   1   2   3   4
   ## 109  65  22   3   1
-  ```
+ ```
 
-  ```r
+ ```r
   barplot(horsekick, col = "grey")
-  ```
+ ```
 
 ![](./figure/unnamed-chunk-8-1.png)<!-- -->
 
-  ```r
+ ```r
   hk_tb <- tibble::enframe(horsekick, name = "Year", value = "Deaths")
 
   bp <- ggplot(hk_tb, aes(x = Year, y = Deaths, fill = Deaths)) +
@@ -320,7 +320,7 @@ This can be plotted in **_R_**:
       guides(fill = FALSE)
 
   bp
-  ```
+ ```
 
 ![](./figure/unnamed-chunk-8-2.png)<!-- -->
 
@@ -330,26 +330,26 @@ In order to determine the average number of deaths over the period of years
 (this is weird because the data set is weird, don't pay mind to it).
 
 
-  ```r
+ ```r
   sum((0:4)*horsekick)/sum(horsekick)
-  ```
+ ```
 
-  ```
+ ```
   ## [1] 0.61
-  ```
+ ```
 
 ### Simulation and Poisson Probabilities
 Poisson Values can be simulated, If a delivery driver has 3 jobs every day, a
 month,  in no particular order might look like this:
 
 
-  ```r
+ ```r
   rpois(30, lambda = 3)
-  ```
+ ```
 
-  ```
+ ```
   ##  [1] 0 4 3 8 2 3 1 1 1 3 3 5 2 3 4 2 2 3 2 5 1 2 2 1 2 5 2 7 1 8
-  ```
+ ```
 but maybe we would have to consider different days as different poisson distributions?
 
 #### Return Probability density
@@ -358,18 +358,18 @@ If we wanted to know the probability of a delivery driver getting a various
 number of jobs:
 
 
-  ```r
+ ```r
   dpois(0:6, lambda = 3) %>% round(1)
-  ```
+ ```
 
-  ```
+ ```
   ## [1] 0.0 0.1 0.2 0.2 0.2 0.1 0.1
-  ```
+ ```
 
 This means that the Horsekick data can be predicted and visualised:
 
 
-  ```r
+ ```r
   lambda = sum(0:4*horsekick)/sum(horsekick)
   obs <- horsekick/200
   pred <- dpois(0:4, lambda)
@@ -384,11 +384,11 @@ This means that the Horsekick data can be predicted and visualised:
           main = "Actual and Predicted Deaths",
           xlab = "Men Killed per Year per Regiment",
           ylab = "Frequency of Deaths")
-  ```
+ ```
 
 ![](./figure/unnamed-chunk-12-1.png)<!-- -->
 
-  ```r
+ ```r
   horse_tib <- pivot_longer(horse_df, cols = c(Observation, Poisson.Prediction), names_to = "Source")
   ## Using GGplot2
   ggplot(horse_tib, aes(x = Year, y = value, fill = Source)) +
@@ -403,7 +403,7 @@ This means that the Horsekick data can be predicted and visualised:
       theme(legend.position = c(0.7, 0.6),
             legend.text = element_text(size = 18),
             legend.title = element_text(size = 22))
-  ```
+ ```
 
 ![](./figure/unnamed-chunk-12-2.png)<!-- -->
 
@@ -431,18 +431,18 @@ And hence the average number of strikes is
 The average value of strikes per square is:
 
 
-  ```r
+ ```r
   strikes_df   <- data.frame("N.Strikes" = 0:5, "squares" = c(229, 211, 93, 35, 7, 1))
   strikes_mat <- as.matrix(strikes_df)
 
   ## Average Strikes per square
   lambda <- sum(0:5 * strikes_mat[,2])/576
-  ```
+ ```
 
 Plot the Frequencies and Predictions
 
 
-  ```r
+ ```r
   obs  <- strikes_df$squares
   pred <- dpois(0:5, lambda) * 576
 
@@ -453,20 +453,20 @@ Plot the Frequencies and Predictions
           legend.text = TRUE,
           col = c("LightCoral", "LightGoldenrodYellow"),
           main = "Rocket Bomb Strikes in London")
-  ```
+ ```
 
 ![](./figure/unnamed-chunk-14-1.png)<!-- -->
 
 Using `ggplot2`:
 
 
-  ```r
+ ```r
   strikes_df$pred <- dpois(0:5, lambda)*576
 
   (strikes_tb <- pivot_longer(strikes_df, cols = c(squares, pred)))
-  ```
+ ```
 
-  ```
+ ```
   ## # A tibble: 12 x 3
   ##    N.Strikes name     value
   ##        <int> <chr>    <dbl>
@@ -482,9 +482,9 @@ Using `ggplot2`:
   ## 10         4 pred      7.06
   ## 11         5 squares   1
   ## 12         5 pred      1.31
-  ```
+ ```
 
-  ```r
+ ```r
   ggplot(strikes_tb, aes(y = value, x = N.Strikes, fill = name)) +
       geom_col(position = "dodge") +
       labs(x     = "Number of Strikes",
@@ -494,7 +494,7 @@ Using `ggplot2`:
       scale_fill_brewer(palette = "Dark2",
                         labels = c("Prediction", "Observation")) +
       theme_bw()
-  ```
+ ```
 
 ![](./figure/unnamed-chunk-15-1.png)<!-- -->
 
@@ -508,7 +508,7 @@ confidence interval for the proportion of seeds germinating.
 
 
 
-  ```r
+ ```r
   ## Generate 1000 Examples of germinating seeds
   obs <- c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
   x <- replicate(1000, {
@@ -518,16 +518,16 @@ confidence interval for the proportion of seeds germinating.
   x <- rbinom(n = 10000, size = 20, prob = 15/20)
   p <- x/20
   quantile(p, c(0.025, 0.975))
-  ```
+ ```
 
-  ```
+ ```
   ##  2.5% 97.5%
   ##  0.55  0.95
 ```
 ###### Plot the Histogram
 
 
-  ```r
+ ```r
   dens_hist <- function(vec, main = paste(""), col = "purple", fill = "lightblue") {
   ## Make the Histogram
       hist(vec, freq = FALSE, col = fill, main = main)
@@ -539,15 +539,15 @@ confidence interval for the proportion of seeds germinating.
       abline(v = c_int[2], col = col, lwd = 2, lty = 2)
   }
   dens_hist(x)
-  ```
+ ```
 
 ![](./figure/unnamed-chunk-17-1.png)<!-- -->
 
-  ```r
+ ```r
   print("test")
-  ```
+ ```
 
-  ```
+ ```
   ## [1] "test"
   ```
 ##### Bud Worms
@@ -938,19 +938,19 @@ Approximate confidence intervals can be generated by using the `epitools` packag
 Plots can be drawn of various regions using the `maps` package, for example a world map focused on the pacific ocean:
 
 
-  ```r
+```r
   ## help(package = maps)
   map("world2")
-    ```
+```
 
 ![](./figure/unnamed-chunk-34-1.png)<!-- -->
 
 There is also the built in data set `state.x77` than we can use:
 
 
-  ```r
+```r
   head(state.x77)
-  ```
+```
 
   ```
   ##            Population Income Illiteracy Life Exp Murder HS Grad Frost   Area
@@ -960,7 +960,7 @@ There is also the built in data set `state.x77` than we can use:
   ## Arkansas         2110   3378        1.9    70.66   10.1    39.9    65  51945
   ## California      21198   5114        1.1    71.71   10.3    62.6    20 156361
   ## Colorado         2541   4884        0.7    72.06    6.8    63.9   166 103766
-    ```
+```
 
 To generate a choropleth map, match names to map names:
 
@@ -970,7 +970,7 @@ To generate a choropleth map, match names to map names:
   only_names  <- sapply(strsplit(state_names, ":"), "[", 1)
   index    <- match(only_names, tolower(state.name))
   index[8] <- 47
-    ```
+```
 
 Then assign some colours:
 
@@ -980,32 +980,32 @@ Then assign some colours:
     rgb(colorRamp(c(lowcol, highcol))((x-min(x))/(max(x)-min(x))),
         maxColorValue = 255)[index]
   }
-    ```
+```
 
 Then draw the map:
 
 
   ```r
   map('state', fill = TRUE, col = col_vec(state.x77[,"HS Grad"], "black", "green"))
-    ```
+```
 
 ![](./figure/unnamed-chunk-38-1.png)<!-- -->
 
 #### Frost
 
 
-  ```r
+```r
   map('state', fill = TRUE, col = col_vec(state.x77[,"Frost"], "white", "blue"))
-    ```
+ ```
 
 ![](./figure/unnamed-chunk-39-1.png)<!-- -->
 
 #### Literacy
 
 
-  ```r
+```r
   map("state", fill = TRUE, col = col_vec(state.x77[,"Murder"], "white", "black"))
-    ```
+```
 
 ![](./figure/unnamed-chunk-40-1.png)<!-- -->
 #### Murder
@@ -1015,7 +1015,7 @@ Then draw the map:
   ## write_clip(colnames(state.x77)[3])
 
   map("state", fill = TRUE, col = col_vec(state.x77[,"Illiteracy"], "purple", "orange"))
-    ```
+ ```
 
 ![](./figure/unnamed-chunk-41-1.png)<!-- -->
 

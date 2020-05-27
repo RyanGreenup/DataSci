@@ -1,0 +1,1152 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{ciencewicki2007}{article}{}
+      \name{author}{2}{}{%
+        {{hash=a445491294ddc671c7e29810683596ef}{%
+           family={Ciencewicki},
+           familyi={C\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=e91b96d5ea1275716d3efd75106bdf49}{%
+           family={Jaspers},
+           familyi={J\bibinitperiod},
+           given={Ilona},
+           giveni={I\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {eng}%
+      }
+      \strng{namehash}{ac24e6af19ddaadfc0b4affda08f13ae}
+      \strng{fullhash}{ac24e6af19ddaadfc0b4affda08f13ae}
+      \strng{bibnamehash}{ac24e6af19ddaadfc0b4affda08f13ae}
+      \strng{authorbibnamehash}{ac24e6af19ddaadfc0b4affda08f13ae}
+      \strng{authornamehash}{ac24e6af19ddaadfc0b4affda08f13ae}
+      \strng{authorfullhash}{ac24e6af19ddaadfc0b4affda08f13ae}
+      \field{sortinit}{C}
+      \field{sortinithash}{963e9d84a3da2344e8833203de5aed05}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Despite current regulations, which limit the levels of certain air pollutants, there are still a number of adverse health effects that result from exposure to these agents. Numerous epidemiological studies have noted an association between the levels of air pollution and hospital admissions for a variety of different health reasons, including a number of respiratory diseases, as well as increased morbidity and mortality associated with various respiratory conditions and diseases. Because of the large impact respiratory virus infections have on morbidity and even mortality, it is important to understand whether and how exposure to common air pollutants could exacerbate the susceptibility to and severity of respiratory virus infections. This review focuses on current epidemiological and experimental studies, which have examined the association between and effect of air pollutants and respiratory viral infections, as well as potential mechanisms associated with these effects. Examined in this review are U.S. Environmental Protection Agency (EPA) "criteria" pollutants nitrogen dioxide (NO(2)), ozone (O(3)), and particulate matter (PM), as well as indoor pollutants such as environmental tobacco smoke (ETS) and combustion products of biomass fuels. Although a number of studies indicate associations between exposure to air pollutants and increased risk for respiratory virus infections, potential mechanisms mediating these effects are largely unexplored. Therefore, additional studies, both epidemiologic and mechanistic, are necessary to increase our understanding of how exposure to air pollutants could affect respiratory virus infections, especially in populations already at risk of developing significant morbidity/mortality after infections with respiratory viruses.}
+      \field{issn}{1091-7691}
+      \field{journaltitle}{Inhalation Toxicology}
+      \field{month}{11}
+      \field{number}{14}
+      \field{title}{Air Pollution and Respiratory Viral Infection}
+      \field{volume}{19}
+      \field{year}{2007}
+      \field{pages}{1135\bibrangedash 1146}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1080/08958370701665434
+      \endverb
+      \keyw{Air Pollution,Animals,Humans,Particulate Matter,Respiratory Tract Infections,United States,Virus Diseases}
+    \endentry
+    \entry{2020o}{misc}{}
+      \list{language}{1}{%
+        {en}%
+      }
+      \field{sortinit}{C}
+      \field{sortinithash}{963e9d84a3da2344e8833203de5aed05}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Coronavirus COVID-19 Global Cases by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University (JHU)}
+      \field{journaltitle}{Johns Hopkins Coronavirus Resource Center}
+      \field{month}{5}
+      \field{title}{{{COVID}}-19 {{Map}}}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/2RW382EL/map.html
+      \endverb
+      \verb{urlraw}
+      \verb https://coronavirus.jhu.edu/map.html
+      \endverb
+      \verb{url}
+      \verb https://coronavirus.jhu.edu/map.html
+      \endverb
+    \endentry
+    \entry{croft2019}{article}{}
+      \name{author}{10}{}{%
+        {{hash=7ca07df2d459bd628066cc5de5db2d30}{%
+           family={Croft},
+           familyi={C\bibinitperiod},
+           given={Daniel\bibnamedelima P.},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=f54573e3f341d8baee46d718831892e6}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Wangjian},
+           giveni={W\bibinitperiod}}}%
+        {{hash=7d736fcc81cbcee639a7a2337009211a}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Shao},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f21d63f33bc6ae75ea9eb5f59849a5e3}{%
+           family={Thurston},
+           familyi={T\bibinitperiod},
+           given={Sally\bibnamedelima W.},
+           giveni={S\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=da54817699a656053fbd9bcdc2152cb7}{%
+           family={Hopke},
+           familyi={H\bibinitperiod},
+           given={Philip\bibnamedelima K.},
+           giveni={P\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=8a7b4da0117fee1faec4dc9c47df22a7}{%
+           family={Masiol},
+           familyi={M\bibinitperiod},
+           given={Mauro},
+           giveni={M\bibinitperiod}}}%
+        {{hash=dea031a198a22142c8954c1f98444e48}{%
+           family={Squizzato},
+           familyi={S\bibinitperiod},
+           given={Stefania},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b1f35e87a5320f0312075eed243c623d}{%
+           family={{van Wijngaarden}},
+           familyi={v\bibinitperiod},
+           given={Edwin},
+           giveni={E\bibinitperiod}}}%
+        {{hash=4be3f790d5211023ad4d3fd5b8f06649}{%
+           family={Utell},
+           familyi={U\bibinitperiod},
+           given={Mark\bibnamedelima J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=6de6888d1eb71c8edde27202e0f46dd7}{%
+           family={Rich},
+           familyi={R\bibinitperiod},
+           given={David\bibnamedelima Q.},
+           giveni={D\bibinitperiod\bibinitdelim Q\bibinitperiod}}}%
+      }
+      \strng{namehash}{561dcd6a05ef6ee124ef393fcc919ef1}
+      \strng{fullhash}{c1436ac230083a6626c4e1887b04963c}
+      \strng{bibnamehash}{561dcd6a05ef6ee124ef393fcc919ef1}
+      \strng{authorbibnamehash}{561dcd6a05ef6ee124ef393fcc919ef1}
+      \strng{authornamehash}{561dcd6a05ef6ee124ef393fcc919ef1}
+      \strng{authorfullhash}{c1436ac230083a6626c4e1887b04963c}
+      \field{sortinit}{C}
+      \field{sortinithash}{963e9d84a3da2344e8833203de5aed05}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Rationale: Fine particulate matter air pollution of 2.5 {$\mu$}m or less in diameter (PM2.5) has been associated with an increased risk of respiratory disease, but assessments of specific respiratory infections in adults are lacking., Objectives: To estimate the rate of respiratory infection healthcare encounters in adults associated with acute increases in PM2.5 concentrations., Methods: Using case–crossover methods, we studied 498,118 adult New York State residents with a primary diagnosis of influenza, bacterial pneumonia, or culture-negative pneumonia upon hospitalization or emergency department (ED) visit (2005–2016). We estimated the relative rate of healthcare encounters associated with increases in PM2.5 in the previous 1–7 days and explored differences before (2005–2007), during (2008–2013), and after (2014–2016) implementation of air quality policies and economic changes., Results: Interquartile range increases in PM2.5 over the previous 7 days were associated with increased excess rates (ERs) of culture-negative pneumonia hospitalizations (2.5\%; 95\% confidence interval [CI], 1.7–3.2\%) and ED visits (2.5\%; 95\% CI, 1.4–3.6\%), and increased ERs of influenza ED visits (3.9\%; 95\% CI, 2.1–5.6\%). Bacterial pneumonia hospitalizations, but not ED visits, were associated with increases in PM2.5 and, though imprecise, were of a similar magnitude to culture-negative pneumonia (Lag Day 6 ER, 2.3\%; 95\% CI, 0.3–4.3). Increased relative rates of influenza ED visits and culture-negative pneumonia hospitalizations were generally larger in the ``after'' period (P\,{$<$}\,0.025 for both outcomes), compared with the ``during'' period, despite reductions in overall PM2.5 concentrations., Conclusions: Increased rates of culture-negative pneumonia and influenza were associated with increased PM2.5 concentrations during the previous week, which persisted despite reductions in PM2.5 from air quality policies and economic changes. Though unexplained, this temporal variation may reflect altered toxicity of different PM2.5 mixtures or increased pathogen virulence.}
+      \field{issn}{2329-6933}
+      \field{journaltitle}{Annals of the American Thoracic Society}
+      \field{month}{3}
+      \field{number}{3}
+      \field{title}{The {{Association}} between {{Respiratory Infection}} and {{Air Pollution}} in the {{Setting}} of {{Air Quality Policy}} and {{Economic Change}}}
+      \field{urlday}{24}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{volume}{16}
+      \field{year}{2019}
+      \field{urldateera}{ce}
+      \field{pages}{321\bibrangedash 330}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1513/AnnalsATS.201810-691OC
+      \endverb
+      \verb{file}
+      \verb /home/ryan/Dropbox/Studies/Papers/Zotero/Attachments/Annals of the American Thoracic Society/2019/Croft et al_2019_The Association between Respiratory Infection and Air Pollution in the Setting.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6394122/
+      \endverb
+      \verb{url}
+      \verb https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6394122/
+      \endverb
+    \endentry
+    \entry{departmentofagrigulturewaterandtheenvironmentaustralia2019}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=e0dcbac4bc56b040e1842bf17896e636}{%
+           family={{Department of Agrigulture, Water and the Environment, Australia}},
+           familyi={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{e0dcbac4bc56b040e1842bf17896e636}
+      \strng{fullhash}{e0dcbac4bc56b040e1842bf17896e636}
+      \strng{bibnamehash}{e0dcbac4bc56b040e1842bf17896e636}
+      \strng{authorbibnamehash}{e0dcbac4bc56b040e1842bf17896e636}
+      \strng{authornamehash}{e0dcbac4bc56b040e1842bf17896e636}
+      \strng{authorfullhash}{e0dcbac4bc56b040e1842bf17896e636}
+      \field{sortinit}{D}
+      \field{sortinithash}{2ef1bd9a78cc71eb74d7231c635177b8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{8}
+      \field{title}{Fact Sheet - {{Travelling}} or Returning to {{Australia}} - {{Department}} of {{Agriculture}}}
+      \field{urlday}{24}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2019}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/6F9RVP5J/factsheet-travelling-returning.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.agriculture.gov.au/travelling/travel-agent-resources/factsheet-travelling-returning
+      \endverb
+      \verb{url}
+      \verb https://www.agriculture.gov.au/travelling/travel-agent-resources/factsheet-travelling-returning
+      \endverb
+    \endentry
+    \entry{dole2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=d61eaf1915100ee2e026644d1bda2676}{%
+           family={Dole},
+           familyi={D\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en-AU}%
+      }
+      \strng{namehash}{d61eaf1915100ee2e026644d1bda2676}
+      \strng{fullhash}{d61eaf1915100ee2e026644d1bda2676}
+      \strng{bibnamehash}{d61eaf1915100ee2e026644d1bda2676}
+      \strng{authorbibnamehash}{d61eaf1915100ee2e026644d1bda2676}
+      \strng{authornamehash}{d61eaf1915100ee2e026644d1bda2676}
+      \strng{authorfullhash}{d61eaf1915100ee2e026644d1bda2676}
+      \field{sortinit}{D}
+      \field{sortinithash}{2ef1bd9a78cc71eb74d7231c635177b8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Despite its large population and shared borders with China and Europe, Russia claims to have a relatively small number of COVID-19 cases. Is the Kremlin winning the fight against coronavirus, or is something else going on?}
+      \field{month}{4}
+      \field{title}{If Coronavirus Explodes in {{Russia}}, {{Putin}}'s Political Survival Could Be on the Line}
+      \field{urlday}{24}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/62BUFGKA/12118056.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.abc.net.au/news/2020-04-05/coronavirus-is-russia-lying-about-its-infection-rate/12118056
+      \endverb
+      \verb{url}
+      \verb https://www.abc.net.au/news/2020-04-05/coronavirus-is-russia-lying-about-its-infection-rate/12118056
+      \endverb
+    \endentry
+    \entry{2020n}{misc}{}
+      \field{sortinit}{E}
+      \field{sortinithash}{f615fb9c6fba11c6f962fb3fd599810e}
+      \field{labeltitlesource}{title}
+      \field{month}{5}
+      \field{title}{Europe :: {{Italy}} —{} {{The World Factbook}} - {{Central Intelligence Agency}}}
+      \field{urlday}{18}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/YIJUGTPJ/it.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.cia.gov/library/publications/the-world-factbook/geos/it.html
+      \endverb
+      \verb{url}
+      \verb https://www.cia.gov/library/publications/the-world-factbook/geos/it.html
+      \endverb
+    \endentry
+    \entry{field2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=89801e6dee292dacad321fcdfadcc21d}{%
+           family={Field},
+           familyi={F\bibinitperiod},
+           given={Kenneth},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en-US}%
+      }
+      \strng{namehash}{89801e6dee292dacad321fcdfadcc21d}
+      \strng{fullhash}{89801e6dee292dacad321fcdfadcc21d}
+      \strng{bibnamehash}{89801e6dee292dacad321fcdfadcc21d}
+      \strng{authorbibnamehash}{89801e6dee292dacad321fcdfadcc21d}
+      \strng{authornamehash}{89801e6dee292dacad321fcdfadcc21d}
+      \strng{authorfullhash}{89801e6dee292dacad321fcdfadcc21d}
+      \field{sortinit}{F}
+      \field{sortinithash}{669c706c6f1fbf3b5a83d26f1d9e9e72}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ArcGIS Blog}
+      \field{month}{2}
+      \field{title}{Mapping Coronavirus, Responsibly}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/34NJAZV5/mapping-coronavirus-responsibly.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.esri.com/arcgis-blog/products/product/mapping/mapping-coronavirus-responsibly/
+      \endverb
+      \verb{url}
+      \verb https://www.esri.com/arcgis-blog/products/product/mapping/mapping-coronavirus-responsibly/
+      \endverb
+    \endentry
+    \entry{gao2020}{article}{}
+      \name{author}{4}{}{%
+        {{hash=ed211f686471a8376b1179f7a8d4d7b6}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Peichao},
+           giveni={P\bibinitperiod}}}%
+        {{hash=5c197210ea3c3cd10b35ad3c6922e157}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Hong},
+           giveni={H\bibinitperiod}}}%
+        {{hash=02f6bdc3bac584c637cdeda62ada6f7d}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Zhiwei},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=20a609f53c7d9954daee81425c25b883}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Jicheng},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{fullhash}{bb1d3ba648321bb27c119f1512cb2f95}
+      \strng{bibnamehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{authorbibnamehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{authornamehash}{59a1a37008a9f721f532490cf51f6f0f}
+      \strng{authorfullhash}{bb1d3ba648321bb27c119f1512cb2f95}
+      \field{sortinit}{G}
+      \field{sortinithash}{5e8d2bf9d38de41b1528bd307546008f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Coronavirus disease 2019 (COVID-19) has emerged as a growing focus of global attention and a critical factor in public-health decision making. Towards fighting the COVID-19 outbreak, countries worldwide and international organisations have taken various actions, including promoting the transparency of and public access to disease data. In such public communications, maps have played an important role in that a map is worth a thousand words. Most of these have taken the form of a choropleth map. Here, we propose employing cartograms to visualise both the expansion and spread of COVID-19. We designed a combination of six circular cartograms containing the data of confirmed cases every 48 hours from 24 January to 3 February 2020. Such a design conveys both spatial and temporal information more intuitively and efficiently, so it can be expected to facilitate better public participation in the fight against COVID-19.}
+      \field{issn}{0308-518X}
+      \field{journaltitle}{Environment \& Planning a}
+      \field{month}{2}
+      \field{title}{Visualising the Expansion and Spread of Coronavirus Disease 2019 by Cartograms}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.1177/0308518X20910162
+      \endverb
+      \verb{file}
+      \verb /home/ryan/Dropbox/Studies/Papers/Zotero/Attachments/Environment & Planning a/2020/Gao et al_2020_Visualising the expansion and spread of coronavirus disease 2019 by cartograms.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7140974/
+      \endverb
+      \verb{url}
+      \verb https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7140974/
+      \endverb
+    \endentry
+    \entry{godin2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=2f7dd8ec6b35da1bc0530ddb40891471}{%
+           family={Godin},
+           familyi={G\bibinitperiod},
+           given={Mellissa},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{2f7dd8ec6b35da1bc0530ddb40891471}
+      \strng{fullhash}{2f7dd8ec6b35da1bc0530ddb40891471}
+      \strng{bibnamehash}{2f7dd8ec6b35da1bc0530ddb40891471}
+      \strng{authorbibnamehash}{2f7dd8ec6b35da1bc0530ddb40891471}
+      \strng{authornamehash}{2f7dd8ec6b35da1bc0530ddb40891471}
+      \strng{authorfullhash}{2f7dd8ec6b35da1bc0530ddb40891471}
+      \field{sortinit}{G}
+      \field{sortinithash}{5e8d2bf9d38de41b1528bd307546008f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Italy has placed its 60 millions resident under quarantine, as the number of coronavirus cases throughout the country continues to rise.}
+      \field{journaltitle}{Time}
+      \field{month}{3}
+      \field{title}{Why {{Is}} the {{Coronavirus Outbreak So Bad}} in {{Italy}}?}
+      \field{urlday}{24}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/4AF46KMA/italy-coronavirus-outbreak.html
+      \endverb
+      \verb{urlraw}
+      \verb https://time.com/5799586/italy-coronavirus-outbreak/
+      \endverb
+      \verb{url}
+      \verb https://time.com/5799586/italy-coronavirus-outbreak/
+      \endverb
+    \endentry
+    \entry{gutierrez2020}{article}{}
+      \name{author}{1}{}{%
+        {{hash=3b57966a0b4a08a34fcc1710ee16e3c7}{%
+           family={Guti{é}rrez},
+           familyi={G\bibinitperiod},
+           given={Pablo},
+           giveni={P\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en-GB}%
+      }
+      \strng{namehash}{3b57966a0b4a08a34fcc1710ee16e3c7}
+      \strng{fullhash}{3b57966a0b4a08a34fcc1710ee16e3c7}
+      \strng{bibnamehash}{3b57966a0b4a08a34fcc1710ee16e3c7}
+      \strng{authorbibnamehash}{3b57966a0b4a08a34fcc1710ee16e3c7}
+      \strng{authornamehash}{3b57966a0b4a08a34fcc1710ee16e3c7}
+      \strng{authorfullhash}{3b57966a0b4a08a34fcc1710ee16e3c7}
+      \field{sortinit}{G}
+      \field{sortinithash}{5e8d2bf9d38de41b1528bd307546008f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Covid-19 has spread around the planet, sending billions of people into lockdown as health services struggle to cope. Find out where the virus has spread, and where it has been most deadly}
+      \field{chapter}{World news}
+      \field{issn}{0261-3077}
+      \field{journaltitle}{The Guardian}
+      \field{month}{5}
+      \field{shorttitle}{Coronavirus World Map}
+      \field{title}{Coronavirus World Map: Which Countries Have the Most Cases and Deaths?}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/ID9YYRXH/coronavirus-world-map-which-countries-have-the-most-cases-and-deaths.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.theguardian.com/world/2020/may/20/coronavirus-world-map-which-countries-have-the-most-cases-and-deaths
+      \endverb
+      \verb{url}
+      \verb https://www.theguardian.com/world/2020/may/20/coronavirus-world-map-which-countries-have-the-most-cases-and-deaths
+      \endverb
+      \keyw{Coronavirus outbreak,Infectious diseases,World news}
+    \endentry
+    \entry{iqair2019}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=92017c4f757a67982491606f8f1871fc}{%
+           family={{IQAir}},
+           familyi={I\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{92017c4f757a67982491606f8f1871fc}
+      \strng{fullhash}{92017c4f757a67982491606f8f1871fc}
+      \strng{bibnamehash}{92017c4f757a67982491606f8f1871fc}
+      \strng{authorbibnamehash}{92017c4f757a67982491606f8f1871fc}
+      \strng{authornamehash}{92017c4f757a67982491606f8f1871fc}
+      \strng{authorfullhash}{92017c4f757a67982491606f8f1871fc}
+      \field{sortinit}{I}
+      \field{sortinithash}{320bc8fe8101b9376f9f21cd507de0e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Find out the most polluted cities in the world in 2019. Check out which city in the world had the highest level of air pollution PM2.5. Download the IQAir AirVisual world air quality report.}
+      \field{title}{World's {{Most Polluted Cities}} in 2019 - {{PM2}}.5 {{Ranking}} | {{AirVisual}}}
+      \field{urlday}{24}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2019}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/9LVZ63WD/world-most-polluted-cities.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.airvisual.com/world-most-polluted-cities
+      \endverb
+      \verb{url}
+      \verb https://www.airvisual.com/world-most-polluted-cities
+      \endverb
+    \endentry
+    \entry{kirk2015}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=bffbeab802f44e07986dac869ceb2b46}{%
+           family={Kirk},
+           familyi={K\bibinitperiod},
+           given={Andy},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{bffbeab802f44e07986dac869ceb2b46}
+      \strng{fullhash}{bffbeab802f44e07986dac869ceb2b46}
+      \strng{bibnamehash}{bffbeab802f44e07986dac869ceb2b46}
+      \strng{authorbibnamehash}{bffbeab802f44e07986dac869ceb2b46}
+      \strng{authornamehash}{bffbeab802f44e07986dac869ceb2b46}
+      \strng{authorfullhash}{bffbeab802f44e07986dac869ceb2b46}
+      \field{sortinit}{K}
+      \field{sortinithash}{9fd838a31ba64d981e8f44562bd33f89}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Anybody facing up to colour choices in any creative activity knows how critical such decisions can be between the success and failure of a design. This is amplified in data visualisation. In contrast to graphic design work, for example, there is greater need to eliminate or at least reduce arbitrary choices.}
+      \field{chapter}{articles}
+      \field{journaltitle}{Visualising Data}
+      \field{month}{1}
+      \field{title}{Make Grey Your Best Friend}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2015}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/GRGV9MWR/make-grey-best-friend.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.visualisingdata.com/2015/01/make-grey-best-friend/
+      \endverb
+      \verb{url}
+      \verb https://www.visualisingdata.com/2015/01/make-grey-best-friend/
+      \endverb
+    \endentry
+    \entry{nswhealth2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=f4f9f7b4bb0c4bad39cb125328759b50}{%
+           family={{NSW Health}},
+           familyi={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{f4f9f7b4bb0c4bad39cb125328759b50}
+      \strng{fullhash}{f4f9f7b4bb0c4bad39cb125328759b50}
+      \strng{bibnamehash}{f4f9f7b4bb0c4bad39cb125328759b50}
+      \strng{authorbibnamehash}{f4f9f7b4bb0c4bad39cb125328759b50}
+      \strng{authornamehash}{f4f9f7b4bb0c4bad39cb125328759b50}
+      \strng{authorfullhash}{f4f9f7b4bb0c4bad39cb125328759b50}
+      \field{sortinit}{N}
+      \field{sortinithash}{f7242c3ed3dc50029fca1be76c497c7c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{5}
+      \field{title}{{{NSW COVID}}-19 Case Statistics - {{COVID}}-19 ({{Coronavirus}})}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/WY9CVK2C/stats-nsw.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.health.nsw.gov.au/Infectious/covid-19/Pages/stats-nsw.aspx
+      \endverb
+      \verb{url}
+      \verb https://www.health.nsw.gov.au/Infectious/covid-19/Pages/stats-nsw.aspx
+      \endverb
+    \endentry
+    \entry{ritchie2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=a6d904a648976069036f5eddb4ad0151}{%
+           family={Ritchie},
+           familyi={R\bibinitperiod},
+           given={Hannah},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{a6d904a648976069036f5eddb4ad0151}
+      \strng{fullhash}{a6d904a648976069036f5eddb4ad0151}
+      \strng{bibnamehash}{a6d904a648976069036f5eddb4ad0151}
+      \strng{authorbibnamehash}{a6d904a648976069036f5eddb4ad0151}
+      \strng{authornamehash}{a6d904a648976069036f5eddb4ad0151}
+      \strng{authorfullhash}{a6d904a648976069036f5eddb4ad0151}
+      \field{sortinit}{R}
+      \field{sortinithash}{da6b42bd3ab22fee61abed031ee405f7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Our complete COVID-19 dataset is a collection of the COVID-19 data maintained by Our World in Data. It is updated daily and includes data on confirmed cases, deaths, and testing.}
+      \field{journaltitle}{Our World in Data}
+      \field{month}{5}
+      \field{title}{Coronavirus {{Source Data}}}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/W3GTT5NL/coronavirus-source-data.html
+      \endverb
+      \verb{urlraw}
+      \verb https://ourworldindata.org/coronavirus-source-data
+      \endverb
+      \verb{url}
+      \verb https://ourworldindata.org/coronavirus-source-data
+      \endverb
+    \endentry
+    \entry{rost2018}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=46812f755e92ee45f07c79ae04ccb947}{%
+           family={Rost},
+           familyi={R\bibinitperiod},
+           given={Lisa},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en-US}%
+      }
+      \strng{namehash}{46812f755e92ee45f07c79ae04ccb947}
+      \strng{fullhash}{46812f755e92ee45f07c79ae04ccb947}
+      \strng{bibnamehash}{46812f755e92ee45f07c79ae04ccb947}
+      \strng{authorbibnamehash}{46812f755e92ee45f07c79ae04ccb947}
+      \strng{authornamehash}{46812f755e92ee45f07c79ae04ccb947}
+      \strng{authorfullhash}{46812f755e92ee45f07c79ae04ccb947}
+      \field{sortinit}{R}
+      \field{sortinithash}{da6b42bd3ab22fee61abed031ee405f7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Data Visualisation represents numbers with shapes –{} and no matter what these shapes look like, they need to have a color. Use these tips to pick the right colors.}
+      \field{journaltitle}{Dataquest}
+      \field{month}{8}
+      \field{title}{Choosing {{Colors}} for {{Data Visualization}}}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2018}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/6Y4UBHWZ/what-to-consider-when-choosing-colors-for-data-visualization.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.dataquest.io/blog/what-to-consider-when-choosing-colors-for-data-visualization/
+      \endverb
+      \verb{url}
+      \verb https://www.dataquest.io/blog/what-to-consider-when-choosing-colors-for-data-visualization/
+      \endverb
+    \endentry
+    \entry{serrano2015}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=292e37dce221a7422bdb1d3051444b28}{%
+           family={Serrano},
+           familyi={S\bibinitperiod},
+           given={Ruel},
+           giveni={R\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{292e37dce221a7422bdb1d3051444b28}
+      \strng{fullhash}{292e37dce221a7422bdb1d3051444b28}
+      \strng{bibnamehash}{292e37dce221a7422bdb1d3051444b28}
+      \strng{authorbibnamehash}{292e37dce221a7422bdb1d3051444b28}
+      \strng{authornamehash}{292e37dce221a7422bdb1d3051444b28}
+      \strng{authorfullhash}{292e37dce221a7422bdb1d3051444b28}
+      \field{sortinit}{S}
+      \field{sortinithash}{322b1d5276f2f6c1bccdcd15920dbee6}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Intensified public health measures, including contact tracing, quarantine and isolation of all contacts and suspected cases, and infection prevention and control have brought the Middle East respiratory syndrome coronavirus (MERS-CoV) under control in the Republic of Korea. Since 4 July no new cases have been reported. Yesterday, all remaining contacts were released from quarantine symptom-free, following 14 days of isolation and monitoring.}
+      \field{month}{7}
+      \field{title}{Intensified Public Health Measures Help Control {{MERS}}-{{CoV}} Outbreak in the {{Republic}} of {{Korea}}}
+      \field{type}{World {{Health Organization}}}
+      \field{urlday}{18}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2015}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/2MLM2AJY/28-07-2015-intensified-public-health-measures-help-control-mers-cov-outbreak-in-the-republic-of.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.who.int/westernpacific/news/detail/28-07-2015-intensified-public-health-measures-help-control-mers-cov-outbreak-in-the-republic-of-korea
+      \endverb
+      \verb{url}
+      \verb https://www.who.int/westernpacific/news/detail/28-07-2015-intensified-public-health-measures-help-control-mers-cov-outbreak-in-the-republic-of-korea
+      \endverb
+    \endentry
+    \entry{sood2020}{article}{}
+      \name{author}{7}{}{%
+        {{hash=b81de3ce0ca0e1fc9d0c28017fdb51ae}{%
+           family={Sood},
+           familyi={S\bibinitperiod},
+           given={Neeraj},
+           giveni={N\bibinitperiod}}}%
+        {{hash=f9aa5f239906abb92a5c04846e77be24}{%
+           family={Simon},
+           familyi={S\bibinitperiod},
+           given={Paul},
+           giveni={P\bibinitperiod}}}%
+        {{hash=919ad49bc83651e1aebe92f2391ca9e6}{%
+           family={Ebner},
+           familyi={E\bibinitperiod},
+           given={Peggy},
+           giveni={P\bibinitperiod}}}%
+        {{hash=c8a31e5ab9b825039ceaa3c8f0f2fe0a}{%
+           family={Eichner},
+           familyi={E\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+        {{hash=6bf780f30ad35cbaa790b48f136abc1e}{%
+           family={Reynolds},
+           familyi={R\bibinitperiod},
+           given={Jeffrey},
+           giveni={J\bibinitperiod}}}%
+        {{hash=cfe76998de895c374be8bdbbf6069c60}{%
+           family={Bendavid},
+           familyi={B\bibinitperiod},
+           given={Eran},
+           giveni={E\bibinitperiod}}}%
+        {{hash=ba34b9aa806a81bd7ae8151c8d6c41c3}{%
+           family={Bhattacharya},
+           familyi={B\bibinitperiod},
+           given={Jay},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{ee75902a00f638d019826c4760b6886c}
+      \strng{fullhash}{13d22bccb8d0bb5b930a3e78481cb20e}
+      \strng{bibnamehash}{ee75902a00f638d019826c4760b6886c}
+      \strng{authorbibnamehash}{ee75902a00f638d019826c4760b6886c}
+      \strng{authornamehash}{ee75902a00f638d019826c4760b6886c}
+      \strng{authorfullhash}{13d22bccb8d0bb5b930a3e78481cb20e}
+      \field{sortinit}{S}
+      \field{sortinithash}{322b1d5276f2f6c1bccdcd15920dbee6}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This population epidemiology study investigates the prevalence of IgG and IgM antibodies to SARS-CoV-2 in Los Angeles County, California, as a marker of both active and past infections.}
+      \field{journaltitle}{JAMA}
+      \field{month}{5}
+      \field{title}{Seroprevalence of {{SARS}}-{{CoV}}-2–{{Specific Antibodies Among Adults}} in {{Los Angeles County}}, {{California}}, on {{April}} 10-11, 2020}
+      \field{urlday}{19}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.1001/jama.2020.8279
+      \endverb
+      \verb{file}
+      \verb /home/ryan/Dropbox/Studies/Papers/Zotero/Attachments/JAMA/2020/Sood et al_2020_Seroprevalence of SARS-CoV-2–Specific Antibodies Among Adults in Los Angeles.pdf;/home/ryan/Zotero/storage/Y8ULY6AP/2766367.html
+      \endverb
+      \verb{urlraw}
+      \verb https://jamanetwork.com/journals/jama/fullarticle/2766367
+      \endverb
+      \verb{url}
+      \verb https://jamanetwork.com/journals/jama/fullarticle/2766367
+      \endverb
+    \endentry
+    \entry{staudinger2011}{article}{}
+      \name{author}{4}{}{%
+        {{hash=b45daf48483c27b4335b7be5640de4b1}{%
+           family={Staudinger},
+           familyi={S\bibinitperiod},
+           given={Markus\bibnamedelima R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=cdc6f7d69cc71f35e7fd7084b5fa460a}{%
+           family={Fink},
+           familyi={F\bibinitperiod},
+           given={Gereon\bibnamedelima R.},
+           giveni={G\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=b2adb855894f5096b30f30224fa3e96a}{%
+           family={Mackay},
+           familyi={M\bibinitperiod},
+           given={Clare\bibnamedelima E.},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=e136702f09f390c358b97e12bbb595a6}{%
+           family={Lux},
+           familyi={L\bibinitperiod},
+           given={Silke},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{935e90376e57fd5b44e4884e6ac3f0b2}
+      \strng{fullhash}{05b7b6c5a029ee9d7bdd30640a6bf1f4}
+      \strng{bibnamehash}{935e90376e57fd5b44e4884e6ac3f0b2}
+      \strng{authorbibnamehash}{935e90376e57fd5b44e4884e6ac3f0b2}
+      \strng{authornamehash}{935e90376e57fd5b44e4884e6ac3f0b2}
+      \strng{authorfullhash}{05b7b6c5a029ee9d7bdd30640a6bf1f4}
+      \field{sortinit}{S}
+      \field{sortinithash}{322b1d5276f2f6c1bccdcd15920dbee6}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Our visual world is hierarchically organized. Hierarchical processing is frequently investigated using Navon figures (large letters made up of smaller ones). In young adults, many studies reported faster reaction times (RT) to target letters presented at the global level [i.e.,~global precedence (GP)]. Furthermore, an age-related decline of this GP has been reported. We tested whether deficits in perceptual grouping via Gestalt laws (Gestalt principles of Proximity and Continuity) might contribute to this decline. In a directed attention task with valid and invalid cues, 20 young (mean age 22) and 20 older (mean age 57) male subjects had to indicate whether a target letter appeared at the global or local level of a Navon figure. The number of local letters forming the global figure was modulated in 5 steps. As expected, during valid trials, young adults showed a GP that linearly increased with increasing numbers of local letters (i.e., GP enhancement). This suggests that GP is related to perceptual grouping via Gestalt laws. By contrast, the group of older subjects demonstrated no precedence effect in RT and a non-significant trend toward GP in error rates (ER). No GP enhancement with an increasing number of local elements was observed. Exploratory analysis revealed that individual insensitivity to the modulation of matrix density, as revealed by a lack of global RT acceleration, was restricted to subjects that showed an overall local precedence (LP). Because older subjects tended to more frequently display an insensitivity to matrix modulation and an LP, we conclude that deficient Gestalt detection as indicated by non-enhanced global RT might contribute to the RT-related decline of GP with age.}
+      \field{issn}{0010-9452}
+      \field{journaltitle}{Cortex}
+      \field{month}{7}
+      \field{number}{7}
+      \field{title}{Gestalt Perception and the Decline of Global Precedence in Older Subjects}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{volume}{47}
+      \field{year}{2011}
+      \field{urldateera}{ce}
+      \field{pages}{854\bibrangedash 862}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1016/j.cortex.2010.08.001
+      \endverb
+      \verb{urlraw}
+      \verb http://www.sciencedirect.com/science/article/pii/S0010945210002170
+      \endverb
+      \verb{url}
+      \verb http://www.sciencedirect.com/science/article/pii/S0010945210002170
+      \endverb
+      \keyw{Aging,Attention,Gestalt,Global precedence,Navon}
+    \endentry
+    \entry{rcoreteam2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=d7689b212ec7da4731c41e0b675e468e}{%
+           family={Team},
+           familyi={T\bibinitperiod},
+           given={R\bibnamedelima Core},
+           giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vienna, Austria}%
+      }
+      \strng{namehash}{d7689b212ec7da4731c41e0b675e468e}
+      \strng{fullhash}{d7689b212ec7da4731c41e0b675e468e}
+      \strng{bibnamehash}{d7689b212ec7da4731c41e0b675e468e}
+      \strng{authorbibnamehash}{d7689b212ec7da4731c41e0b675e468e}
+      \strng{authornamehash}{d7689b212ec7da4731c41e0b675e468e}
+      \strng{authorfullhash}{d7689b212ec7da4731c41e0b675e468e}
+      \field{sortinit}{T}
+      \field{sortinithash}{6f7aff9db9dcfeb7f95fd5bbd2f78df9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{R Foundation for Statistical Computing}
+      \field{title}{R: {{A Language}} and {{Environment}} for {{Statistical Computing}}}
+      \field{year}{2020}
+      \verb{urlraw}
+      \verb http://www.R-project.org/
+      \endverb
+      \verb{url}
+      \verb http://www.R-project.org/
+      \endverb
+    \endentry
+    \entry{thompson2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=ce6e4860c7f51e01fe5da48c24df108d}{%
+           family={Thompson},
+           familyi={T\bibinitperiod},
+           given={Derek},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en-US}%
+      }
+      \strng{namehash}{ce6e4860c7f51e01fe5da48c24df108d}
+      \strng{fullhash}{ce6e4860c7f51e01fe5da48c24df108d}
+      \strng{bibnamehash}{ce6e4860c7f51e01fe5da48c24df108d}
+      \strng{authorbibnamehash}{ce6e4860c7f51e01fe5da48c24df108d}
+      \strng{authornamehash}{ce6e4860c7f51e01fe5da48c24df108d}
+      \strng{authorfullhash}{ce6e4860c7f51e01fe5da48c24df108d}
+      \field{sortinit}{T}
+      \field{sortinithash}{6f7aff9db9dcfeb7f95fd5bbd2f78df9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Seven weeks ago, South Korea and the U.S. had the same number of virus deaths. Today, South Korea has fewer than 300, and the U.S. has more than 70,000.}
+      \field{chapter}{Ideas}
+      \field{journaltitle}{The Atlantic}
+      \field{month}{5}
+      \field{title}{What's {{Behind South Korea}}'s {{COVID}}-19 {{Exceptionalism}}?}
+      \field{urlday}{24}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/XPXGG2S4/611215.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.theatlantic.com/ideas/archive/2020/05/whats-south-koreas-secret/611215/
+      \endverb
+      \verb{url}
+      \verb https://www.theatlantic.com/ideas/archive/2020/05/whats-south-koreas-secret/611215/
+      \endverb
+    \endentry
+    \entry{wickham2016}{book}{}
+      \name{author}{1}{}{%
+        {{hash=1d0f6977ce2d043e298a59a1cd75b7ef}{%
+           family={Wickham},
+           familyi={W\bibinitperiod},
+           given={Hadley},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Springer-Verlag}%
+      }
+      \strng{namehash}{1d0f6977ce2d043e298a59a1cd75b7ef}
+      \strng{fullhash}{1d0f6977ce2d043e298a59a1cd75b7ef}
+      \strng{bibnamehash}{1d0f6977ce2d043e298a59a1cd75b7ef}
+      \strng{authorbibnamehash}{1d0f6977ce2d043e298a59a1cd75b7ef}
+      \strng{authornamehash}{1d0f6977ce2d043e298a59a1cd75b7ef}
+      \strng{authorfullhash}{1d0f6977ce2d043e298a59a1cd75b7ef}
+      \field{sortinit}{W}
+      \field{sortinithash}{ecb89ff85896a47dc313960773ac311d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-3-319-24277-4}
+      \field{title}{Ggplot2: {{Elegant Graphics}} for {{Data Analysis}}}
+      \field{year}{2016}
+      \verb{urlraw}
+      \verb https://ggplot2.tidyverse.org
+      \endverb
+      \verb{url}
+      \verb https://ggplot2.tidyverse.org
+      \endverb
+    \endentry
+    \entry{willis2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=da409b59d3aa99f16c105a3c2d6fa384}{%
+           family={Willis},
+           familyi={W\bibinitperiod},
+           given={Olivia},
+           giveni={O\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en-AU}%
+      }
+      \strng{namehash}{da409b59d3aa99f16c105a3c2d6fa384}
+      \strng{fullhash}{da409b59d3aa99f16c105a3c2d6fa384}
+      \strng{bibnamehash}{da409b59d3aa99f16c105a3c2d6fa384}
+      \strng{authorbibnamehash}{da409b59d3aa99f16c105a3c2d6fa384}
+      \strng{authornamehash}{da409b59d3aa99f16c105a3c2d6fa384}
+      \strng{authorfullhash}{da409b59d3aa99f16c105a3c2d6fa384}
+      \field{sortinit}{W}
+      \field{sortinithash}{ecb89ff85896a47dc313960773ac311d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The Australian Government has pulled the trigger on its emergency response plan and is now operating on the basis the virus is a pandemic.}
+      \field{month}{2}
+      \field{title}{The Coronavirus Emergency Plan Has Been Activated. {{Here}}'s What That Means for You}
+      \field{urlday}{24}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/GC93NMBH/12010056.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.abc.net.au/news/health/2020-02-28/what-coronavirus-emergency-plan-means-for-you/12010056
+      \endverb
+      \verb{url}
+      \verb https://www.abc.net.au/news/health/2020-02-28/what-coronavirus-emergency-plan-means-for-you/12010056
+      \endverb
+    \endentry
+    \entry{wilson2017}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=e580fd50d2c3a7ec1a7ed0e89356fd79}{%
+           family={Wilson},
+           familyi={W\bibinitperiod},
+           given={Alan},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en-US}%
+      }
+      \strng{namehash}{e580fd50d2c3a7ec1a7ed0e89356fd79}
+      \strng{fullhash}{e580fd50d2c3a7ec1a7ed0e89356fd79}
+      \strng{bibnamehash}{e580fd50d2c3a7ec1a7ed0e89356fd79}
+      \strng{authorbibnamehash}{e580fd50d2c3a7ec1a7ed0e89356fd79}
+      \strng{authornamehash}{e580fd50d2c3a7ec1a7ed0e89356fd79}
+      \strng{authorfullhash}{e580fd50d2c3a7ec1a7ed0e89356fd79}
+      \field{sortinit}{W}
+      \field{sortinithash}{ecb89ff85896a47dc313960773ac311d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{When it comes to making charts, scales, and explaining data visually, using color is a very effective tool. Use it right, and you can not only draw your readers in, but y...}
+      \field{chapter}{Creative Inspirations \& Trends}
+      \field{journaltitle}{Adobe Blog}
+      \field{month}{2}
+      \field{shorttitle}{The {{Power}} of {{The Palette}}}
+      \field{title}{The {{Power}} of {{The Palette}}: {{Why Color}} Is {{Key}} in {{Data Visualization}} and {{How}} to {{Use It}}}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Dropbox/Studies/Papers/Zotero/Attachments/undefined/2017/2017_The Power of The Palette.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://theblog.adobe.com/the-power-of-the-palette-why-color-is-key-in-data-visualization-and-how-to-use-it/
+      \endverb
+      \verb{url}
+      \verb https://theblog.adobe.com/the-power-of-the-palette-why-color-is-key-in-data-visualization-and-how-to-use-it/
+      \endverb
+    \endentry
+    \entry{woodley2020}{article}{}
+      \name{author}{1}{}{%
+        {{hash=5340bb5512be1c2c1289b833f19ec5aa}{%
+           family={Woodley},
+           familyi={W\bibinitperiod},
+           given={Matt},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{5340bb5512be1c2c1289b833f19ec5aa}
+      \strng{fullhash}{5340bb5512be1c2c1289b833f19ec5aa}
+      \strng{bibnamehash}{5340bb5512be1c2c1289b833f19ec5aa}
+      \strng{authorbibnamehash}{5340bb5512be1c2c1289b833f19ec5aa}
+      \strng{authornamehash}{5340bb5512be1c2c1289b833f19ec5aa}
+      \strng{authorfullhash}{5340bb5512be1c2c1289b833f19ec5aa}
+      \field{sortinit}{W}
+      \field{sortinithash}{ecb89ff85896a47dc313960773ac311d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Royal Australian College of General Practitioners}
+      \field{month}{2}
+      \field{title}{How Does Coronavirus Compare with Previous Global Outbreaks?}
+      \field{year}{2020}
+    \endentry
+    \entry{worldhealthorganization2020}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=5d292a222024f1b13e98a059c94a9b75}{%
+           family={{World Health Organization}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{5d292a222024f1b13e98a059c94a9b75}
+      \strng{fullhash}{5d292a222024f1b13e98a059c94a9b75}
+      \strng{bibnamehash}{5d292a222024f1b13e98a059c94a9b75}
+      \strng{authorbibnamehash}{5d292a222024f1b13e98a059c94a9b75}
+      \strng{authornamehash}{5d292a222024f1b13e98a059c94a9b75}
+      \strng{authorfullhash}{5d292a222024f1b13e98a059c94a9b75}
+      \field{sortinit}{W}
+      \field{sortinithash}{ecb89ff85896a47dc313960773ac311d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Latest updates on COVID-19}
+      \field{month}{5}
+      \field{title}{Coronavirus {{Disease}} ({{COVID}}-19) - Events as They Happen}
+      \field{urlday}{21}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb /home/ryan/Zotero/storage/JNEQI7Z7/events-as-they-happen.html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.who.int/emergencies/diseases/novel-coronavirus-2019/events-as-they-happen
+      \endverb
+      \verb{url}
+      \verb https://www.who.int/emergencies/diseases/novel-coronavirus-2019/events-as-they-happen
+      \endverb
+    \endentry
+    \entry{zhang2019}{article}{}
+      \name{author}{11}{}{%
+        {{hash=86ccd33e05595a379b9e1cbb74d27242}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Dandan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=1a1d4334ec050578dd7fd6a4c29f860c}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Yuqin},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=19f9d51cea21ee0526badc8d449447a5}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Qiu},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=5cca86b0891dbc99be177651da8f4504}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Yanqun},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=de5a2e1dffa5ec5eff993baa211081b3}{%
+           family={Chu},
+           familyi={C\bibinitperiod},
+           given={Chu},
+           giveni={C\bibinitperiod}}}%
+        {{hash=f0fc7ccc30c05c346877b314d03cb921}{%
+           family={Ding},
+           familyi={D\bibinitperiod},
+           given={Ying},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=f50ac5871653778424423dec81fb80ed}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Yixue},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=02af3e2ffe15f40d780635d5ddf9cd43}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={Yujie},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=2f061d02b458ec86a75bb96f1caac9cf}{%
+           family={Shi},
+           familyi={S\bibinitperiod},
+           given={Jinjin},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5869cfa65d8f471b38b04ad54bbf9ef2}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={Yali},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=96db07e567a6d35923d1ad7e26596509}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Weifang},
+           giveni={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{7851c14f02b238caae32a193aad1f75e}
+      \strng{fullhash}{9a99fafc27c2d6ab70388e36d800b8bc}
+      \strng{bibnamehash}{7851c14f02b238caae32a193aad1f75e}
+      \strng{authorbibnamehash}{7851c14f02b238caae32a193aad1f75e}
+      \strng{authornamehash}{7851c14f02b238caae32a193aad1f75e}
+      \strng{authorfullhash}{9a99fafc27c2d6ab70388e36d800b8bc}
+      \field{sortinit}{Z}
+      \field{sortinithash}{156173bd08b075d7295bc3e0f4735a04}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We studied the short-term effects of air pollutant concentrations in Suzhou City on respiratory infections in children of different age groups.}
+      \field{issn}{1824-7288}
+      \field{journaltitle}{Italian Journal of Pediatrics}
+      \field{month}{9}
+      \field{number}{1}
+      \field{title}{The Relationship between Air Quality and Respiratory Pathogens among Children in {{Suzhou City}}}
+      \field{urlday}{24}
+      \field{urlmonth}{5}
+      \field{urlyear}{2020}
+      \field{volume}{45}
+      \field{year}{2019}
+      \field{urldateera}{ce}
+      \field{pages}{123}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1186/s13052-019-0702-2
+      \endverb
+      \verb{file}
+      \verb /home/ryan/Dropbox/Studies/Papers/Zotero/Attachments/Italian Journal of Pediatrics/2019/Zhang et al_2019_The relationship between air quality and respiratory pathogens among children.pdf;/home/ryan/Zotero/storage/D6KTCX3A/s13052-019-0702-2.html
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1186/s13052-019-0702-2
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1186/s13052-019-0702-2
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
