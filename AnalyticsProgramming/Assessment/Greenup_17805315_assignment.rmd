@@ -329,25 +329,7 @@ sim_seq <- replicate(n, {
 ```
 
 ### Plot the Histogram of Runs
-
-```{r}
-col_names_run_count <- c("One", "Two", "Three", "Four")
-sim_seq_tib <- as_tibble(sim_seq)
-names(sim_seq_tib) <- col_names_run_count
-
-sim_seq_tib %>%
-  pivot_longer(cols = c(One, Two, Three, Four)) %>% 
-  mutate(name = factor(name, labels = col_names_run_count, ordered = TRUE)) %>% 
-  ggplot(aes(fill = name, x = value, y = ..density..)) +
-    geom_histogram(col = "black") +
-    facet_grid(. ~ name, scales = "free_y") +
-    theme_bw() + 
-    labs(x = "Run Count",
-         title = "Simulated Runs",
-         subtitle = TeX("Histogram of Runs \\textit{streaks} for 51 rolls of a fair die"),
-         y = "Density")
-
-```
+Unfourtunately using the `facet_grid` layer of `ggplot2` will not be appropriate here, because both the x/y scale will be relatively independent of each other plot, so instead a for loop will be used to create four seperate plots:
 
 
 ```{r}
