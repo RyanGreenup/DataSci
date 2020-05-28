@@ -310,9 +310,9 @@ tab <- tab[1:4]
 > How many runs of each length would we get if the data were truly random? Write a loop to simulate105sets of 51 tosses, storing the number of runs of each length (1, 2, 3, 4). Plot the histogram of runs(i.e. total number of runs of each length added up over al
 
 ```{r}
-n <- 10
+n <- 10^5
 # sim_seq <- 
-replicate(n, {
+sim_seq <- replicate(n, {
   ## Sample a Dice throw
   s_dice <- sample(1:6, size = 51, replace = TRUE)
   
@@ -324,9 +324,8 @@ replicate(n, {
   
   ## Make it a Matrix
   s_runs_tb[1:4] %>% unlist() %>% matrix(ncol = 4)
-}) %>% unlist() #TODO How to Turn from list into vector 
+}) %>% unlist() %>% as.vector() %>% matrix(ncol = 4, byrow = TRUE) #TODO How to Turn from list into vector 
 
-sim_seq
 ```
 
 ### Plot the Histogram of Runs
@@ -338,10 +337,10 @@ names(sim_seq_tib) <- col_names_run_count
 
 sim_seq_tib %>%
   pivot_longer(cols = c(One, Two, Three, Four)) %>% 
-  mutate(name = factor(name, labels = col_names_run_count), ordered = TRUE) %>% 
+  mutate(name = factor(name, labels = col_names_run_count, ordered = TRUE)) %>% 
   ggplot(aes(fill = name, x = value, y = ..density..)) +
-    geom_histogram(binwidth = 5, col = "black") +
-    facet_grid(. ~ name) +
+    geom_histogram(col = "black") +
+    facet_grid(. ~ name, scales = "free_y") +
     theme_bw() + 
     labs(x = "Run Count",
          title = "Simulated Runs",
@@ -349,6 +348,38 @@ sim_seq_tib %>%
          y = "Density")
 
 ```
+
+
+```{r}
+## Set up a colour Pallete
+plt <- RColorBrewer::brewer.pal(4, name = "Dark2")
+
+## Loop over the possible Names
+p <- list()
+j <- 1
+
+for (i in col_names_run_count) {
+p[[i]] <- paste0("ggplot(sim_seq_tib, aes(y = ..density.., x = ", i, ")) +
+                 geom_histogram(fill = '", plt[j], "' , binwidth = 1) +
+                 theme_bw() + 
+                 labs(y = 'Density')")
+j <- j+1
+}
+
+## Evaluate the List Contents to make the plots
+for (i in 1:length(p)) {
+p[[i]] <- eval(parse(text = p[[i]])) 
+}
+
+# Use Grid Arrange to lay them out
+  # Refer to [this note](~/Notes/MD/Programming/R/Visualisation/Multiple Plots in R.md)
+grid.arrange(grobs = p, layout_matrix = matrix(1:4, ncol = 2))
+  
+```
+
+
+
+
 
 ### Print the Totals
 The total number of runs that occured over the simulations can be returned by using `apply`:
