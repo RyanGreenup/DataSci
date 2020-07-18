@@ -25,14 +25,102 @@
 # [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyl   [ State ]: EDITED, shown value does not take effect until you set or save it.
 :END:
 
-* TODO Calculate Data Statistics
+* Calculate Data Statistics
+
+** Sum Values
+So what we need to do is go through each value and tally it up, it is important
+however to return the value and the print it:
 
 #+begin_src python
-print("Hello World")
+def mysum(x):
+    total = float(0)
+    for i in x:
+        total = total + float(i)
+    return total
+
+value = mysum([1,2,3])
+print(value)
 #+end_src
 
-#+RESULTS[0e07448c7ade91d3bbb6cdc8cd2c48ae6e4cfc4a]:
-: Hello World
+#+RESULTS[09854f20420c9d1ea7c46194294b491ba170ef14]:
+: 6.0
+
+*** Improvements
+
+We could however improve this by using a =try= / =except= test, in the event
+that a non-numerical list is provided:
+
+#+begin_src python
+def mysum(x):
+    total = float(0)
+    for i in x:
+        try:
+            total = total + float(i)
+        except:
+            print("The Values of the list must be numeric")
+            print("Discarding Value")
+    return total
+
+value = mysum([1,2,3, "apple"])
+print(value)
+#+end_src
+
+#+RESULTS[b0be94d0245bb61ce148093311ba1a95cdad7f76]:
+: The Values of the list must be numeric
+: 6.0
+** Minimum Value
+
+Take the first item of the list as a candidate, for every item in the list, compare it to the candidate, if the next value is bigger that will become the new candidate, finally the candidate will be the maximum value.
+
+Just like above we use a =try= / =except= to prevent issues.
+
+#+begin_src python
+def mymax(list_of_vals):
+    candidate = list_of_vals[0]  # Unlike R/Mathematica/Julia, python starts from 0.
+    for i in list_of_vals:
+        try:
+            if i > candidate:
+                candidate = float(i)
+        except:
+            print("The list items must be numeric")
+            print("Discarding Value")
+    return candidate
+
+print(mymax([4, 6, 2, 5, 7, 3, 8, "john", -9]))
+#+end_src
+
+#+RESULTS[d9a918a92fd085f0a2930c4f7453b2bff16a27e8]:
+: The list items must be numeric
+: Discarding Value
+: 8.0
+
+** Maximum Value
+
+Same as above, just remember to:
+
+- wrap in =float()= as appropriate
+- print the function call.
+
+
+#+begin_src python
+def mymin(thelist):
+    candidate = thelist[0]
+    for i in thelist:
+        try:
+            if float(i) > float(candidate):
+                candidate = i
+        except:
+            print("list items must be numeric, discarding value")
+    return candidate
+
+value = mymin([1, 5, 3, "apple", 8, 2, -9])
+print(value)
+#+end_src
+
+#+RESULTS[8f2d0f5538f058b50f2dd62a00b527447541c598]:
+: list items must be numeric, discarding value
+: 8
+
 
 * TODO Vector Norm, Inner Product and Distance
 * TODO Vote Counting
