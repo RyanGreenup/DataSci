@@ -200,7 +200,48 @@ dist = getDist(xvec, yvec);      print(dist)
 
 * TODO Vote Counting
 
+#+begin_src python
+votes = "N , Y, Y,N,n , N , N  N ,n ,y, n,N,Y, y,Y,N , N , n ,y,N"
+def countVotes(ballot):
+    ballot = ballot.replace(",","").replace(" ", "").upper()
+    neg_ballots = ballot.count("N")
+    pos_ballots = ballot.count("Y")
+
+    # Could also have used a loop
+    print(str(pos_ballots) + " Yes votes and " + str(neg_ballots) + " No votes")
+
+countVotes(votes)
+votes = ",,yyyyn,,y,y,nn,y,,nn,y"
+#+end_src
+
+#+RESULTS[769d81700bb0fe64c9cfcbe59254d39b16892213]:
+: 7 Yes votes and 13 No votes
+
 * TODO Word Capitaliser
+#+begin_src python
+def capitalise(sentence):
+    ## Split the words into a list
+    wordsList = sentence.split()
+    ## These are escape words
+    EscWords = ["am", "a", "an", "the", "am", "is", "are", "and", "of", "in", "on", "with", "from", "to"]
+    ## The number of words starting from 0
+    for i in range(len(wordsList)-1):
+        ## if not in the escape words
+        if i not in EscWords:
+            ## replace the ith word for a capitalized one
+            wordsList[i] = wordsList[i].capitalize()
+    ## Take a space and use it to join the list together
+    sentence_Capitalized = " ".join(wordsList)
+    ## Print the output
+    print(sentence_Capitalized)
+    return sentence_Capitalized
+
+capitalise("The quick brown fox jumped over the lazy dogs")
+#+end_src
+
+#+RESULTS[81a994cb77b1d20a90230bafe39bf47128775771]:
+: The Quick Brown Fox Jumped Over The Lazy dogs
+
 * TODO Parse File
 * TODO Parse Dictionary
 * TODO grep
