@@ -122,8 +122,84 @@ print(value)
 : 8
 
 
-* TODO Vector Norm, Inner Product and Distance
+* Vector Norm, Inner Product and Distance
+** Piping
+The /Toolz/ Module gives something very similar to piping in bash / julia / R
+** Using Built ins
+#+begin_src python
+import math as mt
+import copy
+
+## because python counts from 0 indexing is confusing,
+## the count will come back as 4, but the indexes will be 0, 1, 2 and 3.
+
+def getNorm(x):
+    total = 0
+    for i in range(len(x)):
+        total=x[i-1]**2+total
+    return mt.sqrt(total)
+
+print(len([1,2,3,4]))
+
+
+xvec = [0, 1, 2, 3, 4]
+yvec = [4, 3, 2, 1, 0]
+
+norm = getNorm(xvec);            print(norm)
+#+end_src
+
+#+RESULTS[66db8060093765fd412603b4e7791db6ec095b8b]:
+: 4
+: 5.477225575051661
+
+** Inner Product
+#+begin_src python
+
+def getInnerProd(x, y):
+    z = copy.deepcopy(x)    ## Careful, you need to copy, not just assign
+    if len(x) == len(y):
+        for i in range(len(x)):
+            z[i] = x[i]*y[i]
+        return sum(z)
+    else:
+        print("The vectors must have the same dimension")
+xvec = [0, 1, 2, 3, 4]
+yvec = [4, 3, 2, 1, 0]
+
+norm = getNorm(xvec);            print(norm)
+norm = getNorm(yvec);            print(norm)
+prod = getInnerProd(xvec, yvec); print(prod)
+#+end_src
+
+#+RESULTS[4a669b1d5cd377a0e367e900faeb93be24e17688]:
+: 5.477225575051661
+: 5.477225575051661
+: 10
+: 6.324555320336759
+
+** Distance
+#+begin_src python
+
+def getDist(x, y):
+    if len(x) == len(y):
+        z = mt.sqrt(getNorm(x)**2 + getNorm(y)**2 - 2 * getInnerProd(x, y))
+        return z
+    else:
+        print("The vectors must have the same dimension")
+
+
+xvec = [0, 1, 2, 3, 4]
+yvec = [4, 3, 2, 1, 0]
+
+norm = getNorm(xvec);            print(norm)
+norm = getNorm(yvec);            print(norm)
+prod = getInnerProd(xvec, yvec); print(prod)
+dist = getDist(xvec, yvec);      print(dist)
+
+#+end_src
+
 * TODO Vote Counting
+
 * TODO Word Capitaliser
 * TODO Parse File
 * TODO Parse Dictionary
