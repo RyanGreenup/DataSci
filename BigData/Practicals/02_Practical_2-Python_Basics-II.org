@@ -121,7 +121,6 @@ print(value)
 : list items must be numeric, discarding value
 : 8
 
-
 * Vector Norm, Inner Product and Distance
 ** Piping
 The /Toolz/ Module gives something very similar to piping in bash / julia / R
@@ -198,7 +197,7 @@ dist = getDist(xvec, yvec);      print(dist)
 
 #+end_src
 
-* TODO Vote Counting
+* Vote Counting
 
 #+begin_src python
 votes = "N , Y, Y,N,n , N , N  N ,n ,y, n,N,Y, y,Y,N , N , n ,y,N"
@@ -217,7 +216,7 @@ votes = ",,yyyyn,,y,y,nn,y,,nn,y"
 #+RESULTS[769d81700bb0fe64c9cfcbe59254d39b16892213]:
 : 7 Yes votes and 13 No votes
 
-* TODO Word Capitaliser
+* Word Capitaliser
 #+begin_src python
 def capitalise(sentence):
     ## Split the words into a list
@@ -243,6 +242,67 @@ capitalise("The quick brown fox jumped over the lazy dogs")
 : The Quick Brown Fox Jumped Over The Lazy dogs
 
 * TODO Parse File
+
+** Set up the Text File
+
+Take the following text:
+#+begin_quote
+Unit ID, unit name, course name
+301046, Big Data, MICT
+300581, Programming Techniques, BICT
+300144, Object Oriented Analysis, BICT
+300103, Data Structure, BCS
+300147, Object Oriented Programming, BCS
+300569, Computer Security, BIS
+301044, Data Science, MICT
+300582, Technologies for Web Applications, BICT
+#+end_quote
+
+Let's write it to a file:
+
+#+begin_src bash
+pwd
+ls
+#+end_src
+
+#+RESULTS:
+| /home/ryan/DataSci/BigData/Practicals |
+| 02_Practical_2-Python_Basics-II.html  |
+| 02_Practical_2-Python_Basics-II.org   |
+
+#+begin_src python
+scemunits = """
+Unit ID, unit name, course name
+301046, Big Data, MICT
+300581, Programming Techniques, BICT
+300144, Object Oriented Analysis, BICT
+300103, Data Structure, BCS
+300147, Object Oriented Programming, BCS
+300569, Computer Security, BIS
+301044, Data Science, MICT
+300582, Technologies for Web Applications, BICT
+"""
+
+
+
+f = open('scemunits.txt', "w")
+
+for i in scemunits.split('\n'):
+    f.writelines(i+'\n')
+
+f.close()
+#+end_src
+
+#+RESULTS[2da7d03a76835d57d4add6b9b866ac95e02d533a]:
+
+Observe that:
+
+1. The ~"""~ are necessary for new line strings
+2. The ~open(file, w)~ will write over any pre-existing file (like ~>~ in ~bash~)
+   1. usint ~open(file,a)~ would append to a file (like ~>>~ in ~bash~)
+3. Nothing is written to disk until apter ~f.close()~, that's when the changes go from memory to disk.
+
+
 * TODO Parse Dictionary
 * TODO grep
 * TODO Top 10 Words
