@@ -516,6 +516,58 @@ cat outfile.txt
 |  301044 | Data Science | MICT        |
 
 * TODO Parse Dictionary
+
+#+begin_src python
+#!/usr/bin/env python3
+
+# * Create the Dictionary
+
+units = {('301046', 'Big Data'): 'MICT',
+         ('300581', 'Programming Techniques'): 'BICT',
+         ('300144', 'OOA'): 'BICT',
+         ('300103', 'Data Structures'): 'BCS',
+         ('300147', 'OOP'): 'BCS',
+         ('300569', 'Computer Security'): 'BIS',
+         ('301044', 'Data Science'): 'MICT',
+         ('300582', 'TWA'): 'BICT'}
+
+
+def displayUnits(unitsDict, keyword):
+    # Should Return Gracefully if the input is wrong
+    # Could have used Try/Except
+    if type(unitsDict) != dict:
+        print("ERROR; Require Dictionary of Unit Values")
+        return
+    # Make an empty List to fill
+    matches = []
+    # For each dictionary item if it corresponds to the keyword
+    # append it to the list
+    for i in unitsDict:
+        if units[i] == keyword:
+            matches.append(i)
+    # Use to get back matches[][1]
+    matching_units = [matches[i][1] for i in range(len(matches))]
+    # Return the Value
+    return matching_units
+
+
+# To Print the Values join the list together with new line characters.
+# The function should return data in a list not a string
+# (python => data, bash => string)
+
+print("Match MICT \n ---------------------")
+print("\n".join(displayUnits(units, 'MICT')))
+
+print("Match BCS  \n ---------------------")
+print("\n".join(displayUnits(units, 'BCS')))
+#+end_src
+
+#+RESULTS[f9a6aaa874aef5b87022318a3d6c1c82e61035f2]:
+: Big Data
+: Data Science
+: Data Structures
+: OOP
+
 * TODO grep
 * TODO Top 10 Words
 
