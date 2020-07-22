@@ -271,8 +271,9 @@ ls
 | 02_Practical_2-Python_Basics-II.org   |
 
 #+begin_src python
-scemunits = """
-Unit ID, unit name, course name
+
+
+scemunits = """Unit ID, unit name, course name
 301046, Big Data, MICT
 300581, Programming Techniques, BICT
 300144, Object Oriented Analysis, BICT
@@ -280,20 +281,32 @@ Unit ID, unit name, course name
 300147, Object Oriented Programming, BCS
 300569, Computer Security, BIS
 301044, Data Science, MICT
-300582, Technologies for Web Applications, BICT
-"""
+300582, Technologies for Web Applications, BICT"""
 
+def writeTextFile(text, filename) :
+    f = open(filename, 'w')
+    for i in text.split('\n'):
+        f.writelines(i+'\n')
+    f.close()
 
+writeTextFile(scemunits, 'scemunits.txt')
 
-f = open('scemunits.txt', "w")
-
-for i in scemunits.split('\n'):
-    f.writelines(i+'\n')
-
-f.close()
 #+end_src
 
-#+RESULTS[2da7d03a76835d57d4add6b9b866ac95e02d533a]:
+#+RESULTS[bb28f470888a7bd65451bf15ba4e4e0ee3f62f64]:
+
+In order to check that worked we can run ~cat~ from /Python/:
+
+#+begin_src python
+import subprocess
+MyCommand = "cat scemunits.txt"
+scemunits_txt = subprocess.run(MyCommand.split(), capture_output = True)
+print(scemunits_txt)
+#+end_src
+
+#+RESULTS[a52e34d7f6253f02d5030b1f8b280f66022b848b]:
+: CompletedProcess(args=['cat', 'scemunits.txt'], returncode=0, stdout=b'Unit ID, unit name, course name\n301046, Big Data, MICT\n300581, Programming Techniques, BICT\n300144, Object Oriented Analysis, BICT\n300103, Data Structure, BCS\n300147, Object Oriented Programming, BCS\n300569, Computer Security, BIS\n301044, Data Science, MICT\n300582, Technologies for Web Applications, BICT\n', stderr=b'')
+
 
 Observe that:
 
@@ -302,7 +315,142 @@ Observe that:
    1. usint ~open(file,a)~ would append to a file (like ~>>~ in ~bash~)
 3. Nothing is written to disk until apter ~f.close()~, that's when the changes go from memory to disk.
 
+** Parse the Text File
+*** Read the Text File
+
+#+begin_src python
+## Open the File
+scemunits_fid = open('./scemunits.txt')
+
+## Dispense with the first line
+header = scemunits_fid.readline()
+
+## Read the remaining Lines into a var
+scemunits_txt = scemunits_fid.read()
+
+## Print what we have
+print(scemunits_txt)
+
+## Close the file
+scemunits_fid.close()
+#+end_src
+
+
+
+#+RESULTS[badb3d5997f19239df0353b8f01e951532de1178]:
+: 301046, Big Data, MICT
+: 300581, Programming Techniques, BICT
+: 300144, Object Oriented Analysis, BICT
+: 300103, Data Structure, BCS
+: 300147, Object Oriented Programming, BCS
+: 300569, Computer Security, BIS
+: 301044, Data Science, MICT
+: 300582, Technologies for Web Applications, BICT
+
+*** Return only Matching Data
+
+#+begin_src python
+## Split each line into a list element
+obs = scemunits_txt.split('\n')
+
+## Throw away the empty line
+obs = list(filter(None, obs))
+
+## Get the Course Names
+    ## Use replace so whitespace is not required after ,
+courses = [ obs[i].replace(', ', ',').split(',')[2] for i in range(len(obs)) ]
+units = [ obs[i].replace(', ', ',').split(',')[1] for i in range(len(obs)) ]
+
+## Enumerate the obs so that they
+obs = list(obs)
+
+## Make an empty list for the matches
+matches = []
+
+##
+for i in range(len(obs)):
+    ## Don't Require whitespace after comma
+    if courses[i] == "MICT":
+        matches.append(obs[i])
+
+
+#print([header] + join(matches).insert(header))
+#print([header].append(matches))
+print(matches)
+matches.insert(0, header.replace('\n',''))
+print("\n".join(matches))
+
+out_fid = open('outfile.txt', "w")
+# out_fid.write("\n".join(matches))
+for i in matches:
+    out_fid.write(i+'\n')
+    print(i)
+
+out_fid.close()
+#+end_src
+
+#+RESULTS[a974ddd9ef57f5e884cae4d3f30dc64e326986ee]:
+: ['301046, Big Data, MICT', '301044, Data Science, MICT']
+: Unit ID, unit name, course name
+: 301046, Big Data, MICT
+: 301044, Data Science, MICT
+: Unit ID, unit name, course name
+: 301046, Big Data, MICT
+: 301044, Data Science, MICT
+
+We can now inspect the contents of that file:
+
+#+begin_src bash
+
+#+end_src
+
+
+** Wrap it into a function
+
+#+begin_src python
+def readWriteFile(infile, outfile):
+    readTheTextFile(infile)
+    return returnMatchingData(outFile)
+
+def readTheTextFile(infile):
+def returnMatchingData(infile):
+
+#+end_src
+
+
+#+begin_src
+
+## Split each line into a list element
+obs = scemunits_txt.split('\n')
+
+## Throw away the empty line
+obs = list(filter(None, obs))
+
+## Enumerate the obs so that they
+obs = list(enumerate(obs))
+
+## Make an empty list for the matches
+matches = []
+
+##
+for values in obs:
+    ## Don't Require whitespace after comma
+    course_name = values[1].replace(', ',',').split(',')[3-1]
+    unit_name   = values[1].replace(', ',',').split(',')[2-1]
+    if course_name == "MICT":
+        matches.append(values[0])
+
+[ obs[i][1].replace(', ', ',').split(',')[2-1] for i in matches ]
+
+
+
+
+
+#+end_src
 
 * TODO Parse Dictionary
 * TODO grep
 * TODO Top 10 Words
+
+
+ope
