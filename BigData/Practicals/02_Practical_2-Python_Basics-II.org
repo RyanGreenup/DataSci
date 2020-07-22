@@ -241,8 +241,7 @@ capitalise("The quick brown fox jumped over the lazy dogs")
 #+RESULTS[81a994cb77b1d20a90230bafe39bf47128775771]:
 : The Quick Brown Fox Jumped Over The Lazy dogs
 
-* TODO Parse File
-
+* Parse File
 ** Set up the Text File
 
 Take the following text:
@@ -404,49 +403,117 @@ We can now inspect the contents of that file:
 
 #+end_src
 
-
 ** Wrap it into a function
 
 #+begin_src python
+#!/usr/bin/env python3
+
+# * Create the Text File
+scemunits = """Unit ID, unit name, course name
+301046, Big Data, MICT
+300581, Programming Techniques, BICT
+300144, Object Oriented Analysis, BICT
+300103, Data Structure, BCS
+300147, Object Oriented Programming, BCS
+300569, Computer Security, BIS
+301044, Data Science, MICT
+300582, Technologies for Web Applications, BICT"""
+
+def writeTextFile(text, filename) :
+    f = open(filename, 'w')
+    for i in text.split('\n'):
+        f.writelines(i+'\n')
+    f.close()
+
+writeTextFile(scemunits, 'scemunits.txt')
+
+
+# * Main Functions
 def readWriteFile(infile, outfile):
     readTheTextFile(infile)
-    return returnMatchingData(outFile)
+    listOfLines = returnMatchingData(outfile)
+    print(listOfLines)
+    writeToFile(listOfLines, outfile)
 
+
+# ** Sub Functions
+# *** Input
 def readTheTextFile(infile):
-def returnMatchingData(infile):
+    ## Open the File
+    scemunits_fid = open(infile)
+    ## /////////////////// File Open ///////////////////////
 
+    ## Dispense with the first line
+    readTheTextFile.header = scemunits_fid.readline().replace('\n', '')
+
+    ## Read the remaining lines into an attribute
+    readTheTextFile.scemunits_txt = scemunits_fid.read()
+
+    ## Close the File
+    ## /////////////////// File Closed ///////////////////////
+    scemunits_fid.close()
+
+
+# ** Output
+
+def returnMatchingData(outfile):
+    scemunits_txt = readTheTextFile.scemunits_txt
+    ## Split each line into a list element
+    obs = scemunits_txt.split('\n')
+
+    ## Throw away empty lines
+    obs = list(filter(None, obs))
+
+    ## Get the Course and Unit Names
+        ## Don't Require whitespace after comma
+    courses = [ obs[i].replace(', ', ',').split(',')[2] for i in range(len(obs)) ]
+    units = [ obs[i].replace(', ', ',').split(',')[1] for i in range(len(obs)) ]
+
+
+    ## Enumerate the obs so that they
+    obs = list(obs)
+
+    ## Make an empty list for the matches
+    matches = []
+
+
+    ## for each line, throw it in the list of matches if it's in the MICT course
+    ##
+    for i in range(len(obs)):
+        if courses[i] == "MICT":
+            matches.append(obs[i])
+
+    ## Insert the header at position 1
+    matches.insert(0,readTheTextFile.header)
+
+    return matches
+
+def writeToFile(listOfLines, outfile):
+    outfile_fid = open(outfile, 'w')
+    for line in listOfLines:
+        print(line)
+        outfile_fid.write(line+'\n')
+    outfile_fid.close()
+
+readWriteFile('scemunits.txt', 'outfile.txt')
 #+end_src
 
+#+RESULTS[45757ee57da787c3adaaa0a041ecc56cda66fdec]:
+: ['Unit ID, unit name, course name', '301046, Big Data, MICT', '301044, Data Science, MICT']
+: Unit ID, unit name, course name
+: 301046, Big Data, MICT
+: 301044, Data Science, MICT
 
-#+begin_src
+and to confirm that it has written to the file:
 
-## Split each line into a list element
-obs = scemunits_txt.split('\n')
-
-## Throw away the empty line
-obs = list(filter(None, obs))
-
-## Enumerate the obs so that they
-obs = list(enumerate(obs))
-
-## Make an empty list for the matches
-matches = []
-
-##
-for values in obs:
-    ## Don't Require whitespace after comma
-    course_name = values[1].replace(', ',',').split(',')[3-1]
-    unit_name   = values[1].replace(', ',',').split(',')[2-1]
-    if course_name == "MICT":
-        matches.append(values[0])
-
-[ obs[i][1].replace(', ', ',').split(',')[2-1] for i in matches ]
-
-
-
-
-
+#+begin_src bash
+cat outfile.txt
 #+end_src
+
+#+RESULTS:
+| Unit ID | unit name    | course name |
+|  301046 | Big Data     | MICT        |
+|  301044 | Data Science | MICT        |
 
 * TODO Parse Dictionary
 * TODO grep
