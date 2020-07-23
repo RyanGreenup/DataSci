@@ -1,0 +1,9 @@
+Unit ID, unit name, course name
+301046, Big Data, MICT
+300581, Programming Techniques, BICT
+300144, Object Oriented Analysis, BICT
+300103, Data Structure, BCS
+300147, Object Oriented Programming, BCS
+300569, Computer Security, BIS
+301044, Data Science, MICT
+300582, Technologies for Web Applications, BICT
