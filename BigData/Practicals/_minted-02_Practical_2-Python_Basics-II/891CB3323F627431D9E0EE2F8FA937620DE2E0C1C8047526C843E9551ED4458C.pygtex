@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{subprocess}
+\PYG{n}{MyCommand} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}cat scemunits.txt\PYGZdq{}}
+\PYG{n}{scemunits\PYGZus{}txt} \PYG{o}{=} \PYG{n}{subprocess}\PYG{o}{.}\PYG{n}{run}\PYG{p}{(}\PYG{n}{MyCommand}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(),} \PYG{n}{capture\PYGZus{}output} \PYG{o}{=} \PYG{k+kc}{True}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{scemunits\PYGZus{}txt}\PYG{p}{)}
+\end{Verbatim}

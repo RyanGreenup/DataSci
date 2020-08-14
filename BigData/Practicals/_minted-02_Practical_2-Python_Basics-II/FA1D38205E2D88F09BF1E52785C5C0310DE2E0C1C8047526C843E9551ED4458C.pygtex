@@ -1,0 +1,44 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+ch}{\PYGZsh{}!/usr/bin/env python3}
+
+\PYG{c+c1}{\PYGZsh{} * Create the Dictionary}
+
+\PYG{n}{units} \PYG{o}{=} \PYG{p}{\PYGZob{}(}\PYG{l+s+s1}{\PYGZsq{}301046\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Big Data\PYGZsq{}}\PYG{p}{):} \PYG{l+s+s1}{\PYGZsq{}MICT\PYGZsq{}}\PYG{p}{,}
+         \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}300581\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Programming Techniques\PYGZsq{}}\PYG{p}{):} \PYG{l+s+s1}{\PYGZsq{}BICT\PYGZsq{}}\PYG{p}{,}
+         \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}300144\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}OOA\PYGZsq{}}\PYG{p}{):} \PYG{l+s+s1}{\PYGZsq{}BICT\PYGZsq{}}\PYG{p}{,}
+         \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}300103\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Data Structures\PYGZsq{}}\PYG{p}{):} \PYG{l+s+s1}{\PYGZsq{}BCS\PYGZsq{}}\PYG{p}{,}
+         \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}300147\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}OOP\PYGZsq{}}\PYG{p}{):} \PYG{l+s+s1}{\PYGZsq{}BCS\PYGZsq{}}\PYG{p}{,}
+         \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}300569\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Computer Security\PYGZsq{}}\PYG{p}{):} \PYG{l+s+s1}{\PYGZsq{}BIS\PYGZsq{}}\PYG{p}{,}
+         \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}301044\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Data Science\PYGZsq{}}\PYG{p}{):} \PYG{l+s+s1}{\PYGZsq{}MICT\PYGZsq{}}\PYG{p}{,}
+         \PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}300582\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}TWA\PYGZsq{}}\PYG{p}{):} \PYG{l+s+s1}{\PYGZsq{}BICT\PYGZsq{}}\PYG{p}{\PYGZcb{}}
+
+
+\PYG{k}{def} \PYG{n+nf}{displayUnits}\PYG{p}{(}\PYG{n}{unitsDict}\PYG{p}{,} \PYG{n}{keyword}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{} Should Return Gracefully if the input is wrong}
+    \PYG{c+c1}{\PYGZsh{} Could have used Try/Except}
+    \PYG{k}{if} \PYG{n+nb}{type}\PYG{p}{(}\PYG{n}{unitsDict}\PYG{p}{)} \PYG{o}{!=} \PYG{n+nb}{dict}\PYG{p}{:}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}ERROR; Require Dictionary of Unit Values\PYGZdq{}}\PYG{p}{)}
+        \PYG{k}{return}
+    \PYG{c+c1}{\PYGZsh{} Make an empty List to fill}
+    \PYG{n}{matches} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{c+c1}{\PYGZsh{} For each dictionary item if it corresponds to the keyword}
+    \PYG{c+c1}{\PYGZsh{} append it to the list}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{unitsDict}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n}{units}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{==} \PYG{n}{keyword}\PYG{p}{:}
+            \PYG{n}{matches}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Use to get back matches[][1]}
+    \PYG{n}{matching\PYGZus{}units} \PYG{o}{=} \PYG{p}{[}\PYG{n}{matches}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{matches}\PYG{p}{))]}
+    \PYG{c+c1}{\PYGZsh{} Return the Value}
+    \PYG{k}{return} \PYG{n}{matching\PYGZus{}units}
+
+
+\PYG{c+c1}{\PYGZsh{} To Print the Values join the list together with new line characters.}
+\PYG{c+c1}{\PYGZsh{} The function should return data in a list not a string}
+\PYG{c+c1}{\PYGZsh{} (python =\PYGZgt{} data, bash =\PYGZgt{} string)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Match MICT }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{ \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{displayUnits}\PYG{p}{(}\PYG{n}{units}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}MICT\PYGZsq{}}\PYG{p}{)))}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Match BCS  }\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{ \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{\PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{displayUnits}\PYG{p}{(}\PYG{n}{units}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}BCS\PYGZsq{}}\PYG{p}{)))}
+\end{Verbatim}

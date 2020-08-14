@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{capitalise}\PYG{p}{(}\PYG{n}{sentence}\PYG{p}{):}
+    \PYG{c+c1}{\PYGZsh{}\PYGZsh{} Split the words into a list}
+    \PYG{n}{wordsList} \PYG{o}{=} \PYG{n}{sentence}\PYG{o}{.}\PYG{n}{split}\PYG{p}{()}
+    \PYG{c+c1}{\PYGZsh{}\PYGZsh{} These are escape words}
+    \PYG{n}{EscWords} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}am\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}a\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}an\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}the\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}am\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}is\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}are\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}and\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}of\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}in\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}on\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}with\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}from\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}to\PYGZdq{}}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{}\PYGZsh{} The number of words starting from 0}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{wordsList}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}
+        \PYG{c+c1}{\PYGZsh{}\PYGZsh{} if not in the escape words}
+        \PYG{k}{if} \PYG{n}{i} \PYG{o+ow}{not} \PYG{o+ow}{in} \PYG{n}{EscWords}\PYG{p}{:}
+            \PYG{c+c1}{\PYGZsh{}\PYGZsh{} replace the ith word for a capitalized one}
+            \PYG{n}{wordsList}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{wordsList}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{.}\PYG{n}{capitalize}\PYG{p}{()}
+    \PYG{c+c1}{\PYGZsh{}\PYGZsh{} Take a space and use it to join the list together}
+    \PYG{n}{sentence\PYGZus{}Capitalized} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{} \PYGZdq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{wordsList}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{}\PYGZsh{} Print the output}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{sentence\PYGZus{}Capitalized}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{sentence\PYGZus{}Capitalized}
+
+\PYG{n}{capitalise}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}The quick brown fox jumped over the lazy dogs\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

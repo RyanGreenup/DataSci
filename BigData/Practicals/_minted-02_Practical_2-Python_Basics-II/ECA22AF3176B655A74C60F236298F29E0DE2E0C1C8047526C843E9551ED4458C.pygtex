@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{votes} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}N , Y, Y,N,n , N , N  N ,n ,y, n,N,Y, y,Y,N , N , n ,y,N\PYGZdq{}}
+\PYG{k}{def} \PYG{n+nf}{countVotes}\PYG{p}{(}\PYG{n}{ballot}\PYG{p}{):}
+    \PYG{n}{ballot} \PYG{o}{=} \PYG{n}{ballot}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{},\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{)}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{} \PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{)}\PYG{o}{.}\PYG{n}{upper}\PYG{p}{()}
+    \PYG{n}{neg\PYGZus{}ballots} \PYG{o}{=} \PYG{n}{ballot}\PYG{o}{.}\PYG{n}{count}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}N\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{pos\PYGZus{}ballots} \PYG{o}{=} \PYG{n}{ballot}\PYG{o}{.}\PYG{n}{count}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Y\PYGZdq{}}\PYG{p}{)}
+
+    \PYG{c+c1}{\PYGZsh{} Could also have used a loop}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{pos\PYGZus{}ballots}\PYG{p}{)} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{} Yes votes and \PYGZdq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{neg\PYGZus{}ballots}\PYG{p}{)} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{} No votes\PYGZdq{}}\PYG{p}{)}
+
+\PYG{n}{countVotes}\PYG{p}{(}\PYG{n}{votes}\PYG{p}{)}
+\PYG{n}{votes} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{},,yyyyn,,y,y,nn,y,,nn,y\PYGZdq{}}
+\end{Verbatim}

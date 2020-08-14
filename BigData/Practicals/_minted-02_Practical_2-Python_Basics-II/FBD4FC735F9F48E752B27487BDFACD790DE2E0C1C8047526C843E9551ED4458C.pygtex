@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{mymin}\PYG{p}{(}\PYG{n}{thelist}\PYG{p}{):}
+    \PYG{n}{candidate} \PYG{o}{=} \PYG{n}{thelist}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{thelist}\PYG{p}{:}
+        \PYG{k}{try}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n+nb}{float}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{n+nb}{float}\PYG{p}{(}\PYG{n}{candidate}\PYG{p}{):}
+                \PYG{n}{candidate} \PYG{o}{=} \PYG{n}{i}
+        \PYG{k}{except}\PYG{p}{:}
+            \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}list items must be numeric, discarding value\PYGZdq{}}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{candidate}
+
+\PYG{n}{value} \PYG{o}{=} \PYG{n}{mymin}\PYG{p}{([}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}apple\PYGZdq{}}\PYG{p}{,} \PYG{l+m+mi}{8}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{9}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{value}\PYG{p}{)}
+\end{Verbatim}

@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-07-31 Fri 16:32 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Big Data; 02 Practical - Python Basics 2</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Ryan Greenup" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src="https://orgmode.org/org-info.js">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license-end
+</script>
+
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "3");
+org_html_manager.set("VIEW", "showall");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+// @license-end
+</script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.cacheClassElem = elem.className;
+         elem.cacheClassTarget = target.className;
+         target.className = "code-highlighted";
+         elem.className   = "code-highlighted";
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(elem.cacheClassElem)
+         elem.className = elem.cacheClassElem;
+       if(elem.cacheClassTarget)
+         target.className = elem.cacheClassTarget;
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Big Data; 02 Practical - Python Basics 2</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org192cd3c">1. Calculate Data Statistics</a>
+<ul>
+<li><a href="#orgd689f9d">1.1. Sum Values</a>
+<ul>
+<li><a href="#org2ccc2a4">1.1.1. Improvements</a></li>
+</ul>
+</li>
+<li><a href="#org91a7516">1.2. Minimum Value</a></li>
+<li><a href="#org51bb0df">1.3. Maximum Value</a></li>
+</ul>
+</li>
+<li><a href="#org35b555c">2. Vector Norm, Inner Product and Distance</a>
+<ul>
+<li><a href="#orgb5dbd77">2.1. Piping</a></li>
+<li><a href="#org4672848">2.2. Using Built ins</a></li>
+<li><a href="#org3606b37">2.3. Inner Product</a></li>
+<li><a href="#org431168b">2.4. Distance</a></li>
+</ul>
+</li>
+<li><a href="#orgfd9bdb8">3. Vote Counting</a></li>
+<li><a href="#org25fe0a0">4. Word Capitaliser</a></li>
+<li><a href="#org240d5eb">5. Parse File</a>
+<ul>
+<li><a href="#org7a3f97b">5.1. Set up the Text File</a></li>
+<li><a href="#org7c09fac">5.2. Parse the Text File</a>
+<ul>
+<li><a href="#org9cf36cc">5.2.1. Read the Text File</a></li>
+<li><a href="#org71be8c4">5.2.2. Return only Matching Data</a></li>
+</ul>
+</li>
+<li><a href="#org8ff4f1d">5.3. Wrap it into a function</a></li>
+</ul>
+</li>
+<li><a href="#orgda3ed0f">6. Parse Dictionary</a></li>
+<li><a href="#org9bfb4c3">7. grep</a></li>
+<li><a href="#orgbad0704">8. Top 10 Words</a>
+<ul>
+<li><a href="#org8cde801">8.1. Create the Dictionary</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+:HTML:
+</p>
+
+<div id="outline-container-org192cd3c" class="outline-2">
+<h2 id="org192cd3c"><span class="section-number-2">1</span> Calculate Data Statistics</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orgd689f9d" class="outline-3">
+<h3 id="orgd689f9d"><span class="section-number-3">1.1</span> Sum Values</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+So what we need to do is go through each value and tally it up, it is important
+however to return the value and the print it:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">mysum</span>(x):
+    <span style="color: #dcaeea;">total</span> = <span style="color: #c678dd;">float</span>(<span style="color: #da8548; font-weight: bold;">0</span>)
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> x:
+        <span style="color: #dcaeea;">total</span> = total + <span style="color: #c678dd;">float</span>(i)
+    <span style="color: #51afef;">return</span> total
+
+<span style="color: #dcaeea;">value</span> = mysum([<span style="color: #da8548; font-weight: bold;">1</span>,<span style="color: #da8548; font-weight: bold;">2</span>,<span style="color: #da8548; font-weight: bold;">3</span>])
+<span style="color: #51afef;">print</span>(value)
+</pre>
+</div>
+
+<pre class="example">
+6.0
+</pre>
+</div>
+
+<div id="outline-container-org2ccc2a4" class="outline-4">
+<h4 id="org2ccc2a4"><span class="section-number-4">1.1.1</span> Improvements</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+We could however improve this by using a <code>try</code> / <code>except</code> test, in the event
+that a non-numerical list is provided:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">mysum</span>(x):
+    <span style="color: #dcaeea;">total</span> = <span style="color: #c678dd;">float</span>(<span style="color: #da8548; font-weight: bold;">0</span>)
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> x:
+        <span style="color: #51afef;">try</span>:
+            <span style="color: #dcaeea;">total</span> = total + <span style="color: #c678dd;">float</span>(i)
+        <span style="color: #51afef;">except</span>:
+            <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"The Values of the list must be numeric"</span>)
+            <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Discarding Value"</span>)
+    <span style="color: #51afef;">return</span> total
+
+<span style="color: #dcaeea;">value</span> = mysum([<span style="color: #da8548; font-weight: bold;">1</span>,<span style="color: #da8548; font-weight: bold;">2</span>,<span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #98be65;">"apple"</span>])
+<span style="color: #51afef;">print</span>(value)
+</pre>
+</div>
+
+<pre class="example">
+The Values of the list must be numeric
+6.0
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org91a7516" class="outline-3">
+<h3 id="org91a7516"><span class="section-number-3">1.2</span> Minimum Value</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Take the first item of the list as a candidate, for every item in the list, compare it to the candidate, if the next value is bigger that will become the new candidate, finally the candidate will be the maximum value.
+</p>
+
+<p>
+Just like above we use a <code>try</code> / <code>except</code> to prevent issues.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">mymax</span>(list_of_vals):
+    <span style="color: #dcaeea;">candidate</span> = list_of_vals[<span style="color: #da8548; font-weight: bold;">0</span>]  <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Unlike R/Mathematica/Julia, python starts from 0.</span>
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> list_of_vals:
+        <span style="color: #51afef;">try</span>:
+            <span style="color: #51afef;">if</span> i &gt; candidate:
+                <span style="color: #dcaeea;">candidate</span> = <span style="color: #c678dd;">float</span>(i)
+        <span style="color: #51afef;">except</span>:
+            <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"The list items must be numeric"</span>)
+            <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Discarding Value"</span>)
+    <span style="color: #51afef;">return</span> candidate
+
+<span style="color: #51afef;">print</span>(mymax([<span style="color: #da8548; font-weight: bold;">4</span>, <span style="color: #da8548; font-weight: bold;">6</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">5</span>, <span style="color: #da8548; font-weight: bold;">7</span>, <span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #da8548; font-weight: bold;">8</span>, <span style="color: #98be65;">"john"</span>, -<span style="color: #da8548; font-weight: bold;">9</span>]))
+</pre>
+</div>
+
+<pre class="example">
+The list items must be numeric
+Discarding Value
+8.0
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org51bb0df" class="outline-3">
+<h3 id="org51bb0df"><span class="section-number-3">1.3</span> Maximum Value</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Same as above, just remember to:
+</p>
+
+<ul class="org-ul">
+<li>wrap in <code>float()</code> as appropriate</li>
+<li>print the function call.</li>
+</ul>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">mymin</span>(thelist):
+    <span style="color: #dcaeea;">candidate</span> = thelist[<span style="color: #da8548; font-weight: bold;">0</span>]
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> thelist:
+        <span style="color: #51afef;">try</span>:
+            <span style="color: #51afef;">if</span> <span style="color: #c678dd;">float</span>(i) &gt; <span style="color: #c678dd;">float</span>(candidate):
+                <span style="color: #dcaeea;">candidate</span> = i
+        <span style="color: #51afef;">except</span>:
+            <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"list items must be numeric, discarding value"</span>)
+    <span style="color: #51afef;">return</span> candidate
+
+<span style="color: #dcaeea;">value</span> = mymin([<span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">5</span>, <span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #98be65;">"apple"</span>, <span style="color: #da8548; font-weight: bold;">8</span>, <span style="color: #da8548; font-weight: bold;">2</span>, -<span style="color: #da8548; font-weight: bold;">9</span>])
+<span style="color: #51afef;">print</span>(value)
+</pre>
+</div>
+
+<pre class="example">
+list items must be numeric, discarding value
+8
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org35b555c" class="outline-2">
+<h2 id="org35b555c"><span class="section-number-2">2</span> Vector Norm, Inner Product and Distance</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgb5dbd77" class="outline-3">
+<h3 id="orgb5dbd77"><span class="section-number-3">2.1</span> Piping</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+The <i>Toolz</i> Module gives something very similar to piping in bash / julia / R
+</p>
+</div>
+</div>
+<div id="outline-container-org4672848" class="outline-3">
+<h3 id="org4672848"><span class="section-number-3">2.2</span> Using Built ins</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">import</span> math <span style="color: #51afef;">as</span> mt
+<span style="color: #51afef;">import</span> copy
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">because python counts from 0 indexing is confusing,</span>
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">the count will come back as 4, but the indexes will be 0, 1, 2 and 3.</span>
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">getNorm</span>(x):
+    <span style="color: #dcaeea;">total</span> = <span style="color: #da8548; font-weight: bold;">0</span>
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(x)):
+        <span style="color: #dcaeea;">total</span>=x[i-<span style="color: #da8548; font-weight: bold;">1</span>]**<span style="color: #da8548; font-weight: bold;">2</span>+total
+    <span style="color: #51afef;">return</span> mt.sqrt(total)
+
+<span style="color: #51afef;">print</span>(<span style="color: #c678dd;">len</span>([<span style="color: #da8548; font-weight: bold;">1</span>,<span style="color: #da8548; font-weight: bold;">2</span>,<span style="color: #da8548; font-weight: bold;">3</span>,<span style="color: #da8548; font-weight: bold;">4</span>]))
+
+
+<span style="color: #dcaeea;">xvec</span> = [<span style="color: #da8548; font-weight: bold;">0</span>, <span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #da8548; font-weight: bold;">4</span>]
+<span style="color: #dcaeea;">yvec</span> = [<span style="color: #da8548; font-weight: bold;">4</span>, <span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">0</span>]
+
+<span style="color: #dcaeea;">norm</span> = getNorm(xvec);            <span style="color: #51afef;">print</span>(norm)
+</pre>
+</div>
+
+<pre class="example">
+4
+5.477225575051661
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org3606b37" class="outline-3">
+<h3 id="org3606b37"><span class="section-number-3">2.3</span> Inner Product</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+<pre class="src src-python">
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">getInnerProd</span>(x, y):
+    <span style="color: #dcaeea;">z</span> = copy.deepcopy(x)    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Careful, you need to copy, not just assign</span>
+    <span style="color: #51afef;">if</span> <span style="color: #c678dd;">len</span>(x) == <span style="color: #c678dd;">len</span>(y):
+        <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(x)):
+            <span style="color: #dcaeea;">z</span>[i] = x[i]*y[i]
+        <span style="color: #51afef;">return</span> <span style="color: #c678dd;">sum</span>(z)
+    <span style="color: #51afef;">else</span>:
+        <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"The vectors must have the same dimension"</span>)
+<span style="color: #dcaeea;">xvec</span> = [<span style="color: #da8548; font-weight: bold;">0</span>, <span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #da8548; font-weight: bold;">4</span>]
+<span style="color: #dcaeea;">yvec</span> = [<span style="color: #da8548; font-weight: bold;">4</span>, <span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">0</span>]
+
+<span style="color: #dcaeea;">norm</span> = getNorm(xvec);            <span style="color: #51afef;">print</span>(norm)
+<span style="color: #dcaeea;">norm</span> = getNorm(yvec);            <span style="color: #51afef;">print</span>(norm)
+<span style="color: #dcaeea;">prod</span> = getInnerProd(xvec, yvec); <span style="color: #51afef;">print</span>(prod)
+</pre>
+</div>
+
+<pre class="example">
+5.477225575051661
+5.477225575051661
+10
+6.324555320336759
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org431168b" class="outline-3">
+<h3 id="org431168b"><span class="section-number-3">2.4</span> Distance</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+<pre class="src src-python">
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">getDist</span>(x, y):
+    <span style="color: #51afef;">if</span> <span style="color: #c678dd;">len</span>(x) == <span style="color: #c678dd;">len</span>(y):
+        <span style="color: #dcaeea;">z</span> = mt.sqrt(getNorm(x)**<span style="color: #da8548; font-weight: bold;">2</span> + getNorm(y)**<span style="color: #da8548; font-weight: bold;">2</span> - <span style="color: #da8548; font-weight: bold;">2</span> * getInnerProd(x, y))
+        <span style="color: #51afef;">return</span> z
+    <span style="color: #51afef;">else</span>:
+        <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"The vectors must have the same dimension"</span>)
+
+
+<span style="color: #dcaeea;">xvec</span> = [<span style="color: #da8548; font-weight: bold;">0</span>, <span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #da8548; font-weight: bold;">4</span>]
+<span style="color: #dcaeea;">yvec</span> = [<span style="color: #da8548; font-weight: bold;">4</span>, <span style="color: #da8548; font-weight: bold;">3</span>, <span style="color: #da8548; font-weight: bold;">2</span>, <span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #da8548; font-weight: bold;">0</span>]
+
+<span style="color: #dcaeea;">norm</span> = getNorm(xvec);            <span style="color: #51afef;">print</span>(norm)
+<span style="color: #dcaeea;">norm</span> = getNorm(yvec);            <span style="color: #51afef;">print</span>(norm)
+<span style="color: #dcaeea;">prod</span> = getInnerProd(xvec, yvec); <span style="color: #51afef;">print</span>(prod)
+<span style="color: #dcaeea;">dist</span> = getDist(xvec, yvec);      <span style="color: #51afef;">print</span>(dist)
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgfd9bdb8" class="outline-2">
+<h2 id="orgfd9bdb8"><span class="section-number-2">3</span> Vote Counting</h2>
+<div class="outline-text-2" id="text-3">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #dcaeea;">votes</span> = <span style="color: #98be65;">"N , Y, Y,N,n , N , N  N ,n ,y, n,N,Y, y,Y,N , N , n ,y,N"</span>
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">countVotes</span>(ballot):
+    <span style="color: #dcaeea;">ballot</span> = ballot.replace(<span style="color: #98be65;">","</span>,<span style="color: #98be65;">""</span>).replace(<span style="color: #98be65;">" "</span>, <span style="color: #98be65;">""</span>).upper()
+    <span style="color: #dcaeea;">neg_ballots</span> = ballot.count(<span style="color: #98be65;">"N"</span>)
+    <span style="color: #dcaeea;">pos_ballots</span> = ballot.count(<span style="color: #98be65;">"Y"</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Could also have used a loop</span>
+    <span style="color: #51afef;">print</span>(<span style="color: #c678dd;">str</span>(pos_ballots) + <span style="color: #98be65;">" Yes votes and "</span> + <span style="color: #c678dd;">str</span>(neg_ballots) + <span style="color: #98be65;">" No votes"</span>)
+
+countVotes(votes)
+<span style="color: #dcaeea;">votes</span> = <span style="color: #98be65;">",,yyyyn,,y,y,nn,y,,nn,y"</span>
+</pre>
+</div>
+
+<pre class="example">
+7 Yes votes and 13 No votes
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org25fe0a0" class="outline-2">
+<h2 id="org25fe0a0"><span class="section-number-2">4</span> Word Capitaliser</h2>
+<div class="outline-text-2" id="text-4">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">capitalise</span>(sentence):
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Split the words into a list</span>
+    <span style="color: #dcaeea;">wordsList</span> = sentence.split()
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">These are escape words</span>
+    <span style="color: #dcaeea;">EscWords</span> = [<span style="color: #98be65;">"am"</span>, <span style="color: #98be65;">"a"</span>, <span style="color: #98be65;">"an"</span>, <span style="color: #98be65;">"the"</span>, <span style="color: #98be65;">"am"</span>, <span style="color: #98be65;">"is"</span>, <span style="color: #98be65;">"are"</span>, <span style="color: #98be65;">"and"</span>, <span style="color: #98be65;">"of"</span>, <span style="color: #98be65;">"in"</span>, <span style="color: #98be65;">"on"</span>, <span style="color: #98be65;">"with"</span>, <span style="color: #98be65;">"from"</span>, <span style="color: #98be65;">"to"</span>]
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">The number of words starting from 0</span>
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(wordsList)-<span style="color: #da8548; font-weight: bold;">1</span>):
+        <span style="color: #5B6268;">## </span><span style="color: #5B6268;">if not in the escape words</span>
+        <span style="color: #51afef;">if</span> i <span style="color: #51afef;">not</span> <span style="color: #51afef;">in</span> EscWords:
+            <span style="color: #5B6268;">## </span><span style="color: #5B6268;">replace the ith word for a capitalized one</span>
+            <span style="color: #dcaeea;">wordsList</span>[i] = wordsList[i].capitalize()
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Take a space and use it to join the list together</span>
+    <span style="color: #dcaeea;">sentence_Capitalized</span> = <span style="color: #98be65;">" "</span>.join(wordsList)
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Print the output</span>
+    <span style="color: #51afef;">print</span>(sentence_Capitalized)
+    <span style="color: #51afef;">return</span> sentence_Capitalized
+
+capitalise(<span style="color: #98be65;">"The quick brown fox jumped over the lazy dogs"</span>)
+</pre>
+</div>
+
+<pre class="example">
+The Quick Brown Fox Jumped Over The Lazy dogs
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org240d5eb" class="outline-2">
+<h2 id="org240d5eb"><span class="section-number-2">5</span> Parse File</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org7a3f97b" class="outline-3">
+<h3 id="org7a3f97b"><span class="section-number-3">5.1</span> Set up the Text File</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+Take the following text:
+</p>
+<blockquote>
+<p>
+Unit ID, unit name, course name
+301046, Big Data, MICT
+300581, Programming Techniques, BICT
+300144, Object Oriented Analysis, BICT
+300103, Data Structure, BCS
+300147, Object Oriented Programming, BCS
+300569, Computer Security, BIS
+301044, Data Science, MICT
+300582, Technologies for Web Applications, BICT
+</p>
+</blockquote>
+
+<p>
+Let&rsquo;s write it to a file:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #ECBE7B;">pwd</span>
+<span style="color: #ECBE7B;">ls</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-python">
+
+<span style="color: #dcaeea;">scemunits</span> = <span style="color: #98be65;">"""Unit ID, unit name, course name</span>
+<span style="color: #98be65;">301046, Big Data, MICT</span>
+<span style="color: #98be65;">300581, Programming Techniques, BICT</span>
+<span style="color: #98be65;">300144, Object Oriented Analysis, BICT</span>
+<span style="color: #98be65;">300103, Data Structure, BCS</span>
+<span style="color: #98be65;">300147, Object Oriented Programming, BCS</span>
+<span style="color: #98be65;">300569, Computer Security, BIS</span>
+<span style="color: #98be65;">301044, Data Science, MICT</span>
+<span style="color: #98be65;">300582, Technologies for Web Applications, BICT"""</span>
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">writeTextFile</span>(text, filename) :
+    <span style="color: #dcaeea;">f</span> = <span style="color: #c678dd;">open</span>(filename, <span style="color: #98be65;">'w'</span>)
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> text.split(<span style="color: #98be65;">'\n'</span>):
+        f.writelines(i+<span style="color: #98be65;">'\n'</span>)
+    f.close()
+
+writeTextFile(scemunits, <span style="color: #98be65;">'scemunits.txt'</span>)
+
+</pre>
+</div>
+
+<p>
+In order to check that worked we can run <code>cat</code> from <i>Python</i>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">import</span> subprocess
+<span style="color: #dcaeea;">MyCommand</span> = <span style="color: #98be65;">"cat scemunits.txt"</span>
+<span style="color: #dcaeea;">scemunits_txt</span> = subprocess.run(MyCommand.split(), capture_output = <span style="color: #a9a1e1;">True</span>)
+<span style="color: #51afef;">print</span>(scemunits_txt)
+</pre>
+</div>
+
+<pre class="example">
+CompletedProcess(args=['cat', 'scemunits.txt'], returncode=0, stdout=b'Unit ID, unit name, course name\n301046, Big Data, MICT\n300581, Programming Techniques, BICT\n300144, Object Oriented Analysis, BICT\n300103, Data Structure, BCS\n300147, Object Oriented Programming, BCS\n300569, Computer Security, BIS\n301044, Data Science, MICT\n300582, Technologies for Web Applications, BICT\n', stderr=b'')
+</pre>
+
+
+
+<p>
+Observe that:
+</p>
+
+<ol class="org-ol">
+<li>The <code>"""</code> are necessary for new line strings</li>
+<li>The <code>open(file, w)</code> will write over any pre-existing file (like <code>&gt;</code> in <code>bash</code>)
+<ol class="org-ol">
+<li>usint <code>open(file,a)</code> would append to a file (like <code>&gt;&gt;</code> in <code>bash</code>)</li>
+</ol></li>
+<li>Nothing is written to disk until apter <code>f.close()</code>, that&rsquo;s when the changes go from memory to disk.</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-org7c09fac" class="outline-3">
+<h3 id="org7c09fac"><span class="section-number-3">5.2</span> Parse the Text File</h3>
+<div class="outline-text-3" id="text-5-2">
+</div>
+<div id="outline-container-org9cf36cc" class="outline-4">
+<h4 id="org9cf36cc"><span class="section-number-4">5.2.1</span> Read the Text File</h4>
+<div class="outline-text-4" id="text-5-2-1">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5B6268;">## </span><span style="color: #5B6268;">Open the File</span>
+<span style="color: #dcaeea;">scemunits_fid</span> = <span style="color: #c678dd;">open</span>(<span style="color: #98be65;">'./scemunits.txt'</span>)
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Dispense with the first line</span>
+<span style="color: #dcaeea;">header</span> = scemunits_fid.readline()
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Read the remaining Lines into a var</span>
+<span style="color: #dcaeea;">scemunits_txt</span> = scemunits_fid.read()
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Print what we have</span>
+<span style="color: #51afef;">print</span>(scemunits_txt)
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Close the file</span>
+scemunits_fid.close()
+</pre>
+</div>
+
+
+
+<pre class="example">
+301046, Big Data, MICT
+300581, Programming Techniques, BICT
+300144, Object Oriented Analysis, BICT
+300103, Data Structure, BCS
+300147, Object Oriented Programming, BCS
+300569, Computer Security, BIS
+301044, Data Science, MICT
+300582, Technologies for Web Applications, BICT
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org71be8c4" class="outline-4">
+<h4 id="org71be8c4"><span class="section-number-4">5.2.2</span> Return only Matching Data</h4>
+<div class="outline-text-4" id="text-5-2-2">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5B6268;">## </span><span style="color: #5B6268;">Split each line into a list element</span>
+<span style="color: #dcaeea;">obs</span> = scemunits_txt.split(<span style="color: #98be65;">'\n'</span>)
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Throw away the empty line</span>
+<span style="color: #dcaeea;">obs</span> = <span style="color: #c678dd;">list</span>(<span style="color: #c678dd;">filter</span>(<span style="color: #a9a1e1;">None</span>, obs))
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Get the Course Names</span>
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Use replace so whitespace is not required after ,</span>
+<span style="color: #dcaeea;">courses</span> = [ obs[i].replace(<span style="color: #98be65;">', '</span>, <span style="color: #98be65;">','</span>).split(<span style="color: #98be65;">','</span>)[<span style="color: #da8548; font-weight: bold;">2</span>] <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(obs)) ]
+<span style="color: #dcaeea;">units</span> = [ obs[i].replace(<span style="color: #98be65;">', '</span>, <span style="color: #98be65;">','</span>).split(<span style="color: #98be65;">','</span>)[<span style="color: #da8548; font-weight: bold;">1</span>] <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(obs)) ]
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Enumerate the obs so that they</span>
+<span style="color: #dcaeea;">obs</span> = <span style="color: #c678dd;">list</span>(obs)
+
+<span style="color: #5B6268;">## </span><span style="color: #5B6268;">Make an empty list for the matches</span>
+<span style="color: #dcaeea;">matches</span> = []
+
+<span style="color: #5B6268;">##</span>
+<span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(obs)):
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Don't Require whitespace after comma</span>
+    <span style="color: #51afef;">if</span> courses[i] == <span style="color: #98be65;">"MICT"</span>:
+        matches.append(obs[i])
+
+
+<span style="color: #5B6268;">#</span><span style="color: #5B6268;">print([header] + join(matches).insert(header))</span>
+<span style="color: #5B6268;">#</span><span style="color: #5B6268;">print([header].append(matches))</span>
+<span style="color: #51afef;">print</span>(matches)
+matches.insert(<span style="color: #da8548; font-weight: bold;">0</span>, header.replace(<span style="color: #98be65;">'\n'</span>,<span style="color: #98be65;">''</span>))
+<span style="color: #51afef;">print</span>(<span style="color: #98be65;">"\n"</span>.join(matches))
+
+<span style="color: #dcaeea;">out_fid</span> = <span style="color: #c678dd;">open</span>(<span style="color: #98be65;">'outfile.txt'</span>, <span style="color: #98be65;">"w"</span>)
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">out_fid.write("\n".join(matches))</span>
+<span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> matches:
+    out_fid.write(i+<span style="color: #98be65;">'\n'</span>)
+    <span style="color: #51afef;">print</span>(i)
+
+out_fid.close()
+</pre>
+</div>
+
+<pre class="example">
+['301046, Big Data, MICT', '301044, Data Science, MICT']
+Unit ID, unit name, course name
+301046, Big Data, MICT
+301044, Data Science, MICT
+Unit ID, unit name, course name
+301046, Big Data, MICT
+301044, Data Science, MICT
+</pre>
+
+
+<p>
+We can now inspect the contents of that file:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8ff4f1d" class="outline-3">
+<h3 id="org8ff4f1d"><span class="section-number-3">5.3</span> Wrap it into a function</h3>
+<div class="outline-text-3" id="text-5-3">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5B6268;">#</span><span style="color: #5B6268;">!/usr/bin/env python3</span>
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">* Create the Text File</span>
+<span style="color: #dcaeea;">scemunits</span> = <span style="color: #98be65;">"""Unit ID, unit name, course name</span>
+<span style="color: #98be65;">301046, Big Data, MICT</span>
+<span style="color: #98be65;">300581, Programming Techniques, BICT</span>
+<span style="color: #98be65;">300144, Object Oriented Analysis, BICT</span>
+<span style="color: #98be65;">300103, Data Structure, BCS</span>
+<span style="color: #98be65;">300147, Object Oriented Programming, BCS</span>
+<span style="color: #98be65;">300569, Computer Security, BIS</span>
+<span style="color: #98be65;">301044, Data Science, MICT</span>
+<span style="color: #98be65;">300582, Technologies for Web Applications, BICT"""</span>
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">writeTextFile</span>(text, filename) :
+    <span style="color: #dcaeea;">f</span> = <span style="color: #c678dd;">open</span>(filename, <span style="color: #98be65;">'w'</span>)
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> text.split(<span style="color: #98be65;">'\n'</span>):
+        f.writelines(i+<span style="color: #98be65;">'\n'</span>)
+    f.close()
+
+writeTextFile(scemunits, <span style="color: #98be65;">'scemunits.txt'</span>)
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">* Main Functions</span>
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">readWriteFile</span>(infile, outfile):
+    readTheTextFile(infile)
+    <span style="color: #dcaeea;">listOfLines</span> = returnMatchingData(outfile)
+    <span style="color: #51afef;">print</span>(listOfLines)
+    writeToFile(listOfLines, outfile)
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">** Sub Functions</span>
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">*** Input</span>
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">readTheTextFile</span>(infile):
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Open the File</span>
+    <span style="color: #dcaeea;">scemunits_fid</span> = <span style="color: #c678dd;">open</span>(infile)
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">/////////////////// File Open ///////////////////////</span>
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Dispense with the first line</span>
+    <span style="color: #dcaeea;">readTheTextFile.header</span> = scemunits_fid.readline().replace(<span style="color: #98be65;">'\n'</span>, <span style="color: #98be65;">''</span>)
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Read the remaining lines into an attribute</span>
+    <span style="color: #dcaeea;">readTheTextFile.scemunits_txt</span> = scemunits_fid.read()
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Close the File</span>
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">/////////////////// File Closed ///////////////////////</span>
+    scemunits_fid.close()
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">** Output</span>
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">returnMatchingData</span>(outfile):
+    <span style="color: #dcaeea;">scemunits_txt</span> = readTheTextFile.scemunits_txt
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Split each line into a list element</span>
+    <span style="color: #dcaeea;">obs</span> = scemunits_txt.split(<span style="color: #98be65;">'\n'</span>)
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Throw away empty lines</span>
+    <span style="color: #dcaeea;">obs</span> = <span style="color: #c678dd;">list</span>(<span style="color: #c678dd;">filter</span>(<span style="color: #a9a1e1;">None</span>, obs))
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Get the Course and Unit Names</span>
+        <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Don't Require whitespace after comma</span>
+    <span style="color: #dcaeea;">courses</span> = [ obs[i].replace(<span style="color: #98be65;">', '</span>, <span style="color: #98be65;">','</span>).split(<span style="color: #98be65;">','</span>)[<span style="color: #da8548; font-weight: bold;">2</span>] <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(obs)) ]
+    <span style="color: #dcaeea;">units</span> = [ obs[i].replace(<span style="color: #98be65;">', '</span>, <span style="color: #98be65;">','</span>).split(<span style="color: #98be65;">','</span>)[<span style="color: #da8548; font-weight: bold;">1</span>] <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(obs)) ]
+
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Enumerate the obs so that they</span>
+    <span style="color: #dcaeea;">obs</span> = <span style="color: #c678dd;">list</span>(obs)
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Make an empty list for the matches</span>
+    <span style="color: #dcaeea;">matches</span> = []
+
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">for each line, throw it in the list of matches if it's in the MICT course</span>
+    <span style="color: #5B6268;">##</span>
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(obs)):
+        <span style="color: #51afef;">if</span> courses[i] == <span style="color: #98be65;">"MICT"</span>:
+            matches.append(obs[i])
+
+    <span style="color: #5B6268;">## </span><span style="color: #5B6268;">Insert the header at position 1</span>
+    matches.insert(<span style="color: #da8548; font-weight: bold;">0</span>,readTheTextFile.header)
+
+    <span style="color: #51afef;">return</span> matches
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">writeToFile</span>(listOfLines, outfile):
+    <span style="color: #dcaeea;">outfile_fid</span> = <span style="color: #c678dd;">open</span>(outfile, <span style="color: #98be65;">'w'</span>)
+    <span style="color: #51afef;">for</span> line <span style="color: #51afef;">in</span> listOfLines:
+        <span style="color: #51afef;">print</span>(line)
+        outfile_fid.write(line+<span style="color: #98be65;">'\n'</span>)
+    outfile_fid.close()
+
+readWriteFile(<span style="color: #98be65;">'scemunits.txt'</span>, <span style="color: #98be65;">'outfile.txt'</span>)
+</pre>
+</div>
+
+<pre class="example">
+['Unit ID, unit name, course name', '301046, Big Data, MICT', '301044, Data Science, MICT']
+Unit ID, unit name, course name
+301046, Big Data, MICT
+301044, Data Science, MICT
+</pre>
+
+
+<p>
+and to confirm that it has written to the file:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #ECBE7B;">cat</span> outfile.txt
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgda3ed0f" class="outline-2">
+<h2 id="orgda3ed0f"><span class="section-number-2">6</span> Parse Dictionary</h2>
+<div class="outline-text-2" id="text-6">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5B6268;">#</span><span style="color: #5B6268;">!/usr/bin/env python3</span>
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">* Create the Dictionary</span>
+
+<span style="color: #dcaeea;">units</span> = {(<span style="color: #98be65;">'301046'</span>, <span style="color: #98be65;">'Big Data'</span>): <span style="color: #98be65;">'MICT'</span>,
+         (<span style="color: #98be65;">'300581'</span>, <span style="color: #98be65;">'Programming Techniques'</span>): <span style="color: #98be65;">'BICT'</span>,
+         (<span style="color: #98be65;">'300144'</span>, <span style="color: #98be65;">'OOA'</span>): <span style="color: #98be65;">'BICT'</span>,
+         (<span style="color: #98be65;">'300103'</span>, <span style="color: #98be65;">'Data Structures'</span>): <span style="color: #98be65;">'BCS'</span>,
+         (<span style="color: #98be65;">'300147'</span>, <span style="color: #98be65;">'OOP'</span>): <span style="color: #98be65;">'BCS'</span>,
+         (<span style="color: #98be65;">'300569'</span>, <span style="color: #98be65;">'Computer Security'</span>): <span style="color: #98be65;">'BIS'</span>,
+         (<span style="color: #98be65;">'301044'</span>, <span style="color: #98be65;">'Data Science'</span>): <span style="color: #98be65;">'MICT'</span>,
+         (<span style="color: #98be65;">'300582'</span>, <span style="color: #98be65;">'TWA'</span>): <span style="color: #98be65;">'BICT'</span>}
+
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">displayUnits</span>(unitsDict, keyword):
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Should Return Gracefully if the input is wrong</span>
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Could have used Try/Except</span>
+    <span style="color: #51afef;">if</span> <span style="color: #c678dd;">type</span>(unitsDict) != <span style="color: #c678dd;">dict</span>:
+        <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"ERROR; Require Dictionary of Unit Values"</span>)
+        <span style="color: #51afef;">return</span>
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Make an empty List to fill</span>
+    <span style="color: #dcaeea;">matches</span> = []
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">For each dictionary item if it corresponds to the keyword</span>
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">append it to the list</span>
+    <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> unitsDict:
+        <span style="color: #51afef;">if</span> units[i] == keyword:
+            matches.append(i)
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Use to get back matches[][1]</span>
+    <span style="color: #dcaeea;">matching_units</span> = [matches[i][<span style="color: #da8548; font-weight: bold;">1</span>] <span style="color: #51afef;">for</span> i <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(<span style="color: #c678dd;">len</span>(matches))]
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Return the Value</span>
+    <span style="color: #51afef;">return</span> matching_units
+
+
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">To Print the Values join the list together with new line characters.</span>
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">The function should return data in a list not a string</span>
+<span style="color: #5B6268;"># </span><span style="color: #5B6268;">(python =&gt; data, bash =&gt; string)</span>
+
+<span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Match MICT \n ---------------------"</span>)
+<span style="color: #51afef;">print</span>(<span style="color: #98be65;">"\n"</span>.join(displayUnits(units, <span style="color: #98be65;">'MICT'</span>)))
+
+<span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Match BCS  \n ---------------------"</span>)
+<span style="color: #51afef;">print</span>(<span style="color: #98be65;">"\n"</span>.join(displayUnits(units, <span style="color: #98be65;">'BCS'</span>)))
+</pre>
+</div>
+
+<pre class="example">
+Big Data
+Data Science
+Data Structures
+OOP
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org9bfb4c3" class="outline-2">
+<h2 id="org9bfb4c3"><span class="section-number-2">7</span> grep</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+This is easy, just loop through the lines and print if the word is in the line.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5B6268;">#</span><span style="color: #5B6268;">!/bin/python</span>
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">pygrep</span>(filename, expr):
+    <span style="color: #51afef;">try</span>:
+        <span style="color: #dcaeea;">inputfile_fid</span> = <span style="color: #c678dd;">open</span>(filename)
+    <span style="color: #51afef;">except</span>:
+        <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"ERROR: Could note open file"</span>)
+    <span style="color: #51afef;">for</span> line <span style="color: #51afef;">in</span> inputfile_fid:
+        <span style="color: #51afef;">if</span> expr <span style="color: #51afef;">in</span> line:
+            <span style="color: #51afef;">print</span>(line)
+
+pygrep(<span style="color: #98be65;">"./bigdata.txt"</span>, <span style="color: #98be65;">'Big'</span>)
+pygrep(<span style="color: #98be65;">"./bigdata.txt"</span>, <span style="color: #98be65;">'technology'</span>)
+</pre>
+</div>
+
+<pre class="example">
+Big data is a broad term for data sets so large or complex that they are difficult to process using
+
+their tools, and expanding capabilities make Big Data a moving target. Thus, what is considered to be "Big" in
+
+Big data usually includes data sets with sizes beyond the ability of commonly used software tools to capture,
+
+curate, manage, and process data within a tolerable elapsed time. Big data "size" is a constantly moving
+
+target, as of 2012 ranging from a few dozen terabytes to many petabytes of data. Big data is a set of
+
+definition as follows: "Big data is high volume, high velocity, and/or high variety information assets that
+
+Big data uses inductive statistics and concepts from nonlinear system identification to infer laws
+
+Big data can also be defined as "Big data is a large volume unstructured data which cannot be handled by
+
+Big data can be described by the following characteristics: Volume � The quantity of data that is generated is
+
+data under consideration and whether it can actually be considered as Big Data or not. The name �Big Data�
+
+Variety - The next aspect of Big Data is its variety. This means that the category to which Big Data belongs
+
+upholding the importance of the Big Data.
+
+�complexity� of Big Data.
+
+Big data analytics consists of 6 Cs in the integrated industry 4.0 and Cyber Physical Systems environment. 6C
+
+implications in an article titled "Big Data Solution Offering". The methodology addresses handling big data in
+
+Big Data Analytics for Manufacturing Applications can be based on a 5C architecture (connection, conversion,
+
+Big Data Lake - With the changing face of business and IT sector, capturing and storage of data has emerged
+
+Big data requires exceptional technologies to efficiently process large quantities of data within tolerable
+
+Bus wrapped with SAP Big data parked outside IDF13.
+
+Big data has increased the demand of information management specialists in that Software AG, Oracle
+
+While many vendors offer off-the-shelf solutions for Big Data, experts recommend the development of in-house
+
+The use and adoption of Big Data, within governmental processes, is beneficial and allows efficiencies in
+
+Governmental Big Data space.
+
+In 2012, the Obama administration announced the Big Data Research and Development Initiative, to explore how
+
+different big data programs spread across six departments.Big data analysis played a large role in Barack
+
+Big data analysis was, in parts, responsible for the BJP and its allies to win a highly successful Indian
+
+benefit of big data for manufacturing. Big data provides an infrastructure for transparency in manufacturing
+
+In order to hone into the manner in which the media utilises Big Data, it is first necessary to provide some
+
+Practitioners in Advertising and Media approach Big Data as many actionable points of information about
+
+The media industries process Big Data in a dual, interconnected manner:
+
+Big Data and the IoT work in conjunction. From a media perspective, Data is the key derivative of device inter
+
+far-reaching impacts on media efficiency. The wealth of data generated by this industry (i.e. Big Data) allows
+
+Engineering Education. Gautam Siwach engaged at Tackling the challenges of Big Data by MIT Computer Science
+
+In March 2012, The White House announced a national "Big Data Initiative" that consisted of six Federal
+
+The White House Big Data Initiative also included a commitment by the Department of Energy to provide $25
+
+The U.S. state of Massachusetts announced the Massachusetts Big Data Initiative in May 2012, which provides
+
+Massachusetts Institute of Technology hosts the Intel Science and Technology Center for Big Data in the MIT
+
+The European Commission is funding the 2-year-long Big Data Public Private Forum through their Seventh
+
+presenters from various industrial companies discussed their concerns, issues and future goals in Big Data
+
+Computational social sciences � Anyone can use Application Programming Interfaces (APIs) provided by Big Data
+
+emergence of the typical network characteristics of Big Data". In their critique, Snijders, Matzat, and Reips
+
+Big data has been called a "fad" in scientific research and its use was even made fun of as an absurd practice
+
+Questions for Big Data", the authors title big data a part of mythology: "large data sets offer a higher form
+
+often "lost in the sheer volume of numbers", and "working with Big Data is still subjective, and what it
+
+such as pro-active reporting especially target improvements in usability of Big Data, through automated
+
+Big data analysis is often shallow compared to analysis of smaller data sets. In many big data projects, there
+
+Big data is a buzzword and a "vague term", but at the same time an "obsession" with entrepreneurs,
+
+consultants, scientists and the media. Big data showcases such as Google Flu Trends failed to deliver good
+
+election predictions solely based on Twitter were more often off than on target. Big data often poses the same
+
+technology went public with the launch of a company called Ayasdi.
+
+ICT4D) suggests that big data technology can make important contributions but also present unique challenges
+
+the later utilization stage. Finally, with ubiquitous connectivity offered by cloud computing technology, the
+
+well as queries from more than half a million third-party sellers. The core technology that keeps Amazon
+
+form at cloud interface by providing the raw definitions and real time examples within the technology.
+
+experiments (i.e. process a big amount of scientific data; although not with big data technology), the
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgbad0704" class="outline-2">
+<h2 id="orgbad0704"><span class="section-number-2">8</span> Top 10 Words</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+ope
+</p>
+</div>
+
+<div id="outline-container-org8cde801" class="outline-3">
+<h3 id="org8cde801"><span class="section-number-3">8.1</span> Create the Dictionary</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+So the idea here is to first try and open the file, use try/catch so that errors relating to missing files are descriptive and exit gracefully.
+</p>
+
+<p>
+Then make an empty dictionary and go through each word in the list:
+</p>
+<ul class="org-ul">
+<li>If the words is in the list but not the dictionary
+<ul class="org-ul">
+<li>Put it in the dictionary with a value of 1</li>
+</ul></li>
+<li><p>
+If the word is in the dictionary then increment its value
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #5B6268;">#</span><span style="color: #5B6268;">!/bin/python</span>
+<span style="color: #51afef;">from</span> operator <span style="color: #51afef;">import</span> itemgetter
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">createDict</span>(filename):
+    <span style="color: #51afef;">try</span>:
+        <span style="color: #dcaeea;">filename_fid</span> = <span style="color: #c678dd;">open</span>(filename)
+        <span style="color: #dcaeea;">filename_str</span> = filename_fid.read()
+        <span style="color: #dcaeea;">word_list</span> = filename_str.lower().split(<span style="color: #98be65;">' '</span>)
+    <span style="color: #51afef;">except</span>:
+        <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"ERROR: cannot open file"</span>)
+        <span style="color: #51afef;">return</span>
+
+    <span style="color: #dcaeea;">matches</span> = <span style="color: #c678dd;">dict</span>()
+
+    <span style="color: #51afef;">for</span> word <span style="color: #51afef;">in</span> word_list:
+        <span style="color: #51afef;">if</span> word <span style="color: #51afef;">not</span> <span style="color: #51afef;">in</span> matches:
+            <span style="color: #dcaeea;">matches</span>[word] = <span style="color: #da8548; font-weight: bold;">1</span>
+        <span style="color: #51afef;">else</span>:
+            <span style="color: #dcaeea;">matches</span>[word] = matches[word] + <span style="color: #da8548; font-weight: bold;">1</span>
+
+    <span style="color: #51afef;">return</span> matches
+
+createDict(<span style="color: #98be65;">'scemunits.txt'</span>)
+<span style="color: #51afef;">print</span>(createDict(<span style="color: #98be65;">'scemunits.txt'</span>))
+</pre>
+</div>
+
+<pre class="example">
+{'unit': 2, 'id,': 1, 'name,': 1, 'course': 1, 'name\n301046,': 1, 'big': 1, 'data,': 1, 'mict\n300581,': 1, 'programming': 1, 'techniques,': 1, 'bict\n300144,': 1, 'object': 2, 'oriented': 2, 'analysis,': 1, 'bict\n300103,': 1, 'data': 2, 'structure,': 1, 'bcs\n300147,': 1, 'programming,': 1, 'bcs\n300569,': 1, 'computer': 1, 'security,': 1, 'bis\n301044,': 1, 'science,': 1, 'mict\n300582,': 1, 'technologies': 1, 'for': 1, 'web': 1, 'applications,': 1, 'bict\n': 1}
+</pre></li>
+</ul>
+
+<p>
+The rest of the code was given to us and so the sorted values can be returned thusly:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">from</span> operator <span style="color: #51afef;">import</span> itemgetter
+<span style="color: #dcaeea;">myDict</span> = createDict(<span style="color: #98be65;">'bigdata.txt'</span>)
+
+<span style="color: #dcaeea;">sortedList</span> = <span style="color: #c678dd;">sorted</span>(myDict.items(), key = itemgetter(<span style="color: #da8548; font-weight: bold;">1</span>), reverse = <span style="color: #a9a1e1;">True</span>)
+
+<span style="color: #51afef;">for</span> key, value <span style="color: #51afef;">in</span> sortedList[:<span style="color: #da8548; font-weight: bold;">10</span>]:
+    <span style="color: #51afef;">print</span>(key, value)
+
+</pre>
+</div>
+
+<pre class="example">
+the 302
+of 213
+and 201
+data 178
+to 170
+in 122
+a 99
+big 80
+is 75
+as 59
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Ryan Greenup</p>
+<p class="date">Created: 2020-07-31 Fri 16:32</p>
+</div>
+</body>
+</html>

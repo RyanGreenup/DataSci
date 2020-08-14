@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{mysum}\PYG{p}{(}\PYG{n}{x}\PYG{p}{):}
+    \PYG{n}{total} \PYG{o}{=} \PYG{n+nb}{float}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{x}\PYG{p}{:}
+        \PYG{k}{try}\PYG{p}{:}
+            \PYG{n}{total} \PYG{o}{=} \PYG{n}{total} \PYG{o}{+} \PYG{n+nb}{float}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)}
+        \PYG{k}{except}\PYG{p}{:}
+            \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}The Values of the list must be numeric\PYGZdq{}}\PYG{p}{)}
+            \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Discarding Value\PYGZdq{}}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{total}
+
+\PYG{n}{value} \PYG{o}{=} \PYG{n}{mysum}\PYG{p}{([}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}apple\PYGZdq{}}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{value}\PYG{p}{)}
+\end{Verbatim}

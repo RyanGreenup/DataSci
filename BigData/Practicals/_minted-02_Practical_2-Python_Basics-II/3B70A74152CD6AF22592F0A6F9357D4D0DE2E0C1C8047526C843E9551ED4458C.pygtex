@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+ch}{\PYGZsh{}!/bin/python}
+\PYG{k+kn}{from} \PYG{n+nn}{operator} \PYG{k+kn}{import} \PYG{n}{itemgetter}
+
+\PYG{k}{def} \PYG{n+nf}{createDict}\PYG{p}{(}\PYG{n}{filename}\PYG{p}{):}
+    \PYG{k}{try}\PYG{p}{:}
+        \PYG{n}{filename\PYGZus{}fid} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{filename}\PYG{p}{)}
+        \PYG{n}{filename\PYGZus{}str} \PYG{o}{=} \PYG{n}{filename\PYGZus{}fid}\PYG{o}{.}\PYG{n}{read}\PYG{p}{()}
+        \PYG{n}{word\PYGZus{}list} \PYG{o}{=} \PYG{n}{filename\PYGZus{}str}\PYG{o}{.}\PYG{n}{lower}\PYG{p}{()}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{except}\PYG{p}{:}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}ERROR: cannot open file\PYGZdq{}}\PYG{p}{)}
+        \PYG{k}{return}
+
+    \PYG{n}{matches} \PYG{o}{=} \PYG{n+nb}{dict}\PYG{p}{()}
+
+    \PYG{k}{for} \PYG{n}{word} \PYG{o+ow}{in} \PYG{n}{word\PYGZus{}list}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n}{word} \PYG{o+ow}{not} \PYG{o+ow}{in} \PYG{n}{matches}\PYG{p}{:}
+            \PYG{n}{matches}\PYG{p}{[}\PYG{n}{word}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{1}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{n}{matches}\PYG{p}{[}\PYG{n}{word}\PYG{p}{]} \PYG{o}{=} \PYG{n}{matches}\PYG{p}{[}\PYG{n}{word}\PYG{p}{]} \PYG{o}{+} \PYG{l+m+mi}{1}
+
+    \PYG{k}{return} \PYG{n}{matches}
+
+\PYG{n}{createDict}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}scemunits.txt\PYGZsq{}}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{createDict}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}scemunits.txt\PYGZsq{}}\PYG{p}{))}
+\end{Verbatim}

@@ -1,35 +1,48 @@
-#+TITLE: Big Data; 02 Practical - Python Basics 2
-:CONFIG:
-# #+STARTUP: latexpreview
-#+INFOJS_OPT: view:showall toc:3
-#+PLOT: title:"Citas" ind:1 deps:(3) type:2d with:histograms set:"yrange [0:]"
-#+OPTIONS: tex:t
-#+TODO: TODO IN-PROGRESS WAITING DONE
-#+CATEGORY: TAD
+% Created 2020-07-23 Thu 19:38
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle}
+\author{Ryan Greenup}
+\date{\today}
+\title{Big Data; 02 Practical - Python Basics 2}
+\hypersetup{
+ pdfauthor={Ryan Greenup},
+ pdftitle={Big Data; 02 Practical - Python Basics 2},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.3 (Org mode 9.4)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
 :HTML:
-#+INFOJS_OPT: view:info toc:3
-#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="style.css">
-#+CSL_STYLE: /home/ryan/Templates/CSL/nature.csl
-:END:
-:PYTHON:
-#+PROPERTY: header-args:python :session BIGDATAMain :dir ./ :cache yes :eval never-export :exports both :results output
-# exports: both (or code or whatever)
-# results: table (or output or whatever)
-:END:
-:SlowDown:
-# #+STARTUP: latexpreview
-#+LATEX_HEADER: \usepackage{/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle}
-# #+LATEX_HEADER: \twocolumn
-# [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyl   [ State ]: EDITED, shown value does not take effect until you set or save it.
-:END:
+line-style when
 
-* Calculate Data Statistics
+\section{Calculate Data Statistics}
+\label{sec:org2a6c24c}
 
-** Sum Values
+\subsection{Sum Values}
+\label{sec:org5adc63c}
 So what we need to do is go through each value and tally it up, it is important
 however to return the value and the print it:
 
-#+begin_src python
+\begin{minted}[]{python}
 def mysum(x):
     total = float(0)
     for i in x:
@@ -38,17 +51,19 @@ def mysum(x):
 
 value = mysum([1,2,3])
 print(value)
-#+end_src
+\end{minted}
 
-#+RESULTS[09854f20420c9d1ea7c46194294b491ba170ef14]:
-: 6.0
+\begin{verbatim}
+6.0
+\end{verbatim}
 
-*** Improvements
+\subsubsection{Improvements}
+\label{sec:org6cf3875}
 
-We could however improve this by using a =try= / =except= test, in the event
+We could however improve this by using a \texttt{try} / \texttt{except} test, in the event
 that a non-numerical list is provided:
 
-#+begin_src python
+\begin{minted}[]{python}
 def mysum(x):
     total = float(0)
     for i in x:
@@ -61,18 +76,20 @@ def mysum(x):
 
 value = mysum([1,2,3, "apple"])
 print(value)
-#+end_src
+\end{minted}
 
-#+RESULTS[b0be94d0245bb61ce148093311ba1a95cdad7f76]:
-: The Values of the list must be numeric
-: 6.0
-** Minimum Value
+\begin{verbatim}
+The Values of the list must be numeric
+6.0
+\end{verbatim}
+\subsection{Minimum Value}
+\label{sec:orgb8571f8}
 
 Take the first item of the list as a candidate, for every item in the list, compare it to the candidate, if the next value is bigger that will become the new candidate, finally the candidate will be the maximum value.
 
-Just like above we use a =try= / =except= to prevent issues.
+Just like above we use a \texttt{try} / \texttt{except} to prevent issues.
 
-#+begin_src python
+\begin{minted}[]{python}
 def mymax(list_of_vals):
     candidate = list_of_vals[0]  # Unlike R/Mathematica/Julia, python starts from 0.
     for i in list_of_vals:
@@ -85,22 +102,26 @@ def mymax(list_of_vals):
     return candidate
 
 print(mymax([4, 6, 2, 5, 7, 3, 8, "john", -9]))
-#+end_src
+\end{minted}
 
-#+RESULTS[d9a918a92fd085f0a2930c4f7453b2bff16a27e8]:
-: The list items must be numeric
-: Discarding Value
-: 8.0
+\begin{verbatim}
+The list items must be numeric
+Discarding Value
+8.0
+\end{verbatim}
 
-** Maximum Value
+\subsection{Maximum Value}
+\label{sec:orgf345f2e}
 
 Same as above, just remember to:
 
-- wrap in =float()= as appropriate
-- print the function call.
+\begin{itemize}
+\item wrap in \texttt{float()} as appropriate
+\item print the function call.
+\end{itemize}
 
 
-#+begin_src python
+\begin{minted}[]{python}
 def mymin(thelist):
     candidate = thelist[0]
     for i in thelist:
@@ -113,17 +134,21 @@ def mymin(thelist):
 
 value = mymin([1, 5, 3, "apple", 8, 2, -9])
 print(value)
-#+end_src
+\end{minted}
 
-#+RESULTS[8f2d0f5538f058b50f2dd62a00b527447541c598]:
-: list items must be numeric, discarding value
-: 8
+\begin{verbatim}
+list items must be numeric, discarding value
+8
+\end{verbatim}
 
-* Vector Norm, Inner Product and Distance
-** Piping
-The /Toolz/ Module gives something very similar to piping in bash / julia / R
-** Using Built ins
-#+begin_src python
+\section{Vector Norm, Inner Product and Distance}
+\label{sec:org17d144e}
+\subsection{Piping}
+\label{sec:orgb056ed7}
+The \emph{Toolz} Module gives something very similar to piping in bash / julia / R
+\subsection{Using Built ins}
+\label{sec:org693e581}
+\begin{minted}[]{python}
 import math as mt
 import copy
 
@@ -143,14 +168,16 @@ xvec = [0, 1, 2, 3, 4]
 yvec = [4, 3, 2, 1, 0]
 
 norm = getNorm(xvec);            print(norm)
-#+end_src
+\end{minted}
 
-#+RESULTS[66db8060093765fd412603b4e7791db6ec095b8b]:
-: 4
-: 5.477225575051661
+\begin{verbatim}
+4
+5.477225575051661
+\end{verbatim}
 
-** Inner Product
-#+begin_src python
+\subsection{Inner Product}
+\label{sec:org1a10d9c}
+\begin{minted}[]{python}
 
 def getInnerProd(x, y):
     z = copy.deepcopy(x)    ## Careful, you need to copy, not just assign
@@ -166,16 +193,18 @@ yvec = [4, 3, 2, 1, 0]
 norm = getNorm(xvec);            print(norm)
 norm = getNorm(yvec);            print(norm)
 prod = getInnerProd(xvec, yvec); print(prod)
-#+end_src
+\end{minted}
 
-#+RESULTS[4a669b1d5cd377a0e367e900faeb93be24e17688]:
-: 5.477225575051661
-: 5.477225575051661
-: 10
-: 6.324555320336759
+\begin{verbatim}
+5.477225575051661
+5.477225575051661
+10
+6.324555320336759
+\end{verbatim}
 
-** Distance
-#+begin_src python
+\subsection{Distance}
+\label{sec:orgd4ca3fa}
+\begin{minted}[]{python}
 
 def getDist(x, y):
     if len(x) == len(y):
@@ -193,11 +222,12 @@ norm = getNorm(yvec);            print(norm)
 prod = getInnerProd(xvec, yvec); print(prod)
 dist = getDist(xvec, yvec);      print(dist)
 
-#+end_src
+\end{minted}
 
-* Vote Counting
+\section{Vote Counting}
+\label{sec:org044ba30}
 
-#+begin_src python
+\begin{minted}[]{python}
 votes = "N , Y, Y,N,n , N , N  N ,n ,y, n,N,Y, y,Y,N , N , n ,y,N"
 def countVotes(ballot):
     ballot = ballot.replace(",","").replace(" ", "").upper()
@@ -209,13 +239,15 @@ def countVotes(ballot):
 
 countVotes(votes)
 votes = ",,yyyyn,,y,y,nn,y,,nn,y"
-#+end_src
+\end{minted}
 
-#+RESULTS[769d81700bb0fe64c9cfcbe59254d39b16892213]:
-: 7 Yes votes and 13 No votes
+\begin{verbatim}
+7 Yes votes and 13 No votes
+\end{verbatim}
 
-* Word Capitaliser
-#+begin_src python
+\section{Word Capitaliser}
+\label{sec:org1ba727f}
+\begin{minted}[]{python}
 def capitalise(sentence):
     ## Split the words into a list
     wordsList = sentence.split()
@@ -234,16 +266,19 @@ def capitalise(sentence):
     return sentence_Capitalized
 
 capitalise("The quick brown fox jumped over the lazy dogs")
-#+end_src
+\end{minted}
 
-#+RESULTS[81a994cb77b1d20a90230bafe39bf47128775771]:
-: The Quick Brown Fox Jumped Over The Lazy dogs
+\begin{verbatim}
+The Quick Brown Fox Jumped Over The Lazy dogs
+\end{verbatim}
 
-* Parse File
-** Set up the Text File
+\section{Parse File}
+\label{sec:org088dfe5}
+\subsection{Set up the Text File}
+\label{sec:org4b7a218}
 
 Take the following text:
-#+begin_quote
+\begin{quote}
 Unit ID, unit name, course name
 301046, Big Data, MICT
 300581, Programming Techniques, BICT
@@ -253,21 +288,16 @@ Unit ID, unit name, course name
 300569, Computer Security, BIS
 301044, Data Science, MICT
 300582, Technologies for Web Applications, BICT
-#+end_quote
+\end{quote}
 
 Let's write it to a file:
 
-#+begin_src bash
+\begin{minted}[]{bash}
 pwd
 ls
-#+end_src
+\end{minted}
 
-#+RESULTS:
-| /home/ryan/DataSci/BigData/Practicals |
-| 02_Practical_2-Python_Basics-II.html  |
-| 02_Practical_2-Python_Basics-II.org   |
-
-#+begin_src python
+\begin{minted}[]{python}
 
 
 scemunits = """Unit ID, unit name, course name
@@ -288,34 +318,40 @@ def writeTextFile(text, filename) :
 
 writeTextFile(scemunits, 'scemunits.txt')
 
-#+end_src
+\end{minted}
 
-#+RESULTS[bb28f470888a7bd65451bf15ba4e4e0ee3f62f64]:
+In order to check that worked we can run \texttt{cat} from \emph{Python}:
 
-In order to check that worked we can run ~cat~ from /Python/:
-
-#+begin_src python
+\begin{minted}[]{python}
 import subprocess
 MyCommand = "cat scemunits.txt"
 scemunits_txt = subprocess.run(MyCommand.split(), capture_output = True)
 print(scemunits_txt)
-#+end_src
+\end{minted}
 
-#+RESULTS[a52e34d7f6253f02d5030b1f8b280f66022b848b]:
-: CompletedProcess(args=['cat', 'scemunits.txt'], returncode=0, stdout=b'Unit ID, unit name, course name\n301046, Big Data, MICT\n300581, Programming Techniques, BICT\n300144, Object Oriented Analysis, BICT\n300103, Data Structure, BCS\n300147, Object Oriented Programming, BCS\n300569, Computer Security, BIS\n301044, Data Science, MICT\n300582, Technologies for Web Applications, BICT\n', stderr=b'')
+\begin{verbatim}
+CompletedProcess(args=['cat', 'scemunits.txt'], returncode=0, stdout=b'Unit ID, unit name, course name\n301046, Big Data, MICT\n300581, Programming Techniques, BICT\n300144, Object Oriented Analysis, BICT\n300103, Data Structure, BCS\n300147, Object Oriented Programming, BCS\n300569, Computer Security, BIS\n301044, Data Science, MICT\n300582, Technologies for Web Applications, BICT\n', stderr=b'')
+\end{verbatim}
+
 
 
 Observe that:
 
-1. The ~"""~ are necessary for new line strings
-2. The ~open(file, w)~ will write over any pre-existing file (like ~>~ in ~bash~)
-   1. usint ~open(file,a)~ would append to a file (like ~>>~ in ~bash~)
-3. Nothing is written to disk until apter ~f.close()~, that's when the changes go from memory to disk.
+\begin{enumerate}
+\item The \texttt{"""} are necessary for new line strings
+\item The \texttt{open(file, w)} will write over any pre-existing file (like \texttt{>} in \texttt{bash})
+\begin{enumerate}
+\item usint \texttt{open(file,a)} would append to a file (like \texttt{>>} in \texttt{bash})
+\end{enumerate}
+\item Nothing is written to disk until apter \texttt{f.close()}, that's when the changes go from memory to disk.
+\end{enumerate}
 
-** Parse the Text File
-*** Read the Text File
+\subsection{Parse the Text File}
+\label{sec:orgc585340}
+\subsubsection{Read the Text File}
+\label{sec:orge5a1a9f}
 
-#+begin_src python
+\begin{minted}[]{python}
 ## Open the File
 scemunits_fid = open('./scemunits.txt')
 
@@ -330,23 +366,25 @@ print(scemunits_txt)
 
 ## Close the file
 scemunits_fid.close()
-#+end_src
+\end{minted}
 
 
 
-#+RESULTS[badb3d5997f19239df0353b8f01e951532de1178]:
-: 301046, Big Data, MICT
-: 300581, Programming Techniques, BICT
-: 300144, Object Oriented Analysis, BICT
-: 300103, Data Structure, BCS
-: 300147, Object Oriented Programming, BCS
-: 300569, Computer Security, BIS
-: 301044, Data Science, MICT
-: 300582, Technologies for Web Applications, BICT
+\begin{verbatim}
+301046, Big Data, MICT
+300581, Programming Techniques, BICT
+300144, Object Oriented Analysis, BICT
+300103, Data Structure, BCS
+300147, Object Oriented Programming, BCS
+300569, Computer Security, BIS
+301044, Data Science, MICT
+300582, Technologies for Web Applications, BICT
+\end{verbatim}
 
-*** Return only Matching Data
+\subsubsection{Return only Matching Data}
+\label{sec:org60dc81a}
 
-#+begin_src python
+\begin{minted}[]{python}
 ## Split each line into a list element
 obs = scemunits_txt.split('\n')
 
@@ -384,26 +422,25 @@ for i in matches:
     print(i)
 
 out_fid.close()
-#+end_src
+\end{minted}
 
-#+RESULTS[a974ddd9ef57f5e884cae4d3f30dc64e326986ee]:
-: ['301046, Big Data, MICT', '301044, Data Science, MICT']
-: Unit ID, unit name, course name
-: 301046, Big Data, MICT
-: 301044, Data Science, MICT
-: Unit ID, unit name, course name
-: 301046, Big Data, MICT
-: 301044, Data Science, MICT
+\begin{verbatim}
+['301046, Big Data, MICT', '301044, Data Science, MICT']
+Unit ID, unit name, course name
+301046, Big Data, MICT
+301044, Data Science, MICT
+Unit ID, unit name, course name
+301046, Big Data, MICT
+301044, Data Science, MICT
+\end{verbatim}
+
 
 We can now inspect the contents of that file:
 
-#+begin_src bash
+\subsection{Wrap it into a function}
+\label{sec:org869de63}
 
-#+end_src
-
-** Wrap it into a function
-
-#+begin_src python
+\begin{minted}[]{python}
 #!/usr/bin/env python3
 
 # * Create the Text File
@@ -494,28 +531,26 @@ def writeToFile(listOfLines, outfile):
     outfile_fid.close()
 
 readWriteFile('scemunits.txt', 'outfile.txt')
-#+end_src
+\end{minted}
 
-#+RESULTS[45757ee57da787c3adaaa0a041ecc56cda66fdec]:
-: ['Unit ID, unit name, course name', '301046, Big Data, MICT', '301044, Data Science, MICT']
-: Unit ID, unit name, course name
-: 301046, Big Data, MICT
-: 301044, Data Science, MICT
+\begin{verbatim}
+['Unit ID, unit name, course name', '301046, Big Data, MICT', '301044, Data Science, MICT']
+Unit ID, unit name, course name
+301046, Big Data, MICT
+301044, Data Science, MICT
+\end{verbatim}
+
 
 and to confirm that it has written to the file:
 
-#+begin_src bash
+\begin{minted}[]{bash}
 cat outfile.txt
-#+end_src
+\end{minted}
 
-#+RESULTS:
-| Unit ID | unit name    | course name |
-|  301046 | Big Data     | MICT        |
-|  301044 | Data Science | MICT        |
+\section{Parse Dictionary}
+\label{sec:org73bad5f}
 
-* Parse Dictionary
-
-#+begin_src python
+\begin{minted}[]{python}
 #!/usr/bin/env python3
 
 # * Create the Dictionary
@@ -558,19 +593,21 @@ print("\n".join(displayUnits(units, 'MICT')))
 
 print("Match BCS  \n ---------------------")
 print("\n".join(displayUnits(units, 'BCS')))
-#+end_src
+\end{minted}
 
-#+RESULTS[f9a6aaa874aef5b87022318a3d6c1c82e61035f2]:
-: Big Data
-: Data Science
-: Data Structures
-: OOP
+\begin{verbatim}
+Big Data
+Data Science
+Data Structures
+OOP
+\end{verbatim}
 
-* grep
+\section{grep}
+\label{sec:org95b840b}
 
 This is easy, just loop through the lines and print if the word is in the line.
 
-#+begin_src python
+\begin{minted}[]{python}
 #!/bin/python
 
 def pygrep(filename, expr):
@@ -584,10 +621,9 @@ def pygrep(filename, expr):
 
 pygrep("./bigdata.txt", 'Big')
 pygrep("./bigdata.txt", 'technology')
-#+end_src
+\end{minted}
 
-#+RESULTS[e1e87e3bd3a9ce15fcb5fdc0abbe8c0ab39975bd]:
-#+begin_example
+\begin{verbatim}
 Big data is a broad term for data sets so large or complex that they are difficult to process using
 
 their tools, and expanding capabilities make Big Data a moving target. Thus, what is considered to be "Big" in
@@ -697,22 +733,27 @@ well as queries from more than half a million third-party sellers. The core tech
 form at cloud interface by providing the raw definitions and real time examples within the technology.
 
 experiments (i.e. process a big amount of scientific data; although not with big data technology), the
-#+end_example
+\end{verbatim}
 
-* Top 10 Words
+\section{Top 10 Words}
+\label{sec:org874d09b}
 
 
 ope
 
-** Create the Dictionary
+\subsection{Create the Dictionary}
+\label{sec:org2014149}
 So the idea here is to first try and open the file, use try/catch so that errors relating to missing files are descriptive and exit gracefully.
 
 Then make an empty dictionary and go through each word in the list:
-  + If the words is in the list but not the dictionary
-    + Put it in the dictionary with a value of 1
-  + If the word is in the dictionary then increment its value
+\begin{itemize}
+\item If the words is in the list but not the dictionary
+\begin{itemize}
+\item Put it in the dictionary with a value of 1
+\end{itemize}
+\item If the word is in the dictionary then increment its value
 
-    #+begin_src python
+\begin{minted}[]{python}
 #!/bin/python
 from operator import itemgetter
 
@@ -737,14 +778,16 @@ def createDict(filename):
 
 createDict('scemunits.txt')
 print(createDict('scemunits.txt'))
-    #+end_src
+\end{minted}
 
-    #+RESULTS[0e63aa0291d9c4abddc13a9a67c9bf1ca2a9d6ef]:
-    : {'unit': 2, 'id,': 1, 'name,': 1, 'course': 1, 'name\n301046,': 1, 'big': 1, 'data,': 1, 'mict\n300581,': 1, 'programming': 1, 'techniques,': 1, 'bict\n300144,': 1, 'object': 2, 'oriented': 2, 'analysis,': 1, 'bict\n300103,': 1, 'data': 2, 'structure,': 1, 'bcs\n300147,': 1, 'programming,': 1, 'bcs\n300569,': 1, 'computer': 1, 'security,': 1, 'bis\n301044,': 1, 'science,': 1, 'mict\n300582,': 1, 'technologies': 1, 'for': 1, 'web': 1, 'applications,': 1, 'bict\n': 1}
+\begin{verbatim}
+{'unit': 2, 'id,': 1, 'name,': 1, 'course': 1, 'name\n301046,': 1, 'big': 1, 'data,': 1, 'mict\n300581,': 1, 'programming': 1, 'techniques,': 1, 'bict\n300144,': 1, 'object': 2, 'oriented': 2, 'analysis,': 1, 'bict\n300103,': 1, 'data': 2, 'structure,': 1, 'bcs\n300147,': 1, 'programming,': 1, 'bcs\n300569,': 1, 'computer': 1, 'security,': 1, 'bis\n301044,': 1, 'science,': 1, 'mict\n300582,': 1, 'technologies': 1, 'for': 1, 'web': 1, 'applications,': 1, 'bict\n': 1}
+\end{verbatim}
+\end{itemize}
 
 The rest of the code was given to us and so the sorted values can be returned thusly:
 
-#+begin_src python
+\begin{minted}[]{python}
 from operator import itemgetter
 myDict = createDict('bigdata.txt')
 
@@ -753,10 +796,9 @@ sortedList = sorted(myDict.items(), key = itemgetter(1), reverse = True)
 for key, value in sortedList[:10]:
     print(key, value)
 
-#+end_src
+\end{minted}
 
-#+RESULTS[49ed52e70122beda1a6db798ac126a10bd4e0e05]:
-#+begin_example
+\begin{verbatim}
 the 302
 of 213
 and 201
@@ -767,4 +809,5 @@ a 99
 big 80
 is 75
 as 59
-#+end_example
+\end{verbatim}
+\end{document}

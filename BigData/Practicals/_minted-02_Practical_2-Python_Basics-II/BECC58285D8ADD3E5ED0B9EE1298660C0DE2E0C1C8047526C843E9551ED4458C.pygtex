@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{scemunits} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}\PYGZdq{}Unit ID, unit name, course name}
+\PYG{l+s+s2}{301046, Big Data, MICT}
+\PYG{l+s+s2}{300581, Programming Techniques, BICT}
+\PYG{l+s+s2}{300144, Object Oriented Analysis, BICT}
+\PYG{l+s+s2}{300103, Data Structure, BCS}
+\PYG{l+s+s2}{300147, Object Oriented Programming, BCS}
+\PYG{l+s+s2}{300569, Computer Security, BIS}
+\PYG{l+s+s2}{301044, Data Science, MICT}
+\PYG{l+s+s2}{300582, Technologies for Web Applications, BICT\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+
+\PYG{k}{def} \PYG{n+nf}{writeTextFile}\PYG{p}{(}\PYG{n}{text}\PYG{p}{,} \PYG{n}{filename}\PYG{p}{)} \PYG{p}{:}
+    \PYG{n}{f} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{filename}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}w\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{text}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{):}
+        \PYG{n}{f}\PYG{o}{.}\PYG{n}{writelines}\PYG{p}{(}\PYG{n}{i}\PYG{o}{+}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{f}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+\PYG{n}{writeTextFile}\PYG{p}{(}\PYG{n}{scemunits}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}scemunits.txt\PYGZsq{}}\PYG{p}{)}
+\end{Verbatim}

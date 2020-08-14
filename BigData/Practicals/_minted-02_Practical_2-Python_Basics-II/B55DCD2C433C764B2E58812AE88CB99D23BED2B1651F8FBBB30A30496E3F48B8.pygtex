@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+cat outfile.txt
+\end{Verbatim}

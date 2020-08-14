@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{getInnerProd}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{):}
+    \PYG{n}{z} \PYG{o}{=} \PYG{n}{copy}\PYG{o}{.}\PYG{n}{deepcopy}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}    \PYG{c+c1}{\PYGZsh{}\PYGZsh{} Careful, you need to copy, not just assign}
+    \PYG{k}{if} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)} \PYG{o}{==} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{y}\PYG{p}{):}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)):}
+            \PYG{n}{z}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{x}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{*}\PYG{n}{y}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+        \PYG{k}{return} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{z}\PYG{p}{)}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}The vectors must have the same dimension\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{xvec} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{]}
+\PYG{n}{yvec} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}
+
+\PYG{n}{norm} \PYG{o}{=} \PYG{n}{getNorm}\PYG{p}{(}\PYG{n}{xvec}\PYG{p}{);}            \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{norm}\PYG{p}{)}
+\PYG{n}{norm} \PYG{o}{=} \PYG{n}{getNorm}\PYG{p}{(}\PYG{n}{yvec}\PYG{p}{);}            \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{norm}\PYG{p}{)}
+\PYG{n}{prod} \PYG{o}{=} \PYG{n}{getInnerProd}\PYG{p}{(}\PYG{n}{xvec}\PYG{p}{,} \PYG{n}{yvec}\PYG{p}{);} \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{prod}\PYG{p}{)}
+\end{Verbatim}

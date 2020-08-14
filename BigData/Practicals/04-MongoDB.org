@@ -1,0 +1,110 @@
+#+TITLE: Big Data; 02 Practical - Python Basics 2
+:CONFIG:
+# #+STARTUP: latexpreview
+#+INFOJS_OPT: view:showall toc:3
+#+PLOT: title:"Citas" ind:1 deps:(3) type:2d with:histograms set:"yrange [0:]"
+#+OPTIONS: tex:t
+#+TODO: TODO IN-PROGRESS WAITING DONE
+#+CATEGORY: TAD
+:HTML:
+#+INFOJS_OPT: view:info toc:3
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="style.css">
+#+CSL_STYLE: /home/ryan/Templates/CSL/nature.csl
+:END:
+:PYTHON:
+#+PROPERTY: header-args:python :session BIGDATAMain :dir ./ :cache yes :eval never-export :exports both :results output
+# exports: both (or code or whatever)
+# results: table (or output or whatever)
+:END:
+:SlowDown:
+# #+STARTUP: latexpreview
+#+LATEX_HEADER: \usepackage{/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle}
+# #+LATEX_HEADER: \twocolumn
+# [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyl   [ State ]: EDITED, shown value does not take effect until you set or save it.
+:END:
+
+* Basic MongoDB Operations
+- [[https://docs.mongodb.com/manual/tutorial/insert-documents/][See the Tutorials here]]
+** Insert Documents
+
+** Query Documents
+** Update Documents
+** Remove Documents
+
+* Using the ~product~ Database
+The [[./product.json]] Database will be used here
+** Using the Mongo-compass program                                             :ATTACH:
+:PROPERTIES:
+:ID:       7f7bd3b3-1e74-45d3-80c0-94373ead9968
+:END:
+1. Open mongo-compass
+
+2. Connect to the mongoDB server
+
+   1. Probably http://localhost:38157
+
+      1. If you're on SystemD check with ~sudo systemctl status mongodb~
+
+      [[attachment:_20200814_162644screenshot.png]]
+
+3. Create a new collection
+
+         [[attachment:_20200814_164006screenshot.png]]
+
+4. Import the JSON File
+
+5. Now from the terminal run ~mongo~ to open a shell and then ~use product~ to switch to that database.
+
+** List Movies
+#+BEGIN_SRC mongo :db product.json
+db.product.find('Type': 'Movie')
+#+END_SRC
+
+#+RESULTS:
+
+** Find Songs
+** Calculate the Average Price of Books
+
+* How to use Org-Babel Mongo
+** Org Babel Mongo
+
+Support for MongoDB queries in org-mode blocks, like so:
+
+#+BEGIN_EXAMPLE
+#+BEGIN_SRC mongo :db staff
+db.employees.count({country: "gb"});
+#+END_SRC
+
+#+RESULTS:
+: 15
+#+END_EXAMPLE
+
+*** Installation
+
+If you're hooked up to [[http://melpa.milkbox.net/][MELPA]]:
+
+#+BEGIN_EXAMPLE
+M-x package-refresh-contents
+M-x package-install RET ob-mongo
+#+END_EXAMPLE
+
+Alternatively just grab the single =ob-mongo.el= file and install that in your preferred way.
+
+*** Status
+
+Alpha. Safe to use, but feature-poor. It's still better than it not existing at all. ;-)
+
+*** Options
+
+Each block supports the following arguments:
+
+| Argument   | Description      | Example                               | Default |
+|------------+------------------+---------------------------------------+---------|
+| =:db=        | Database name.   | =#+BEGIN_SRC mongo :db staff=           | None.   |
+| =:host=      | Host             | =#+BEGIN_SRC mongo :host localhost=     | None.   |
+| =:port=      | Port             | =#+BEGIN_SRC mongo :port 27018=         | None.   |
+| =:user=      | Username         | =#+BEGIN_SRC mongo :user root=          | None.   |
+| =:password=  | Password         | =#+BEGIN_SRC mongo :password superword= | None.   |
+| =:mongoexec= | Mongo executable | =#+BEGIN_SRC mongo :mongoexec mongo26=  | "mongo" |
+
+All defaults are customizable with =M-x customize-group RET ob-mongo=.

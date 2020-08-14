@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{operator} \PYG{k+kn}{import} \PYG{n}{itemgetter}
+\PYG{n}{myDict} \PYG{o}{=} \PYG{n}{createDict}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}bigdata.txt\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{sortedList} \PYG{o}{=} \PYG{n+nb}{sorted}\PYG{p}{(}\PYG{n}{myDict}\PYG{o}{.}\PYG{n}{items}\PYG{p}{(),} \PYG{n}{key} \PYG{o}{=} \PYG{n}{itemgetter}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{),} \PYG{n}{reverse} \PYG{o}{=} \PYG{k+kc}{True}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{key}\PYG{p}{,} \PYG{n}{value} \PYG{o+ow}{in} \PYG{n}{sortedList}\PYG{p}{[:}\PYG{l+m+mi}{10}\PYG{p}{]:}
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{key}\PYG{p}{,} \PYG{n}{value}\PYG{p}{)}
+\end{Verbatim}

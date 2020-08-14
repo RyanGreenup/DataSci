@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{math} \PYG{k}{as} \PYG{n+nn}{mt}
+\PYG{k+kn}{import} \PYG{n+nn}{copy}
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} because python counts from 0 indexing is confusing,}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{} the count will come back as 4, but the indexes will be 0, 1, 2 and 3.}
+
+\PYG{k}{def} \PYG{n+nf}{getNorm}\PYG{p}{(}\PYG{n}{x}\PYG{p}{):}
+    \PYG{n}{total} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)):}
+        \PYG{n}{total}\PYG{o}{=}\PYG{n}{x}\PYG{p}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{o}{+}\PYG{n}{total}
+    \PYG{k}{return} \PYG{n}{mt}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{total}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{([}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+m+mi}{4}\PYG{p}{]))}
+
+
+\PYG{n}{xvec} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{]}
+\PYG{n}{yvec} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}
+
+\PYG{n}{norm} \PYG{o}{=} \PYG{n}{getNorm}\PYG{p}{(}\PYG{n}{xvec}\PYG{p}{);}            \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{norm}\PYG{p}{)}
+\end{Verbatim}

@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2020-08-14 Fri 16:27 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Big Data; 02 Practical - Python Basics 2</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Ryan Greenup" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src="https://orgmode.org/org-info.js">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+// @license-end
+</script>
+
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "3");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "3");
+org_html_manager.set("VIEW", "showall");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+// @license-end
+</script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.cacheClassElem = elem.className;
+         elem.cacheClassTarget = target.className;
+         target.className = "code-highlighted";
+         elem.className   = "code-highlighted";
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(elem.cacheClassElem)
+         elem.className = elem.cacheClassElem;
+       if(elem.cacheClassTarget)
+         target.className = elem.cacheClassTarget;
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Big Data; 02 Practical - Python Basics 2</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org7fc9387">1. Basic MongoDB Operations</a>
+<ul>
+<li><a href="#orgaea956f">1.1. Insert Documents</a></li>
+<li><a href="#org34dadd2">1.2. Query Documents</a></li>
+<li><a href="#org7e6bfa1">1.3. Update Documents</a></li>
+<li><a href="#orge8de033">1.4. Remove Documents</a></li>
+</ul>
+</li>
+<li><a href="#org1f030a0">2. Using the <code>product</code> Database</a>
+<ul>
+<li><a href="#org2e1432c">2.1. Using the Mongo-compass program&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span></a></li>
+<li><a href="#org1b4aabf">2.2. List Movies</a></li>
+<li><a href="#org3ce9dbb">2.3. Find Songs</a></li>
+<li><a href="#orgb23bc06">2.4. Calculate the Average Price of Books</a></li>
+</ul>
+</li>
+<li><a href="#org2bea5a8">3. How to use Org-Babel Mongo</a>
+<ul>
+<li><a href="#orgbc5e349">3.1. Org Babel Mongo</a>
+<ul>
+<li><a href="#orgbd74665">3.1.1. Installation</a></li>
+<li><a href="#orgdff49fe">3.1.2. Status</a></li>
+<li><a href="#org80f5c95">3.1.3. Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+:HTML:
+</p>
+
+<div id="outline-container-org7fc9387" class="outline-2">
+<h2 id="org7fc9387"><span class="section-number-2">1</span> Basic MongoDB Operations</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li><a href="https://docs.mongodb.com/manual/tutorial/insert-documents/">See the Tutorials here</a></li>
+</ul>
+</div>
+<div id="outline-container-orgaea956f" class="outline-3">
+<h3 id="orgaea956f"><span class="section-number-3">1.1</span> Insert Documents</h3>
+</div>
+
+<div id="outline-container-org34dadd2" class="outline-3">
+<h3 id="org34dadd2"><span class="section-number-3">1.2</span> Query Documents</h3>
+</div>
+<div id="outline-container-org7e6bfa1" class="outline-3">
+<h3 id="org7e6bfa1"><span class="section-number-3">1.3</span> Update Documents</h3>
+</div>
+<div id="outline-container-orge8de033" class="outline-3">
+<h3 id="orge8de033"><span class="section-number-3">1.4</span> Remove Documents</h3>
+</div>
+</div>
+
+<div id="outline-container-org1f030a0" class="outline-2">
+<h2 id="org1f030a0"><span class="section-number-2">2</span> Using the <code>product</code> Database</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+The <a href="./product.json">./product.json</a> Database will be used here
+</p>
+</div>
+<div id="outline-container-org2e1432c" class="outline-3">
+<h3 id="org2e1432c"><span class="section-number-3">2.1</span> Using the Mongo-compass program&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span></h3>
+<div class="outline-text-3" id="text-2-1">
+<ol class="org-ol">
+<li>Open mongo-compass</li>
+<li>Connect to the mongoDB server
+<ol class="org-ol">
+<li>Probably <a href="http://localhost:38157">http://localhost:38157</a>
+<ol class="org-ol">
+<li>If you&rsquo;re on SystemD check with <code>sudo systemctl status mongodb</code></li>
+</ol></li>
+</ol></li>
+</ol>
+
+
+
+<div class="figure">
+<p><img src="file:///home/ryan/Notes/Org/.attach/7f/7bd3b3-1e74-45d3-80c0-94373ead9968/_20200814_162644screenshot.png" alt="_20200814_162644screenshot.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org1b4aabf" class="outline-3">
+<h3 id="org1b4aabf"><span class="section-number-3">2.2</span> List Movies</h3>
+</div>
+<div id="outline-container-org3ce9dbb" class="outline-3">
+<h3 id="org3ce9dbb"><span class="section-number-3">2.3</span> Find Songs</h3>
+</div>
+<div id="outline-container-orgb23bc06" class="outline-3">
+<h3 id="orgb23bc06"><span class="section-number-3">2.4</span> Calculate the Average Price of Books</h3>
+</div>
+</div>
+
+<div id="outline-container-org2bea5a8" class="outline-2">
+<h2 id="org2bea5a8"><span class="section-number-2">3</span> How to use Org-Babel Mongo</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgbc5e349" class="outline-3">
+<h3 id="orgbc5e349"><span class="section-number-3">3.1</span> Org Babel Mongo</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Support for MongoDB queries in org-mode blocks, like so:
+</p>
+
+<pre class="example">
+#+BEGIN_SRC mongo :db staff
+db.employees.count({country: "gb"});
+#+END_SRC
+
+#+RESULTS:
+: 15
+</pre>
+</div>
+
+<div id="outline-container-orgbd74665" class="outline-4">
+<h4 id="orgbd74665"><span class="section-number-4">3.1.1</span> Installation</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+If you&rsquo;re hooked up to <a href="http://melpa.milkbox.net/">MELPA</a>:
+</p>
+
+<pre class="example">
+M-x package-refresh-contents
+M-x package-install RET ob-mongo
+</pre>
+
+<p>
+Alternatively just grab the single <code>ob-mongo.el</code> file and install that in your preferred way.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdff49fe" class="outline-4">
+<h4 id="orgdff49fe"><span class="section-number-4">3.1.2</span> Status</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<p>
+Alpha. Safe to use, but feature-poor. It&rsquo;s still better than it not existing at all. ;-)
+</p>
+</div>
+</div>
+
+<div id="outline-container-org80f5c95" class="outline-4">
+<h4 id="org80f5c95"><span class="section-number-4">3.1.3</span> Options</h4>
+<div class="outline-text-4" id="text-3-1-3">
+<p>
+Each block supports the following arguments:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Argument</th>
+<th scope="col" class="org-left">Description</th>
+<th scope="col" class="org-left">Example</th>
+<th scope="col" class="org-left">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>:db</code></td>
+<td class="org-left">Database name.</td>
+<td class="org-left"><code>#+BEGIN_SRC mongo :db staff</code></td>
+<td class="org-left">None.</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>:host</code></td>
+<td class="org-left">Host</td>
+<td class="org-left"><code>#+BEGIN_SRC mongo :host localhost</code></td>
+<td class="org-left">None.</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>:port</code></td>
+<td class="org-left">Port</td>
+<td class="org-left"><code>#+BEGIN_SRC mongo :port 27018</code></td>
+<td class="org-left">None.</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>:user</code></td>
+<td class="org-left">Username</td>
+<td class="org-left"><code>#+BEGIN_SRC mongo :user root</code></td>
+<td class="org-left">None.</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>:password</code></td>
+<td class="org-left">Password</td>
+<td class="org-left"><code>#+BEGIN_SRC mongo :password superword</code></td>
+<td class="org-left">None.</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>:mongoexec</code></td>
+<td class="org-left">Mongo executable</td>
+<td class="org-left"><code>#+BEGIN_SRC mongo :mongoexec mongo26</code></td>
+<td class="org-left">&ldquo;mongo&rdquo;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+All defaults are customizable with <code>M-x customize-group RET ob-mongo</code>.
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Ryan Greenup</p>
+<p class="date">Created: 2020-08-14 Fri 16:27</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+% Created 2020-08-14 Fri 16:26
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyle}
+\author{Ryan Greenup}
+\date{\today}
+\title{Big Data; 02 Practical - Python Basics 2}
+\hypersetup{
+ pdfauthor={Ryan Greenup},
+ pdftitle={Big Data; 02 Practical - Python Basics 2},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.1 (Org mode 9.4)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+:HTML:
+
+\section{Basic MongoDB Operations}
+\label{sec:orgf97b54d}
+\begin{itemize}
+\item \href{https://docs.mongodb.com/manual/tutorial/insert-documents/}{See the Tutorials here}
+\end{itemize}
+\subsection{Insert Documents}
+\label{sec:orgc89a261}
+
+\subsection{Query Documents}
+\label{sec:org533f114}
+\subsection{Update Documents}
+\label{sec:orgacd83d9}
+\subsection{Remove Documents}
+\label{sec:org834a7ff}
+
+\section{Using the \texttt{product} Database}
+\label{sec:orgf92bb53}
+The \url{./product.json} Database will be used here
+\subsection{Using the Mongo-compass program\hfill{}\textsc{ATTACH}}
+\label{sec:orgde5a1f2}
+\begin{enumerate}
+\item Open mongo-compass
+\item Connect to the mongoDB server
+\begin{enumerate}
+\item Probably \url{http://localhost:38157}
+\begin{enumerate}
+\item If you're on SystemD check with \texttt{sudo systemctl status mongodb}
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+
+\begin{center}
+\includegraphics[width=.9\linewidth]{/home/ryan/Notes/Org/.attach/7f/7bd3b3-1e74-45d3-80c0-94373ead9968/_20200814_162644screenshot.png}
+\end{center}
+
+
+
+\subsection{List Movies}
+\label{sec:org137624a}
+\subsection{Find Songs}
+\label{sec:org3edf32c}
+\subsection{Calculate the Average Price of Books}
+\label{sec:org5b0daf1}
+
+\section{How to use Org-Babel Mongo}
+\label{sec:orge20ee8d}
+\subsection{Org Babel Mongo}
+\label{sec:orgd7278cc}
+
+Support for MongoDB queries in org-mode blocks, like so:
+
+\begin{verbatim}
+#+BEGIN_SRC mongo :db staff
+db.employees.count({country: "gb"});
+#+END_SRC
+
+#+RESULTS:
+: 15
+\end{verbatim}
+
+\subsubsection{Installation}
+\label{sec:org51e78c9}
+
+If you're hooked up to \href{http://melpa.milkbox.net/}{MELPA}:
+
+\begin{verbatim}
+M-x package-refresh-contents
+M-x package-install RET ob-mongo
+\end{verbatim}
+
+Alternatively just grab the single \texttt{ob-mongo.el} file and install that in your preferred way.
+
+\subsubsection{Status}
+\label{sec:org4cbf32c}
+
+Alpha. Safe to use, but feature-poor. It's still better than it not existing at all. ;-)
+
+\subsubsection{Options}
+\label{sec:org15284f9}
+
+Each block supports the following arguments:
+
+\begin{center}
+\begin{tabular}{llll}
+Argument & Description & Example & Default\\
+\hline
+\texttt{:db} & Database name. & \texttt{\#+BEGIN\_SRC mongo :db staff} & None.\\
+\texttt{:host} & Host & \texttt{\#+BEGIN\_SRC mongo :host localhost} & None.\\
+\texttt{:port} & Port & \texttt{\#+BEGIN\_SRC mongo :port 27018} & None.\\
+\texttt{:user} & Username & \texttt{\#+BEGIN\_SRC mongo :user root} & None.\\
+\texttt{:password} & Password & \texttt{\#+BEGIN\_SRC mongo :password superword} & None.\\
+\texttt{:mongoexec} & Mongo executable & \texttt{\#+BEGIN\_SRC mongo :mongoexec mongo26} & ``mongo''\\
+\end{tabular}
+\end{center}
+
+All defaults are customizable with \texttt{M-x customize-group RET ob-mongo}.
+\end{document}
