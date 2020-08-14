@@ -24,14 +24,289 @@
 # [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyl   [ State ]: EDITED, shown value does not take effect until you set or save it.
 :END:
 
-
 * 3 SQLite
+** Export
+The code blocks MUST be ~begin_src sqlite~ in order for the evaluation to work, however to export to minted they MUST be ~begin_src sql~ so I'll just have to use ~sed~ clean it up.
+
+#+begin_src bash :results output
+sd -s '_src sqlite' '_src sqlite' 04-MongoDB.org
+#+end_src
+
+#+begin_src bash
+sd -s '_src sqlite' '_src sqliteite'  04-MongoDB.org
+#+end_src
+
+** Introduction
+
+The database is [[./testdb.sqlite]], we can investigate it like this:
+
 #+begin_src sqlite :db testdb.sqlite
 .tables
 #+end_src
 
 #+RESULTS:
 : record
+
+now that we know that it has a table called record we can get column names from it using ~.schema~:
+
+#+begin_src sqlite :db testdb.sqlite
+.schema record
+#+end_src
+
+#+RESULTS:
+| CREATE TABLE record ( |   |
+| [Sid] INTEGER         |   |
+| [Sname] TEXT          |   |
+| [Sex] TEXT            |   |
+| [DOB] TEXT            |   |
+| [Uid] INTEGER         |   |
+| [Mark] REAL           |   |
+| [Uname] TEXT          |   |
+| [Utype] TEXT          |   |
+| );                    |   |
+
+Alternatively the following could be used:
+
+#+begin_src sqlite :db testdb.sqlite
+PRAGMA table_info(record);
+#+end_src
+
+#+RESULTS:
+| 0 | Sid   | INTEGER | 0 |   | 0 |
+| 1 | Sname | TEXT    | 0 |   | 0 |
+| 2 | Sex   | TEXT    | 0 |   | 0 |
+| 3 | DOB   | TEXT    | 0 |   | 0 |
+| 4 | Uid   | INTEGER | 0 |   | 0 |
+| 5 | Mark  | REAL    | 0 |   | 0 |
+| 6 | Uname | TEXT    | 0 |   | 0 |
+| 7 | Utype | TEXT    | 0 |   | 0 |
+
+
+#+begin_src sqlite :db testdb.sqlite
+select * from record limit 4
+#+end_src
+
+#+RESULTS:
+| 18395061 | Adam Ross | M | 1988-06-20 | 300580 | 88.0 | Programming Fundamentals    | Programming |
+| 18395061 | Adam Ross | M | 1988-06-20 | 300581 | 79.0 | Programming Techniques      | Programming |
+| 18395061 | Adam Ross | M | 1988-06-20 | 300585 | 74.0 | Systems Analysis and Design | Analysis    |
+| 18395061 | Adam Ross | M | 1988-06-20 | 300144 | 59.0 | Object Oriented Analysis    | Analysis    |
+
+** SQL Exercises
+*** Count the Number of Records
+
+#+begin_src sqlite :db testdb.sqlite
+select count(*) from record;
+#+end_src
+
+#+RESULTS:
+: 5006
+
+*** Count the number of female students
+
+#+begin_src sqlite :db testdb.sqlite
+select count(*) from
+       (select Distinct Sid from record)
+       ;
+#+end_src
+
+#+RESULTS:
+: 1000
+
+*** Male Students that Faile a Programming Class
+Return a list of the male students who failed /Programming Techniques (300581)/, Display:
+
+- student IDs
+- Names
+- Marks
+
+The ~like~ operator could be used:
+
+#+begin_src sqlite :db testdb.sqlite
+select Sname, Sid, Mark from record where Sex is "M" and Mark < 50 and Uname like "%prog%tech%";
+#+end_src
+
+#+RESULTS:
+| Joshua Shaw | 18776570 | 46.0 |
+| Keith Davis | 18941001 | 49.0 |
+
+*** Lowest Vs Highest
+Display:
+
+- Student IDs
+- Names
+
+of students that are:
+
+- Female
+- Highest or Lowest mark in OOA
+
+Notice that this seems wrong:
+
+#+begin_src sqlite :db testdb.sqlite
+select Sname, Sid, Uname, max(Mark), min(Mark) from record where Sex is "F" ;
+select Sname, Sid, Uname, min(Mark), min(Mark) from record where Sex is "F" ;
+#+end_src
+
+#+RESULTS:
+| Jennifer Smith | 18612794 | Programming Techniques | 100.0 | 34.0 |
+| Jennifer Smith | 18612794 | Programming Techniques |  34.0 | 34.0 |
+
+And that this simply doesn't evaluate:
+
+#+begin_src sqlite :db testdb.sqlite
+select Sid, Sname from record where Sex = "F" and Mark = Max(Mark);
+#+end_src
+
+Instead you need to wrap the ~Max(Mark)~ call in a ~(select )~ statement.
+
+  #+begin_src sqlite :db testdb.sqlite
+select Sid, Sname, Uname, Mark from  record where Sex is "F" and Mark = (select max(Mark) from record);
+select Sid, Sname, Uname, Mark from  record where Sex is "F" and Mark in (select max(Mark) from record);
+  #+end_src
+
+  #+RESULTS:
+  | 17844194 | Rebecca Morris    | Network Technologies        | 100.0 |
+  | 17267976 | Erin Phillips     | Network Technologies        | 100.0 |
+  | 18183025 | Lindsey Mitchell  | Systems Analysis and Design | 100.0 |
+  | 18306683 | Cynthia Thomas    | Systems Analysis and Design | 100.0 |
+  | 18395645 | Shannon Evans     | Systems Analysis and Design | 100.0 |
+  | 17014005 | Kathryn Roberts   | Systems Analysis and Design | 100.0 |
+  | 17482984 | Allison Jones     | Systems Analysis and Design | 100.0 |
+  | 17267372 | Kristen Hughes    | Systems Analysis and Design | 100.0 |
+  | 17435628 | Stephanie Jones   | Systems Analysis and Design | 100.0 |
+  | 18233557 | Christina Jones   | Systems Analysis and Design | 100.0 |
+  | 17504162 | Amanda Evans      | Systems Analysis and Design | 100.0 |
+  | 18422958 | Lisa Bennett      | Network Technologies        | 100.0 |
+  | 18435634 | Chelsea Russell   | Programming Fundamentals    | 100.0 |
+  | 18435634 | Chelsea Russell   | Systems Analysis and Design | 100.0 |
+  | 18025468 | Sarah Williams    | Systems Analysis and Design | 100.0 |
+  | 17653287 | Jessica Reid      | Big Data                    | 100.0 |
+  | 18026521 | Danielle Williams | Big Data                    | 100.0 |
+  | 18958966 | Jennifer Wilson   | Systems Analysis and Design | 100.0 |
+  | 18174160 | Lisa Jones        | Big Data                    | 100.0 |
+  | 17864868 | Lauren Hill       | Systems Analysis and Design | 100.0 |
+  | 17921398 | Jessica Wilson    | Systems Analysis and Design | 100.0 |
+  | 18740585 | April Price       | Systems Analysis and Design | 100.0 |
+  | 18001310 | April Graham      | Systems Analysis and Design | 100.0 |
+  | 17582640 | Meghan Taylor     | Systems Analysis and Design | 100.0 |
+  | 18774356 | Elizabeth Young   | Systems Analysis and Design | 100.0 |
+  | 18899505 | Kathleen Ross     | Programming Fundamentals    | 100.0 |
+  | 18041686 | Elizabeth Evans   | Object Oriented Analysis    | 100.0 |
+  | 17699458 | Courtney Smith    | Systems Analysis and Design | 100.0 |
+  | 17383582 | Amber Rose        | Systems Analysis and Design | 100.0 |
+  | 18753548 | Sarah Bennett     | Big Data                    | 100.0 |
+  | 18030119 | Ashley Knight     | Systems Analysis and Design | 100.0 |
+  | 18176079 | Kathleen Gray     | Network Technologies        | 100.0 |
+  | 17713866 | Ashley Clarke     | Systems Analysis and Design | 100.0 |
+  | 17713866 | Ashley Clarke     | Big Data                    | 100.0 |
+  | 18508757 | Brittany Thomas   | Systems Analysis and Design | 100.0 |
+  | 17847187 | Kristina Simpson  | Network Technologies        | 100.0 |
+  | 18581352 | Stacy Richardson  | Systems Analysis and Design | 100.0 |
+  | 17844194 | Rebecca Morris    | Network Technologies        | 100.0 |
+  | 17267976 | Erin Phillips     | Network Technologies        | 100.0 |
+  | 18183025 | Lindsey Mitchell  | Systems Analysis and Design | 100.0 |
+  | 18306683 | Cynthia Thomas    | Systems Analysis and Design | 100.0 |
+  | 18395645 | Shannon Evans     | Systems Analysis and Design | 100.0 |
+  | 17014005 | Kathryn Roberts   | Systems Analysis and Design | 100.0 |
+  | 17482984 | Allison Jones     | Systems Analysis and Design | 100.0 |
+  | 17267372 | Kristen Hughes    | Systems Analysis and Design | 100.0 |
+  | 17435628 | Stephanie Jones   | Systems Analysis and Design | 100.0 |
+  | 18233557 | Christina Jones   | Systems Analysis and Design | 100.0 |
+  | 17504162 | Amanda Evans      | Systems Analysis and Design | 100.0 |
+  | 18422958 | Lisa Bennett      | Network Technologies        | 100.0 |
+  | 18435634 | Chelsea Russell   | Programming Fundamentals    | 100.0 |
+  | 18435634 | Chelsea Russell   | Systems Analysis and Design | 100.0 |
+  | 18025468 | Sarah Williams    | Systems Analysis and Design | 100.0 |
+  | 17653287 | Jessica Reid      | Big Data                    | 100.0 |
+  | 18026521 | Danielle Williams | Big Data                    | 100.0 |
+  | 18958966 | Jennifer Wilson   | Systems Analysis and Design | 100.0 |
+  | 18174160 | Lisa Jones        | Big Data                    | 100.0 |
+  | 17864868 | Lauren Hill       | Systems Analysis and Design | 100.0 |
+  | 17921398 | Jessica Wilson    | Systems Analysis and Design | 100.0 |
+  | 18740585 | April Price       | Systems Analysis and Design | 100.0 |
+  | 18001310 | April Graham      | Systems Analysis and Design | 100.0 |
+  | 17582640 | Meghan Taylor     | Systems Analysis and Design | 100.0 |
+  | 18774356 | Elizabeth Young   | Systems Analysis and Design | 100.0 |
+  | 18899505 | Kathleen Ross     | Programming Fundamentals    | 100.0 |
+  | 18041686 | Elizabeth Evans   | Object Oriented Analysis    | 100.0 |
+  | 17699458 | Courtney Smith    | Systems Analysis and Design | 100.0 |
+  | 17383582 | Amber Rose        | Systems Analysis and Design | 100.0 |
+  | 18753548 | Sarah Bennett     | Big Data                    | 100.0 |
+  | 18030119 | Ashley Knight     | Systems Analysis and Design | 100.0 |
+  | 18176079 | Kathleen Gray     | Network Technologies        | 100.0 |
+  | 17713866 | Ashley Clarke     | Systems Analysis and Design | 100.0 |
+  | 17713866 | Ashley Clarke     | Big Data                    | 100.0 |
+  | 18508757 | Brittany Thomas   | Systems Analysis and Design | 100.0 |
+  | 17847187 | Kristina Simpson  | Network Technologies        | 100.0 |
+  | 18581352 | Stacy Richardson  | Systems Analysis and Design | 100.0 |
+
+Now it's simply a matter of getting the minimum as well:
+
+#+begin_src sqlite :db testdb.sqlite
+select max(Mark), Sid, Sname, Uname from  record where Sex is "F" and Uname like "%Object%Oriented%Analysis%" drop column Mark;
+select min(Mark), Sid, Sname, Uname from  record where Sex is "F" and Uname like "%Object%Oriented%Analysis%" ;
+#+end_src
+
+#+RESULTS:
+| 100.0 | 18041686 | Elizabeth Evans | Object Oriented Analysis |
+|  51.0 | 18148368 | Lauren Williams | Object Oriented Analysis |
+
+This includes the ~Mark~, if we didn't want that then we could wrap the call in another ~select~:
+
+#+begin_src sqlite :db testdb.sqlite
+select Sid, Sname from (select max(Mark), Sid, Sname, Uname from  record where Sex is "F" and Uname like "%Object%Oriented%Analysis%");
+select Sid, Sname from (select min(Mark), Sid, Sname, Uname from  record where Sex is "F" and Uname like "%Object%Oriented%Analysis%");
+#+end_src
+
+#+RESULTS:
+| 18041686 | Elizabeth Evans |
+| 18148368 | Lauren Williams |
+
+
+
+*** Youngest vs Oldest Student
+
+#+begin_src sqlite :db testdb.sqlite
+select not DOB from record where ;
+#+end_src
+
+
+#+begin_src sqlite :db testdb.sqlite
+select Distinct Sid, Sname, min(DOB) from record;
+#+end_src
+
+#+RESULTS:
+| 17863769 | Anthony Morris | 1985-01-20 |
+
+*** Top Performers
+
+The trick here is to give the average mark column an alias, this way we can sort by it later:
+
+#+begin_src sqlite :db testdb.sqlite
+select distinct Sid, Sname, Sex, avg(Mark) as av_mark
+from record
+group by Sid
+order by av_mark desc
+limit 5
+
+
+#+end_src
+
+#+RESULTS:
+| 18908735 | Eric Green       | M |             93.5 |
+| 17582991 | Daniel Richards  | M |            93.25 |
+| 18555338 | Michael Williams | M |             92.4 |
+| 17435628 | Stephanie Jones  | F |             92.2 |
+| 17713866 | Ashley Clarke    | F | 91.8333333333333 |
+
+** Python and SQL Questions
+
+Test whether or not female students out perform male students in analysis units via mean and std dev analysis using sql queries.
+
+#+begin_src sqlite :db testdb.sqlite
+select distinct Sid, Mark, from record
+#+end_src
 
 
 * 4 NoSQL; MongoDB
@@ -321,4 +596,3 @@ This will then return:
 #+end_src
 
 So the Average price of books with more than 500 pages is \$103.75
-
