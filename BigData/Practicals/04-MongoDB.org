@@ -24,15 +24,17 @@
 # [[/home/ryan/Dropbox/profiles/Templates/LaTeX/ScreenStyl   [ State ]: EDITED, shown value does not take effect until you set or save it.
 :END:
 
-* Basic MongoDB Operations
-- [[https://docs.mongodb.com/manual/tutorial/insert-documents/][See the Tutorials here]]
-** Insert Documents
 
-** Query Documents
-** Update Documents
-** Remove Documents
+* 3 SQLite
+#+begin_src sqlite :db testdb.sqlite
+.tables
+#+end_src
 
-* Using the ~product~ Database
+#+RESULTS:
+: record
+
+
+* 4 NoSQL; MongoDB
 The [[./product.json]] Database will be used here
 ** Using the Mongo-compass program                                             :ATTACH:
 :PROPERTIES:
@@ -319,46 +321,4 @@ This will then return:
 #+end_src
 
 So the Average price of books with more than 500 pages is \$103.75
-* How to use Org-Babel Mongo
-** Org Babel Mongo
 
-Support for MongoDB queries in org-mode blocks, like so:
-
-#+BEGIN_SRC JSON
-#+BEGIN_SRC mongo
-db.employees.count({country: "gb"});
-#+END_SRC
-
-#+RESULTS:
-: 15
-#+END_SRC JSON
-
-*** Installation
-
-If you're hooked up to [[http://melpa.milkbox.net/][MELPA]]:
-
-#+BEGIN_SRC JSON
-M-x package-refresh-contents
-M-x package-install RET ob-mongo
-#+END_SRC JSON
-
-Alternatively just grab the single =ob-mongo.el= file and install that in your preferred way.
-
-*** Status
-
-Alpha. Safe to use, but feature-poor. It's still better than it not existing at all. ;-)
-
-*** Options
-
-Each block supports the following arguments:
-
-| Argument   | Description      | Example                               | Default |
-|------------+------------------+---------------------------------------+---------|
-| =:db=        | Database name.   | =#+BEGIN_SRC mongo :db staff=           | None.   |
-| =:host=      | Host             | =#+BEGIN_SRC mongo :host localhost=     | None.   |
-| =:port=      | Port             | =#+BEGIN_SRC mongo :port 27018=         | None.   |
-| =:user=      | Username         | =#+BEGIN_SRC mongo :user root=          | None.   |
-| =:password=  | Password         | =#+BEGIN_SRC mongo :password superword= | None.   |
-| =:mongoexec= | Mongo executable | =#+BEGIN_SRC mongo :mongoexec mongo26=  | "mongo" |
-
-All defaults are customizable with =M-x customize-group RET ob-mongo=.
