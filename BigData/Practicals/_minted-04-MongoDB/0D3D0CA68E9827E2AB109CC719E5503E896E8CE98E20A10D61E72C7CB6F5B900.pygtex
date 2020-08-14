@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nx}{db}\PYG{p}{.}\PYG{n+nx}{product}\PYG{p}{.}\PYG{n+nx}{find}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}Type\PYGZsq{}}\PYG{o}{:} \PYG{l+s+s1}{\PYGZsq{}Song\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Genre\PYGZsq{}}\PYG{o}{:} \PYG{p}{\PYGZob{}} \PYG{n+nx}{\PYGZdl{}regex}\PYG{o}{:} \PYG{l+s+sr}{/.*Rock.*/} \PYG{p}{\PYGZcb{}\PYGZcb{},} \PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}Title\PYGZsq{}}\PYG{o}{:} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Artist\PYGZsq{}}\PYG{o}{:} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}Album\PYGZsq{}}\PYG{o}{:} \PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{})}
+\end{Verbatim}

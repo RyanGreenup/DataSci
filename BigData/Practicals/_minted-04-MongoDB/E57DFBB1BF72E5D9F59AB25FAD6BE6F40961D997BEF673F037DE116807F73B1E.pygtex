@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2d0\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{l+m+mf}{129.79} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2d1\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{l+m+mf}{52.89} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2d4\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{l+m+mf}{153.16} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2d8\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{err}{NaN} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2da\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{err}{NaN} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2e0\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{l+m+mf}{153.09} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2e1\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{l+m+mf}{37.99} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2e3\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{l+m+mf}{53.69} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2ea\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{l+m+mf}{28.99} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZob{}} \PYG{n+nt}{\PYGZdq{}\PYGZus{}id\PYGZdq{}} \PYG{p}{:} \PYG{err}{ObjectId(}\PYG{l+s+s2}{\PYGZdq{}551668dbeb88341eb801f2eb\PYGZdq{}}\PYG{err}{)}\PYG{p}{,} \PYG{n+nt}{\PYGZdq{}Price\PYGZdq{}} \PYG{p}{:} \PYG{l+m+mf}{27.68} \PYG{p}{\PYGZcb{}}
+\PYG{err}{\PYGZgt{}}
+\end{Verbatim}

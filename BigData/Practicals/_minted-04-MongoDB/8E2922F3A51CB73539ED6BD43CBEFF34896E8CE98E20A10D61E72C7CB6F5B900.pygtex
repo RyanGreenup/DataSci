@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nx}{db}\PYG{p}{.}\PYG{n+nx}{product}\PYG{p}{.}\PYG{n+nx}{aggregate}\PYG{p}{([}
+    \PYG{p}{\PYGZob{}} \PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}match\PYGZdq{}}\PYG{o}{:} \PYG{p}{\PYGZob{}} \PYG{l+s+s1}{\PYGZsq{}Type\PYGZsq{}}\PYG{o}{:} \PYG{l+s+s1}{\PYGZsq{}Book\PYGZsq{}}\PYG{p}{,} \PYG{n+nx}{Pages}\PYG{o}{:} \PYG{p}{\PYGZob{}} \PYG{n+nx}{\PYGZdl{}gt}\PYG{o}{:} \PYG{l+m+mi}{500} \PYG{p}{\PYGZcb{},} \PYG{n+nx}{Price}\PYG{o}{:} \PYG{p}{\PYGZob{}} \PYG{n+nx}{\PYGZdl{}ne}\PYG{o}{:} \PYG{k+kc}{NaN} \PYG{p}{\PYGZcb{}} \PYG{p}{\PYGZcb{}} \PYG{p}{\PYGZcb{},}
+    \PYG{p}{\PYGZob{}}\PYG{n+nx}{\PYGZdl{}group}\PYG{o}{:} \PYG{p}{\PYGZob{}}\PYG{n+nx}{\PYGZus{}id}\PYG{o}{:}\PYG{k+kc}{null}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}AveragePrice\PYGZdq{}}\PYG{o}{:} \PYG{p}{\PYGZob{}}\PYG{n+nx}{\PYGZdl{}avg}\PYG{o}{:}\PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}Price\PYGZdq{}}\PYG{p}{\PYGZcb{}} \PYG{p}{\PYGZcb{}} \PYG{p}{\PYGZcb{}}
+\PYG{p}{]);}
+\end{Verbatim}

@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nx}{use} \PYG{n+nx}{local}
+\PYG{n+nx}{db}\PYG{p}{.}\PYG{n+nx}{product}\PYG{p}{.}\PYG{n+nx}{find}\PYG{p}{()}
+\end{Verbatim}

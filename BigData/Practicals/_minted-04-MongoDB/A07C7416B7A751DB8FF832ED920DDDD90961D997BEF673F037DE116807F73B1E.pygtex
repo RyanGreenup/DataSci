@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{err}{\PYGZsh{}+BEGIN\PYGZus{}SRC} \PYG{err}{mongo}
+\PYG{err}{db.employees.count(}\PYG{p}{\PYGZob{}}\PYG{err}{country:} \PYG{n+nt}{\PYGZdq{}gb\PYGZdq{}}\PYG{p}{\PYGZcb{}}\PYG{err}{);}
+\end{Verbatim}

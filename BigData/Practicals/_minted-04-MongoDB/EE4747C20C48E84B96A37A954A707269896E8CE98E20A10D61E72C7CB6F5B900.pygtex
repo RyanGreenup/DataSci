@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nx}{db}\PYG{p}{.}\PYG{n+nx}{product}\PYG{p}{.}\PYG{n+nx}{aggregate}\PYG{p}{([}
+    \PYG{p}{\PYGZob{}}\PYG{n+nx}{\PYGZdl{}group}\PYG{o}{:} \PYG{p}{\PYGZob{}}\PYG{n+nx}{\PYGZus{}id}\PYG{o}{:}\PYG{k+kc}{null}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}AveragePrice\PYGZdq{}}\PYG{o}{:} \PYG{p}{\PYGZob{}}\PYG{n+nx}{\PYGZdl{}avg}\PYG{o}{:}\PYG{l+s+s2}{\PYGZdq{}\PYGZdl{}Price\PYGZdq{}}\PYG{p}{\PYGZcb{}} \PYG{p}{\PYGZcb{}} \PYG{p}{\PYGZcb{}}
+\PYG{p}{]);}
+\end{Verbatim}

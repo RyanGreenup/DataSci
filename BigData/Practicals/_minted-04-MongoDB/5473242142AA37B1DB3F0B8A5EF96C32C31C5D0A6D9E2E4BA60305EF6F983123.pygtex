@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+mongo \PYGZhy{}\PYGZhy{}eval \PYG{l+s+s1}{\PYGZsq{}db.product.find()\PYGZsq{}} \PYG{n+nb}{local} \PYG{p}{|} fzf
+\end{Verbatim}

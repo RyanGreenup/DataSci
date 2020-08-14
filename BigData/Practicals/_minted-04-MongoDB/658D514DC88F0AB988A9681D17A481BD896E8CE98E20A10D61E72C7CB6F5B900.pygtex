@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nx}{db}\PYG{p}{.}\PYG{n+nx}{product}\PYG{p}{.}\PYG{n+nx}{find}\PYG{p}{(\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}Cast\PYGZsq{}}\PYG{o}{:} \PYG{l+s+s1}{\PYGZsq{}Morgan Freeman\PYGZsq{}}\PYG{p}{\PYGZcb{},} \PYG{p}{\PYGZob{}}\PYG{n+nx}{Title}\PYG{o}{:} \PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{})}
+\end{Verbatim}
