@@ -45,11 +45,11 @@ The [[./product.json]] Database will be used here
 
       1. If you're on SystemD check with ~sudo systemctl status mongodb~
 
-      [[attachment:_20200814_162644screenshot.png]]
+      [[file:org-compass-Server.png]]
 
 3. Create a new collection
 
-         [[attachment:_20200814_164006screenshot.png]]
+      [[file:org-compass-Collection.png]]
 
 4. Import the JSON File
 
